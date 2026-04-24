@@ -1,0 +1,415 @@
+{%- assign secSt = section.settings -%}
+<div class="content-indent {{ section.settings.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="masonary">
+  <div class="{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}">
+   
+     {% render 'sec-title' %}
+
+     {% capture styles %}
+          --tcl:{{secSt.tcl}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tff:var(--{{secSt.tff}});--tfw:{{secSt.tfw}};--tlh:{{secSt.tlh}};
+          --cl:{{secSt.cl}};--fs:{{secSt.fs}}px;--fsm:{{secSt.fsm}}px;--fw:{{secSt.fw}};--tlh:{{secSt.lh}};
+          --bg:{{secSt.bg | color_modify: 'alpha', secSt.opt}};--zcl:{{secSt.zoom_text }};--zbg:{{ secSt.zoom_bg }};--br:{{secSt.img_rad}}px;
+     {% endcapture %}
+     <div class="grid gspace lookbook grid-masonary gallery grid-mr" 
+       style="--grsp:0 -{{ secSt.grid-spacing | divided_by: 2.0  }}px;--grspi:0 {{ secSt.grid-spacing | divided_by: 2.0  }}px {{secSt.grid-spacing}}px;--grspm:0 -{{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px;--grspim:0 {{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px {{secSt.grid-spacing-mbl}}px;{{styles}}">
+        <div class="pa grid-sizer-{{section.id}} col-{{section.settings.grid-spacing-col}}"></div>
+        {% for block in section.blocks limit: section.blocks.size %}
+            {%- assign blkSt = block.settings -%}
+            {% assign product_box = forloop.index | minus:1 %}
+            {% assign delay_time = 50 | times : product_box %}
+
+        {% if blkSt.image!= blank %}          
+        <div class="gitem ms-item grid-lookbook col-mr wd100 {{blkSt.width}} wow fadeInUp" data-wow-delay="{{delay_time}}ms">
+           <div class="cl-item gallery">                      
+             <a class="zoom pr db"  href="{{ blkSt.image | img_url:'master' }}" data-pswp-width="{{blkSt.image.width}}" data-pswp-height="{{blkSt.image.height}}">
+                <span class="zoom-img zoom"><i class="at at-expand"></i></span>   
+               <img class="imgFl lazyload" src="{{ blkSt.image | img_url: '50x' }}" width="{{ blkSt.image.width }}" height="{{ blkSt.image.height }}"
+                    data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '300,500,750,1000,1350,1600,2000' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" />
+             </a>
+             
+             {% if blkSt.title != blank or  blkSt.title2 != blank %}
+             <div class="lookbook-caption">
+               {% if blkSt.url != blank %}<a href="{{ blkSt.url}}">{% endif %}
+               {% if blkSt.title != blank %}<div class="ttlTxt">{{ blkSt.title }}</div>{% endif %}
+               {% if blkSt.title2 != blank %}<div class="rgTxt mt5">{{ blkSt.title2 }}</div>{% endif %}
+               {% if blkSt.url != blank %}</a>{% endif %}
+             </div>
+             {% endif %}             
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+  </div>
+</div>
+<link rel="preload" as="style" href="{{ 'photoswipe.css' | asset_url }}" onload="this.rel='stylesheet'">
+<script type="module">
+    import PhotoSwipeLightbox from '{{'photoswipe-lightbox.min.js' | asset_url}}';
+    const lightbox = new PhotoSwipeLightbox({
+        gallery: '.grid-masonary',
+        children: 'a.zoom',
+        pswpModule: () => import('{{'photoswipe.min.js' | asset_url}}')
+    });
+    lightbox.init();
+</script>
+{% schema %}
+  {
+    "name": "t:sections.photo_gallery.name",
+	"class":"index-section",
+	"max_blocks":50,
+    "settings": [			
+	   {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Photo Gallery"	
+      },
+ 	  {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "t:sections.all.sub_head",
+        "default": "A large room for the exhibition of pictures"
+      }, 
+     {
+		 "type": "paragraph",
+		 "content":"t:sections.photo_gallery.preview"
+     },	 
+	  {
+        "type": "header",      
+        "content":"t:sections.all.name"
+      }, 	  
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },
+		{
+         "type": "checkbox",
+		 "id": "section_width",
+		 "label":"t:global.fullwidth",
+		 "default": true
+        }, 
+		 {
+			"type":"checkbox",
+			"id":"npd",
+			"label":"t:global.no_padding",
+			"info": "t:global.no_padding_info",
+			"default": false
+		  },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+	  {
+        "type": "header",
+        "content": "t:global.grid.name"
+      },			  
+	  {
+        "type": "paragraph",
+        "content": "t:global.grid.space"
+      },
+	  {
+        "type": "range",
+        "id": "grid-spacing",
+        "label": "t:global.devices.desktop",
+        "default": 15,
+        "min": 0,
+        "max": 50,
+        "step": 1,
+		"unit":"px"
+      },
+     {
+        "type": "range",
+        "id": "grid-spacing-mbl",
+        "label": "t:global.devices.mobile",
+        "default": 5,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px",
+		"info":"t:global.grid.space_info"		
+      },
+	{
+        "type": "range",
+        "id": "grid-spacing-col",
+        "label": "t:global.grid.column",
+        "default": 2,
+        "min": 2,
+        "max": 5,
+        "step": 1,
+		"info":"t:sections.photo_gallery.column_guide"
+      },	  
+	  {
+        "type": "header",
+        "content": "t:sections.all.heading.title"
+      },
+	  {
+        "type": "color",
+        "id": "tcl",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },
+      {
+            "type": "range",
+            "id": "tfs",
+            "label": "t:global.font.size",
+            "default": 16,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "tfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 15,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "tff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "600",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "tlh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },	  
+	  {
+        "type": "header",
+        "content": "t:sections.all.heading.details"
+      },	  
+	  {
+        "type": "color",
+        "id": "cl",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },
+      {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 13,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 13,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "fw",
+            "label": "t:global.font.weight",
+            "default": "400",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "lh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+	   {
+			"type":"color",
+			"id":"bg",
+		    "label":"t:global.background.color",
+			"default":"#fff"
+		},      
+         {
+            "type": "range",
+            "id": "opt",
+            "min": 0,
+            "max": 1,
+            "step": 0.1,
+            "label": "t:global.background.opacity",
+            "unit": "%",
+            "default": 0.9
+          },
+		{
+			"type":"color",
+			"id":"zoom_text",
+		    "label":"t:sections.photo_gallery.zoom_icon",
+			"default":"#111"
+		},
+		{
+			"type":"color",
+			"id":"zoom_bg",
+		    "label":"t:sections.photo_gallery.zoom_icon_bg",
+			"default":"#fff"
+		},
+		{
+			"type": "range",
+			"id": "img_rad",
+			"min": 0,
+			"max": 30,
+			"step": 1,
+			"label": "t:global.image.radius",
+			"unit": "px",
+			"default": 0
+	   }
+	 ],
+	"blocks":[
+		{
+			"name":"t:sections.photo_gallery.block.name",
+			"type":"photo",
+		 	"settings":[
+					{
+			"type":"image_picker",
+			"id":"image",
+		     "label":"t:global.image.name"
+		    },
+			{
+			"type":"textarea",
+			"id":"title",
+		    "label":"t:global.text.title",
+            "default":"A LARGE ROOM FOR THE EXHIBITION OF PICTURES"
+		    },			
+	      {
+			"type":"textarea",
+			"id":"title2",
+		    "label":"t:global.text.text",
+            "default":"Give your potential customers a way to envision <br/>that product in their home or in their hands"
+		    },
+			{
+			"type":"url",
+			"id":"url",
+		     "label":"t:global.link",
+                "info": "t:sections.photo_gallery.block.link_info"
+		    },
+		 	 {
+            "type": "select",
+            "id": "width",
+            "label": "t:sections.all.column_width",
+            "default": "wd50-md",
+			"info":"t:sections.all.column_width_info",
+            "options": [
+			  { "value": "wd20-md", "label": "20%" },
+              { "value": "wd25-md", "label": "25%" },
+              { "value": "wd33-md", "label": "33%" },
+              { "value": "wd40-md", "label": "40%" },
+              { "value": "wd50-md", "label": "50%" },
+              { "value": "wd60-md", "label": "60%" },
+              { "value": "wd66-md", "label": "66%" },
+              { "value": "wd75-md", "label": "75%" },
+              { "value": "wd80-md", "label": "80%" },
+              { "value": "wd100", "label": "100%" }
+            ]
+          }
+		 ]
+	   }       
+     ],
+	"presets": [
+      {
+        "name": "t:sections.photo_gallery.name"   
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,490 @@
+{%- assign secSt = section.settings -%}
+{%- capture lookbookSec -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" id="sliderbox-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="carousel" {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.bg}}{% endif %};"{% endif %} >    
+  
+  <div class="instashoping{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}">   
+    {% render 'sec-title' %}
+
+     <div class="grid f-wrap shop gspace mfp-link rwcols-{{secSt.mobile-grid}} rwcols-md-{{secSt.tablet-grid}} rwcols-lg-{{secSt.grid}}{% if secSt.enable_carousel %} carousel {% unless secSt.section_width %}arwOut{% endunless %}{% else %} grid--uniform listing{% endif %}{% if secSt.disable_zoom %} no-zoom{% endif %}"
+          style="--grsp:0 -{{ secSt.grid-spacing | divided_by: 2.0  }}px;--grspi:0 {{ secSt.grid-spacing | divided_by: 2.0  }}px {{secSt.grid-spacing}}px;--grspm:0 -{{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px;--grspim:0 {{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px {{secSt.grid-spacing-mbl}}px;--brd:{{secSt.brd}}px;"
+          {% if secSt.enable_carousel %}data-flickity='{ "cellAlign":"left","groupCells":true,"wrapAround":true,"pageDots":false{%- if secSt.autoplay -%},"autoPlay":{{secSt.speed | times: 1000}}{% endif %}{%- if isRtl -%},"rightToLeft": true{%- endif -%} }'{% endif %}>
+        {% for block in section.blocks limit: section.blocks.size %}
+            {%- assign blkSt = block.settings -%}
+            {% assign product_box = forloop.index | minus:1 %}
+            {% assign delay_time = 50 | times : product_box %}    	
+            {% if blkSt.image != blank %}
+                <div class="gitem grid-lookbook wow fadeInUp" data-wow-delay="{{delay_time}}ms">
+                  <a class="db igshop mfp pr" href="#igpp{{ block.id }}" title="{{ blkSt.title | escape}}">
+                    <span class="instaShop pa fl f-aic f-jcc"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#000" fill-rule="evenodd" d="M3.01725 9.7037C3.17372 7.20029 5.2497 5.25 7.758 5.25H16.2424C18.7507 5.25 20.8267 7.20029 20.9831 9.7037L21.4831 17.7037C21.6541 20.4383 19.4823 22.75 16.7424 22.75H11.5002C11.086 22.75 10.7502 22.4142 10.7502 22C10.7502 21.5858 11.086 21.25 11.5002 21.25H16.7424C18.6171 21.25 20.103 19.6683 19.9861 17.7973L19.4861 9.79727C19.379 8.08441 17.9586 6.75 16.2424 6.75H7.758C6.0418 6.75 4.62139 8.08441 4.51433 9.79727L4.01433 17.7973C3.89739 19.6683 5.38333 21.25 7.258 21.25H7.5002C7.91441 21.25 8.2502 21.5858 8.2502 22C8.2502 22.4142 7.91441 22.75 7.5002 22.75H7.258C4.5181 22.75 2.34634 20.4383 2.51725 17.7037L3.01725 9.7037Z" clip-rule="evenodd"></path><path fill="#000" fill-rule="evenodd" d="M7.25 5C7.25 2.92893 8.92893 1.25 11 1.25H13C15.0711 1.25 16.75 2.92893 16.75 5V6C16.75 6.41421 16.4142 6.75 16 6.75 15.5858 6.75 15.25 6.41421 15.25 6V5C15.25 3.75736 14.2426 2.75 13 2.75H11C9.75736 2.75 8.75 3.75736 8.75 5V6C8.75 6.41421 8.41421 6.75 8 6.75 7.58579 6.75 7.25 6.41421 7.25 6V5zM7.25 10C7.25 12.0711 8.92893 13.75 11 13.75H13C15.0711 13.75 16.75 12.0711 16.75 10V9C16.75 8.58579 16.4142 8.25 16 8.25 15.5858 8.25 15.25 8.58579 15.25 9V10C15.25 11.2426 14.2426 12.25 13 12.25H11C9.75736 12.25 8.75 11.2426 8.75 10V9C8.75 8.58579 8.41421 8.25 8 8.25 7.58579 8.25 7.25 8.58579 7.25 9V10z" clip-rule="evenodd"></path></svg></span>
+                    <img class="imgFl lazyload" loading="lazy" src="{{ blkSt.image | img_url: '50x' }}" width="{{ blkSt.image.width }}" height="{{ blkSt.image.height }}"
+                        data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '300,500,750,1000,1350,1600' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" />
+                  </a>
+                </div>
+            {% else %}
+                <div class="gitem grid-lookbook {{blkSt.width}} wow fadeInUp" data-wow-delay="{{delay_time}}ms">
+                 {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}{{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+      <div class="hide">
+          {% for block in section.blocks %}
+            {%- assign blkSt = block.settings -%}
+            {% if blkSt.image != blank %}
+                    <div id="igpp{{ block.id }}" class="insPopup mfpbox mfp-hide mfp-with-anim">
+                        <div class="grid">
+                            <div class="gitem wd60-md">
+                                <div class="pr lookbook">
+                                <img class="imgFl lazyload" loading="lazy" width="{{ blkSt.image.width }}" height="{{ blkSt.image.height }}"
+                                     data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '300,500,750,1000,1350,1600' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" />
+                                    {% if blkSt.product1 != blank %}
+                                        <a class="products" href="{{blkSt.product1.url}}" target="_blank" style="top:{{ blkSt.p1_top}}%;left:{{ blkSt.p1_left}}%;" title="{{ blkSt.product1.title | escape }}"><span class="btn-shop"><i class="at at-plus-r"></i></span></a>
+                                    {% endif %}
+                                    {% if blkSt.product2 != blank %}
+                                        <a class="products" href="{{blkSt.product2.url}}" target="_blank" style="top:{{ blkSt.p2_top}}%;left:{{ blkSt.p2_left}}%;" title="{{ blkSt.product2.title | escape }}"><span class="btn-shop"><i class="at at-plus-r"></i></span></a>
+                                    {% endif %}
+                                    {% if blkSt.product3 != blank %}
+                                        <a class="products" href="{{blkSt.product3.url}}" target="_blank" style="top:{{ blkSt.p3_top}}%;left:{{ blkSt.p3_left}}%;" title="{{ blkSt.product3.title | escape }}"><span class="btn-shop"><i class="at at-plus-r"></i></span></a>
+                                    {% endif %}
+                                    {% if blkSt.product4 != blank %}
+                                        <a class="products" href="{{blkSt.product4.url}}" target="_blank" style="top:{{ blkSt.p4_top}}%;left:{{ blkSt.p4_left}}%;" title="{{ blkSt.product4.title | escape }}"><span class="btn-shop"><i class="at at-plus-r"></i></span></a>
+                                    {% endif %}
+                                </div>
+                            </div>
+  								<div class="gitem wd40-md">
+                                {% if blkSt.title != blank %}<div class="fl f-jcsb fs18 fwm mb10">{% if blkSt.url != blank %}<a href="{{ blkSt.url }}" class="fl f-jcsb" target="_blank">{% endif %}{{ blkSt.title }}<i class="at at-external-link ml15"></i>{% if blkSt.url != blank %}</a>{% endif %}</div>{% endif %}
+                                {% if blkSt.cpt != blank %}<div class="mb20">{{ blkSt.cpt }}</div>{% endif %}
+
+                                {% if blkSt.product1 != blank %}{% render 'product-card-grid-columns', product: blkSt.product1, postion: blkSt.dis-pstn1 %}{% endif %}
+                                {% if blkSt.product2 != blank %}{% render 'product-card-grid-columns', product:blkSt.product2, postion: blkSt.dis-pstn2 %}{% endif %}
+                                {% if blkSt.product3 != blank %}{% render 'product-card-grid-columns', product:blkSt.product3, postion: blkSt.dis-pstn3 %}{% endif %}
+                                {% if blkSt.product4 != blank %}{% render 'product-card-grid-columns', product:blkSt.product4, postion: blkSt.dis-pstn4 %}{% endif %}
+
+                                {% if secSt.isbtn and secSt.btn != blank and blkSt.url != blank %}
+                                    <a href="{{ blkSt.url }}" class="btn {{secSt.btn-size-mob}} {{secSt.btn-size-desk}} {{secSt.btn-style}}" target="_blank">{{ secSt.btn }}</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+  </div>
+</div>
+{%- endcapture -%}
+{{lookbookSec | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.instagram.shop",
+	"class":"index-section",
+	"max_blocks":50,
+    "settings": [			
+	   {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Instagram Shop"		
+      },
+ 	  {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "t:sections.all.sub_head",
+        "default": "Describe your products, collection etc..."
+      }, 	
+	  {
+        "type": "header",      
+        "content":"t:sections.all.name"
+      }, 	  
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },
+		{
+         "type": "checkbox",
+		 "id": "section_width",
+		 "label": "t:global.fullwidth",
+		 "default": true
+        }, 
+	 {
+		"type":"checkbox",
+		"id":"npd",
+		"label":"t:global.no_padding",
+        "info": "t:global.no_padding_info",
+		"default": false
+	  },
+      {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+	   {
+        "type": "checkbox",
+        "id": "section_cov",
+        "label": "t:global.background.add",
+        "default": false,
+        "info":"select light color"
+      },
+    {
+        "type": "color",
+        "id": "bg",
+        "label": "t:global.background.color",
+        "default": "#f5f5f5"
+      },	 
+       {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+      },	  
+	  {
+        "type": "header",
+        "content": "t:global.grid.name"
+      },
+	  {
+        "type": "range",
+        "id": "grid-spacing",
+        "label": "t:global.grid.space",
+        "default": 15,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px"
+      },
+     {
+        "type": "range",
+        "id": "grid-spacing-mbl",
+        "label": "t:global.grid.space_mobile",
+        "default": 5,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px",
+        "info": "t:global.grid.space_info"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:global.grid.row"
+      }, 	
+      {
+        "type": "range",
+        "id": "grid",
+        "label": "t:global.devices.desktop",
+        "default": 4,
+        "min": 2,
+        "max": 7,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "tablet-grid",
+        "label": "t:global.devices.tablet",
+        "default": 3,
+        "min": 1,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "mobile-grid",
+        "label": "t:global.devices.mobile",
+        "default": 2,
+        "min": 1,
+        "max": 3,
+        "step": 1
+      },
+	  {
+        "type": "header",
+        "content": "t:sections.all.carousel.name"
+      },
+ 	 {
+		"type":"checkbox",
+		"id":"enable_carousel",
+		"label":"t:global.enable",
+		"default": true
+	  },       	 	    
+	  {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "t:sections.all.carousel.autoplay",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "speed",
+        "label": "t:sections.all.carousel.speed",
+        "default": 5,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+		"unit": "Sec"
+      },
+      {
+		"type":"paragraph",
+		"content":"----------------------------------------"
+	  }, 
+	  {
+            "type": "range",
+            "id": "brd",
+            "label": "t:global.image.radius",
+            "default": 0,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit":"px"		
+       },	  	 
+		{
+		"type":"checkbox",
+		"id":"isbtn",
+		"label":"t:sections.instagram.button_in_popup",
+		"default": false
+	   },	
+	  {
+		"type": "text",
+		"id": "btn",
+		"label": "t:global.button.text",
+		"default": "View on Instagram"
+	  },
+	   {
+            "type": "select",
+            "id": "btn-style",
+            "label": "t:global.button.select",
+            "default": "btn",
+            "options": [
+              {
+              "label": "Solid Button 1",
+              "value": "btn"
+              },
+              {
+              "label": "Solid Button 2",
+              "value": "btn2"
+              },
+              {
+              "label": "Solid Button 3",
+              "value": "btn3"
+              },
+              {
+              "label": "Border Button 1",
+              "value": "bdr-btn1"
+              },
+              {
+              "label": "Border Button 2",
+              "value": "bdr-btn2"
+              } 
+            ]
+        },
+		{
+          "type": "select",
+          "id": "btn-size-desk",
+          "label": "t:global.button.size",
+          "default": "btn-sm",
+          "options": [
+			  {
+			  "label": "Small",
+			  "value": "btn-sm"
+			  },
+			  {
+			  "label": "Medium",
+			  "value": "btn-md"
+			  },
+			  {
+			  "label": "Large",
+			  "value": "btn-lg"
+			  }	
+          	]
+          }, 
+          {
+			  "type": "select",
+			  "id": "btn-size-mob",
+			  "label": "t:global.button.size_mobile",
+			  "default": "mob-btn-sm",
+			  "options": [
+				  {
+					  "label": "Small",
+					  "value": "mob-btn-sm"
+				  },
+				  {
+					  "label": "Medium",
+					  "value": "mob-btn-md"
+				  },
+				  {
+					  "label": "Large",
+					  "value": "mob-btn-lg"
+				  }	
+			  ]
+       }	  
+	 ],
+	"blocks":[
+		{
+			"name":"t:sections.instagram.block.name",
+			"type":"img",
+		 	"settings":[
+                {
+                    "type":"image_picker",
+                    "id":"image",
+                     "label":"t:global.image.name"
+                },
+                {
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:sections.instagram.block.title"
+                },
+                {
+                    "type":"richtext",
+                    "id":"cpt",
+                    "label":"t:sections.instagram.block.caption"			 
+                },
+                {
+                    "type":"url",
+                    "id":"url",
+                    "label":"t:sections.instagram.block.link"
+                },
+              {
+                "type":"header",
+                "content":"t:sections.instagram.block.add_products"
+               },
+              {
+                "type": "product",
+                "id": "product1",
+                "label": "t:sections.instagram.block.product1"
+              },
+               {
+                "type": "range",
+                "id": "p1_top",
+                "label": "t:sections.instagram.block.top_position",
+                "default": 1,
+                "min": 1,
+                "max": 90,
+                "step": 1,
+                "unit": "%"
+              },
+              {
+                "type": "range",
+                "id": "p1_left",
+                "label": "t:sections.instagram.block.left_position",
+                "default": 1,
+                "min": 1,
+                "max": 90,
+                "step": 1,
+                "unit": "%"
+              },
+		 {
+            "type": "product",
+            "id": "product2",
+            "label": "t:sections.instagram.block.product2"
+          },
+		 {		
+            "type": "range",
+            "id": "p2_top",
+            "label": "t:sections.instagram.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p2_left",
+            "label": "t:sections.instagram.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		{
+            "type": "product",
+            "id": "product3",
+            "label": "t:sections.instagram.block.product3"
+          },
+		 {		
+            "type": "range",
+            "id": "p3_top",
+            "label": "t:sections.instagram.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p3_left",
+            "label": "t:sections.instagram.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		{
+            "type": "product",
+            "id": "product4",
+            "label": "t:sections.instagram.block.product4"
+          },
+		 {		
+            "type": "range",
+            "id": "p4_top",
+            "label": "t:sections.instagram.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p4_left",
+            "label": "t:sections.instagram.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          }
+		 ]
+	   }       
+     ],
+	"presets": [
+      {
+        "name": "t:sections.instagram.shop",
+        "blocks": [
+          {
+            "type": "img"
+          },
+          {
+            "type": "img"
+          },
+          {
+            "type": "img"
+          },
+          {
+            "type": "img"
+          }          	  
+        ]
+      }
+    ]
+  }
+{% endschema %}

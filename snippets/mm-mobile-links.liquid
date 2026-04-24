@@ -1,0 +1,40 @@
+<li class="lvl-1{% if link.active or link.child_active %} active{% endif %}">
+  {%- assign label1 = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+  {%- assign imgName = link.title | handleize | prepend: 'mm-' | append: '.png' -%}
+  {%- assign imgSrc = imgName | file_img_url: '70x' -%}
+  <a href="{{ link.url }}" class="site-nav">
+      {% if imgSrc contains '?v=' and secSt.isimg %}
+            <img class="mmImg" loading="lazy" src="{{ imgSrc }}" width="{{ secSt.imgsize }}" height="{{ secSt.imgsize }}" alt="{{ link.title }}" />
+        {% endif %}
+      {{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label1] }}</span>{% endif %}
+      {%- if link.links != blank -%}<i class="at at-plus-l" aria-hidden="true"></i>{%- endif -%}
+    </a>
+  {%- if link.links != blank -%}
+  <ul class="subLinks{% if gridView %} gridView gr{{ secSt.menugrid }}{% endif %}" {% if gridView %}style="--fs:{{ secSt.ft2 }}px;--bdr:{{ secSt.ibdr2 }}px;"{% endif %}>
+    {%- for childlink in link.links -%}
+    <li class="lvl-2{% if childlink.active or childlink.child_active %} active{% endif %}">
+      {%- assign label2 = childlink.title |  split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+      <a href="{{ childlink.url }}" class="site-nav lvl-2">
+          {%- assign chimgName = childlink.title | handleize | prepend: 'mm-' | append: '.png' -%}
+          {%- assign chimgSrc = chimgName | file_img_url: '70x' -%}
+          {% if chimgSrc contains '?v=' and secSt.isimg %}
+                <img class="mmImg" loading="lazy" src="{{ chimgSrc }}" {% if gridView %}width="{{ secSt.imgsize2 }}" height="{{ secSt.imgsize2 }}"{% else %}width="{{ secSt.imgsize }}" height="{{ secSt.imgsize }}"{% endif %} alt="{{ childlink.title }}" />
+          {% endif %}
+          {{ childlink.title | split: '[label' | first }}{% if childlink.title contains '[label' %}<span class="lbl {{label2}}">{{ section.settings[label2] }}</span>{% endif %}
+          {%- if childlink.links != blank and gridView != true -%}<i class="at at-plus-l" aria-hidden="true"></i>{%- endif -%}
+       </a>
+      {%- if childlink.links != blank and gridView != true -%}
+      <ul class="subLinks">
+        {%- for lvl3link in childlink.links -%}
+        <li class="lvl-3 {% if lvl3link.active %}active{% endif %}">
+          {%- assign label3 = lvl3link.title |  split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+          <a href="{{ lvl3link.url }}" class="site-nav lvl-3">{{ lvl3link.title | split: '[label' | first }}{% if lvl3link.title contains '[label' %}<span class="lbl {{label3}}">{{ section.settings[label3] }}</span>{% endif %}</a>
+        </li>
+        {%- endfor -%}
+      </ul>
+      {%- endif -%}
+    </li>
+    {%- endfor -%}
+  </ul>
+  {%- endif -%}
+</li>

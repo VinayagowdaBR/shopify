@@ -1,0 +1,816 @@
+{%- assign secSt = section.settings -%}
+{% capture siteFooter %}
+<footer class="site-footer{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" role="contentinfo">  
+   
+  {% if section.blocks.size != 0 %}
+  	<div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %}">
+  	<div class="footer-top footer-block">
+        {% for block in section.blocks %}          
+            {% assign blkSt = block.settings %}
+
+        {% capture blockTtl %}{% if blkSt.title != blank %}<p class="h4 mb15">{{ blkSt.title }}</p>{% endif %}{% endcapture %}
+        {%- case block.type -%}
+        {% when 'custom' %}
+        <div id="nav_menu-{{ block.id }}" class="footer-block__item {{blkSt.width}} custom-block{% if blkSt.txt_align %} tc{% endif %}">
+          {{blockTtl}}
+
+          {% if blkSt.logo %}
+          <p class="footer-logo"><img class="autoHt lazyload" loading="lazy" data-src="{{ blkSt.logo | img_url: 'master' }}" width="{{blkSt.logo-width}}" height="{{ blkSt.logo-width | divided_by: blkSt.logo.aspect_ratio }}" alt="{{ blkSt.logo.alt | default: shop.name }}"></p>
+          {% endif %}
+
+          <div class="text custom-text">{{ blkSt.custom-text }}</div>                 
+          {% if blkSt.show_socials %}
+          
+          	  {% if blkSt.socials_ttl != blank %}
+              <h3 class="h4">{{ blkSt.socials_ttl }}</h3>
+              {% endif %} 
+          
+              {% render 'social-media' %}
+          {% endif %}                   
+        </div>
+
+        {% when 'menu' %}
+        <div id="nav_menu-{{ block.id }}" class="footer-block__item {{blkSt.width}} footer-links">
+          {{blockTtl}}
+          <ul>
+            {% for link in linklists[blkSt.menulinks].links %}
+            <li><a href="{{ link.url }}">{{ link.title | split: '[' | first }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% when 'contact' %}
+        <div id="text-{{ block.id }}" class="footer-block__item {{blkSt.width}} contact-box">
+
+          {{blockTtl}}
+
+          {% if blkSt.logo != blank %}
+          <p><img class="autoHt lazyload" loading="lazy" data-src="{{ blkSt.logo | img_url: 'master' }}" width="{{blkSt.logo-width}}" height="{{ blkSt.logo-width | divided_by: blkSt.logo.aspect_ratio }}" alt="{{ blkSt.logo.alt | default: shop.name }}"></p>
+          {% endif %}
+          
+          <ul class="addressFooter">
+            {% if blkSt.address  != blank  %}
+            <li>{% if blkSt.show_icons %} <i class="at at-map-marker-al " aria-hidden="true"></i> {% endif %} {{ blkSt.address }}</li>
+            {% endif %}
+            {% if blkSt.phone  != blank  %}
+            <li class="phone">{% if blkSt.show_icons %}<i class="at at-phone-l" aria-hidden="true"></i> {% endif %}<a href="tel:{{blkSt.phone }}">{{ blkSt.phone }}</a></li>
+            {% endif %}
+            {% if blkSt.email  != blank  %}
+            <li class="email">{% if blkSt.show_icons %}<i class="at at-envelope-l" aria-hidden="true"></i> {% endif %} <a href="mailto:{{blkSt.email}}">{{ blkSt.email }}</a></li>
+            {% endif %}
+          </ul>
+          
+          {% if blkSt.show_socials %}
+            {% if blkSt.socials_ttl != blank %}<h5 class="h4">{{ blkSt.socials_ttl }}</h5>{% endif %}
+            {% render 'social-media' %}
+          {% endif %} 
+        </div>         			
+
+        {% when 'newsletter' %}
+        <div id="text-{{ block.id }}" class="footer-block__item {{blkSt.width}} newsletter{% if blkSt.newltr_align %} tc{% endif %}">
+          <div class="wrap-newsletter">
+            {{blockTtl}}
+
+            {% if blkSt.sub_title %}<p>{{ blkSt.sub_title }}</p>{% endif %}
+            {% render 'newsletter-form' , formId: 'footNewslt' %}
+            {% if blkSt.show_socials %}
+            <div class="socials">
+              {%- if blkSt.socials_ttl != blank -%}<h3 class="h4">{{ blkSt.socials_ttl }}</h3>{%- endif -%}
+              {% render 'social-media' %}
+            </div>
+            {% endif %}
+          </div>                  
+        </div>       
+
+        {% when 'instagram' %}
+        	{% case blkSt.grid %}
+              {% when 2 %}{%- assign grid_ds = 'one-half' -%}
+              {% when 3 %}{%- assign grid_ds = 'one-third' -%}
+              {% when 4 %}{%- assign grid_ds = 'one-quarter' -%}
+              {% when 5 %}{%- assign grid_ds = 'one-fifth' -%}
+              {% when 6 %}{%- assign grid_ds = 'one-sixth' -%}
+              {% when 7 %}{%- assign grid_ds = 'one-seventh' -%}
+              {% when 8 %}{%- assign grid_ds = 'one-eighth' -%}
+              {% when 9 %}{%- assign grid_ds = 'one-nineth' -%}
+              {% when 10 %}{%- assign grid_ds = 'one-tenth' -%}
+            {% endcase %}
+            {% case blkSt.tablet-grid %}
+              {% when 1 %}{%- assign grid_tb = 'medium--one-whole' -%}
+              {% when 2 %}{%- assign grid_tb = 'medium--one-half' -%}
+              {% when 3 %}{%- assign grid_tb = 'medium--one-third' -%}
+              {% when 4 %}{%- assign grid_tb = 'medium--one-quarter' -%}
+              {% when 5 %}{%- assign grid_tb = 'medium--one-fifth' -%}
+              {% when 6 %}{%- assign grid_tb = 'medium--one-sixth' -%}
+              {% when 7 %}{%- assign grid_tb = 'medium--one-seventh' -%}
+            {% endcase %}
+            {% case blkSt.mobile-grid %}
+              {% when 1 %}{%- assign grid_mb = 'small--one-whole' -%}
+              {% when 2 %}{%- assign grid_mb = 'small--one-half' -%}
+              {% when 3 %}{%- assign grid_mb = 'small--one-third' -%}
+              {% when 4 %}{%- assign grid_mb = 'small--one-quarter' -%}
+              {% when 5 %}{%- assign grid_mb = 'small--one-fifth' -%}
+            {% endcase %}
+        	
+        {% if blkSt.appinsta %}
+        <div id="text-{{ block.id }}" class="footer-block__item {{blkSt.width}}">
+        	<div id="insta-feed"></div>
+        </div>
+        {% else %}
+        <div id="text-{{ block.id }}" class="footer-block__item {{blkSt.width}} home-instagram instagram">   
+          <div data-section-id="{{ section.id }}" data-section-type="instagram" data-image="{{ blkSt.images_size }}"
+               data-count="{{ blkSt.limit }}" data-act="{{ blkSt.act }}" data-ds="{{grid_ds}}" data-tb="{{grid_tb}}" data-mb="{{grid_mb}}">
+            {{blockTtl}}
+            {% if blkSt.sub_title %}
+            <p>{{ blkSt.sub_title }}</p>
+            {% endif %}
+            <div id="instafeed{{section.id}}" class="instafeed im{{ blkSt.images_size }} rwcols-{{blkSt.mobile-grid}} rwcols-md-{{blkSt.tablet-grid}} rwcols-lg-{{blkSt.grid}}"></div>   
+          </div>
+        </div>
+  		{% endif %}
+        
+        {% when 'socialicons' %}
+        <div id="text-{{ block.id }}" class="footer-block__item {{blkSt.width}} socialicons">
+          {{blockTtl}}
+          {% render 'social-media', hideLbl: true %}
+        </div>
+      
+         {% when 'hrline' %}
+          <div id="hrline-{{ block.id }}" class="hrline footer-block__item w_100">
+          <hr style="border-bottom:1px solid {{blkSt.lineclr}};"/>
+          </div>  
+		
+	  {% when 'cms' %}
+	  <div class="footer-block__item hide-sm hide-md wd10-md">         
+	  </div>        
+		
+        {%- endcase -%}                
+        {% endfor %}
+      </div>        
+  </div>
+  {% endif %}
+  
+  {% if secSt.copyright_text != blank or secSt.show_payment %}
+  <div class="footer-bottom">
+    <div class="fl f-aic f-jcsb f-col f-row-md{% unless secSt.section_width %} page-width{% else %} fullwidth{% endunless %}">
+        {% if secSt.copyright_text != blank %}
+        <div class="fl1{% if secSt.show_payment %} tc tl-md{% else %} tc{% endif %}">
+          {{ secSt.copyright_text }}
+          {% if secSt.show_designby %}{% endif %}
+        </div>
+        {% endif %}
+      	{% if secSt.show_payment %}
+          <div class="fl1 paymentCall{% if secSt.copyright_text != blank %} tc tr-md{% endif %}">
+            {%- if secSt.payment_img != blank -%}
+           	 <p class="footer-img"><img class="autoHt lazyload" loading="lazy" data-src="{{ secSt.payment_img | img_url: 'master' }}" alt="{{ secSt.payment_img.alt }}" width="{{secSt.payment_img_width}}" height="{{ secSt.payment_img | divided_by: secSt.payment_img.aspect_ratio }}" /></p>
+            {%- else -%}
+            	{% for type in shop.enabled_payment_types %}{{ type | payment_type_svg_tag: class: 'payment-list__item' }}{% endfor %}
+            {%- endif -%}
+          </div>
+        {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</footer>
+{% endcapture %}
+{{ siteFooter | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+
+    "name": "t:sections.footer_section.name",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "section_width",
+            "label": "t:global.fullwidth",
+            "default": false
+        },
+        {
+            "type": "textarea",
+            "id": "copyright_text",
+            "label": "t:sections.footer_section.copyright_text",
+            "default": "© 2024,Rohan. All Rights Reserved."
+        },
+        {
+            "type": "checkbox",
+            "id": "show_designby",
+            "label": "t:sections.footer_section.designed_by",
+            "default": true
+        },
+        {
+            "type": "header",
+            "content": "t:sections.footer_section.payment_options"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_payment",
+            "label": "t:global.display",
+            "default": true
+        },
+        {
+            "type": "image_picker",
+            "id": "payment_img",
+            "label": "t:sections.footer_section.payment_image",
+            "info": "t:sections.footer_section.payment_image_info"
+        },
+        {
+            "type": "text",
+            "id": "payment_img_width",
+            "label": "t:sections.footer_section.max_width",
+            "default": "350"
+        },
+        {
+            "type": "header",
+            "content": "t:global.snow.title"
+        },
+        {
+            "type": "checkbox",
+            "id": "snow_effect",
+            "label": "t:global.enable",
+            "default": false,
+            "info": "For Christmas"
+        },
+        {
+            "type": "select",
+            "id": "snow_style",
+            "label": "t:global.snow.style",
+            "default": "style1",
+            "options": [
+                {
+                    "value": "style1",
+                    "label": "Falling Down"
+                },
+                {
+                    "value": "style2",
+                    "label": "Falling From Left"
+                }
+            ]
+        }
+    ],
+    "blocks": [
+        {
+            "type": "menu",
+            "name": "t:sections.footer_section.blocks.menu.name",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "t:global.text.title",
+                    "default": "Informations"
+                },
+                {
+                    "type": "link_list",
+                    "id": "menulinks",
+                    "label": "t:sections.footer_section.blocks.menu.select",
+                    "default": "main-menu"
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.footer_section.container_width",
+                    "default": "wd25-md",
+                    "info": "t:sections.footer_section.container_width_info",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd40-md",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd60-md",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "contact",
+            "name": "t:sections.footer_section.blocks.contact.name",
+            "limit": 2,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "t:global.text.title",
+                    "default": "Contact Us"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "logo",
+                    "label": "t:sections.footer_section.blocks.contact.logo"
+                },
+                {
+                    "type": "range",
+                    "id": "logo-width",
+                    "label": "t:sections.footer_section.max_width",
+                    "default": 150,
+                    "min": 100,
+                    "max": 300,
+                    "step": 5,
+                    "unit": "px"
+                },
+                {
+                    "type": "textarea",
+                    "id": "address",
+                    "label": "t:sections.footer_section.blocks.contact.address",
+                    "default": "55 Gallaxy Enque,<br />2568 steet, 23568 NY"
+                },
+                {
+                    "type": "text",
+                    "id": "phone",
+                    "label": "t:sections.footer_section.blocks.contact.phone",
+                    "default": "(440) 000 000 0000"
+                },
+                {
+                    "type": "text",
+                    "id": "email",
+                    "label": "t:sections.footer_section.blocks.contact.email",
+                    "default": "sales@yousite.com"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_icons",
+                    "label": "t:sections.footer_section.blocks.contact.show_icons",
+                    "default": false
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.contact.socials"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_socials",
+                    "label": "t:global.display",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "socials_ttl",
+                    "label": "t:global.text.title",
+                    "default": "Stay Connected"
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.footer_section.container_width",
+                    "default": "wd25-md",
+                    "info": "t:sections.footer_section.container_width_info",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd40-md",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd60-md",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "custom",
+            "name": "t:sections.footer_section.blocks.custom.name",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "t:global.text.title",
+                    "default": "About Us"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "logo",
+                    "label": "t:global.image.name"
+                },
+                {
+                    "type": "range",
+                    "id": "logo-width",
+                    "label": "t:sections.footer_section.max_width",
+                    "default": 150,
+                    "min": 100,
+                    "max": 300,
+                    "step": 5,
+                    "unit": "px"
+                },
+                {
+                    "type": "textarea",
+                    "id": "custom-text",
+                    "label": "t:global.text.text",
+                    "default": "Making a profitable ecommerce store is hard work. You can't just open a website and expect people to flood in. If you really want to succeed you have to create traffic"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.contact.socials"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_socials",
+                    "label": "t:global.display",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "socials_ttl",
+                    "label": "t:global.text.title",
+                    "default": "Stay Connected"
+                },
+                {
+                    "type": "paragraph",
+                    "content": "----------------------------------------"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "txt_align",
+                    "label": "t:sections.footer_section.align_center",
+                    "default": false
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.footer_section.container_width",
+                    "default": "wd25-md",
+                    "info": "t:sections.footer_section.container_width_info",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd40-md",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd60-md",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "newsletter",
+            "name": "t:sections.footer_section.blocks.newsletter.name",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "t:global.text.title",
+                    "default": "Newsletter"
+                },
+                {
+                    "type": "text",
+                    "id": "sub_title",
+                    "label": "t:global.text.text",
+                    "default": "Enter your email to receive daily news and get 20% off coupon for all items. NO spam, we promise"
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.contact.socials"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "show_socials",
+                    "label": "t:global.display",
+                    "default": true
+                },
+                {
+                    "type": "text",
+                    "id": "socials_ttl",
+                    "label": "t:global.text.title",
+                    "default": "Stay Connected"
+                },
+                {
+                    "type": "paragraph",
+                    "content": "----------------------------------------"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "newltr_align",
+                    "label": "t:sections.footer_section.align_center",
+                    "default": false
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.footer_section.container_width",
+                    "default": "wd25-md",
+                    "info": "t:sections.footer_section.container_width_info",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd40-md",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd60-md",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "instagram",
+            "name": "t:sections.footer_section.blocks.instagram.name",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "paragraph",
+                    "content": "t:sections.footer_section.blocks.instagram.note"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+
+                    "label": "t:global.text.title",
+                    "default": "Rohan On Instagram"
+                },
+                {
+                    "type": "text",
+                    "id": "sub_title",
+                    "label": "t:global.text.text",
+                    "default": "Phasellus lorem malesuada ligula pulvinar commodo maecenas suscipit auctom."
+                },
+                {
+                    "type": "text",
+                    "id": "act",
+                    "label": "t:sections.footer_section.blocks.instagram.api_key",
+                    "info": "t:sections.footer_section.blocks.instagram.api_key_info"
+                },
+                {
+                    "type": "range",
+                    "id": "limit",
+                    "label": "t:sections.footer_section.blocks.instagram.photos_show",
+                    "default": 8,
+                    "min": 1,
+                    "max": 12,
+                    "step": 1
+                },
+                {
+                    "type": "paragraph",
+                    "content": "t:sections.footer_section.blocks.instagram.photos_per_row"
+                },
+                {
+                    "type": "range",
+                    "id": "grid",
+                    "label": "t:global.devices.desktop",
+                    "default": 6,
+                    "min": 1,
+                    "max": 10,
+                    "step": 1
+                },
+                {
+                    "type": "range",
+                    "id": "tablet-grid",
+                    "label": "t:global.devices.tablet",
+                    "default": 5,
+                    "min": 1,
+                    "max": 7,
+                    "step": 1
+                },
+                {
+                    "type": "range",
+                    "id": "mobile-grid",
+                    "label": "t:global.devices.mobile",
+                    "default": 3,
+                    "min": 1,
+                    "max": 5,
+                    "step": 1
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.footer_section.container_width",
+                    "default": "wd25-md",
+                    "info": "t:sections.footer_section.container_width_info",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd40-md",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd60-md",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "socialicons",
+            "name": "t:sections.footer_section.blocks.social.name",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "t:global.text.title",
+                    "default": "Stay Connected"
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.footer_section.container_width",
+                    "default": "wd25-md",
+                    "info": "t:sections.footer_section.container_width_info",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd40-md",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd60-md",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "hrline",
+            "name": "t:sections.footer_section.blocks.line.name",
+            "settings": [
+                {
+                    "type": "color",
+                    "id": "lineclr",
+                    "label": "t:global.color.name",
+                    "default": "#eee"
+                }
+            ]
+        },
+        {
+            "type": "cms",
+            "name": "t:sections.footer_section.blocks.space.name",
+            "settings": [
+                {
+                    "type": "paragraph",
+                    "content": "t:sections.footer_section.blocks.space.width"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

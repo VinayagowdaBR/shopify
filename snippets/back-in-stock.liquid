@@ -1,0 +1,69 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+<div id="backInStock" class="backStock mb20{% if current_variant.available %} hide{% endif %}" style="border:1px solid {{ blkSt.bd }};border-radius:{{ blkSt.bdr }}px;">
+    <h3 class="mb5 fw-500">{{ 'products.notify.title' | t }}</h3>
+    <p class="form-success bisMsg hide">{{ 'products.notify.submited' | t: name: current_variant.title }}</p>
+    <div id="backStockSuccess" class="mfpbox tc mfp-hide mfp-with-anim">{{ 'products.notify.post_success' | t }}</div>
+      {% form 'contact', id: 'backinstockform' %}
+          <label for="backStockEmail" class="mb20">{{ 'products.notify.subtitle' | t }}</label>
+          {{ form.errors | default_errors }}
+              <input type="hidden" name="contact[product]" value="{{ product.title }} - {{ shop.url }}{{ product.url }}">
+              <input type="hidden" name="contact[variant]" value="{{ current_variant.title }}" data-id="{{ current_variant.id }}" id="bisVariant">
+              <input type="hidden" name="challenge" value="false">
+              <div class="fl formFiels f-col f-row-md">
+                  <input type="email" id="backStockEmail" name="contact[email]" placeholder="{{ 'products.enquiry.email' | t }}" class="fl1 mb10 mb0-md" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" required>
+                  <input type="submit" class="btn mb0" value="{{ 'products.notify.button' | t }}" data-variant="">
+              </div>
+      {% endform %}
+</div>
+<style>
+    .backStock { border:1px solid #ddd; padding:30px; }
+    .backStock h3 { font-size:18px; }
+    #backStockSuccess{ color:#3fbc22; max-width:400px; }
+    @media (max-width:768px){
+    }
+</style>
+<script>
+var backCoikie = 'backinstock{{ product.id }}';
+window.addEventListener('DOMContentLoaded',function(){
+    
+    $("#backinstockform").submit(function(){
+        var cvr = getCookie(backCoikie)+'_'+$('#bisVariant').attr('data-id');
+        setCookie(backCoikie,cvr,1);
+        setCookie('contatForm','backinstockform',1);
+    });
+    const error = window.location.href.indexOf('form_type=contact') > -1;
+    if(window.location.href.indexOf('contact_posted=true') > -1 || error){
+        if(getCookie('contatForm') == 'backinstockform'){
+            $.magnificPopup.open({
+              items: {
+                src: '#backStockSuccess'
+              },
+              type: 'inline',
+              callbacks: {
+                 close: function(){
+                    setCookie('contatForm','',1);
+                 }
+               }
+            });
+        }
+    }
+    {% if current_variant.available == false %}
+        checkBackinstock('{{ current_variant.id }}');
+    {% endif %}
+});
+    function checkBackinstock(vr){
+        $('#bisVariant').attr('data-id', vr);
+        $('.backStock').removeClass('hide');
+         if(getCookie(backCoikie) != null){
+           $('#backinstockform').removeClass('hide');
+           $('.bisMsg').addClass('hide');
+           var str = String(getCookie(backCoikie)).split("_");
+           for(var i=0; i<str.length; i++){
+             if(str[i] == vr){
+               $('#backinstockform').addClass('hide');
+               $('.bisMsg').removeClass('hide');
+             }
+           }
+         }
+     }
+</script>

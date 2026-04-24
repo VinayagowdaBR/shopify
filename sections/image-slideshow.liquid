@@ -1,0 +1,263 @@
+{%- assign secSt = section.settings -%}
+{%- capture imageSlideShow -%}
+<div class="content-indent {{ secSt.top-offeset}}">
+  <div data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+    {%- capture height -%}
+                {% for block in section.blocks %}
+                    {% if block.settings.image != blank %}
+                        --slht:{{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100}}%;
+                        {% if block.settings.mb_image != blank %}
+                            --slhtm:{{ 1 | divided_by: block.settings.mb_image.aspect_ratio | times: 100}}%;
+                        {% else %}
+                            --slhtm:{{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100}}%;
+                        {% endif %}
+                        {% break %}
+                    {% else %}
+                        --slht:40%;--slhtm:40%;
+                    {% endif %}
+                {% endfor %}
+                {% unless secSt.arrow %}--arw:none{% endunless %};
+                {% unless secSt.dot %}--dot:none{% endunless %};
+                --arrow: {{secSt.arrowc}};
+	  			  --arrowbg: {{ secSt.arrowbg }};
+                 --dotsa: {{secSt.dots}};
+                 --dots: {{secSt.dots | color_modify:'alpha', 0.5 }};
+            {%- endcapture -%}
+    {% if section.blocks.size > 0 %}
+    <div class="slideshow-wrapper{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}">
+      <div class="slideshow pr ctStyle of_hidden" style="{{height}}border-radius: {{secSt.brd}}px;" id="ss{{ section.id }}"
+        data-flickity='{ "cellAlign":"left","wrapAround":true,"fade":true,"selectedAttraction": "0.2","friction":"0.8"{%- if secSt.autoplay -%},"autoPlay":{{secSt.speed | times: 1000}}{% endif %}{%- if settings.rtl -%},"rightToLeft": true{%- endif -%} }'>
+        {% for block in section.blocks %}
+          {%- liquid
+              assign blkSt = block.settings
+
+              if blkSt.imagem != blank
+                  assign dsizes = '1296,1512,2000,2450,3000,3600'
+              else
+                  assign dsizes = ''
+              endif    
+              assign msizes = '375,540,780,1080'
+
+              assign imgPos = blkSt.ialign | replace:"_"," "
+              if blkSt.image.presentation.focal_point != blank
+                 assign imgPos = blkSt.image.presentation.focal_point
+              endif
+              assign img2Pos = blkSt.ialign | replace:"_"," "
+              if blkSt.mb_image != blank and blkSt.mb_image.presentation.focal_point != blank
+                 assign img2Pos = blkSt.mb_image.presentation.focal_point
+              endif
+          %}
+        <div class="sslide im sl{{ block.id }}" {{ block.shopify_attributes }}>
+          {% if block.settings.link != blank %}<a href="{{ block.settings.link }}" class="slideshow__link" {% if block.settings.newTab %}target="_blank"{% endif %}>{% endif %}
+              {% if block.settings.image != blank %}
+              <picture class="slide-image">
+                  {% if blkSt.mb_image != blank %}
+                      <source media="(max-width:767px)" srcset="{{ blkSt.mb_image | img_url: '700x' }}">
+                  {% endif %}
+                  <source media="(max-width:1280px)" srcset="{{ blkSt.image | img_url: '1400x' }}">
+                  <img class="ssimg imgFt{% if section.settings.imganim %} anim{% endif %}" src="{{ blkSt.image | img_url: '2000x' }}" width="{{ blkSt.image.width }}" height="{{ blkSt.image.height }}" alt="{{ blkSt.image.alt | escape }}"
+                    {% if section.index > 2 %}loading="lazy"{% else %}fetchpriority="high"{% endif %} style="--ipos:{{ imgPos }};--iposm:{{ img2Pos }}">
+              </picture>
+
+              {% else %}
+                <div class="ssimg imgFt h_100 js">
+                    <div class="ph_bg h_100">{% capture current %}{% cycle 1, 2 %}{% endcapture %}{{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}</div>
+                </div>
+              {% endif %}
+            {% if block.settings.link != blank %}</a>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if section.blocks.size == 0 %}
+    <div class="placeholder-noblocks">{{ 'homepage.onboarding.no_content' | t }}</div>
+    {% endif %}
+  </div>
+</div>
+{%- endcapture -%}
+{{imageSlideShow | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.slideshow.image_name",
+    "class": "imageSlideshow",
+    "max_blocks": 10,
+    "settings": [	
+	 {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },
+        {
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": true
+	  },
+	  {
+			"type":"checkbox",
+			"id":"npd",
+			"label":"t:global.no_padding",
+			"info": "t:global.no_padding_info",
+			"default": true
+	 },
+	  {
+            "type": "range",
+            "id": "brd",
+            "label": "t:global.image.radius",
+            "default": 0,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit":"px"		
+       },
+	  {
+        "type": "header",
+        "content": "t:sections.all.carousel.name"
+      },		
+	  {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "t:sections.all.carousel.autoplay",
+        "default": true
+      },
+	 {
+        "type": "range",
+        "id": "speed",
+       	"label":"t:sections.all.carousel.speed",
+        "default": 7,
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "unit": "Sec"
+      },
+       {
+            "type": "paragraph",
+            "content": "t:sections.all.carousel.arrows"
+        },
+		{
+            "type": "checkbox",
+            "id": "arrow",
+            "label": "t:global.display",
+            "default": true			
+        },
+		 {
+            "type": "color",
+            "id": "arrowc",
+            "label": "t:global.color.name",
+            "default": "#111"
+          },
+		 {
+            "type": "color",
+            "id": "arrowbg",
+            "label": "t:global.background.color",
+            "default": "#fff"
+          },	  	 
+		{
+            "type": "paragraph",
+            "content": "t:sections.all.carousel.dots"
+        },
+		{
+            "type": "checkbox",
+            "id": "dot",
+            "label": "t:global.display",
+            "default": false			
+        },
+		{
+            "type": "color",
+            "id": "dots",
+            "label": "t:global.color.name",
+            "default": "#ddd"
+      },
+	  {
+        "type": "header",
+        "content": "t:global.snow.title"
+      },	  
+	  {
+		"type":"checkbox",
+		"id":"snow_effect",
+		"label":"t:global.enable",
+		"default": false,
+		"info":"For Christmas"
+	   },
+        {
+          "type": "select",
+          "id": "snow_style",
+          "label": "t:global.snow.style",
+          "default": "style1",         
+          "options": [
+            {
+            "value": "style1",
+            "label": "Falling Down"
+            },
+            {
+            "value": "style2",
+            "label": "Falling From Left"
+            }
+            ]
+          },
+	  {
+		"type":"paragraph",
+		"content":"For Best Resoultion recommanded image width: 1900px for Desktop and 780px for Mobile. try to keep all image with same size."
+	  }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "t:sections.slideshow.blocks.image",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:global.image.name"
+          },
+		  {
+            "type": "image_picker",
+            "id": "mb_image",
+            "label": "t:global.image.mobile"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:global.link"
+          },
+		  {
+            "type": "checkbox",
+            "id": "newTab",
+            "label": "t:global.open_new_tab"
+          }
+        ]
+      }
+    ],
+    "presets": [{
+      "name": "t:sections.slideshow.image_name",     
+      "settings": {
+        "autoplay": true
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }]
+  }
+{% endschema %}

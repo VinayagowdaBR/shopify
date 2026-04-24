@@ -1,0 +1,576 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "product": {
+      "type": "hov-product-conversion",
+      "settings": {
+        "show_badge": false,
+        "badge_text": "✨ Bestseller",
+        "subtitle": "A delicate statement for everyday elegance.",
+        "show_reviews": false,
+        "review_text": "Loved by women for everyday wear",
+        "show_tax_text": false,
+        "tax_text": "Inclusive of taxes. Free shipping on prepaid orders.",
+        "show_urgency": false,
+        "urgency_text": "",
+        "badge_1": "",
+        "badge_2": "",
+        "badge_3": "",
+        "badge_4": "",
+        "reassurance_1": "",
+        "reassurance_2": ""
+      }
+    },
+    "custom_liquid_crNYWJ": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom_liquid.name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "custom_liquid": "{% comment %} ═══════ LIQUID: Read metafields + calculate pricing ═══════ {% endcomment %}\n{% assign cv = product.selected_or_first_available_variant %}\n{% assign price = cv.price %}\n{% assign compare = cv.compare_at_price %}\n{% assign on_sale = false %}\n{% assign pct_off = 0 %}\n{% if compare and compare > price %}\n  {% assign on_sale = true %}\n  {% assign saved = compare | minus: price %}\n  {% assign pct_off = saved | times: 100 | divided_by: compare %}\n{% endif %}\n\n{% comment %} ── Read custom metafields ── {% endcomment %}\n{% comment %} TAGS: comma-separated, e.g. \"Bestseller, Hot Selling, Limited Deal\" {% endcomment %}\n{% assign custom_tags_raw = product.metafields.custom.product_tags | default: '' %}\n\n{% comment %} SUBTITLE {% endcomment %}\n{% assign custom_subtitle = product.metafields.custom.subtitle | default: '' %}\n\n{% comment %} MATERIAL: comma-separated, e.g. \"100% 304 Stainless Steel, 18K Gold Plated\" {% endcomment %}\n{% assign material_raw = product.metafields.custom.material_info | default: '' %}\n\n{% comment %} WHY BUY: multi-line text, each line = one bullet {% endcomment %}\n{% assign why_buy_raw = product.metafields.custom.why_buy | default: '' %}\n\n{% comment %} GUARANTEE: defaults to 6 months anti-tarnish {% endcomment %}\n{% assign guarantee = product.metafields.custom.guarantee_text | default: '6 Months Anti-Tarnish Guarantee' %}\n\n{% comment %} ── Parse comma-separated values into arrays ── {% endcomment %}\n{% assign custom_tags = custom_tags_raw | split: ',' %}\n{% assign materials = material_raw | split: ',' %}\n{% assign why_buy_lines = why_buy_raw | split: '\n' %}",
+        "top-offeset": "default",
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": ""
+      }
+    },
+    "collection_list_hnDqwz": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_xfdAr9": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earrings",
+            "collection_name": "",
+            "collection_btn": "",
+            "url": ""
+          }
+        },
+        "featured_collection_dHT6Ax": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earrings",
+            "collection_name": "",
+            "collection_btn": "",
+            "url": ""
+          }
+        },
+        "featured_collection_diNMnm": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "",
+            "collection_name": "",
+            "collection_btn": "",
+            "url": ""
+          }
+        },
+        "featured_collection_Tnii9i": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "",
+            "collection_name": "",
+            "collection_btn": "",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_xfdAr9",
+        "featured_collection_dHT6Ax",
+        "featured_collection_diNMnm",
+        "featured_collection_Tnii9i"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".flickity-button {display: none;}"
+      ],
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 3,
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "style": "st5",
+        "enable_carousel": true,
+        "autoplay": false,
+        "speed": 30,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "tfs": 16,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1.2,
+        "cl": "rgba(0,0,0,0)",
+        "bg": "rgba(0,0,0,0)",
+        "opt": 0,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "upsell": {
+      "type": "upsell-bundle",
+      "disabled": true,
+      "settings": {
+        "title": "FREQUENTLY BOUGHT TOGETHER",
+        "subtitle": "",
+        "collection": "frequently-bought-together",
+        "top-offeset": "none",
+        "section_cov": true,
+        "sec_bg_clr": "#fcfcfc",
+        "bgg": "",
+        "hidem": true
+      }
+    },
+    "custom_liquid_VGUwrQ": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom_liquid.name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "custom_liquid": "<div class=\"hov-faq-wrapper\">\n\n  <div class=\"hov-accordion\">\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>What is House of Viya?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          House of Viya is a contemporary jewellery brand dedicated to crafting elegant silver and gold-plated designs that blend timeless aesthetics with modern sensibilities. Each piece is thoughtfully designed to be worn effortlessly—every day and beyond.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>What kind of jewellery does House of Viya offer?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          We offer a curated selection of rings, earrings, bracelets, necklaces, pendants, and bangles—crafted in premium 925 sterling silver and high-quality anti-tarnish gold plating, designed for everyday elegance and special moments alike.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>Is House of Viya jewellery authentic?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          Yes. All our silver jewellery is made using genuine 925 sterling silver. Our gold-plated pieces use premium anti-tarnish plating techniques to ensure lasting shine and quality.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>Is your jewellery suitable for sensitive skin?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          Absolutely. Our jewellery is crafted with skin-friendly materials and is nickel-free, making it suitable for most sensitive skin types. We prioritize comfort as much as craftsmanship.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>Do you offer custom or personalized jewellery?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          Select designs may be customized or personalized. We recommend reaching out to our team via WhatsApp for availability, timelines, and design possibilities.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>What is your return and exchange policy?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          We offer a hassle-free return and exchange policy in line with our brand standards. Please refer to our Refund & Shipping Policy page for complete details.\n        </p>\n      </div>\n    </div>\n\n    <div class=\"hov-accordion-item\">\n      <button class=\"hov-accordion-header\">\n        <span>How can I get in touch with House of Viya?</span>\n        <span class=\"hov-chevron\">⌄</span>\n      </button>\n      <div class=\"hov-accordion-content\">\n        <p>\n          You can reach us via WhatsApp, email, or through the Contact Us page. Our support team is always happy to assist you.\n        </p>\n      </div>\n    </div>\n\n  </div>\n</div>\n<script>\ndocument.querySelectorAll('.hov-accordion-header').forEach(header => {\n  header.addEventListener('click', () => {\n    const item = header.parentElement;\n\n    document.querySelectorAll('.hov-accordion-item').forEach(i => {\n      if (i !== item) {\n        i.classList.remove('active');\n        i.querySelector('.hov-accordion-content').style.maxHeight = null;\n      }\n    });\n\n    item.classList.toggle('active');\n    const content = item.querySelector('.hov-accordion-content');\n    content.style.maxHeight = item.classList.contains('active')\n      ? content.scrollHeight + 'px'\n      : null;\n  });\n});\n</script>\n<style>\n.hov-faq-wrapper {\n  max-width: 900px;\n  margin: 60px auto;\n  padding: 0 20px;\n}\n\n.hov-faq-title {\n  text-align: center;\n  font-size: 32px;\n  margin-bottom: 30px;\n  font-family: \"Playfair Display\", serif;\n}\n\n.hov-accordion-item {\n  border-bottom: 1px solid #e5e5e5;\n}\n\n.hov-accordion-header {\n  width: 100%;\n  background: none;\n  border: none;\n  padding: 20px 0;\n  cursor: pointer;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  font-family: \"Playfair Display\", serif;\n  font-size: 18px;\n}\n\n.hov-chevron {\n  transition: transform 0.4s ease;\n}\n\n.hov-accordion-item.active .hov-chevron {\n  transform: rotate(180deg);\n}\n\n.hov-accordion-content {\n  max-height: 0;\n  overflow: hidden;\n  transition: max-height 0.7s ease;\n}\n\n.hov-accordion-content p {\n  font-family: 'Poppins', sans-serif;\n  font-size: 15px;\n  line-height: 1.8;\n  color: #555;\n  margin: 10px 0 25px;\n}\n</style>",
+        "top-offeset": "default",
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": ""
+      }
+    },
+    "product_slider_ciUhrG": {
+      "type": "product-slider",
+      "name": "t:sections.products_slider.name",
+      "settings": {
+        "title": "Best Seller",
+        "subtitle": "",
+        "collection": "best-seller",
+        "top-offeset": "default",
+        "section_width": false,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "prbox_style": "style1",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "rows": 5,
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": false,
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "small",
+        "autoplay": false,
+        "speed": 5,
+        "show_view_all": "",
+        "btn-style": "btn"
+      }
+    },
+    "17677702292774aa1c": {
+      "type": "apps",
+      "blocks": {
+        "trustwill_trustoo_review_widget_AA87Vf": {
+          "type": "shopify://apps/trustwill-trustoo/blocks/review-widget/c8f15077-6475-4e86-ad06-b66038d5ba2c",
+          "settings": {
+            "product": ""
+          }
+        },
+        "trustwill_trustoo_barrage_carousel_zTENCP": {
+          "type": "shopify://apps/trustwill-trustoo/blocks/barrage-carousel/c8f15077-6475-4e86-ad06-b66038d5ba2c",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "trustwill_trustoo_review_widget_AA87Vf",
+        "trustwill_trustoo_barrage_carousel_zTENCP"
+      ],
+      "settings": {
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa"
+      }
+    },
+    "custom_liquid_zPgqCr": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "name": "t:sections.custom_liquid.name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "custom_liquid": "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Ayarra Luxe - FAQ</title>\n    <style>\n      /* --- GLOBAL LAYOUT STYLES --- */\n      body {\n        margin: 0;\n        padding: 0;\n        background-color: #f9f9f9;\n      }\n      .page-width {\n        max-width: 1400px;\n        margin: 0 auto;\n        padding: 0 20px;\n      }\n      .h1 {\n        font-size: 28px;\n        margin-bottom: 25px;\n        color: #333;\n      }\n      .h4 {\n        font-size: 16px;\n        font-weight: 600;\n        margin: 0;\n        color: #444;\n      }\n\n      /* --- GRID STYLES --- */\n      .collapsible-content__grid {\n        display: grid;\n        grid-template-columns: 1fr 2fr;\n        gap: 40px;\n        margin-top: 30px;\n      }\n\n      /* --- FAQ SIDEBAR --- */\n      .faq-image-section {\n        background: #ffffff;\n        color: #000;\n        border: 2px solid #000000;\n        padding: 40px 25px;\n        border-radius: 8px;\n        text-align: center;\n        position: sticky;\n        top: 20px;\n        height: fit-content;\n      }\n\n      .Common {\n        font-size: 20px;\n        font-weight: 700;\n        margin-bottom: 5px;\n      }\n\n      .people-icon {\n        margin: 20px auto 15px;\n        width: 110px;\n        height: 110px;\n        background: #ffffff;\n        border-radius: 50%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        overflow: hidden;\n        border: 4px solid #000;\n      }\n\n      .contact-image {\n        width: 100%;\n        height: 100%;\n        object-fit: cover;\n        display: block;\n      }\n\n      .questions {\n        font-size: 14px;\n        margin-bottom: 8px;\n      }\n\n      .date-month {\n        font-size: 11px;\n        opacity: 0.8;\n        margin-bottom: 25px;\n      }\n\n      .whatsapp-chat {\n        display: inline-block;\n        padding: 10px 20px;\n        background-color: #25d366;\n        color: #fff;\n        text-decoration: none;\n        font-weight: bold;\n        border-radius: 5px;\n        transition: 0.2s;\n        font-size: 14px;\n      }\n\n      .whatsapp-chat:hover {\n        background-color: #128c7e;\n      }\n\n      /* --- ACCORDION --- */\n      .accordion {\n        width: 100%;\n      }\n\n      .accordion-item {\n        border-bottom: 1px solid #ddd;\n      }\n\n      .accordion-header {\n        padding: 15px 0;\n        cursor: pointer;\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        background: none;\n        border: none;\n      }\n\n      .indicator {\n        font-size: 1.8em;\n        margin-left: 15px;\n        transition: 0.3s;\n        width: 20px;\n        text-align: center;\n      }\n\n      .accordion-item.active .indicator {\n        transform: rotate(180deg);\n      }\n\n      .accordion-content {\n        max-height: 0;\n        overflow: hidden;\n        transition: max-height 0.4s ease-in-out;\n      }\n\n      .accordion-content p {\n        margin: 10px 0 20px;\n        font-size: 14px;\n        color: #666;\n        line-height: 1.5;\n      }\n\n      .accordion-item.active .accordion-content {\n        max-height: 300px;\n      }\n\n      /* --- MOBILE --- */\n      @media (max-width: 990px) {\n        .collapsible-content__grid {\n          grid-template-columns: 1fr;\n          gap: 30px;\n        }\n        .faq-image-section {\n          position: relative;\n          top: 0;\n        }\n      }\n    </style>\n  </head>\n\n  <body>\n    <div class=\"page-width\">\n      <div class=\"grid collapsible-content__grid\">\n\n        <!-- LEFT SIDEBAR -->\n        <div class=\"grid__item collapsible-content__grid-item\">\n          <div class=\"faq-image-section\">\n            <div class=\"Common\">Common Questions</div>\n\n            <div class=\"people-icon\">\n              <img \n                src=\"https://static.vecteezy.com/system/resources/thumbnails/027/951/137/small/stylish-spectacles-guy-3d-avatar-character-illustrations-png.png\"\n                alt=\"Ayarra Luxe Customer Support\"\n                class=\"contact-image\"\n              >\n            </div>\n\n            <div class=\"questions\">Got more questions? We’re here to help.</div>\n            <div class=\"date-month\">Mon–Fri: 10am–6pm • Avg reply time: 2 hours</div>\n\n            <a href=\"https://wa.me/91XXXXXXXXXX?text=Hello%20I%20have%20a%20query%20about%20Ayarra%20Luxe\" \n               class=\"whatsapp-chat\">\n               Chat on WhatsApp\n            </a>\n          </div>\n        </div>\n\n        <!-- RIGHT ACCORDION -->\n        <div class=\"grid__item collapsible-section\">\n          <div class=\"accordion\">\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">What is Ayarra Luxe?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  Ayarra Luxe is a premium 925 silver jewellery brand offering elegant, tarnish-resistant pieces designed for everyday luxury and timeless style.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">What types of jewellery do you offer?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  We offer 925 silver earrings, rings, bracelets, necklaces, pendants, and elegant collections crafted for both daily wear and special occasions.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">Is your jewellery real sterling silver?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  Yes! Every Ayarra Luxe piece is made from authentic 925 sterling silver, known for its purity, durability, and long-lasting shine.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">Is Ayarra Luxe jewellery tarnish-resistant?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  Our jewellery is crafted with advanced anti-tarnish coatings to keep your silver shine bright. Proper care ensures your pieces last beautifully for years.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">Do you accept custom orders?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  Yes, we accept select custom requests for 925 silver pieces. Share your idea, and we’ll explore a beautiful customised design for you.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">Do you offer international shipping?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  Yes! Ayarra Luxe ships worldwide. Delivery times may vary by country, and tracking details are provided for every order.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">What is your return policy?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  We offer a 7-day return/exchange window for unworn items in original condition. For complete terms, please check our Return Policy page.\n                </p>\n              </div>\n            </div>\n\n            <div class=\"accordion-item\">\n              <button class=\"accordion-header\">\n                <h3 class=\"h4\">How can I contact customer support?</h3>\n                <span class=\"indicator\">+</span>\n              </button>\n              <div class=\"accordion-content\">\n                <p>\n                  You can reach us at <strong>support@ayarraluxe.com</strong> or through the Contact Us page. Our team replies within 24 business hours.\n                </p>\n              </div>\n            </div>\n\n          </div>\n        </div>\n\n      </div>\n    </div>\n\n    <script>\n      document.querySelectorAll('.accordion-header').forEach(header => {\n        header.addEventListener('click', function () {\n          const item = this.closest('.accordion-item');\n          item.classList.toggle('active');\n\n          const indicator = item.querySelector('.indicator');\n          indicator.textContent = item.classList.contains('active') ? '—' : '+';\n        });\n      });\n    </script>\n  </body>\n</html>",
+        "top-offeset": "small",
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": ""
+      }
+    },
+    "ds_comparison_table_A3BNY7": {
+      "type": "ds-comparison-table",
+      "blocks": {
+        "row_MqL8J7": {
+          "type": "row",
+          "settings": {
+            "benefit": "Faster Delivery",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_h8zmDT": {
+          "type": "row",
+          "settings": {
+            "benefit": "Great Customer Support",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_WXLhXB": {
+          "type": "row",
+          "settings": {
+            "benefit": "Trendiest Designs",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_X3KikE": {
+          "type": "row",
+          "settings": {
+            "benefit": "Affordable Prices",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_8TTrtP": {
+          "type": "row",
+          "settings": {
+            "benefit": "Easy Refund Policy",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_JnibRj": {
+          "type": "row",
+          "settings": {
+            "benefit": "Long Lasting Jewellery",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_D8Rzk4": {
+          "type": "row",
+          "settings": {
+            "benefit": "Celebrity Verified",
+            "us": true,
+            "others": false
+          }
+        },
+        "row_bP6Kxw": {
+          "type": "row",
+          "settings": {
+            "benefit": "High Quality Material",
+            "us": true,
+            "others": false
+          }
+        }
+      },
+      "block_order": [
+        "row_MqL8J7",
+        "row_h8zmDT",
+        "row_WXLhXB",
+        "row_X3KikE",
+        "row_8TTrtP",
+        "row_JnibRj",
+        "row_D8Rzk4",
+        "row_bP6Kxw"
+      ],
+      "disabled": true,
+      "name": "Comparison table",
+      "settings": {
+        "title": "Why Choose Us",
+        "heading_size": "h0",
+        "text": "<p>Beyond the Rest: Defining Our Value.<br/></p>",
+        "button_label": "",
+        "link": "shopify://collections/best-selling",
+        "button_style_secondary": true,
+        "color_scheme": "custom",
+        "layout": "table_second",
+        "benefit_color_scheme": "accent-1",
+        "checkmark_color": "#53af01",
+        "icon_cells_color_scheme": "background-1",
+        "us_label": "[shop_name]",
+        "us_label_size": 12,
+        "logo_width": 35,
+        "mobile_logo_width": 25,
+        "others_label": "Others",
+        "others_label_size": 12,
+        "others_logo_width": 25,
+        "others_mobile_logo_width": 35,
+        "padding_top": 48,
+        "padding_bottom": 8,
+        "custom_colors_background": "#ffffff",
+        "custom_gradient_background": "",
+        "custom_colors_text": "#2e2a39",
+        "custom_colors_solid_button_background": "#dd1d1d",
+        "custom_colors_solid_button_text": "#ffffff",
+        "custom_colors_outline_button": "#dd1d1d"
+      }
+    },
+    "product_slider_YjHQmN": {
+      "type": "product-slider",
+      "disabled": true,
+      "name": "t:sections.products_slider.name",
+      "settings": {
+        "title": "EXPLORE MORE",
+        "subtitle": "",
+        "collection": "home-page",
+        "top-offeset": "default",
+        "section_width": false,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "prbox_style": "style1",
+        "grid": 4,
+        "tablet-grid": 4,
+        "mobile-grid": 2,
+        "rows": 20,
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": true,
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "small",
+        "autoplay": false,
+        "speed": 5,
+        "show_view_all": "",
+        "btn-style": "btn"
+      }
+    },
+    "store_features_XmBNPr": {
+      "type": "store-features",
+      "blocks": {
+        "text_block_kbFM7X": {
+          "type": "text_block",
+          "settings": {
+            "icons": "at-undo-r",
+            "title": "EASY RETURNS",
+            "text": "<p>7-day hassle-free return policy</p>",
+            "texturl": ""
+          }
+        },
+        "text_block_J3yg8Y": {
+          "type": "text_block",
+          "settings": {
+            "icons": "at-phone-24",
+            "title": "24/7 SUPPORT",
+            "text": "<p>Real-time chat & email support</p>",
+            "texturl": ""
+          }
+        },
+        "text_block_wgBcBQ": {
+          "type": "text_block",
+          "settings": {
+            "icons": "at-ship-fast",
+            "title": "FREE SHIPPING",
+            "text": "<p>On all prepaid orders above ₹999</p>",
+            "texturl": ""
+          }
+        },
+        "text_block_xCXmYU": {
+          "type": "text_block",
+          "settings": {
+            "icons": "at-payment-security",
+            "title": "SECURE PAYMENTS",
+            "text": "<p>All major cards & UPI accepted</p>",
+            "texturl": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_block_kbFM7X",
+        "text_block_J3yg8Y",
+        "text_block_wgBcBQ",
+        "text_block_xCXmYU"
+      ],
+      "disabled": true,
+      "name": "t:sections.store_features.name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": false,
+        "section_cov": true,
+        "sec_bg_clr": "#0a0a3f",
+        "bgg": "",
+        "hide_mobile": false,
+        "hided": false,
+        "style": "style2",
+        "icon-type": "image",
+        "icons_clr": "#ffffff",
+        "isz": 38,
+        "tcl": "#ffffff",
+        "tfs": 12,
+        "tfsm": 12,
+        "tfw": "600",
+        "tlh": 1.2,
+        "cl": "#ffffff",
+        "border_sep": "#eeeeee"
+      }
+    },
+    "tabs": {
+      "type": "product-tabs",
+      "blocks": {
+        "descriptions": {
+          "type": "desc",
+          "disabled": true,
+          "settings": {
+            "title": "PRODUCT DETAILS"
+          }
+        },
+        "spec_eyp8Bk": {
+          "type": "spec",
+          "disabled": true,
+          "settings": {
+            "title": "SPECIFICATIONS",
+            "content": "",
+            "style": "2",
+            "grid": 4,
+            "tgrid": 3,
+            "mgrid": 2,
+            "bdr": "#f5f5f5"
+          }
+        },
+        "review": {
+          "type": "review",
+          "disabled": true,
+          "settings": {
+            "title": "REVIEWS",
+            "otherapp": ""
+          }
+        },
+        "ca4b9cc3-1de5-4957-9152-20d832cd0b41": {
+          "type": "custom",
+          "disabled": true,
+          "settings": {
+            "title": "SHIPPING & RETURNS",
+            "content": "<h4>Returns Policy</h4>\n\n<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce eros justo, accumsan non dui sit amet. Phasellus semper volutpat mi sed imperdiet. Ut odio lectus, vulputate non ex non, mattis sollicitudin purus. Mauris consequat justo a enim interdum, in consequat dolor accumsan. Nulla iaculis diam purus, ut vehicula leo efficitur at.</p>\n<p><br>Interdum et malesuada fames ac ante ipsum primis in faucibus. In blandit nunc enim, sit amet pharetra erat aliquet ac.</p>\n\n<h4>Shipping</h4>\n<p>Pellentesque ultrices ut sem sit amet lacinia. Sed nisi dui, ultrices ut turpis pulvinar. Sed fringilla ex eget lorem consectetur, consectetur blandit lacus varius. Duis vel scelerisque elit, et vestibulum metus. Integer sit amet tincidunt tortor. Ut lacinia ullamcorper massa, a fermentum arcu vehicula ut. Ut efficitur faucibus dui Nullam tristique dolor eget turpis consequat varius. Quisque a interdum augue. Nam ut nibh mauris.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "descriptions",
+        "spec_eyp8Bk",
+        "review",
+        "ca4b9cc3-1de5-4957-9152-20d832cd0b41"
+      ],
+      "disabled": true,
+      "settings": {
+        "section_width": false,
+        "tab_style": "1",
+        "tab_align": "center",
+        "tfs": 13,
+        "tff": "ft2",
+        "tfw": "600",
+        "cl": "#111111",
+        "tbg": "#f5f5f5",
+        "bdr": "#dddddd",
+        "cla": "#111111",
+        "tbga": "#ffffff",
+        "bdra": "#dddddd",
+        "bbrd": 0,
+        "clm": "#000000",
+        "tbgm": "#eeeeee",
+        "bdrm": "#ffffff",
+        "clam": "#eeeeee",
+        "tbgam": "#000000",
+        "bdram": "#eeeeee"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "disabled": true,
+      "settings": {
+        "title": "RECOMMENDED PRODUCTS",
+        "subtitle": "",
+        "section_width": false,
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "limit": "5",
+        "enable_carousel": true,
+        "autoplay": true,
+        "speed": 3
+      }
+    },
+    "recently-viewed": {
+      "type": "recently-viewed",
+      "disabled": true,
+      "settings": {
+        "title": "RECENTLY VIEWED PRODUCTS",
+        "subtitle": "",
+        "section_width": false,
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "recently_pr_limit": "5",
+        "autoplay": false,
+        "speed": 5
+      }
+    }
+  },
+  "order": [
+    "product",
+    "custom_liquid_crNYWJ",
+    "collection_list_hnDqwz",
+    "upsell",
+    "custom_liquid_VGUwrQ",
+    "product_slider_ciUhrG",
+    "17677702292774aa1c",
+    "custom_liquid_zPgqCr",
+    "ds_comparison_table_A3BNY7",
+    "product_slider_YjHQmN",
+    "store_features_XmBNPr",
+    "tabs",
+    "recommendations",
+    "recently-viewed"
+  ]
+}

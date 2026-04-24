@@ -1,0 +1,73 @@
+{% for block in section.blocks %}
+{%- assign enableSlideshow = false -%}
+{% if block.settings.cat-bnr-1 != blank or block.settings.cat-bnr-2 != blank  or block.settings.cat-bnr-3 != blank  or block.settings.cat-bnr-4 != blank  or block.settings.cat-bnr-5 != blank %}
+	{%- assign enableSlideshow = true -%}
+{% endif %}
+{% if block.type == 'slideshow' and enableSlideshow %}
+<div class="catBanners imageSlideshow mb20{% unless block.settings.display_mobile %} hide-sm{% endunless %}">
+  <div class="slideshow-wrapper">
+    <div class="slideshow" id="collection-slideshow" 
+         data-flickity='{ "cellAlign":"left","groupCells":true,"wrapAround":true,"pageDots":false,"autoPlay":6000{%- if settings.rtl -%},"rightToLeft": true{%- endif -%} }'>
+      {% if block.settings.cat-bnr-1 != blank %}
+      <div class="slideshow__slide w_100">
+        {% if block.settings.cat-bnr--url-1 != blank %}<a href="{{block.settings.cat-bnr--url-1}}" class="slideshow__link">{% endif %}
+          <img class="imgFl lazyload" src="{{ block.settings.cat-bnr-1 | img_url: '50x' }}" width="{{ block.settings.cat-bnr-1.width }}" height="{{ block.settings.cat-bnr-1.height }}"
+               data-srcset="{% render 'lazyload', image: block.settings.cat-bnr-1, sizes: '540,760,940,1180,1596' %}" data-sizes="auto" alt="{{ block.settings.cat-bnr-1.alt | escape }}">
+          {% if block.settings.cat-bnr--url-1 != blank %}</a>{% endif %}
+      </div>
+      {% endif %}
+
+      {% if block.settings.cat-bnr-2 != blank %}
+      <div class="slideshow__slide w_100">
+        {% if block.settings.cat-bnr--url-2 != blank %}
+        <a href="{{block.settings.cat-bnr--url-2}}" class="slideshow__link">
+          {% endif %}
+          <img class="imgFl lazyload" src="{{ block.settings.cat-bnr-2 | img_url: '50x' }}" width="{{ block.settings.cat-bnr-2.width }}" height="{{ block.settings.cat-bnr-2.height }}"
+               data-srcset="{% render 'lazyload', image: block.settings.cat-bnr-2, sizes: '540,760,940,1180,1596' %}" data-sizes="auto" alt="{{ block.settings.cat-bnr-2.alt | escape }}">
+          {% if block.settings.cat-bnr--url-2 != blank %}
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if block.settings.cat-bnr-3 != blank %}
+      <div class="slideshow__slide w_100">
+        {% if block.settings.cat-bnr--url-3 != blank %}
+        <a href="{{block.settings.cat-bnr--url-3}}" class="slideshow__link">
+          {% endif %}
+          <img class="imgFl lazyload" src="{{ block.settings.cat-bnr-3 | img_url: '50x' }}" width="{{ block.settings.cat-bnr-3.width }}" height="{{ block.settings.cat-bnr-3.height }}"
+               data-srcset="{% render 'lazyload', image: block.settings.cat-bnr-3, sizes: '540,760,940,1180,1596' %}" data-sizes="auto" alt="{{ block.settings.cat-bnr-3.alt | escape }}">
+          {% if block.settings.cat-bnr--url-3 != blank %}
+        </a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+      {% if block.settings.cat-bnr-4 != blank %}
+      <div class="slideshow__slide w_100">
+        {% if block.settings.cat-bnr--url-4 != blank %}<a href="{{block.settings.cat-bnr--url-4}}" class="slideshow__link">{% endif %}
+          <img class="imgFl lazyload" src="{{ block.settings.cat-bnr-4 | img_url: '50x' }}" width="{{ block.settings.cat-bnr-4.width }}" height="{{ block.settings.cat-bnr-4.height }}"
+               data-srcset="{% render 'lazyload', image: block.settings.cat-bnr-4, sizes: '540,760,940,1180,1596' %}" data-sizes="auto" alt="{{ block.settings.cat-bnr-4.alt | escape }}">
+          {% if block.settings.cat-bnr--url-4 != blank %}</a>{% endif %}
+      </div>
+      {% endif %}
+
+      {% if block.settings.cat-bnr-5 != blank %}
+      <div class="slideshow__slide w_100">
+        {% if block.settings.cat-bnr--url-5 != blank %}
+        <a href="{{block.settings.cat-bnr--url-5}}" class="slideshow__link">
+          {% endif %}
+          <img class="imgFl lazyload" src="{{ block.settings.cat-bnr-5 | img_url: '50x' }}" width="{{ block.settings.cat-bnr-5.width }}" height="{{ block.settings.cat-bnr-5.height }}"
+               data-srcset="{% render 'lazyload', image: block.settings.cat-bnr-5, sizes: '540,760,940,1180,1596' %}" data-sizes="auto" alt="{{ block.settings.cat-bnr-5.alt | escape }}">
+          {% if block.settings.cat-bnr--url-5 != blank %}</a>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+<style>
+#collection-slideshow .flickity-button { width:40px; height:40px;}  
+#collection-slideshow .flickity-button .flickity-button-icon {width: 15px;}
+</style>

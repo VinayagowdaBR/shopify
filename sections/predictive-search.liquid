@@ -1,0 +1,51 @@
+{%- if predictive_search.performed -%}
+<div id="predictive-search-results" class="tl" role="listbox">
+      {%- if predictive_search.resources.queries.size > 0 or predictive_search.resources.collections.size > 0 -%}
+            <p class="popkeywords suugestWords mb0" role="group" aria-labelledby="predictive-search-queries">
+              <span class="fw-500">{{- 'general.search.suggestions' | t -}}:</span>
+                {%- for query in predictive_search.resources.queries -%}
+                    <a href="{{ query.url }}" class="psearch-item" tabindex="-1" aria-label="{{ query.text }}"><u>{{ query.styled_text }}</u></a>
+                {%- endfor -%}
+                {%- for collection in predictive_search.resources.collections -%}
+                    <a href="{{ collection.url }}" class="psearch-item" tabindex="-1"><u>{{ collection.title }}</u></a>
+                {%- endfor -%}
+            </p>
+      {%- endif -%}
+      {% assign ispages = predictive_search.resources.pages.size | plus: predictive_search.resources.articles.size %}
+      <div class="grid">
+          {%- if predictive_search.resources.products.size > 0 -%}
+            <div class="gitem psproducts mb10{% if ispages > 0 %} wd75-md{% endif %}">
+              <h2 class="popttl mb15">{{- 'general.search.products' | t -}}</h2>
+			  <hr class="mt0 mb20"/>
+              <div class="psproducts grid rwcols-2 rwcols-md-3 rwcols-lg-4" role="group" aria-labelledby="predictive-search-products">
+                {%- for product in predictive_search.resources.products -%}
+                  <div class="gitem">{% include 'product-card-grid-columns', product:product, sizes: '' %}</div>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endif -%}
+          {%- if predictive_search.resources.articles.size > 0 or predictive_search.resources.pages.size > 0 -%}
+          <div class="gitem wd25-md psPages mb10">
+              <h2 class="popttl mb15">{{- 'general.search.pages' | t -}}</h2>
+			   <hr class="mt0 mb20"/>
+              <ul id="spageslist" class="spageslist" role="group" aria-labelledby="predictive-search-pages-desktop">
+                {%- for page in predictive_search.resources.pages -%}
+                  <li class="psearch-list-item" role="option" aria-selected="false">
+                    <a href="{{ page.url }}" class="psearch-item" tabindex="-1">{{ page.title }}</a>
+                  </li>
+                {%- endfor -%}
+                {%- for article in predictive_search.resources.articles -%}
+                  <li class="predictive-search__list-item" role="option" aria-selected="false">
+                    <a href="{{ article.url }}" class="psearch-item" tabindex="-1">{{ article.title }}</a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {% endif %}
+    </div>
+    <p class="tc w_100 db mt20"><button class="btn" tabindex="-1" role="option" aria-selected="false">{{ 'general.search.all' | t: terms: predictive_search.terms }} <i class="at at-long-arrow-alt-right"></i></button></p>
+  </div>
+    {%- if predictive_search.resources.products.size == 0 -%}
+      <p class="noResult">{{ 'general.search.no_results_html' | t: terms: predictive_search.terms }}</p>
+    {%- endif -%}
+{%- endif -%}

@@ -1,0 +1,1723 @@
+{%- if section.blocks.size > 0 -%}
+{%- assign secSt = section.settings -%}
+<ul id="siteNav" class="siteNavigation {{ section.settings.menuAlign}}{% if settings.nav_below_logo %} fwmm{% unless settings.main_header_fullwidth %} page-width{% endunless %}{% endif %}" data-section-id="site-{{ section.id }}" data-section-type="site-navigation">
+{% for block in section.blocks %}
+    {%- assign blkSt = block.settings -%}
+    {%- assign label = blkSt.title | split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+    {%- capture linkLevel1 -%}<a href="{% if blkSt.url != blank %}{{ blkSt.url }}{% else %}#{% endif %}" {% if blkSt.newtab %} target="_blank"{% endif %}>{{ blkSt.title | split: '[label' | first }}{% if section.settings.menuarrow %} <i class="at at-angle-down-l"></i>{% endif %}{% if blkSt.title contains '[label' %}<span class="lbl {{label}}">{{ section.settings[label] }}</span>{% endif %}</a>{%- endcapture -%}
+    {%- case block.type -%}
+    {%- when 'homelink' -%}
+    <li class="lvl1"><a href="{{routes.root_url}}">{{ blkSt.title}}</a></li>
+
+    {%- when 'loginlink' -%}
+    {% if customer %}
+    <li class="lvl1"><a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a></li>
+    <li class="lvl1"><a href="{{ routes.account_logout_url }}">{{ 'customer.account.logout' | t }}</a></li>    
+    {% else %}
+    <li class="lvl1"><a href="{{ routes.account_login_url }}">{{ 'customer.login.form_title' | t }}</a></li> 
+    {% endif %}	  
+
+    {%- when 'single_link' -%}
+    <li class="lvl1" {{ block.shopify_attributes }}>{{linkLevel1 | replace: '<i class="at at-angle-down-l"></i>','' }}</li>
+
+    {%- when 'megamenu1' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" {{ block.shopify_attributes }} style="--img_rad:{{blkSt.img_rad}}px" >{{linkLevel1}}
+      <div class="megamenu style1{% if blkSt.imgcall == "right" %} flex f-ais{% endif %}{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}"{% if blkSt.custom_size %}style="width:{{blkSt.mm_size}}px;"{% endif %}>
+          {% if blkSt.box_sized %}<div class="mm_layout{% if blkSt.imgcall == "right" %} fl f-ais{% endif %}">{% endif %}
+        	{%- capture imgColumns -%}
+            {%- capture my_variable -%}{{blkSt.megamenu1_image}} {{blkSt.megamenu2_image}} {{blkSt.megamenu3_image}} {{blkSt.megamenu4_image}}{%- endcapture -%}
+            {%- assign products_array = my_variable | split: ' ' -%}
+            {%- if products_array.size > 0 -%}
+                {%- if blkSt.megamenu1_image != blank -%}
+                	<li class="gitem imageCol tc">
+                      <a href="{{ blkSt.imageurl }}">
+                        <img class="autoHt lazyload" data-src="{{ blkSt.megamenu1_image | img_url: 'master' }}" width="{{ blkSt.megamenu1_image.width }}" height="{{ blkSt.megamenu1_image.height }}" alt="{{blkSt.megamenu1_image.alt}}">
+                        {% if blkSt.imageTtl1 != blank %}<span class="ttl{% if blkSt.show_bdr %} bdr{% endif %}">{{blkSt.imageTtl1}}</span>{% endif %}
+                      </a>
+                	</li>
+                {%- endif -%}
+                {%- if blkSt.megamenu2_image != blank -%}
+                	<li class="gitem imageCol tc">
+                      <a href="{{ blkSt.Image2url }}">
+                        <img class="autoHt lazyload" data-src="{{ blkSt.megamenu2_image | img_url: 'master' }}" width="{{ blkSt.megamenu2_image.width }}" height="{{ blkSt.megamenu2_image.height }}" alt="{{blkSt.megamenu2_image.alt}}">
+                      	{% if blkSt.imageTtl2 != blank %}<span class="ttl{% if blkSt.show_bdr %} bdr{% endif %}">{{blkSt.imageTtl2}}</span>{% endif %}
+                      </a>
+                	</li>
+                {%- endif -%}
+                {%- if blkSt.megamenu3_image != blank -%}
+                	<li class="gitem imageCol tc">
+                      <a href="{{ blkSt.Image3url }}">
+                        <img class="autoHt lazyload" data-src="{{ blkSt.megamenu3_image | img_url: 'master' }}" width="{{ blkSt.megamenu3_image.width }}" height="{{ blkSt.megamenu3_image.height }}" alt="{{blkSt.megamenu3_image.alt}}">
+                      	{% if blkSt.imageTtl3 != blank %}<span class="ttl{% if blkSt.show_bdr %} bdr{% endif %}">{{blkSt.imageTtl3}}</span>{% endif %}
+                      </a>
+                	</li>
+                {%- endif -%}
+                {%- if blkSt.megamenu4_image != blank -%}
+                	<li class="gitem imageCol tc">
+                      <a href="{{ blkSt.Image4url }}">
+                        <img class="autoHt lazyload" data-src="{{ blkSt.megamenu4_image | img_url: 'master' }}" width="{{ blkSt.megamenu4_image.width }}" height="{{ blkSt.megamenu4_image.height }}" alt="{{blkSt.megamenu4_image.alt}}">
+                        {% if blkSt.imageTtl4 != blank %}<span class="ttl{% if blkSt.show_bdr %} bdr{% endif %}">{{blkSt.imageTtl4}}</span>{% endif %}
+                      </a>
+                	</li>
+                {%- endif -%}
+          	{%- endif -%}
+          {%- endcapture -%}
+          {% if blkSt.megamenu1_image != blank or blkSt.megamenu2_image != blank or blkSt.megamenu3_image != blank or blkSt.megamenu4_image != blank %}
+       		<ul class="grid rwcols-{{blkSt.mmcolumns}}{% if blkSt.imgcall == "right" %} flex-item{%- endif -%}">{% for link in linklists[blkSt.mm_linklist].links %}{% render 'mm-links', link:link %}{% endfor %}</ul>
+           	<ul class="grid f-ais rwcols-{{blkSt.mmimgcolumns}}" {% if blkSt.imgcall == "right" %}style="width:{{blkSt.columnWidth}}%;margin-left:15px;"{%- endif -%}>{{imgColumns}}</ul>
+          {%- else -%}
+        	<ul class="grid rwcols-{{blkSt.mmcolumns}} flex-item mmWrapper">{% for link in linklists[blkSt.mm_linklist].links %}{% render 'mm-links', link:link %}{% endfor %}</ul>
+          {%- endif -%}
+         {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+    </li>
+    {%- endif -%}
+
+    {%- when 'megamenu2' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" style="--img_rad:{{blkSt.img_rad}}px" {{ block.shopify_attributes }}>{{linkLevel1}}
+      <div class="megamenu grid--table style2{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}"{% if blkSt.custom_size %}style="width:{{blkSt.mm_size}}px;"{% endif %}>
+       {% if blkSt.box_sized %}<div class=" grid--table mm_layout">{% endif %}
+        <div class="gitem prColumn">
+          <ul class="grid rwcols-{{blkSt.mmcolumns}}">
+            {%- assign collection = collections[blkSt.collection] -%}
+            {% for product in collection.products limit: blkSt.pr_limit %}
+            <li class="gitem productCol">{% render 'mm-product', product:product %}</li>
+            {% endfor %}
+          </ul>
+          {%- if blkSt.prodall != blank -%}<a href="{{collection.url}}" class="btn">{{blkSt.prodall}}</a>{%- endif -%}
+        </div>
+        {%- if blkSt.ftcl -%}
+        <div class="gitem mmftcolumn tc" style="background-color:{{blkSt.ftcl_bg}};width:{{blkSt.ftcl_width}}%;">
+          {%- if blkSt.ft_link != blank -%}<a href="{{blkSt.ft_link}}">{%- endif -%}
+          {%- if blkSt.ftcl_image != blank -%}
+          <p><img class="imgFl lazyload" src="{{ blkSt.ftcl_image | img_url: '50x' }}" width="{{ blkSt.ftcl_image.width }}" height="{{ blkSt.ftcl_image.height }}"
+               data-srcset="{% render 'lazyload', image: blkSt.ftcl_image, sizes: '180,360,540,720,900' %}" data-sizes="auto" alt="{{ blkSt.ftcl_image.alt | escape }}"></p>
+          {%- endif -%}
+          {%- if blkSt.ftcl_title != blank -%}<h4 style="color:{{blkSt.ftcl_txt}};font-size:{{blkSt.ftcl_title_size}}px;">{{blkSt.ftcl_title}}</h4>{%- endif -%}
+          {%- if blkSt.ftcl_title != blank -%}<p style="color:{{blkSt.ftcl_txt}};font-size:{{blkSt.ftcl_subtitle_size}}px;">{{blkSt.ftcl_subtitle}}</p>{%- endif -%}
+          {%- if blkSt.ftcl_title != blank -%}<span class="btn" style="color:{{blkSt.ftcl_txt}};background-color:{{blkSt.ftcl_bg}}; border:2px solid {{blkSt.ftcl_txt}};">{{blkSt.ftcl_btn}}</span>{%- endif -%}
+          {%- if blkSt.ft_link != blank -%}</a>{%- endif -%}
+        </div>
+         {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+      {%- endif %}
+    </li>
+    {%- endif -%}
+
+    {%- when 'megamenu3' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" {{ block.shopify_attributes }}>{{linkLevel1}}
+      <div class="megamenu style3{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}"{% if blkSt.custom_size %}style="width:{{blkSt.mm_size}}px;"{% endif %}>
+       {% if blkSt.box_sized %}<div class="mm_layout">{% endif %}
+          {%- capture menucolumns -%}{{blkSt.ttl1 | remove: " "}} {{blkSt.ttl2 | remove: " "}} {{blkSt.ttl3 | remove: " "}} {{blkSt.ttl4 | remove: " "}} {{blkSt.ttl5 | remove: " "}}{%- endcapture -%}
+          {%- assign columnitems = menucolumns | split: ' ' -%}
+        <ul class="grid rwcols-{{columnitems.size}} mmWrapper" style="--img_rad:{{blkSt.img_rad}}px">
+          {%- assign mm3img = '380x' -%}
+          {%- if columnitems.size == 4 -%}
+              {% assign mm3img = '475x' %}
+          {% elsif columnitems.size == 3 %}
+              {% assign mm3img = '640x' %}
+          {% elsif columnitems.size == 2 %}
+              {% assign mm3img = '900x' %}
+          {% elsif columnitems.size == 1 %}
+              {% assign mm3img = '1900x' %}
+          {%- endif -%}
+
+          {%- if blkSt.ttl1 != blank -%}
+          <li class="gitem lvl-1">
+            {%- assign m3label1 = blkSt.ttl1 |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+            <a href="{% if blkSt.ttlurl1 != blank %}{{ blkSt.ttlurl1 }}{% else %}#{% endif %}" class="lvl-1">
+          	  <img class="autoHt lazyload" width="{{ blkSt.megamenu1_image.width }}" height="{{ blkSt.megamenu1_image.height }}"
+                   data-srcset="{% render 'lazyload', image: blkSt.megamenu1_image, sizes: '180,360,540,720' %}" data-sizes="auto" alt="{{ blkSt.megamenu1_image.alt | escape }}">
+              <span class="title">{{ blkSt.ttl1 | split: '[label' | first }} {% if blkSt.ttl1 contains '[label' %}<span class="lbl {{m3label1}}">{{ section.settings[m3label1] }}</span>{% endif %}</span>
+            </a>
+            <ul>
+              {% for link in linklists[blkSt.mm_linkcol1].links %}
+              	<li class="lvl-2{% if link.active %} active{% endif %}">
+                  {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                  <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+              	</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {%- endif -%}
+          {%- if blkSt.ttl2 != blank -%}
+          <li class="gitem lvl-1">
+            {%- assign m3label2 = blkSt.ttl2 |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+            <a href="{% if blkSt.ttlurl2 != blank %}{{ blkSt.ttlurl2 }}{% else %}#{% endif %}" class="lvl-1">
+          	  <img class="autoHt lazyload" width="{{ blkSt.megamenu2_image.width }}" height="{{ blkSt.megamenu2_image.height }}" 
+                   data-srcset="{% render 'lazyload', image: blkSt.megamenu2_image, sizes: '180,360,540,720' %}" data-sizes="auto" alt="{{ blkSt.megamenu2_image.alt | escape }}">
+              <span class="title">{{ blkSt.ttl2 | split: '[label' | first }} {% if blkSt.ttl2 contains '[label' %}<span class="lbl {{m3label2}}">{{ section.settings[m3label2] }}</span>{% endif %}</span>
+            </a>
+            <ul>
+              {% for link in linklists[blkSt.mm_linkcol2].links %}
+              	<li class="lvl-2{% if link.active %} active{% endif %}">
+                  {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                  <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+              	</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {%- endif -%}
+          {%- if blkSt.ttl3 != blank -%}
+          <li class="gitem lvl-1">
+            {%- assign m3label3 = blkSt.ttl3 |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+            <a href="{% if blkSt.ttlurl3 != blank %}{{ blkSt.ttlurl3 }}{% else %}#{% endif %}" class="lvl-1">
+          	  <img class="autoHt lazyload" width="{{ blkSt.megamenu3_image.width }}" height="{{ blkSt.megamenu3_image.height }}"
+                  data-srcset="{% render 'lazyload', image: blkSt.megamenu3_image, sizes: '180,360,540,720' %}" data-sizes="auto" alt="{{ blkSt.megamenu3_image.alt | escape }}">
+              <span class="title">{{ blkSt.ttl3 | split: '[label' | first }} {% if blkSt.ttl3 contains '[label' %}<span class="lbl {{m3label3}}">{{ section.settings[m3label3] }}</span>{% endif %}</span>
+            </a>
+            <ul>
+              {% for link in linklists[blkSt.mm_linkcol3].links %}
+              	<li class="lvl-2{% if link.active %} active{% endif %}">
+                  {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                  <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+              	</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {%- endif -%}
+          {%- if blkSt.ttl4 != blank -%}
+          <li class="gitem lvl-1">
+            {%- assign m3label4 = blkSt.ttl4 |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+            <a href="{% if blkSt.ttlurl4 != blank %}{{ blkSt.ttlurl4 }}{% else %}#{% endif %}" class="lvl-1">
+          	  <img class="autoHt lazyload" width="{{ blkSt.megamenu4_image.width }}" height="{{ blkSt.megamenu4_image.height }}"
+                  data-srcset="{% render 'lazyload', image: blkSt.megamenu4_image, sizes: '180,360,540,720' %}" data-sizes="auto" alt="{{ blkSt.megamenu4_image.alt | escape }}">
+              <span class="title">{{ blkSt.ttl4 | split: '[label' | first }} {% if blkSt.ttl4 contains '[label' %}<span class="lbl {{m3label4}}">{{ section.settings[m3label4] }}</span>{% endif %}</span>
+            </a>
+            <ul>
+              {% for link in linklists[blkSt.mm_linkcol4].links %}
+              	<li class="lvl-2{% if link.active %} active{% endif %}">
+                  {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                  <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+              	</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {%- endif -%}
+          {%- if blkSt.ttl5 != blank -%}
+          <li class="gitem lvl-1">
+            {%- assign m3label5 = blkSt.ttl5 |  split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+            <a href="{% if blkSt.ttlurl5 != blank %}{{ blkSt.ttlurl5 }}{% else %}#{% endif %}" class="lvl-1">
+          	  <img class="autoHt lazyload" width="{{ blkSt.megamenu5_image.width }}" height="{{ blkSt.megamenu5_image.height }}"
+                  data-srcset="{% render 'lazyload', image: blkSt.megamenu5_image, sizes: '180,360,540,720' %}" data-sizes="auto" alt="{{ blkSt.megamenu5_image.alt | escape }}">
+              <span class="title">{{ blkSt.ttl5 | split: '[label' | first }} {% if blkSt.ttl5 contains '[label' %}<span class="lbl {{m3label5}}">{{ section.settings[m3label5] }}</span>{% endif %}</span>
+            </a>
+            <ul>
+              {% for link in linklists[blkSt.mm_linkcol5].links %}
+              	<li class="lvl-2{% if link.active %} active{% endif %}">
+                  {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                  <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+              	</li>
+              {% endfor %}
+            </ul>
+          </li>
+          {%- endif -%}
+        </ul>
+         {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+    </li>
+    {%- endif -%}
+
+    {%- when 'megamenu4' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" {{ block.shopify_attributes }}>{{linkLevel1}}
+      {%- if linklists[blkSt.mm_linklist].links != blank -%}
+      <div class="megamenu style4{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}" style="{% if blkSt.custom_size %}width:{{blkSt.mm_size}}px;{% endif %}{% if blkSt.mm4_bg != blank %}background-image:url({{blkSt.mm4_bg | img_url: "master"}});background-position:top {{blkSt.mm4_img_position}};{% endif %}">
+         {% if blkSt.box_sized %}<div class="mm_layout">{% endif %}
+          <ul class="grid rwcols-{{blkSt.mmcolumns}} mmWrapper" {% if blkSt.mm4_bg != blank %}style="padding-{{blkSt.mm4_img_position}}:{{blkSt.mm4_space}};"{% endif %}>
+            {% for link in linklists[blkSt.mm_linklist].links %}{%- render 'mm-links', link:link -%}{% endfor %}
+          </ul>
+        {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+      {%- endif -%}
+    </li>
+    {%- endif -%}
+
+    {%- when 'megamenu5' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" {{ block.shopify_attributes }}>{{linkLevel1}}
+      <div class="megamenu style5{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}"{% if blkSt.custom_size %} style="width:{{blkSt.mm_size}}px;"{% endif %}>
+        {% if blkSt.box_sized %}<div class="mm_layout">{% endif %}
+        <ul class="grid rwcols-{{blkSt.mmcolumns}} mmWrapper {{blkSt.mm_linkStyle}}" style="--img_rad:{{blkSt.img_rad}}px" >
+          {%- for link in linklists[blkSt.mm_linklist].links -%}
+          <li class="gitem lvl-1">
+            {%- assign navImg = link.title | handleize -%}
+            <a href="{{ link.url }}" class="site-nav lvl-1">
+              {%- if blkSt.mm_linkStyle == "above" -%}<span class="imgOver">{{ link.title }}</span>{%- endif -%}
+              <img class="imgFl lazyload" data-src="{{ navImg | append: '.jpg' | file_img_url: '400x' }}" width="400" height="400" alt="{{ link.title }}" />
+              {%- if blkSt.mm_linkStyle != "above" -%}<span class="imgOver">{{ link.title }}</span>{%- endif -%}
+            </a>
+          </li>
+          {%- endfor -%}
+        </ul>
+        {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+    </li>
+    {%- endif -%}
+
+    {%- when 'megamenu7' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" {{ block.shopify_attributes }}>{{linkLevel1}}
+      <div class="megamenu style5{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}"{% if blkSt.custom_size %} style="width:{{blkSt.mm_size}}px;"{% endif %}>
+        {% if blkSt.box_sized %}<div class="mm_layout">{% endif %}
+        {{ blkSt.mm_html }}
+        <div>&nbsp;</div>
+        {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+    </li>
+    {%- endif -%}
+  
+  	{%- when 'megamenu6' -%}
+    {%- if blkSt.title != blank -%}
+    <li class="lvl1 parent megamenu{% if blkSt.custom_size %} ctsize{% endif %}" {{ block.shopify_attributes }}>{{linkLevel1}}
+      <div class="megamenu style6{% if blkSt.imgcall == "right" %} flex{% endif %}{% if blkSt.custom_size %} {{blkSt.mm_align}}{% else %} mmfull{% endif %}"{% if blkSt.custom_size %}style="width:{{blkSt.mm_size}}px;"{% endif %}>
+          {% if blkSt.box_sized %}<div class="mm_layout{% if blkSt.imgcall == "right" %} flex{% endif %}">{% endif %}
+        	<ul class="fl w_100 mmWrapper">
+              <li class="mm6main">
+                  {% for link in linklists[blkSt.mm_linklist].links %}
+                      {%- assign label1 = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                      <a href="{{ link.url }}" class="site-nav lvl-1{% if link.links != blank %} hasSub{% endif %}{% if forloop.first %} active{% endif %}" data-link="#nv{{link.title | handleize}}">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label1] }}</span>{% endif %}</a>
+                  {% endfor %}
+              </li>
+        	  <li class="lvl-1 fl1">
+                  {% for link in linklists[blkSt.mm_linklist].links %}
+                	{% assign nindex = forloop.index %}
+                	<div id="nv{{link.title | handleize}}" class="fl admmsub{% if forloop.first %} active{% endif %}">
+                      {%- if link.links != blank -%}
+                        <ul class="subLinks fl1">
+                          <li class="fl1 lvl-2{% if childlink.active or childlink.child_active %} active{% endif %}" style="column-count:{{blkSt.mmcolumns}};">
+                          {%- for childlink in link.links -%}
+                            {%- assign label2 = childlink.title |  split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+                            <a href="{{ childlink.url }}" class="site-nav lvl-2">{{ childlink.title | split: '[label' | first }}{% if childlink.title contains '[label' %}<span class="lbl {{label2}}">{{ section.settings[label2] }}</span>{% endif %}</a>
+                            {%- if childlink.links != blank -%}
+                            <ul class="subLinks">
+                              {%- for lvl3link in childlink.links -%}
+                              <li class="lvl-3 {% if lvl3link.active %}active{% endif %}">
+                                {%- assign label3 = lvl3link.title |  split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+                                <a href="{{ lvl3link.url }}" class="site-nav lvl-3">{{ lvl3link.title | split: '[label' | first }}{% if lvl3link.title contains '[label' %}<span class="lbl {{label3}}">{{ section.settings[label3] }}</span>{% endif %}</a>
+                              </li>
+                              {%- endfor -%}
+                            </ul>
+                            {%- endif -%}
+                          {%- endfor -%}
+                          </li>
+                        </ul>
+                      	{%- endif -%}
+                      	{%- assign assign clindex = 'collection' | append: nindex -%}
+                        {%- assign assign lkclect = block.settings[clindex] -%}
+                        {%- assign collection = collections[lkclect] -%}
+                      	{%- if collection.products.size > 0 -%}
+                          <div class="lvl-1 mm6bx grid rwcols-{{blkSt.grid}}" style="width:{{blkSt.columnWidth}}%">
+                            {%- liquid
+                                case blkSt.grid
+                                    when 1
+                                        assign image_size = '80,150,350,550'
+                                    when 2
+                                        assign image_size = '80,150,350'
+                                    when 3 
+                                        assign image_size = '80,150,350'
+                                    when 4 
+                                        assign image_size = '80,150,350'
+                                endcase
+                            -%}
+                            {% for product in collection.products limit: blkSt.prlimit %}
+                              <div class="gitem">{% render 'product-card-grid-columns', product:product, grid_image_width: image_size %}</div>
+                            {% endfor %}
+                          </div>
+                      	{% endif %}
+                    </div>
+                  {% endfor %}
+        	  </li>
+        	</ul>
+         {% if blkSt.box_sized %}</div>{% endif %}
+      </div>
+    </li>
+    {%- endif -%}
+
+    {%- when 'dropdown' -%}
+    {%- if blkSt.title != blank -%}<li class="lvl1 parent dropdown" {{ block.shopify_attributes }}>{{linkLevel1}}<ul class="dropdown">{% for link in linklists[blkSt.mm_linklist].links %}{% render 'mm-dropdown', link:link %}{% endfor %}</ul></li>{%- endif -%}
+
+    {%- endcase -%}
+    {%- endfor -%}
+</ul>
+<!--mmobile-->
+<div class="mobile-nav-wrapper hide-lg" role="navigation">
+    <div class="closemmn fl f-aic f-jcc" title="{{ 'general.accessibility.close_menu' | t}}"><i class="at at-times-r" aria-hidden="true"></i></div>
+    <ul id="MobileNav" class="MobileNav siteNavigation" style="--bdr:{{ secSt.ibdr }}px;">
+    {% if section.settings.spnav %}
+        {% for link in linklists[section.settings.mbmenu].links %}
+            {% render 'mm-mobile-links', link: link, secSt:secSt, gridView: secSt.gridView %}
+        {% endfor %}
+    {% else %}
+        {%- for block in section.blocks -%}
+            {%- assign blkSt = block.settings -%}
+            {%- assign label = blkSt.title | split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+            {%- capture linkLevel1 -%}
+                {%- assign imgName = blkSt.title | handleize | prepend: 'mm-' | append: '.png' -%}
+                {%- assign imgSrc = imgName | file_img_url: '70x' -%}
+                <a href="{% if blkSt.url != blank %}{{ blkSt.url }}{% else %}#{% endif %}">
+                    {% if imgSrc contains '?v=' and secSt.isimg %}
+                        <img class="mmImg" loading="lazy" src="{{ imgSrc }}" width="{{ secSt.imgsize }}" height="{{ secSt.imgsize }}" alt="{{ blkSt.title }}" />
+                    {% endif %}
+                    {{ blkSt.title | split: '[label' | first }}{% if blkSt.title contains '[label' %} <span class="lbl {{label}}">{{ section.settings[label] }}</span>{% endif %}
+                    <i class="at at-plus-l"></i>
+                </a>
+            {%- endcapture -%}
+
+            {%- if block.type == 'homelink' -%}
+                <li class="lvl1"><a href="{{routes.root_url}}">{{ blkSt.title}}</a></li>
+            {%- elsif block.type == 'single_link' -%}
+                {%- assign singlelabel = blkSt.title |  split: '[label' | last  | split: ']' | first | prepend: "nm_label" -%}
+                <li class="lvl1">{{linkLevel1 | replace: '<i class="at at-plus-l"></i>',''}}</li>
+            {%- elsif block.type == 'megamenu1' or block.type == 'megamenu4' or block.type == 'megamenu5' or block.type == 'megamenu6' or block.type == 'dropdown' -%}
+                {%- if blkSt.title != blank -%}
+                    <li class="lvl1 parent megamenu">{{linkLevel1}}<ul>{% for link in linklists[blkSt.mm_linklist].links %}{% render 'mm-mobile-links', link:link %}{% endfor %}</ul></li>
+                {%- endif -%}
+            {%- elsif block.type == 'megamenu2' -%}
+                {%- if blkSt.title != blank -%}<li class="lvl1 parent megamenu">{{linkLevel1}}
+                <ul>
+                    {%- assign collection = collections[blkSt.collection] -%}
+                    {% for product in collection.products limit: blkSt.pr_limit %}
+                        <li class="lvl-2"><a href="{{ product.url }}" class="site-nav">{{ product.title }}</a></li>
+                    {% endfor %}
+                    {%- if blkSt.prodall != blank -%}
+                        <li class="lvl-2"><a href="{{collection.url}}" class="site-nav">{{blkSt.prodall}}</a></li>
+                    {%- endif -%}
+                    {%- if blkSt.ftcl and blkSt.ft_link != blank and blkSt.ftcl_title != blank -%}
+                        <li class="lvl-2"><a href="{{blkSt.ft_link}}" class="site-nav">{{blkSt.ftcl_title}}</a></li>
+                    {%- endif -%}
+                </ul>
+                {%- endif -%}
+            {%- elsif block.type == 'megamenu3' -%}
+                {%- if blkSt.title != blank -%}
+                    <li class="lvl1 parent megamenu">{{linkLevel1}}
+                    <ul>
+                        {%- if blkSt.ttl1 != blank -%}
+                            <li class="lvl-1"><a href="{% if blkSt.ttlurl1 != blank %}{{ blkSt.ttlurl1 }}{% else %}#{% endif %}" class="lvl-1">{{ blkSt.ttl1 }}{% if blkSt.mm_linkcol1 != blank %}<i class="at at-plus-r" aria-hidden="true"></i>{% endif %}</a>
+                                <ul>
+                                    {% for link in linklists[blkSt.mm_linkcol1].links %}
+                                        <li class="lvl-2{% if link.active %} active{% endif %}">
+                                            {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                                            <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if blkSt.ttl2 != blank -%}
+                            <li class="lvl-1">
+                                <a href="{% if blkSt.ttlurl2 != blank %}{{ blkSt.ttlurl2 }}{% else %}#{% endif %}" class="lvl-1">{{ blkSt.ttl2 }}{% if blkSt.mm_linkcol2 != blank %}<i class="at at-plus-r" aria-hidden="true"></i>{% endif %}</a>
+                                <ul>
+                                    {% for link in linklists[blkSt.mm_linkcol2].links %}
+                                        <li class="lvl-2{% if link.active %} active{% endif %}">
+                                            {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                                            <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if blkSt.ttl3 != blank -%}
+                            <li class="lvl-1">
+                                <a href="{% if blkSt.ttlurl3 != blank %}{{ blkSt.ttlurl3 }}{% else %}#{% endif %}" class="lvl-1">{{ blkSt.ttl3 }}{% if blkSt.mm_linkcol3 != blank %}<i class="at at-plus-r" aria-hidden="true"></i>{% endif %}</a>
+                                <ul>
+                                    {% for link in linklists[blkSt.mm_linkcol3].links %}
+                                        <li class="lvl-2{% if link.active %} active{% endif %}">
+                                            {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                                            <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if blkSt.ttl4 != blank -%}
+                            <li class="lvl-1">
+                                <a href="{% if blkSt.ttlurl4 != blank %}{{ blkSt.ttlurl4 }}{% else %}#{% endif %}" class="lvl-1">{{ blkSt.ttl4 }}{% if blkSt.mm_linkcol4 != blank %}<i class="at at-plus-r" aria-hidden="true"></i>{% endif %}</a>
+                                <ul>
+                                    {% for link in linklists[blkSt.mm_linkcol4].links %}
+                                        <li class="lvl-2{% if link.active %} active{% endif %}">
+                                            {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                                            <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {%- endif -%}
+
+                        {%- if blkSt.ttl5 != blank -%}
+                            <li class="lvl-1">
+                                <a href="{% if blkSt.ttlurl5 != blank %}{{ blkSt.ttlurl5 }}{% else %}#{% endif %}" class="lvl-1">{{ blkSt.ttl5 }}{% if blkSt.mm_linkcol5 != blank %}<i class="at at-plus-r" aria-hidden="true"></i>{% endif %}</a>
+                                <ul>
+                                    {% for link in linklists[blkSt.mm_linkcol5].links %}
+                                        <li class="lvl-2{% if link.active %} active{% endif %}">
+                                            {%- assign label = link.title |  split: '[label' | last | split: ']' | first | prepend: "nm_label" -%}
+                                            <a href="{{ link.url }}" class="site-nav">{{ link.title | split: '[label' | first }}{% if link.title contains '[label' %}<span class="lbl {{label1}}">{{ section.settings[label] }}</span>{% endif %}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {%- endif -%}
+                    </ul>
+                </li>
+                {%- endif -%}
+            {%- endif -%}
+        {%- endfor -%}
+        <li></li>
+        {% if shop.customer_accounts_enabled %}
+            {% if customer %}
+                <li><a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a></li>
+                <li><a href="{{ routes.account_logout_url }}"><b>{{ 'customer.account.logout' | t }}</b></a></li>
+            {% else %}
+                <li><a href="{{ routes.account_login_url }}">{{ 'customer.login.form_title' | t }}</a></li>
+                {% if shop.customer_accounts_optional %}<li><a href="{{routes.account_register_url}}">{{ 'customer.register.link' | t }}</a></li>{% endif %}
+            {% endif %}
+        {% endif %}
+        {% if settings.enable_wishlist %}<li><a href="{{pages[settings.wishlist_page].url}}" title="{{ 'products.wishlist.title' | t }}">{{ 'products.wishlist.title' | t }}</a></li>{% endif %}
+    {% endif %}
+    </ul>
+</div>
+<!--mmobileend -->
+{%- endif -%}
+{% schema %}
+  {
+    "name": "t:sections.navigation.name",
+    "class": "hide-sm hide-md",
+    "settings": [
+	{
+		 "type": "paragraph",
+		 "content": "t:sections.navigation.check_style"
+      }, 
+	{
+		 "type": "paragraph",
+		 "content": "t:sections.navigation.change_style"
+      },
+     {
+        "type": "checkbox",
+        "id": "menuarrow",
+        "label": "t:sections.navigation.show_arrow",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "menuAlign",
+        "label": "t:sections.navigation.alignment",
+        "default": "tl",
+        "options": [
+          {
+            "value": "tl",
+            "label": "Left"
+          },
+          {
+            "value": "tc",
+            "label": "Center"
+          },
+          {
+            "value": "tr",
+            "label": "Right"
+          }
+      	]
+      },
+      {
+		"type": "header",
+        "content": "t:sections.navigation.mobile_mav"
+	  },
+      {
+        "type": "checkbox",
+        "id": "spnav",
+        "label": "t:sections.navigation.different_menu",		
+        "default": false
+      },
+      {
+        "type": "link_list",
+        "id": "mbmenu",
+        "label": "t:sections.navigation.select_menu",
+        "default": "main-menu"
+      }, 
+	  {
+		 "type": "paragraph",
+		 "content": "t:sections.navigation.show_image"
+      },
+      {
+        "type": "checkbox",
+        "id": "isimg",
+        "label": "t:global.enable",
+        "default": false,
+        "info": "t:sections.navigation.show_image_info"
+      },
+      {
+        "type": "range",
+        "id": "imgsize",
+        "min": 20,
+        "max": 50,
+        "step": 1,
+        "label": "t:global.image.size",
+        "default": 30
+      },
+      {
+        "type": "range",
+        "id": "ibdr",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "label": "t:global.image.radius",
+        "default": 30
+      }, 
+	  {
+		 "type": "paragraph",
+		 "content": "t:sections.navigation.grid_view"
+      },
+      {
+        "type": "checkbox",
+        "id": "gridView",
+        "label": "t:global.enable",
+        "default": false,
+        "info": "t:sections.navigation.grid_view_info"
+      },
+      {
+        "type": "range",
+        "id": "menugrid",
+        "min": 2,
+        "max": 4,
+        "step": 1,
+        "label": "t:global.grid.column",
+        "default": 3
+      },
+      {
+        "type": "range",
+        "id": "imgsize2",
+        "min": 30,
+        "max": 130,
+        "step": 1,
+        "label": "t:global.image.size",
+        "default": 80
+      },
+      {
+        "type": "range",
+        "id": "ibdr2",
+        "min": 0,
+        "max": 100,
+        "step": 1,
+        "label": "t:global.image.radius",
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "ft2",
+        "min": 9,
+        "max": 30,
+        "step": 1,
+        "label": "t:global.font.size",
+        "default": 12
+      }, 
+      {
+		"type": "header",
+        "content": "t:sections.navigation.labels"
+	  },
+	  {
+        "type": "text",
+        "id": "nm_label1",
+        "label":"t:sections.navigation.label1",
+        "default": "New"
+      },
+	  {
+        "type": "text",
+        "id": "nm_label2",
+        "label":"t:sections.navigation.label2",
+        "default": "Sale"
+      },
+	  {
+        "type": "text",
+        "id": "nm_label3",
+        "label":"t:sections.navigation.label3",
+        "default": "Hot"
+      },
+	  {
+        "type": "text",
+        "id": "nm_label4",
+        "label":"t:sections.navigation.label4",
+        "default": "Populer"
+      },
+	  {
+        "type": "text",
+        "id": "nm_label5",
+        "label":"t:sections.navigation.label5",
+        "default": "New"
+      }      
+	],
+    "blocks": [
+	  {
+        "type": "homelink",
+        "name": "t:sections.navigation.blocks.home",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name",
+			"default": "Home"
+          }  
+        ]
+      },
+ 	 {
+        "type": "loginlink",
+        "name": "t:sections.navigation.blocks.login.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "loginlink",
+            "label": "t:sections.navigation.link_name",
+			"default": "Login",
+			"info":"t:sections.navigation.blocks.login.info"
+          },
+		 {
+            "type": "paragraph",           
+			"content":"t:sections.navigation.blocks.login.account_info"
+          }  
+        ]
+      },
+      {
+        "type": "single_link",
+        "name": "t:sections.navigation.blocks.single",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+		  {
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          }  
+        ]
+      },
+	  {
+        "type": "megamenu1",
+        "name": "t:sections.navigation.blocks.simple.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          },  
+          {
+            "type": "link_list",
+            "id": "mm_linklist",
+            "label": "t:sections.navigation.select_menu",
+            "default": "main-menu"
+          },
+          {
+            "type": "range",
+            "id": "mmcolumns",
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "label": "t:sections.navigation.select_columns",
+            "default": 2
+          },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.blocks.simple.image_columns"
+          },
+          {
+            "type": "select",
+            "id": "imgcall",
+            "label": "t:sections.navigation.blocks.simple.position",
+            "default": "right",
+			"info": "t:sections.navigation.blocks.simple.position_info",
+            "options": [
+              {
+                "value": "right",
+                "label": "Right"
+              },
+              {
+                "value": "bottom",
+                "label": "Bottom"
+              }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "columnWidth",
+            "min": 20,
+            "max": 100,
+            "step": 1,
+            "label": "t:sections.navigation.column_width",
+            "default": 50,
+			"unit": "%",
+			"info": "t:sections.navigation.blocks.simple.column_width_info"
+          },
+          {
+            "type": "range",
+            "id": "mmimgcolumns",
+            "min": 1,
+            "max": 4,
+            "step": 1,
+            "label": "t:sections.navigation.blocks.simple.image_row",
+            "default": 2
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.navigation.blocks.simple.image1"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu1_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "text",
+            "id": "imageTtl1",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "url",
+            "id": "imageurl",
+            "label": "t:global.link"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.navigation.blocks.simple.image2"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu2_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "text",
+            "id": "imageTtl2",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "url",
+            "id": "Image2url",
+            "label": "t:global.link"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.navigation.blocks.simple.image3"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu3_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "text",
+            "id": "imageTtl3",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "url",
+            "id": "Image3url",
+            "label": "t:global.link"
+          },
+          {
+            "type": "paragraph",
+            "content": "t:sections.navigation.blocks.simple.image4"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu4_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "text",
+            "id": "imageTtl4",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "url",
+            "id": "Image4url",
+            "label": "t:global.link"
+          },
+           {
+            "type": "checkbox",
+            "id": "show_bdr",
+            "label": "t:sections.navigation.blocks.simple.border",
+            "default": true
+          },
+          {
+			"type": "range",
+			"id": "img_rad",
+			"label": "t:global.image.radius",
+			"default": 0,
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"unit": "px"
+      		},
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		   {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+		 
+        ]
+      },
+	  {
+        "type": "megamenu2",
+        "name": "t:sections.navigation.blocks.products.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+ 		  {
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection",
+          	"label": "t:sections.all.select_collection"
+          },
+          {
+            "type": "range",
+            "id": "pr_limit",
+            "min": 2,
+            "max": 20,
+            "step": 1,
+            "label": "t:sections.navigation.blocks.products.products_limit",
+            "default": 6
+          },
+          {
+            "type": "range",
+            "id": "mmcolumns",
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "label": "t:sections.navigation.select_columns",
+            "default": 2
+          },
+          {
+            "type": "text",
+            "id": "prodall",
+            "label": "t:global.button.text",
+            "default": "View All Products"
+          },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.blocks.products.featured_column"
+          },
+          {
+            "type": "checkbox",
+            "id": "ftcl",
+            "label": "t:global.enable",
+			"default": true
+          },
+          {
+            "type": "range",
+            "id": "ftcl_width",
+            "min": 20,
+            "max": 80,
+            "step": 1,
+            "label": "t:sections.navigation.column_width",
+			"unit": "%",
+            "default": 50
+          },
+          {
+            "type": "image_picker",
+            "id": "ftcl_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "text",
+            "id": "ftcl_title",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "range",
+            "id": "ftcl_title_size",
+            "min": 13,
+            "max": 100,
+            "step": 1,
+            "label": "t:sections.navigation.blocks.products.title_size",
+            "default": 30
+          },
+          {
+            "type": "text",
+            "id": "ftcl_subtitle",
+            "label": "t:global.text.sub_title"
+          },
+          {
+            "type": "range",
+            "id": "ftcl_subtitle_size",
+            "min": 10,
+            "max": 40,
+            "step": 1,
+            "label": "t:sections.navigation.blocks.products.subtitle_size",
+            "default": 15
+          },
+          {
+            "type": "text",
+            "id": "ftcl_btn",
+            "label": "t:global.button.text"
+          },
+          {
+            "type": "url",
+            "id": "ft_link",
+            "label": "t:global.link"
+          },
+          {
+            "type": "color",
+            "id": "ftcl_txt",
+            "label": "t:global.color.text",
+            "default": "#fff"
+          },
+          {
+            "type": "color",
+            "id": "ftcl_bg",
+            "label": "t:global.background.color",
+            "default": "#333"
+          },
+          {
+			"type": "range",
+			"id": "img_rad",
+			"label": "t:global.image.radius",
+			"default": 0,
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"unit": "px"
+      		},
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		 {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+        ]
+      },
+	  {
+        "type": "megamenu3",
+        "name": "t:sections.navigation.blocks.image_columns.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+ 		  {
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          },  
+		  {
+            "type":"header",
+        	"content": "t:sections.navigation.blocks.image_columns.column1"
+          },
+          {
+            "type": "text",
+            "id": "ttl1",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu1_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "url",
+            "id": "ttlurl1",
+            "label": "t:global.link"
+          },
+          {
+            "type": "link_list",
+            "id": "mm_linkcol1",
+            "label": "t:sections.navigation.select_menu"
+          },
+		  {
+            "type":"header",
+        	"content": "t:sections.navigation.blocks.image_columns.column2"
+          },
+          {
+            "type": "text",
+            "id": "ttl2",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu2_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "url",
+            "id": "ttlurl2",
+            "label": "t:global.link"
+          },
+          {
+            "type": "link_list",
+            "id": "mm_linkcol2",
+            "label": "t:sections.navigation.select_menu"
+          },
+		  {
+            "type":"header",
+        	"content": "t:sections.navigation.blocks.image_columns.column3"
+          },
+          {
+            "type": "text",
+            "id": "ttl3",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu3_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "url",
+            "id": "ttlurl3",
+            "label": "t:global.link"
+          },
+          {
+            "type": "link_list",
+            "id": "mm_linkcol3",
+            "label": "t:sections.navigation.select_menu"
+          },
+		  {
+            "type":"header",
+        	"content": "t:sections.navigation.blocks.image_columns.column4"
+          },
+          {
+            "type": "text",
+            "id": "ttl4",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu4_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "url",
+            "id": "ttlurl4",
+            "label": "t:global.link"
+          },
+          {
+            "type": "link_list",
+            "id": "mm_linkcol4",
+            "label": "t:sections.navigation.select_menu"
+          },
+		  {
+            "type":"header",
+        	"content": "t:sections.navigation.blocks.image_columns.column5"
+          },
+          {
+            "type": "text",
+            "id": "ttl5",
+            "label": "t:global.text.title"
+          },
+          {
+            "type": "image_picker",
+            "id": "megamenu5_image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "url",
+            "id": "ttlurl5",
+            "label": "t:global.link"
+          },
+          {
+            "type": "link_list",
+            "id": "mm_linkcol5",
+            "label": "t:sections.navigation.select_menu"
+          },
+ 		   {
+			"type": "range",
+			"id": "img_rad",
+			"label": "t:global.image.radius",
+			"default": 0,
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"unit": "px"
+      		},
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		  {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+        ]
+      },
+	  {
+        "type": "megamenu4",
+        "name": "t:sections.navigation.blocks.background_image.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+		 {
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          }, 
+          {
+            "type": "link_list",
+            "id": "mm_linklist",
+            "label": "t:sections.navigation.select_menu",
+            "default": "main-menu"
+          },
+          {
+            "type": "range",
+            "id": "mmcolumns",
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "label": "t:sections.navigation.select_columns",
+            "default": 3
+          },
+          {
+            "type": "image_picker",
+            "id": "mm4_bg",
+            "label": "t:global.background.image"
+          },
+          {
+            "type": "select",
+            "id": "mm4_img_position",
+            "label": "t:global.background.position",
+			"default": "right",
+            "options": [
+              { "value": "left","label": "Left" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+          {
+            "type": "select",
+            "id": "mm4_space",
+            "label": "t:sections.navigation.blocks.background_image.space",
+			"default": "30%",
+            "options": [
+              { "value": "20%","label": "20%" },
+              { "value": "30%", "label": "30%" },
+              { "value": "40%", "label": "40%" },
+              { "value": "50%", "label": "50%" },
+              { "value": "60%", "label": "60%" },
+              { "value": "70%", "label": "70%" }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		 {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+        ]
+      },
+	  {
+        "type": "megamenu5",
+        "name": "t:sections.navigation.blocks.links_image.name",
+        "settings": [
+		  {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          },  
+          {
+            "type": "link_list",
+            "id": "mm_linklist",
+            "label": "t:sections.navigation.select_menu",
+            "default": "main-menu",
+			"info": "t:sections.navigation.blocks.links_image.image_info"
+          },
+          {
+            "type": "select",
+            "id": "mm_linkStyle",
+            "label": "t:sections.navigation.blocks.links_image.title_possition",
+			"default": "over",
+            "options": [
+              { "value": "above", "label": "Above Image" },
+			  { "value": "over", "label": "Over Image" },
+              { "value": "below", "label": "Below Image" }
+            ]
+          },
+          {
+            "type": "range",
+            "id": "mmcolumns",
+            "min": 1,
+            "max": 6,
+            "step": 1,
+            "label": "t:sections.navigation.select_columns",
+            "default": 5
+          },
+          {
+			"type": "range",
+			"id": "img_rad",
+			"label": "t:global.image.radius",
+			"default": 0,
+			"min": 0,
+			"max": 50,
+			"step": 1,
+			"unit": "px"
+      	  },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		 {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+        ]
+      },
+	  {
+        "type": "megamenu7",
+        "name": "t:sections.navigation.blocks.custom.name",
+        "settings": [
+		  {
+            "type": "paragraph",
+            "content": "t:sections.navigation.blocks.custom.info"
+          },
+		  {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+ 	         },
+ 			{
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          },  
+          {
+            "type": "liquid",
+            "id": "mm_html",
+            "label": "t:sections.navigation.blocks.custom.custom_code",
+			"info": "t:sections.navigation.blocks.custom.custom_code_info"
+          },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		  {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+        ]
+      },
+	  {
+        "type": "megamenu6",
+        "name": "t:sections.navigation.blocks.advanced.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "newtab",
+            "label": "t:sections.navigation.new_tab"
+          },  
+          {
+            "type": "link_list",
+            "id": "mm_linklist",
+            "label": "t:sections.navigation.select_menu",
+            "default": "main-menu"
+          },
+          {
+            "type": "range",
+            "id": "mmcolumns",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "label": "t:sections.navigation.select_columns",
+            "default": 2
+          },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.blocks.advanced.products"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection1",
+          	"label": "t:sections.navigation.blocks.advanced.collection1"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection2",
+          	"label": "t:sections.navigation.blocks.advanced.collection2"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection3",
+          	"label": "t:sections.navigation.blocks.advanced.collection3"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection4",
+          	"label": "t:sections.navigation.blocks.advanced.collection4"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection5",
+          	"label": "t:sections.navigation.blocks.advanced.collection5"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection6",
+          	"label": "t:sections.navigation.blocks.advanced.collection6"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection7",
+          	"label": "t:sections.navigation.blocks.advanced.collection7"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection8",
+          	"label": "t:sections.navigation.blocks.advanced.collection8"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection9",
+          	"label": "t:sections.navigation.blocks.advanced.collection9"
+          },  
+          {
+          	"type": "collection",
+          	"id": "collection10",
+          	"label": "t:sections.navigation.blocks.advanced.collection10"
+          },
+          {
+            "type": "range",
+            "id": "grid",
+            "label": "t:sections.navigation.blocks.advanced.products_row",
+            "default": 2,
+            "min": 1,
+            "max": 4,
+            "step": 1
+          },
+          {
+            "type": "range",
+            "id": "prlimit",
+            "min": 1,
+            "max": 20,
+            "step": 1,
+            "label": "t:sections.all.number_of_product",
+            "default": 6
+          },
+          {
+            "type": "range",
+            "id": "columnWidth",
+            "min": 20,
+            "max": 70,
+            "step": 1,
+            "label": "t:sections.navigation.column_width",
+            "default": 40,
+			"unit": "%"
+          },
+          {
+            "type": "header",
+            "content": "t:sections.navigation.custom_size"
+          },
+          {
+            "type": "checkbox",
+            "id": "custom_size",
+            "label": "t:global.enable",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "mm_size",
+            "label": "t:sections.navigation.box_width",
+            "default": "600"
+          },
+          {
+            "type": "select",
+            "id": "mm_align",
+            "label": "t:sections.navigation.box_align",
+			"default": "center",
+            "options": [
+              { "value": "left", "label": "Left" },
+              { "value": "center", "label": "Center" },
+              { "value": "right", "label": "Right" }
+            ]
+          },
+		   {
+            "type": "header",
+            "content":"t:sections.navigation.navigation_below_logo"
+          },
+ 			{
+            "type": "checkbox",
+            "id": "box_sized",
+            "label": "t:sections.navigation.container_width",
+            "default": false,
+			"info":"t:sections.navigation.container_width_info"
+          }
+		 
+        ]
+      },
+      {
+        "type": "dropdown",
+        "name": "t:sections.navigation.blocks.dropdown.name",
+        "settings": [
+          {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.navigation.link_name"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "t:global.link"
+          },
+          {
+            "type": "link_list",
+            "id": "mm_linklist",
+            "label": "t:sections.navigation.select_menu",
+            "default": "main-menu"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

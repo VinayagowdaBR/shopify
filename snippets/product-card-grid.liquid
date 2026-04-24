@@ -1,0 +1,280 @@
+{%- liquid
+	assign boxstyle = secSt.prbox_style | default: settings.prbox_style
+	
+    if secSt.prbox_style != blank
+  		assign secondImg = secSt.secondary_image
+		assign vendorName = secSt.show_vendor
+  		assign actionBtn = secSt.prlist_btn_show
+  		assign actionBtnmb = secSt.btn_mobiles
+  		assign prReview = settings.show_reviewgrid
+  		assign colorSwatch = secSt.show_color_swatch
+	else
+  		assign secondImg = settings.secondary_image
+  		assign vendorName = settings.show_vendor
+  		assign actionBtn = settings.prlist_btn_show
+  		assign actionBtnmb = settings.btn_mobiles
+  		assign prReview = settings.show_reviewgrid
+  		assign colorSwatch = settings.show_color_swatch
+	endif
+	
+    assign product_box = forloop.index | minus:1
+	assign delay_time = 50 | times : product_box
+	assign quickUrl = product.url | split: "?" | first
+
+    assign productUrl = product.url | within: collection
+    if settings.clname
+        assign productUrl = product.url
+    endif
+-%}
+
+{% capture buttons %}
+  {%- unless actionBtn -%}
+  <div class="button-set{% if actionBtnmb %} hide-sm{% endif %}">
+    {% if settings.enable_wishlist %}<a class="btn wishlist addto-wishlist" href="{{pages[settings.wishlist_page].url}}" rel="{{ product.handle | handleize }}" aria-label="{{ 'products.wishlist.add_to' | t}}"><i class="at at-heart-l"></i><span class="tooltip-label">{{ 'products.wishlist.add_to' | t}}</span></a>{% endif %}
+    {% if product.available and settings.catalogmode == false %}
+      {% assign variantCount = product.variants | size %}    
+      {% if variantCount > 1 %}
+        {% if settings.enable_quickshop %}
+          <a class="btn btn-options quickShop" href="{{ quickUrl }}" aria-label="{{ 'products.product.quick_shop' | t}}"><i class="at at-cart-l" aria-hidden="true"></i><span class="tooltip-label">{{ 'products.product.quick_shop' | t}}</span></a>
+        {% else %}
+           <a class="btn btn-options" href="{{ productUrl }}" aria-label="{{ 'products.product.select_options' | t}}"><i class="at at-cart-l" aria-hidden="true"></i><span class="tooltip-label">{{ 'products.product.select_options' | t}}</span></a>                  	
+        {% endif %}
+      {% else %}
+        <a class="btn add-to-cart" href="{{ productUrl }}" aria-label="{{ 'products.product.add_to_cart' | t}}"><i class="at at-cart-l" aria-hidden="true"></i><span class="tooltip-label">{{ 'products.product.add_to_cart' | t}}</span></a>
+    	<product-form class="product-form hide">
+			{%- form 'product', product, id: 'quickadd', class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+	            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <button type="submit" name="add" id="AddToCart-{{ product.id }}" class="cartBtn"><span id="AddToCartText-{{ product.id }}">{{ 'products.product.add_to_cart' | t }}</span><div class="btn_spinner hidden"></div></button>
+            {%- endform -%}
+        </product-form>
+      {% endif %}
+    {% endif %}
+    
+    {% if settings.quick_view %}<a href="{{quickUrl}}?section_id=quick-view" rel="nofollow" class="btn quick-view" aria-label="{{ 'products.product.quick_view' | t}}"><i class="at at-search-plus" aria-hidden="true"></i><span class="tooltip-label">{{ 'products.product.quick_view' | t}}</span></a>{% endif %}
+  </div>
+  {%- endunless -%}
+{% endcapture %}
+
+{% capture buttons2 %}
+  {%- unless actionBtn -%}
+  <div class="button-set{% if actionBtnmb %} hide-sm{% endif %}">
+    {% if settings.enable_wishlist %}<a class="btn wishlist addto-wishlist" href="{{pages[settings.wishlist_page].url}}" rel="{{ product.handle | handleize }}" aria-label="{{ 'products.wishlist.add_to' | t}}"><i class="at at-heart-l"></i><span class="tooltip-label">{{ 'products.wishlist.add_to' | t}}</span></a>{% endif %}
+    {% if settings.quick_view %}<a href="{{quickUrl}}?section_id=quick-view" rel="nofollow" class="btn quick-view" aria-label="{{ 'products.product.quick_view' | t}}"><i class="at at-search-plus" aria-hidden="true"></i><span class="tooltip-label">{{ 'products.product.quick_view' | t}}</span></a>{% endif %}
+  </div>
+  {%- endunless -%}
+{% endcapture %}
+
+{% capture addtocart %}
+  {%- unless actionBtn -%}
+ <div class="flatbtn{% if actionBtnmb %} hide-sm{% endif %}">
+     {% if product.available %}
+      {% assign variantCount = product.variants | size %}    
+      {% if variantCount > 1 %}
+        {% if settings.enable_quickshop %}
+          <a class="btn btn-options quickShop" href="{{ quickUrl }}" rel="nofollow">{{ 'products.product.quick_shop' | t}}<span class="tooltip-label">{{ 'products.product.quick_shop' | t}}</span></a>
+        {% else %}
+           <a class="btn btn-options" href="{{ productUrl }}">{{ 'products.product.select_options' | t}}<span class="tooltip-label">{{ 'products.product.select_options' | t}}</span></a>                  	
+        {% endif %}
+      {% else %}
+        <a class="btn add-to-cart" href="{{ productUrl }}" aria-label="{{ 'products.product.add_to_cart' | t}}">{{ 'products.product.add_to_cart' | t}}<span class="tooltip-label">{{ 'products.product.add_to_cart' | t}}</span></a>
+        <product-form class="product-form hide">
+			{%- form 'product', product, id: 'quickadd', class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+	            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+                <button type="submit" name="add" id="AddToCart-{{ product.id }}" class="cartBtn"><span id="AddToCartText-{{ product.id }}">{{ 'products.product.add_to_cart' | t }}</span><div class="loading-overlay__spinner hidden"></div></button>
+            {%- endform -%}
+        </product-form>
+      {% endif %}
+    {% endif %}
+    </div>
+  {%- endunless -%}
+{% endcapture %}
+
+{% capture productTimer %}
+	{%- if settings.display_countdown and product.metafields.my_fields.countdown != blank -%}
+      <div class="saleTime fl f-jcc desktop hide-sm hide-md" data-date="{{product.metafields.my_fields.countdown}}"><span><span class="tm days">00</span>{{'date_formats.days' | t}}</span><span><span class="tm hours">00</span>{{ 'date_formats.hours' | t }}</span><span><span class="tm minutes">00</span>{{'date_formats.minuts' | t}}</span><span><span class="tm seconds">00</span>{{'date_formats.seconds' | t}}</span></div>
+    {%- endif -%}
+{% endcapture %}
+{% capture productTimerMobile %}
+	{%- if settings.display_countdown and product.metafields.my_fields.countdown != blank -%}
+      <div class="saleTime fl f-jcc mobile hide-lg" data-date="{{product.metafields.my_fields.countdown}}"><span><span class="tm days">00</span>{{'date_formats.days' | t}}</span><span><span class="tm hours">00</span>{{ 'date_formats.hours' | t }}</span><span><span class="tm minutes">00</span>{{'date_formats.minuts' | t}}</span><span><span class="tm seconds">00</span>{{'date_formats.seconds' | t}}</span></div>
+    {%- endif -%}
+{% endcapture %}
+
+<style>
+  .grid-view-item .gview-img {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* Adjust for your image aspect ratio */
+  }
+
+  .grid-view-item .gview-img .gimg-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .grid-view-item .gitem-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: transform 0.5s ease-in-out; /* Smooth slide transition */
+  }
+
+  .grid-view-item .gitem-img.primary {
+    z-index: 1;
+    opacity: 1;
+    transform: translateX(0); /* Primary image stays in place */
+  }
+
+  .grid-view-item .gitem-img.hover {
+    z-index: 2; /* Secondary image appears above primary */
+    opacity: 0; /* Start fully transparent */
+    transform: translateX(100%); /* Start positioned to the right */
+    transition: transform 0.5s ease-in-out, opacity 0.0s ease-in-out; /* Transition both transform and opacity */
+  }
+
+  .grid-view-item .gview-img:hover .gitem-img.primary {
+    opacity: 1; /* Primary image remains fully visible */
+    transform: translateX(0); /* Primary image stays in place */
+  }
+
+  .grid-view-item .gview-img:hover .gitem-img.hover {
+    opacity: 1; /* Secondary image becomes fully visible */
+    transform: translateX(0); /* Secondary image slides in to cover primary */
+  }
+
+  @media (max-width: 767px) {
+    .grid-view-item .gitem-img.hover {
+      display: none; /* Hide secondary image on mobile */
+    }
+  }
+
+  .btn_spinner {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    gap: 5px;
+  }
+
+  .btn_spinner .dot {
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: blink 1.2s infinite ease-in-out both;
+  }
+
+  .btn_spinner .dot:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .btn_spinner .dot:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes blink {
+    0%, 80%, 100% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    40% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+
+  .loading .txt {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .loading .btn_spinner {
+    display: flex;
+  }
+</style>
+
+<div class="grid-view-item {{boxstyle}}{% unless product.available %} sold-out{% endunless %} wow fadeIn" data-wow-delay="{{delay_time}}ms">
+  {% if boxstyle == "style2" %}<a class="overly" href="{{ productUrl }}"></a>{% endif %}
+  <div class="gview-img">
+    <a class="gimg-link" href="{{ productUrl }}" title="{{product.title}}">
+      <div class="gitem-img lazyload{% if secondImg and product.images.size > 1 %} primary{% endif %}" data-bgset="{% render 'prgrid-img', image: product.featured_image, sizes: sizes %}" data-sizes="auto" data-parent-fit="contain"></div>
+      {%- if secondImg and product.images.size > 1 and boxstyle != "style2" -%}
+          <div class="gitem-img lazyload hover" data-bgset="{% render 'prgrid-img', image: product.images[1], sizes: sizes %}" data-sizes="auto" data-parent-fit="contain"></div>
+      {%- endif -%}
+      {%- if colorSwatch -%}<div class="gitem-img hover variantImg"></div>{%- endif -%}
+    </a>
+	
+    {%- assign enableLbl = false -%}
+    {%- if settings.sold_lbl -%}{%- unless product.available -%}{%- assign enableLbl = true -%}{%- endunless -%}{%- endif -%}
+    {%- if product.compare_at_price > product.price or product.tags contains settings.pr_label1 or product.tags contains settings.pr_label2 or product.tags contains settings.pr_label3 -%}
+    	{%- assign enableLbl = true -%}
+    {%- endif -%}
+    {%- if settings.pr_lbl and enableLbl -%}
+    <div class="product-labels fl f-col {{ settings.select_label_style }}">
+      {%- if settings.sale_lbl and product.compare_at_price > product.price -%}
+        {% if settings.sale_label_style == "salelabel" %}
+          <span class="lbl on-sale">{{ 'products.product.on_sale' | t}}</span>
+        {% else %}
+          <span class="lbl on-sale">-{{ product.compare_at_price_min | minus: product.price | times: 100 | divided_by: product.compare_at_price_min }}%</span>
+        {% endif %}
+      {%- endif -%}
+      {%- if product.tags contains settings.pr_label1 -%}<span class="lbl pr-label1">{{settings.pr_label1}}</span>{%- endif -%}
+      {%- if product.tags contains settings.pr_label2 -%}<span class="lbl pr-label2">{{settings.pr_label2}}</span>{%- endif -%}
+      {%- if product.tags contains settings.pr_label3 -%}<span class="lbl pr-label3">{{settings.pr_label3}}</span>{%- endif -%}
+      {%- if settings.sold_lbl and product.available == false -%}<span class="lbl sold-out"><span>{{ 'products.product.sold_out' | t}}</span></span>{%- endif -%}
+    </div>
+    {%- endif -%}
+
+    {{ productTimer}}
+
+    {% if boxstyle == "style1" or boxstyle == "style4" or boxstyle == "style6" %}{{buttons}}{% endif %}
+    {% if boxstyle == "style5" %}{{buttons2}}{% endif %}
+  </div>
+  {% if boxstyle == "style3" or boxstyle == "style6" %}{% render 'color-swatches', product: product,secSt:secSt,colorSwatch:colorSwatch  %}{% endif %}
+<div class="details">
+  {% if vendorName %}
+    <div class="grid-view-item__vendor">{{ product.vendor }}</div>
+  {% endif %}
+
+  <a href="{{ productUrl }}" class="grid-view-item__title">{{ product.title }}</a>
+
+  {%- unless settings.hide-price -%}
+    <div class="priceWraper fl f-aic {% unless boxstyle == "style4" or boxstyle == "style6" %}f-jcc {% endunless %}f-wrap">
+      {% render 'product-price', product: product %}
+    </div>
+  {%- endunless -%}
+
+  {% if prReview %}
+    {% render 'ratings', product: product %}
+  {% endif %}
+
+  {% if boxstyle != "style3" and boxstyle == "style6" %}
+    {% render 'color-swatches', product: product, secSt:secSt, colorSwatch:colorSwatch %}
+  {% endif %}
+
+
+
+  {{ productTimerMobile }}
+</div>
+  {% if settings.enable_quickshop %}<div class="shopWrapper" id="ProductSection-{{product.id}}"></div>{% endif %}
+</div>
+
+<script>
+  document.addEventListener('lazybeforeunveil', function(e) {
+    if (e.target.closest('.grid-view-item')) {
+      var bg = e.target.getAttribute('data-bgset');
+      if (bg) {
+        e.target.style.backgroundImage = 'url(' + bg + ')';
+      }
+    }
+  });
+</script>

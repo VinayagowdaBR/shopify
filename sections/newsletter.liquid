@@ -1,0 +1,149 @@
+{% assign secSt = section.settings %}
+<div class="content-indent {{ section.settings.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">
+  <div class="newsletter-section {% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %} wow fadeIn" > 
+    {% if section.settings.section_cov %} <div class="section-cover" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};border-radius:{{secSt.bdr}}px;"> {% endif%}   
+    {% render 'sec-title' %}
+    {% render 'newsletter-form', formId: 'nwsecform' %}
+    {% if section.settings.section_cov %}</div> {% endif%}
+  </div>
+</div>
+<style>
+  .newsletter-section  .sec-ttl * { color:{{section.settings.text_clr}}; }
+  .newsletter__input { border:0; background-color:{{section.settings.input_bg}}; color:{{section.settings.input_text}};}
+  .newsletter__submit { font-size:13px; letter-spacing:0.5px; border:0; background-color:{{section.settings.input_btn}}; color:{{section.settings.input_btn_text}};}
+  .newsletter__submit:hover { opacity:0.9; border:0; }
+</style>
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:sections.all.head",
+      "default":"Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label":"Subheading",
+      "default":"Sign up to stay in the loop. Receive updates, access to exclusive deals, and more."
+    },   
+    {
+      "type": "paragraph",
+      "content":"t:sections.newsletter.info"
+    },		
+      {
+        "type": "color",
+        "id": "text_clr",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },
+	 {
+        "type": "color",
+        "id": "input_text",
+        "label": "t:sections.newsletter.input_text",
+        "default": "#000"
+      },
+	 {
+        "type": "color",
+        "id": "input_bg",
+        "label": "t:sections.newsletter.input_bg",
+        "default": "#fff"
+      },
+	  {
+        "type": "color",
+        "id": "input_btn_text",
+        "label": "t:sections.newsletter.button_text",
+        "default": "#fff"
+      },
+	 {
+        "type": "color",
+        "id": "input_btn",
+        "label": "t:sections.newsletter.button_bg",
+        "default": "#000"
+      },
+	 {
+        "type": "header",
+        "content":"t:sections.all.name"
+      },
+        {
+        "type": "select",
+        "id": "top-offeset",
+        "label": "t:sections.all.top_offSet",
+        "default": "default",
+        "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "none",
+                    "label": "None"
+                }
+            ]
+        }, 	
+		{
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": true
+	  },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+	   {
+		"type":"checkbox",
+		"id":"npd",
+		"label":"t:global.no_padding",
+        "info": "t:global.no_padding_info",
+		"default": true
+	  },
+		{	
+            "type": "checkbox",
+            "id": "section_cov",
+            "label": "t:global.background.add",
+            "default": true
+        },
+      {
+      "type": "color",
+      "id": "sec_bg_clr",
+      "label": "t:global.background.color",
+      "default":"#fafafa"	
+      },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+	  {
+        "type": "range",
+        "id": "bdr",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "label": "t:global.border_radius",
+        "unit": "px",
+        "default": 0
+       }
+  ],
+  "presets": [
+    {
+      "name":"Newsletter"     
+    }
+  ]
+}
+{% endschema %}

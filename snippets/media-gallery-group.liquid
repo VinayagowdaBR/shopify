@@ -1,0 +1,194 @@
+{%- liquid
+    assign isRtl = false
+    assign lisRtl = 'ar,dv,ha,he,ku,fa,ur,ug' | split: ','
+    if lisRtl contains request.locale.iso_code or settings.rtl
+        assign isRtl = true
+    endif
+
+	assign featured_img = product.selected_or_first_available_variant.featured_media | default: product.featured_image
+
+    assign zoomImg = '1800x1800'
+    assign enable_zoom = settings.enable_zoom
+
+    assign className = ""
+    assign slidefade = true
+    assign centermode = 'left'
+    assign watchCss = false
+    assign slHeight = true
+    assign dotNav = false
+    
+    if settings.product_latyout == "style3"
+        assign className = "fl f-wrap"
+        assign watchCss = true
+    elsif settings.product_latyout == "style4"
+        assign watchCss = true
+    elsif settings.product_latyout == "style5"
+        assign className = "fl f-wrap"
+        assign watchCss = true
+    elsif secSt.prstyle == "5"
+		assign centermode = "center"
+		assign slHeight = false
+		assign dotNav = true
+    endif
+-%}
+{% if settings.product_latyout == "style1" and settings.thumbnail_pos != "bottom" %}
+	{% capture imgSt %}--imgw:calc(100% - 90px);{% if settings.thumbnail_pos == "left" %}--od:1;{% endif %}{% endcapture %}
+{% elsif settings.product_latyout == "style2" and settings.thumbnail_pos != "bottom" %}
+	{% capture imgSt %}--imgw:calc(100% - 90px);{% if settings.thumbnail_pos == "left" %}--od:1;{% endif %}{% endcapture %}
+{% else %}
+	{% capture imgSt %}--imgw:100%;{% endcapture %}
+{% endif %}
+{% for mcolor in allColor %}
+<media-gallery-group id="pis{{ sectionId }}{{ mcolor }}" data-wraper="#pis{{ sectionId }}{{ mcolor }}" data-section="{{ sectionId }}" data-target="media{{ featured_img.id }}" class="fl f-jcsb f-col mgroup{% if settings.thumbnail_pos != "bottom" %} f-row-md{% endif %}{% if svriant != mcolor%} hide{% else %} active{% endif %}">
+    <div class="pr_lg_img" style="{{imgSt}}">
+        <div class="primgSlider {{settings.product_latyout}} {{className}}" data-flickity='{ "cellAlign":"{{centermode}}","watchCSS":{{watchCss}},"wrapAround":true,"adaptiveHeight":{{slHeight}},"pageDots":{{dotNav}}{%- if isRtl -%},"rightToLeft": true{%- endif -%} }'>
+            {% for media in product.media %}
+                {%- assign imgNo = forloop.index0 -%}
+                {% case media.media_type %}
+                    {% when 'image' %}
+                        {% if mcolor == media.alt %}
+                        <{%- if settings.enable_lightbox -%}a href="{{ media | img_url: 'master' }}"{% else %}div{% endif %} data-id="media{{ media.id }}" data-pswp-width="{{media.width}}" data-pswp-height="{{media.height}}" class="pr_zoom_{{sectionId}} pr_photo pswipe{% if settings.enable_lightbox %} lightbox{% endif %}{% if enable_zoom %} zoomcr{% endif %}" {% if enable_zoom %}data-zoom="{{ media | img_url: zoomImg }}"{% endif %} data-slide="{{imgNo}}">
+                            <span class="imgWrapper" style="max-width:{% if settings.pimg_maxHt != blank %}{{ settings.pimg_maxHt | times: media.aspect_ratio }}{% else %}{{media.width}}{% endif %}px;">
+                                <img class="imgFl lazyload featImg{{ sectionId }} product-featured-img{% if enable_zoom %} js-zoom-enabled{% endif %}{% if forloop.first %} lazypreload{% endif %}" {% unless forloop.first %}lazyload="lazy"{% endunless %} src="{{ media | img_url: '600x' }}" width="{{ media.width }}" height="{{ media.height }}"
+                                    data-srcset="{% render 'lazyload', image: media, sizes: '400,600,800,1000' %}" data-sizes="auto" alt="{{ media.alt | escape }}">
+                            </span>
+                        </{%- if settings.enable_lightbox -%}a{% else %}div{% endif %}>
+                        {% endif %}
+                    {% when 'external_video' %}
+                        <div class="pr_photo p{{secSt.prstyle}} videoSlide" data-media-id="{{ media.id }}" data-slide="{{imgNo}}">
+                            <div class="vd-wrap">{{ media | external_video_tag }}</div>
+                        </div>
+                    {% when 'video' %}
+                        <div class="pr_photo p{{secSt.prstyle}} videoSlide" data-media-id="{{ media.id }}" data-slide="{{imgNo}}">
+                            {%- assign videoThumb = media | img_url: '700x' -%}
+                            {{ media | video_tag: poster: videoThumb, controls: true, muted: true, loop: true, playsinline: true, webkit-playsinline: true }}
+                        </div>
+                    {% when 'model' %}
+                        <div class="pr_photo p{{secSt.prstyle}} pmd" id="FeaturedMedia-{{ sectionId }}-{{ media.id }}-wrapper" data-product-media-type-model data-product-single-media-wrapper data-media-id="{{ sectionId }}-{{ media.id }}">
+                            <div class="prMedia" style="padding-top:100%">{{ media | model_viewer_tag: image_size: pimgsize, reveal: 'interaction', toggleable: true, data-model-id: media.id }}</div>
+                        </div>
+                    {% else %}
+                        <div class="pr_photo p{{secSt.prstyle}} " style="padding-top: 100%;" data-media-id="{{ media.id }}">{{ media | media_tag }}</div>
+                {% endcase %}
+            {% endfor %}                                       
+        </div>
+        {{ prmediabtn }}
+    </div>
+
+    {% if product.media.size > 0 %}
+        <div class="thumbs_nav {{settings.thumbnail_pos}} pr flickity-enabled{% if settings.product_latyout != "style1" and settings.product_latyout != "style2" %} hide{% endif %}{% if product.media.size == 1 %} hide{% endif %}">
+            <div class="pr_thumbsWr ptw{{ sectionId }}">
+                <div class="pr_thumbs pr_thumbs{{ sectionId }}{% if secSt.prthumbs != "bottom" %} f-col-md{% endif %}">
+                    {% for media in product.media %}
+                        {%- assign imgNo = forloop.index0 -%}
+                        {% capture thumbImgs %}{{ media | img_url: '100x' }} 100w {{ 100 | divided_by: media.aspect_ratio | round }}h,{{ media | img_url: '200x' }} 200w {{ 200 | divided_by: media.aspect_ratio | round }}h{% endcapture %}
+                        {% if media.media_type == 'image' %}
+                            {% if mcolor == media.alt %}
+                                <div class="pr_thumbs_item{% if media.media_type == 'video' or media.media_type == 'external_video' or media.media_type == 'model' %} vd{% endif %}" data-slide="{{imgNo}}">
+                                    <a id="media{{ media.id }}" data-target="media{{ media.id }}" href="{{ media | img_url: '600x' }}" class="gitem-img pr_thumb pr_thumb{{ sectionId }}{% if media.media_type == 'image' %} swipeImg{% endif %}{% if featured_img_src == media %} activeSlide{% endif %}" title="{{ media.alt | default: product.title }}">
+                                        <img class="imgFt lazyload" lazyload="lazy" src="{{ media | img_url: '100x' }}" width="100" height="{{ '100' | divided_by: media.aspect_ratio | floor}}"
+                                            data-srcset="{% render 'lazyload', image: media, sizes: '100,200' %}" data-sizes="auto" alt="{{ media.alt | escape }}">
+                                        {% if media.media_type == 'video' or media.media_type == 'external_video'  %}<svg class="at-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6zM48 453.5v-395c0-4.6 5.1-7.5 9.1-5.2l334.2 197.5c3.9 2.3 3.9 8 0 10.3L57.1 458.7c-4 2.3-9.1-.6-9.1-5.2z"/></svg>{% endif %}
+                                        {% if media.media_type == 'model' or media.media_type == 'external_video'  %}<svg class="at-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M239.1 7.5l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V130.5c0-20-12.4-37.9-31.1-44.9l-208-78C262 3.4 250 3.4 239.1 7.5zm16.9 45l208 78v.3l-208 84.5-208-84.5v-.3l208-78zM48 182.6l184 74.8v190.2l-184-92v-173zm232 264.9V257.4l184-74.8v172.9l-184 92z"/></svg>{% endif %}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="pr_thumbs_item{% if media.media_type == 'video' or media.media_type == 'external_video' or media.media_type == 'model' %} vd{% endif %}" data-slide="{{imgNo}}">
+                                <a id="media{{ media.id }}" data-target="media{{ media.id }}" href="{{ media | img_url: '600x' }}" class="gitem-img pr_thumb pr_thumb{{ sectionId }}{% if media.media_type == 'image' %} swipeImg{% endif %}{% if featured_img_src == media %} activeSlide{% endif %}" title="{{ media.alt | default: product.title }}">
+                                    <img class="imgFt lazyload" lazyload="lazy" src="{{ media | img_url: '100x' }}" width="100" height="{{ '100' | divided_by: media.aspect_ratio | floor}}"
+                                        data-srcset="{% render 'lazyload', image: media, sizes: '100,200' %}" data-sizes="auto" alt="{{ media.alt | escape }}">
+                                    {% if media.media_type == 'video' or media.media_type == 'external_video'  %}<svg class="at-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6zM48 453.5v-395c0-4.6 5.1-7.5 9.1-5.2l334.2 197.5c3.9 2.3 3.9 8 0 10.3L57.1 458.7c-4 2.3-9.1-.6-9.1-5.2z"/></svg>{% endif %}
+                                    {% if media.media_type == 'model' or media.media_type == 'external_video'  %}<svg class="at-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M239.1 7.5l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V130.5c0-20-12.4-37.9-31.1-44.9l-208-78C262 3.4 250 3.4 239.1 7.5zm16.9 45l208 78v.3l-208 84.5-208-84.5v-.3l208-78zM48 182.6l184 74.8v190.2l-184-92v-173zm232 264.9V257.4l184-74.8v172.9l-184 92z"/></svg>{% endif %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <button class="flickity-button previous" type="button" aria-label="Previous"><svg class="flickity-button-icon" viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow"></path></svg></button>
+            <button class="flickity-button next" type="button" aria-label="Next"><svg class="flickity-button-icon" viewBox="0 0 100 100"><path d="M 10,50 L 60,100 L 70,90 L 30,50  L 70,10 L 60,0 Z" class="arrow" transform="translate(100, 100) rotate(180) "></path></svg></button>
+        </div>
+    {% endif %}
+</media-gallery-group>
+{% endfor %}
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+    var secId = $('media-gallery-group').data('section'),
+        wraper = $('.mgroup.active').data('wraper'),
+        $primgsl = $(wraper+' .primgSlider');
+
+    $(window).on('load', function(e){
+        $primgsl.flickity('resize');
+        setActiveGallery(wraper, $primgsl);
+        $('.pr_thumb[data-slide="0"] .prvideo').trigger('click');
+        var video = $('.primgSlider .videoSlide.is-selected video').get(0);
+        if($(video).length){ video.play(); }
+    });
+    $('.swatchInput.color').on('change',function(e){
+        var cr = $(this).val(),
+        wraper = '#pis'+secId+cr;
+        $('.mgroup').addClass('hide');
+        $('#pis'+secId+cr).removeClass('hide').find('.primgSlider').flickity('resize');
+        setActiveGallery(wraper, $primgsl);
+    });
+    $('.pr_thumb').on('click',function(e){
+        e.preventDefault();
+        console.log($(this).attr('id'));
+        var mid = $(this).attr('id'),
+        wraper = $(this).closest('media-gallery-group').data('wraper'),
+        activeMedia = $(wraper+' [data-id="'+mid+'"]').index();
+        console.log(mid);
+        $(wraper+' .primgSlider').flickity('select', activeMedia);
+    });
+    function setActiveGallery(wraper, $primgsl){
+        setTimeout( function(){ $('.pr_thumbs_item:first-child').addClass('active-thumb'); },200);
+
+        var $carouselNavH = $(wraper+' .pr_thumbsWr'),
+            $carouselNav = $(wraper+' .pr_thumbs'),
+            $carouselNavCells = $(wraper+' .pr_thumbs_item'),
+            navTop  = $carouselNav.position().top,
+            navLeft  = $carouselNav.position().left,
+            navCellHeight = $carouselNavCells.height(),
+            navCellWidth = $carouselNavCells.width(),
+            navHeight = $carouselNav.height(),
+            navWidth = $carouselNav.width(),
+            $primgsl = $(wraper+' .primgSlider'),
+            flkty = $primgsl.data('flickity');
+
+        $primgsl.on('select.flickity',function(){
+            {% if settings.product_latyout == "style1" or settings.product_latyout == "style2" %}
+                $carouselNav.find('.active-thumb').removeClass('active-thumb');
+                var $selected = $carouselNavCells.eq(flkty.selectedIndex).addClass('active-thumb');
+                if($('.thumbs_nav.bottom').length || $(window).width()<767){
+                    var scrollX = $selected.position().left + $carouselNavH.scrollLeft() - ( navWidth + navCellWidth) / 2.5;
+                    $carouselNavH.animate({scrollLeft: scrollX});
+                } else {
+                    var scrollY = $selected.position().top + $carouselNav.scrollTop() - ( navHeight + navCellHeight) / 2.5;
+                    $carouselNav.animate({scrollTop: scrollY});
+                }
+            {% endif %}
+        });
+        $primgsl.on('change.flickity', function(event, index){
+            if($(this).find('.videoSlide video').length){ $(this).find('.videoSlide video').get(0).pause(); }
+            var video = $(this).find('.videoSlide.is-selected video').get(0);
+            if($(video).length){ video.play(); }
+            var flkty = $(this).data('flickity');
+            if($(this).find('.is-selected model-viewer').length){
+                flkty.options.draggable = false;
+                flkty.updateDraggable();
+                $('.is-selected .shopify-model-viewer-ui__button--poster').trigger('click')
+            } else {
+                flkty.options.draggable = true;
+                flkty.updateDraggable();
+            }
+        });
+        $(wraper+' .thumbs_nav .previous').on('click',function(){
+            $primgsl.flickity('previous');
+        });
+        $(wraper+' .thumbs_nav .next').on('click', function(){
+            $primgsl.flickity('next');
+        });
+    }
+});
+</script>

@@ -1,0 +1,62 @@
+{%- if settings.breadcrumb_pg -%}{%- render 'breadcrumb' -%}{%- else -%}<div class="topSpace"></div>{%- endif -%}
+<style>
+  #wishProducts .removeItem { padding:8px; width:35px; height:35px; position:absolute; right:-0px; top:-15px; z-index:4; }
+  #wishProducts .wishlist  { display:none; }
+    #wishProducts { padding-top:30px;}
+</style>
+<div class="page-width">
+    <h1 class="page-title">{{ page.title }}</h1>
+    <div class="grid rwcols-2 rwcols-md-3 rwcols-lg-4 grid-products tc" id="wishProducts"></div>
+    <p class="tc hide nowishItem">{{ 'products.wishlist.wishlist-empty' | t }}</p>
+</div>
+<p>&nbsp;</p><p>&nbsp;</p>
+
+<script>
+window.addEventListener('load', function() {
+    $.ajax({
+        url: '/collections/all?type='+localStorage.getItem('wishlist')+'&view=prlist',
+        dataType: 'html',
+        type: 'GET',
+        success: function(data) {
+            if($(data).find('.grid-view-item').length){
+                $('#wishProducts').html(data);
+            } else {
+                $('.nowishItem').removeClass('hide');
+            }
+        },
+        error: function(data) {
+            console.log('ajax error');
+        },
+        complete: function(){
+            theme.countdown();
+        }
+    });
+    $(document).on('click', '.removeItem', function(e){
+            e.preventDefault();
+            var item = $(this).parents('.gitem');
+            var str = localStorage.getItem('wishlist');
+            str = str.replace(item.attr("data-pr"), '');
+            str = str.replace('++', '+');
+            localStorage.setItem('wishlist', str);
+            item.fadeOut(500);
+            setTimeout(removeItem, 500, item);
+          });
+    
+        function removeItem(item){
+          item.remove();
+          if(localStorage.getItem('wishlist') == '+' || localStorage.getItem('wishlist') == ''){
+            localStorage.removeItem('wishlist');
+            $('.nowishItem').removeClass('hide');
+            $('.favCount').addClass('hide');
+          } else {
+            var str = String(localStorage.getItem('wishlist')).split("+");
+               for (var i=0; i<str.length; i++) {
+                 if (str[i] != '') {
+                console.log(str[i]);
+                   $('.favCount').text(i);
+                 }
+               }
+          }
+        }
+      });
+</script>

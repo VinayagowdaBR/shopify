@@ -1,0 +1,332 @@
+{%- assign secSt = section.settings -%}
+{%- capture storeFeatures -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">  
+  {% if secSt.section_cov %}<div class="section-cover small-pd" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};">{% endif%}
+  	<div class="{% unless section.settings.section_width %}page-width{% else %}fullwidth{% endunless %} wow fadeIn">          
+  	
+     {% render 'sec-title' %}
+
+      <ul class="store-info fl f-jcsb sec{{section.id}} {{ secSt.style}}"
+           style="--cl:{{secSt.cl}};--tcl:{{secSt.tcl}};--tfs:{{secSt.tfs}}px;--tsm:{{secSt.tfsm}}px;--tff:var(--ft1);--tfw:{{secSt.tfw}};--lh:{{secSt.tlh}};
+                  --icl:{{secSt.icons_clr}};--isz:{{secSt.isz}}px;--bd:{{secSt.border_sep}}">
+          {% for block in section.blocks limit: section.blocks.size %}
+          {%- assign blkSt = block.settings -%}
+          <li class="fl1 item" {{ block.shopify_attributes }}>
+			<{% if blkSt.texturl != blank %}a href="{{blkSt.texturl}}"{% else %}div{% endif %} class="{% if secSt.style == 'style2' %} flex{% if blkSt.text == blank%} f-aic{% endif %}{% else %}tc{% endif %}">
+                {% if secSt.icon-type == 'image' and blkSt.image != blank %}
+                    <img class="at lazyload" data-src="{{blkSt.image | img_url: '200x' }}" width="{{secSt.isz}}px" height="{{secSt.isz}}px" alt="{{blkSt.image.alt | escap }}" />
+                {% elsif blkSt.icons != blank %}
+                    <i class="at {{ blkSt.icons}}" aria-hidden="true"></i>
+                {% endif %}
+            	<div class="text fl1">
+                	{% if blkSt.title %}<p class="ttlTxt mb5">{{ blkSt.title }}</p>{% endif %}
+                	{% if blkSt.text %}<span class="sub-text">{{ blkSt.text }}</span>{% endif %}
+            	</div>
+            </{% if blkSt.texturl != blank %}a{% else %}div{% endif %}>
+          </li>
+          {% endfor %}
+      </ul>
+      {% if section.blocks.size == 0 %}
+      {% include 'no-blocks' %}
+      {% endif %} 
+  </div>
+  {% if secSt.section_cov %} </div> {% endif%}
+</div>
+
+{%- endcapture -%}
+{{storeFeatures | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.store_features.name",
+	"max_blocks": 10,
+	"settings":[
+		{
+        "type": "text",
+        "id": "title",
+        "label": "t:sections.all.head"       
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "t:sections.all.sub_head"         
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.name"
+        },
+	 {
+        "type": "select",
+        "id": "top-offeset",
+        "label": "t:sections.all.top_offSet",
+        "default": "default",
+        "options": [
+          {
+            "value": "default",
+            "label": "Default"
+          },
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "none",
+            "label": "None"
+          }
+        ]
+        },	
+       {
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": false
+	   },
+        {
+          "type": "checkbox",
+          "id": "section_cov",
+          "label": "t:global.background.add",
+          "default": true
+        },
+        {
+            "type": "color",
+            "id": "sec_bg_clr",
+            "label": "t:global.background.color",
+			"default":"#fafafa"	
+		 },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+         {
+         "type": "checkbox",
+         "id": "hide_mobile",
+         "label": "t:global.devices.mobile_hide",
+         "default": false
+        },
+         {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+      {
+		"type":"paragraph",
+		"content":"----------------------------------------"
+	  },
+		{
+            "type": "select",
+            "id": "style",
+            "label": "t:sections.store_features.style",
+            "default": "style2",
+            "options": [
+              {
+                "value": "style1",
+                "label": "Style 1"
+              },
+              {
+                "value": "style2",
+                "label": "Style 2"
+              }			  
+			]
+        },		
+      {
+		"type":"header",
+		"content":"t:sections.store_features.icons"
+	  },
+		{
+            "type": "select",
+            "id": "icon-type",
+            "label": "t:sections.store_features.icon_type",
+            "default": "icon",
+            "options": [
+              {
+                "value": "image",
+                "label": "Image"
+              },
+              {
+                "value": "icon",
+                "label": "Font Icon"
+              }			  
+			]
+        },
+        {
+            "type": "color",
+            "id": "icons_clr",
+            "label": "t:global.color.name",
+			"default":"#333"	
+		},
+      {
+            "type": "range",
+            "id": "isz",
+            "label": "t:sections.store_features.icon_size",
+            "default":30,
+            "min": 30,
+            "max": 120,
+            "step": 1,
+            "unit": "px"
+        }, 
+      {
+		"type":"header",    
+		"content":"t:sections.all.heading.title"
+	  },
+		 {
+            "type": "color",
+            "id": "tcl",
+            "label": "t:global.color.name",
+			"default":"#111"	
+		 },
+      {
+            "type": "range",
+            "id": "tfs",
+            "label": "t:global.font.size",
+            "default": 14,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "tfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 12,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "600",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "tlh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        }, 
+      {
+		"type":"header",
+		"content":"t:sections.all.heading.details"
+	  },
+		{
+            "type": "color",
+            "id": "cl",
+            "label": "t:global.color.name",
+			"default":"#333"	
+		 },				
+		 {
+            "type": "color",
+            "id": "border_sep",
+            "label": "t:sections.store_features.separation",
+			"default":"#eee"	
+		 }
+	],
+    "blocks": [
+      {
+        "type": "text_block",
+        "name": "t:sections.store_features.feature",
+        "settings": [
+		  {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "text",
+            "id": "icons",
+            "label": "t:sections.store_features.icon_class",
+			"default":"at-truck-l",
+			"info":"t:sections.store_features.icon_info"
+
+		  }, 		 
+          {
+            "type": "textarea",
+            "id": "title",
+            "label": "t:global.text.title",
+            "default": "Add a title or tagline"		   
+          },
+          {
+            "type": "richtext",
+            "id": "text",
+            "label": "t:global.text.text",
+            "default":"<p>Use this text to display your store information</p>"
+          },
+		  {
+            "type": "url",
+            "id": "texturl",
+            "label": "t:global.link"
+          }   
+         
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.store_features.name",       
+        "blocks": [
+          {
+            "type": "text_block",
+            "settings": {
+              "icons":"at-truck-l",
+              "title":"FREE SHIPPING",
+              "text":"<p>When you spend $100+</p>"
+            }
+          },
+          {
+            "type": "text_block",
+             "settings": {
+              "icons":"at-undo-r",
+              "title":"FREE RETURNS",
+              "text":"<p>30-days free return policy.</p>"
+            }
+          },
+          {
+            "type": "text_block",
+             "settings": {
+              "icons":"at-lock-al",
+              "title":"SECURED PAYMENTS",
+              "text":"<p>We accept all credit cards.</p>"
+            }
+          },
+          {
+            "type": "text_block",
+             "settings": {
+              "icons":"at-chat",
+              "title":"24/7 HELP CENTER",
+              "text":"<p>Dedicated 24/7 support</p>"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,359 @@
+{% assign secSt = section.settings %}
+<div class="content-indent {{ secSt.top-offeset}} wow fadeIn{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">
+  <div class="wow fadeIn {{secSt.style}}{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}">
+  	
+   <div class="pr of_hidden video-sec{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" style="--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tlh:{{secSt.blh}};--tfw:{{secSt.bfw}};--tcl:{{secSt.color_ttl}};border-radius:{{secSt.bg_rad}}px">   
+      {% if secSt.video_url == blank and secSt.mp4video == blank	%}
+      	<div class="video-wrapper">
+          <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+        </div>
+      {% else %}         
+         {% if secSt.video_url.type == "youtube" %}        
+         <div class="video-wrapper">
+           <iframe width="100%" height="500" src="https://www.youtube.com/embed/{{ secSt.video_url.id }}?autoplay=1&mute=1&allowfullscreen=1&controls=0" width="850" height="480" frameborder="0" allow="accelerometer;  encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
+         </div>
+         {% endif %}
+	   
+         {% if secSt.video_url.type == "vimeo" %}
+         <div class="video-wrapper"><iframe src="//player.vimeo.com/video/{{ secSt.video_url.id }}?byline=0&portrait=0&badge=0" width="850" height="480" frameborder="0" allowfullscreen></iframe></div>
+         {% endif %}     
+     
+         {% if secSt.video_url == blank and secSt.mp4video != blank %}
+	   
+	   	  {%- liquid 
+                   if secSt.mp4videom != nil 
+                      assign desktop = 'hide-sm w_100'
+                      assign mobile = 'hide-md hide-lg w_100'
+                    else                   
+                      assign mobile = 'hide w_100'
+                    endif 
+         -%}                                 
+		{{ secSt.mp4video | video_tag: loop:true, autoplay:true, muted:muted, class:desktop, image_size: '800x' }}
+		{{ secSt.mp4videom | video_tag: loop:true, autoplay:true, muted:muted, class:mobile, image_size: '400x' }}
+           
+          {% endif %}    
+	  
+      {% endif %}    
+	   
+    {%- if secSt.title != blank or secSt.btntxt != blank -%}
+    <div class="fl video-text pa l0 t0 w_100 h_100">
+    	<div class="fl f-jce f-aic {{ secSt.text_align }} w_100">
+		  <div class="indiv"> 
+			  <span class="db ttlTxt {% if secSt.hide_text %} hide-sm{% endif %}">{{ secSt.title }}</span>      
+			  {% if secSt.btntxt != blank %}
+			  <a href="{{secSt.btnurl}}" class="btn db mt15 {% if secSt.hide_btn %} hide-sm{% endif %} {{secSt.btn-style}} {{secSt.btn-size}}" >{{ secSt.btntxt}}</a>
+			  {% endif %}
+		  </div>
+		</div>
+    </div>
+    {% endif %}
+	   
+   </div>
+  
+  </div>  
+</div>
+{% schema %}
+  {
+    "name": "t:sections.video_section.name",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [{
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "none",
+                    "label": "None"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "section_width",
+            "label": "t:global.fullwidth",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "npd",
+            "label": "t:global.no_padding",
+            "info": "t:global.no_padding_info",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+        {
+            "type": "range",
+            "id": "bg_rad",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "label": "t:global.background.radius",
+            "unit": "px",
+            "default": 0
+        },
+        {
+            "type": "header",
+            "content": "t:sections.video_section.embed_video"
+        },
+        {
+            "type": "video_url",
+            "id": "video_url",
+            "label": "t:sections.video_section.video_url",
+            "accept": ["youtube", "vimeo"]
+        },
+        {
+            "type": "header",
+            "content": "t:sections.video_section.mp4_video"
+        },
+        {
+            "type": "video",
+            "id": "mp4video",
+            "label": "t:sections.video_section.select_video",
+            "info": "t:sections.video_section.video_info"
+        },
+        {
+            "type": "video",
+            "id": "mp4videom",
+            "label": "t:sections.video_section.select_video_mobile",
+            "info": "t:sections.video_section.mobile_video_info"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "t:global.text.text",
+            "default": "AVONE - BEST SELLING<BR/>SHOPIFY THEME"
+        },
+        {
+            "type": "color",
+            "id": "color_ttl",
+            "label": "t:global.color.name",
+            "default": "#fff"
+        },
+        {
+            "type": "range",
+            "id": "tfs",
+            "label": "t:global.font.size",
+            "default": 50,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "tfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 22,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "bfw",
+            "label": "t:global.font.weight",
+            "default": "700",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "blh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+        {
+            "type": "text",
+            "id": "btntxt",
+            "label": "t:global.button.text"
+        },
+        {
+            "type": "url",
+            "id": "btnurl",
+            "label":"t:global.link"
+        },
+        {
+            "type": "checkbox",
+            "id": "hide_btn",
+            "label": "t:sections.video_section.hide_button_mobile",
+            "default": false
+        },
+        {
+            "type": "select",
+            "id": "btn-style",
+            "label": "t:global.button.select",
+            "default": "btn",
+            "options": [
+                {
+                    "label": "Solid Button 1",
+                    "value": "btn"
+                },
+                {
+                    "label": "Solid Button 2",
+                    "value": "btn2"
+                },
+                {
+                    "label": "Solid Button 3",
+                    "value": "btn3"
+                },
+                {
+                    "label": "Border Button 1",
+                    "value": "bdr-btn1"
+                },
+                {
+                    "label": "Border Button 2",
+                    "value": "bdr-btn2"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "btn-size",
+            "label": "t:global.button.size",
+            "default": "btn-lg",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "btn-lg"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "hide_text",
+            "label": "t:sections.video_section.hide_text_mobile",
+            "default": false,
+            "info": "t:sections.video_section.hide_text_info"
+        },
+        {
+            "type": "select",
+            "id": "text_align",
+            "label": "t:global.text.position",
+            "default": "f-jcc-md f-aie-md tc",
+            "options": [
+                {
+                    "label": "Top Left",
+                    "value": "f-ais-md f-jcs-md"
+                },
+                {
+                    "label": "Top Center",
+                    "value": "f-jcc-md f-ais-md tc"
+                },
+                {
+                    "label": "Top Right",
+                    "value": "f-jce-md f-ais-md"
+                },
+                {
+                    "label": "Left",
+                    "value": "f-aic-md f-jcs-md"
+                },
+                {
+                    "label": "Center",
+                    "value": "f-jcc-md f-aic-md tc"
+                },
+                {
+                    "label": "Right",
+                    "value": "f-jce-md f-aic-md"
+                },
+                {
+                    "label": "Bottom Left",
+                    "value": "f-aie-md f-jcs-md"
+                },
+                {
+                    "label": "Bottom Center",
+                    "value": "f-jcc-md f-aie-md tc"
+                },
+                {
+                    "label": "Bottom Right",
+                    "value": "f-jce-md f-aie-md"
+                }
+            ]
+        },
+        {
+            "type": "header",
+            "content": "t:global.snow.title"
+        },
+        {
+            "type": "checkbox",
+            "id": "snow_effect",
+            "label": "t:global.enable",
+            "default": false,
+            "info": "For Christmas"
+        },
+        {
+            "type": "select",
+            "id": "snow_style",
+            "label": "t:global.snow.style",
+            "default": "style1",
+            "options": [
+                {
+                    "value": "style1",
+                    "label": "Falling Down"
+                },
+                {
+                    "value": "style2",
+                    "label": "Falling From Left"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "t:sections.video_section.name"
+        }
+    ]
+}
+{% endschema %}

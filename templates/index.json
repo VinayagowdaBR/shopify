@@ -1,0 +1,1457 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "custom_slider_Je3QqT": {
+      "type": "custom-slider",
+      "blocks": {
+        "banner_EzNt8N": {
+          "type": "banner",
+          "settings": {
+            "desktop_banner_image": "shopify://shop_images/Add_a_heading_78.png",
+            "mobile_banner_image_1": "shopify://shop_images/Untitled_design_81.png",
+            "banner_link": "shopify://collections/all"
+          }
+        },
+        "banner_cMyHNx": {
+          "type": "banner",
+          "settings": {
+            "desktop_banner_image": "shopify://shop_images/Add_a_heading_79.png",
+            "mobile_banner_image_1": "shopify://shop_images/Untitled_design_80_234c54ba-7b16-43b0-a747-d9de7e74ee45.png",
+            "banner_link": "shopify://collections/all"
+          }
+        },
+        "banner_Qgxa8D": {
+          "type": "banner",
+          "disabled": true,
+          "settings": {
+            "banner_link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "banner_EzNt8N",
+        "banner_cMyHNx",
+        "banner_Qgxa8D"
+      ],
+      "name": "Custom Slider",
+      "settings": {}
+    },
+    "collection_list2_WmEYG6": {
+      "type": "collection-list2",
+      "blocks": {
+        "item_YnYXFc": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/2936e5c1e3c58ed8d66041002657fa63.jpg",
+            "title": "Mangalasutra",
+            "link": "shopify://collections/mangalsutra"
+          }
+        },
+        "item_PAzzm4": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.13.26_PM.jpg",
+            "title": "Bangles & Kadas",
+            "link": "shopify://collections/bangles-and-kadas"
+          }
+        },
+        "item_8wrcVT": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.11.43_PM.jpg",
+            "title": "Rings",
+            "link": "shopify://collections/rings"
+          }
+        },
+        "item_qDQ4j3": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.19.21_PM.jpg",
+            "title": "Earrings",
+            "link": "shopify://collections/earrings"
+          }
+        },
+        "item_QJLrzr": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.21.53_PM.jpg",
+            "title": "Bracelets",
+            "link": "shopify://collections/bracelets"
+          }
+        },
+        "item_zHtaMk": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.23.58_PM.jpg",
+            "title": "Chains",
+            "link": "shopify://collections/necklaces"
+          }
+        },
+        "item_bGB3gT": {
+          "type": "item",
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.31.58_PM.jpg",
+            "title": "Hip Belts",
+            "link": "shopify://collections/hip-belts"
+          }
+        },
+        "item_zYHApY": {
+          "type": "item",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.25.24_PM.jpg",
+            "title": "Necklace sets",
+            "link": "shopify://collections/necklace-sets"
+          }
+        }
+      },
+      "block_order": [
+        "item_YnYXFc",
+        "item_PAzzm4",
+        "item_8wrcVT",
+        "item_qDQ4j3",
+        "item_QJLrzr",
+        "item_zHtaMk",
+        "item_bGB3gT",
+        "item_zYHApY"
+      ],
+      "custom_css": [
+        "h2 {font-size: 32px; text-align: center; width: 100%; margin-bottom: 8px;}"
+      ],
+      "name": "Category Circles",
+      "settings": {
+        "hide_desktop": false,
+        "hide_mobile": false,
+        "heading": "Curated for You",
+        "bg_color": "rgba(0,0,0,0)",
+        "radius_percent": 50,
+        "show_ring": true,
+        "ring_color": "#c8a96e",
+        "ring_width": 2,
+        "rim_size": 2,
+        "title_case": "capitalize",
+        "title_font_size": 14,
+        "desktop_align": "center",
+        "desktop_size": 130,
+        "mobile_size": 90,
+        "gap_desktop": 16,
+        "gap_mobile": 10,
+        "items_mobile": "4",
+        "padding_desktop": "16px 24px 16px",
+        "margin_desktop": "0",
+        "padding_mobile": "0px 8px 8px",
+        "margin_mobile": "0"
+      }
+    },
+    "custom_liquid_VTkH6Q": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "name": "t:sections.custom_liquid.name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "custom_liquid": "<!-- ✅ FULL-WIDTH POLICY SECTION (full-bleed, no side gaps) -->\n<div class=\"policy-section-wrapper\">\n  <div class=\"policy-box\">\n\n    <div class=\"policy-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0695/6879/0581/files/Frame_21a13de0-8e83-442b-9834-fb6f564d405f.svg?v=1765446568\" class=\"policy-icon\">\n      <p class=\"policy-text\">2 Days Return</p>\n    </div>\n\n    <div class=\"policy-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0695/6879/0581/files/usp-return-d_svg.svg?v=1765446571\" class=\"policy-icon\">\n      <p class=\"policy-text\">10 Days Exchange</p>\n    </div>\n\n    <div class=\"policy-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0695/6879/0581/files/usp-warranty-d.svg?v=1765446577\" class=\"policy-icon\">\n      <p class=\"policy-text\">Cash On Delivery</p>\n    </div>\n\n    <div class=\"policy-item\">\n      <img src=\"https://cdn.shopify.com/s/files/1/0695/6879/0581/files/Layer_1.svg?v=1765446579\" class=\"policy-icon\">\n      <p class=\"policy-text\">Fast Shipping</p>\n    </div>\n\n  </div>\n</div>\n\n<style>\n/* FULL-BLEED WRAPPER: forces the section to span the viewport width\n   even if the theme adds container padding. */\n.policy-section-wrapper {\n  width: 100vw;\n  position: relative;\n  left: 50%;\n  right: 50%;\n  margin-left: -50vw;\n  margin-right: -50vw;\n  background: #c4e4af;\n  box-sizing: border-box;\n  padding: 0; /* remove any vertical padding if present */\n}\n\n/* CENTERED CONTENT BOX: keeps content centered and constrained */\n.policy-box {\n  max-width: 1200px;\n  margin: 0 auto;           /* center inside the full-bleed wrapper */\n  display: flex;\n  justify-content: space-between;\n  border: 1px solid #ddd;\n  padding: 20px 10px;       /* internal padding for the box */\n  background: transparent;  /* wrapper provides the bg color */\n  box-sizing: border-box;\n}\n\n/* 4 equal columns */\n.policy-item {\n  width: 25%;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  gap: 10px;\n  position: relative;\n  text-align: center;\n  box-sizing: border-box;\n}\n\n/* Separators */\n.policy-item:not(:last-child)::after {\n  content: \"\";\n  position: absolute;\n  right: 0;\n  top: 20%;\n  height: 60%;\n  width: 1px;\n  background: #999;\n}\n\n.policy-icon {\n  width: 40px;\n}\n\n.policy-text {\n  font-size: 14px;\n  white-space: nowrap;\n}\n\n/* MOBILE */\n@media (max-width: 768px) {\n  .policy-box {\n    padding: 12px 8px;\n  }\n\n  .policy-item {\n    width: 25%;\n    flex-direction: column; /* stack icon + text */\n    justify-content: center;\n    align-items: center;\n    gap: 6px;\n  }\n\n  .policy-item:not(:last-child)::after {\n    height: 70%;\n    top: 15%;\n  }\n\n  .policy-icon {\n    width: 26px;\n  }\n\n  .policy-text {\n    font-size: 10px;\n    line-height: 1.3;\n    text-align: center;\n  }\n}\n</style>",
+        "top-offeset": "none",
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#d1f4ba",
+        "bgg": ""
+      }
+    },
+    "collection_list_tiA9Y9": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_Wbywpr": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "daily-edit",
+            "collection_image": "shopify://shop_images/row-1-column-1_4_fbf74b66-693d-49a1-a187-f41110442b9d.png",
+            "collection_name": "Daily Elegance<br>\n<span style=\"font-size:10px;\">\n  Minimal, lightweight, comfortable, perfect for everyday sophistication\n</span>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_KV8mCb": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "workday-classic",
+            "collection_image": "shopify://shop_images/row-1-column-2_4_74cfc301-4730-4e38-b076-9340da5d2eda.png",
+            "collection_name": "Workday Classic<br>\n<span style=\"font-size:10px;\">\nSubtle,Polished,Professional<br>\nDesigned for long hours& Clean looks\n</span>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_G9UVGF": {
+          "type": "featured_collection",
+          "disabled": true,
+          "settings": {
+            "collection": "evening-pick",
+            "collection_image": "shopify://shop_images/row-1-column-3_3_28635be7-28bf-4b7f-a3c2-321dc53bd3e1.png",
+            "collection_name": "Evening Glam<br>\n<span style=\"font-size:10px;\">\nStatement,Bold,Sparkle-ready <br>\nMade to stand out\n</span>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_9g6pG4": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "celebration-edit",
+            "collection_image": "shopify://shop_images/row-1-column-4_2_f62edb71-44b5-4d82-a2cf-bad89fbd2cd9.png",
+            "collection_name": "Festive Finesse<br>\n<span style=\"font-size:10px;\">\nTraditional,Ornate,Elegant<br>\nPerfect For Celebration\n</span>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_WNeB4X": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bridal-select",
+            "collection_image": "shopify://shop_images/row-1-column-5_1_5ffdb09e-ee00-4f6b-8e73-5d7d60632994.png",
+            "collection_name": "Bridal & Occasion<br>\n<span style=\"font-size:10px;\">\nHeirloom,Grand,Timeless<br>\nFor Unforgettable Moments\n</span>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_CDF9iq": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "perfect-to-gift",
+            "collection_image": "shopify://shop_images/row-1-column-6_1_8388fb13-f639-495d-942a-704d1471fe77.png",
+            "collection_name": "Gifting Edits<br>\n<span style=\"font-size:10px;\">\nThoughtful,Elegant,Ready-to-gift<br>\nFor Every Celebration\n</span>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_Wbywpr",
+        "featured_collection_KV8mCb",
+        "featured_collection_G9UVGF",
+        "featured_collection_9g6pG4",
+        "featured_collection_WNeB4X",
+        "featured_collection_CDF9iq"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  Shop by Occassion\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fffaf7",
+        "bgg": "",
+        "grid-spacing": 0,
+        "grid-spacing-mbl": 0,
+        "grid": 6,
+        "tablet-grid": 4,
+        "mobile-grid": 2,
+        "style": "st3",
+        "enable_carousel": true,
+        "autoplay": false,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "tfs": 15,
+        "tfsm": 12,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1.2,
+        "cl": "#111111",
+        "bg": "rgba(0,0,0,0)",
+        "opt": 0,
+        "bdr": 13,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "collection_list_eRg6rC": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_8mipwU": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "rings",
+            "collection_image": "shopify://shop_images/row-1-column-1_58.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/rings"
+          }
+        },
+        "featured_collection_gHEz8j": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bangles",
+            "collection_image": "shopify://shop_images/row-1-column-2_44.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/bangles"
+          }
+        },
+        "featured_collection_H9WcpX": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bracelets",
+            "collection_image": "shopify://shop_images/row-1-column-3_41.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/bracelets"
+          }
+        },
+        "featured_collection_j9aEk8": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earrings",
+            "collection_image": "shopify://shop_images/row-2-column-1_21.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/earrings"
+          }
+        },
+        "featured_collection_KbQLAN": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "necklaces",
+            "collection_image": "shopify://shop_images/row-2-column-2_20.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/necklaces"
+          }
+        },
+        "featured_collection_PGc9bx": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "pendants",
+            "collection_image": "shopify://shop_images/row-2-column-3_19.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/pendants"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_8mipwU",
+        "featured_collection_gHEz8j",
+        "featured_collection_H9WcpX",
+        "featured_collection_j9aEk8",
+        "featured_collection_KbQLAN",
+        "featured_collection_PGc9bx"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  Shop by Occassion\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": true,
+        "section_cov": false,
+        "sec_bg_clr": "#fffaf7",
+        "bgg": "",
+        "grid-spacing": 10,
+        "grid-spacing-mbl": 16,
+        "grid": 6,
+        "tablet-grid": 4,
+        "mobile-grid": 3,
+        "style": "st6",
+        "enable_carousel": false,
+        "autoplay": true,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": false,
+        "tfs": 15,
+        "tfsm": 12,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1.2,
+        "cl": "rgba(0,0,0,0)",
+        "bg": "rgba(0,0,0,0)",
+        "opt": 0,
+        "bdr": 13,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "collection_list_ajpzkM": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_VGdxRW": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-her",
+            "collection_image": "shopify://shop_images/collection2_27.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/gift-for-her"
+          }
+        },
+        "featured_collection_78hXYf": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-him",
+            "collection_image": "shopify://shop_images/collection2_23.png",
+            "collection_name": "",
+            "collection_btn": "",
+            "url": "shopify://collections/gift-for-him"
+          }
+        },
+        "featured_collection_XkjpnQ": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-mother",
+            "collection_image": "shopify://shop_images/collection2_21.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/gift-for-mother"
+          }
+        },
+        "featured_collection_3FP7yF": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-baby",
+            "collection_image": "shopify://shop_images/collection2_22.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/gift-for-baby"
+          }
+        },
+        "featured_collection_LcMjWC": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-loved-ones",
+            "collection_image": "shopify://shop_images/collection2_20.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/gift-for-loved-ones"
+          }
+        },
+        "featured_collection_UYHtdi": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-couples",
+            "collection_image": "shopify://shop_images/collection2_19.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/gift-for-couples"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_VGdxRW",
+        "featured_collection_78hXYf",
+        "featured_collection_XkjpnQ",
+        "featured_collection_3FP7yF",
+        "featured_collection_LcMjWC",
+        "featured_collection_UYHtdi"
+      ],
+      "disabled": true,
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  Shop by Recipient\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": false,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#f9f3ee",
+        "bgg": "",
+        "grid-spacing": 32,
+        "grid-spacing-mbl": 5,
+        "grid": 6,
+        "tablet-grid": 2,
+        "mobile-grid": 3,
+        "style": "st1",
+        "enable_carousel": false,
+        "autoplay": true,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "tfs": 16,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1,
+        "cl": "rgba(0,0,0,0)",
+        "bg": "rgba(0,0,0,0)",
+        "opt": 0,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "collection_list_KwiT46": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_z3DBHd": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "for-him",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T122824.291_58cdfff6-7c75-4a69-a8f7-4447ae6fbd7c.png",
+            "collection_name": "",
+            "collection_btn": "",
+            "url": ""
+          }
+        },
+        "featured_collection_TKKFbF": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "for-her",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T123003.631_7e61f65c-bf19-44e2-9e2f-359703295006.png",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_z3DBHd",
+        "featured_collection_TKKFbF"
+      ],
+      "disabled": true,
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  Shop by Recipient\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": false,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": true,
+        "section_cov": false,
+        "sec_bg_clr": "#f9f3ee",
+        "bgg": "",
+        "grid-spacing": 32,
+        "grid-spacing-mbl": 5,
+        "grid": 2,
+        "tablet-grid": 2,
+        "mobile-grid": 1,
+        "style": "st1",
+        "enable_carousel": true,
+        "autoplay": true,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "tfs": 16,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1,
+        "cl": "rgba(0,0,0,0)",
+        "bg": "rgba(0,0,0,0)",
+        "opt": 0,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "products_rows_mKpL7Y": {
+      "type": "products-rows",
+      "disabled": true,
+      "name": "t:sections.products_row.name",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  Earrings</h2>",
+        "subtitle": "",
+        "collection": "earrings",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": true,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "linear-gradient(180deg, rgba(198, 73, 130, 1) 9%, rgba(255, 140, 162, 0.84) 72%)",
+        "prbox_style": "style1",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "rows": 4,
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": false,
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "small",
+        "show_view_all": "View More",
+        "btn-style": "btn",
+        "btn-size-desk": "btn-md",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "collection_list_m8mqPp": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_aQ9E6D": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "under-299",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T151110.029.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/under-299"
+          }
+        },
+        "featured_collection_G8KpXc": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "under-399",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T151138.366.png",
+            "collection_name": "‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/under-399"
+          }
+        },
+        "featured_collection_cYwCRn": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "under-499",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T151148.117.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/under-499"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_aQ9E6D",
+        "featured_collection_G8KpXc",
+        "featured_collection_cYwCRn"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".details {display: none !important;}"
+      ],
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": true,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 5,
+        "grid": 3,
+        "tablet-grid": 3,
+        "mobile-grid": 3,
+        "style": "st1",
+        "enable_carousel": true,
+        "autoplay": false,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "tfs": 16,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1.2,
+        "cl": "#ffffff",
+        "bg": "#000000",
+        "opt": 0,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "collection_list_NiiLAK": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_nVhMrX": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "wife",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T165938.311_b9922e36-08f6-44bc-a226-7905de1f1002.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/wife"
+          }
+        },
+        "featured_collection_4DanLw": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "husband",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T165428.776_4ec07d31-884c-44a2-8bb7-8f9c71e051aa.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/husband"
+          }
+        },
+        "featured_collection_iMa7f9": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mother",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T170358.347_f8055704-ad68-46b5-af98-ca43390d63fb.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/mother"
+          }
+        },
+        "featured_collection_7YVNcT": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "brother",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T170631.471_6f8138c6-c026-4dae-af8f-81357be70212.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/brother"
+          }
+        },
+        "featured_collection_3bBgza": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "sister",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T170937.402_004933d2-dfe5-4cf4-8aa8-1f48cff52916.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/sister"
+          }
+        },
+        "featured_collection_4hbcfQ": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "friends",
+            "collection_image": "shopify://shop_images/collection2_-_2026-01-06T171224.506_fcaf279a-a5f3-408b-bd6f-6ff1caf89efa.png",
+            "collection_name": "‎",
+            "collection_btn": "Shop Now",
+            "url": "shopify://collections/friends"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_nVhMrX",
+        "featured_collection_4DanLw",
+        "featured_collection_iMa7f9",
+        "featured_collection_7YVNcT",
+        "featured_collection_3bBgza",
+        "featured_collection_4hbcfQ"
+      ],
+      "disabled": true,
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  Collection List\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": true,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "linear-gradient(270deg, rgba(238, 218, 239, 0.78), rgba(249, 215, 179, 1) 40%)",
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 5,
+        "grid": 6,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "style": "st1",
+        "enable_carousel": true,
+        "autoplay": false,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "tfs": 16,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1.2,
+        "cl": "#ffffff",
+        "bg": "#000000",
+        "opt": 0,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "grid_banners_wnHHRY": {
+      "type": "grid-banners",
+      "blocks": {
+        "style2_3yDEaw": {
+          "type": "style2",
+          "settings": {
+            "image1": "shopify://shop_images/collection2_-_2026-01-06T173441.555.png",
+            "text1": "",
+            "text1-large": "",
+            "bnr1align": "f-jcc f-aie tc",
+            "link1": "shopify://collections/everyday-wear",
+            "image2": "shopify://shop_images/collection2_-_2026-01-06T173747.275.png",
+            "text2": "",
+            "text2-large": "",
+            "bnr2align": "f-jcc f-aie tc",
+            "link2": "shopify://collections/twinning",
+            "image3": "shopify://shop_images/collection2_-_2026-01-06T174123.626.png",
+            "text3": "",
+            "text3-large": "",
+            "bnr3align": "f-jcc f-aie tc",
+            "link3": "shopify://collections/party-wear",
+            "image4": "shopify://shop_images/collection2_-_2026-01-06T174324.012.png",
+            "text4": "",
+            "text4-large": "",
+            "bnr4align": "f-jcc f-aie tc",
+            "link4": "shopify://collections/traditional-wear",
+            "image5": "shopify://shop_images/collection2_-_2026-01-06T175412.415.png",
+            "text5": "",
+            "text5-large": "",
+            "bnr5align": "f-jcc f-aie tc",
+            "link5": "shopify://collections/minimalistic-wear"
+          }
+        }
+      },
+      "block_order": [
+        "style2_3yDEaw"
+      ],
+      "disabled": true,
+      "name": "Grid Banners",
+      "settings": {
+        "title": "<h2 style=\"font-size: 28px; font-weight: 400; letter-spacing: 0.5px; color: #2b2b2b; margin-bottom: 12px;\">\n  Glam Gallery\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "fullwidth": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "cl": "#000000",
+        "fs": 13,
+        "fsm": 12,
+        "fw": "400",
+        "lh": 1.2,
+        "cl2": "#000000",
+        "tfs": 18,
+        "tfsm": 18,
+        "tff": "ft2",
+        "tfw": "500",
+        "tlh": 1.2,
+        "isbox": true,
+        "bg": "#ffffff",
+        "opt": 0,
+        "bdr": 7,
+        "img_rad": 0,
+        "disable_zoom": true,
+        "snow_effect": false,
+        "snow_style": "style1"
+      }
+    },
+    "products_rows_diDG4B": {
+      "type": "products-rows",
+      "name": "t:sections.products_row.name",
+      "settings": {
+        "title": "Bestsellers",
+        "subtitle": "",
+        "collection": "best-seller",
+        "top-offeset": "none",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "prbox_style": "style3",
+        "grid": 4,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "rows": 4,
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": false,
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "large",
+        "show_view_all": "View More",
+        "btn-style": "btn",
+        "btn-size-desk": "btn-md",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "17633584337e0e10ff": {
+      "type": "apps",
+      "blocks": {
+        "reelfy_videos_reelfy_section_XYCG7a": {
+          "type": "shopify://apps/reelfy-videos/blocks/reelfy-section/4022ffb0-05c3-4ef3-a409-6df51f4b1b3f",
+          "settings": {
+            "gallery_id": 16638,
+            "title": "",
+            "subtitle": "",
+            "heading_size": "1",
+            "heading_align": "left",
+            "heading_color": "",
+            "desc_style": "subtitle",
+            "desc_color": "",
+            "custom_class": "",
+            "background_color": "",
+            "padding_top": 36,
+            "padding_bottom": 36,
+            "padding_left_right": 0
+          }
+        }
+      },
+      "block_order": [
+        "reelfy_videos_reelfy_section_XYCG7a"
+      ],
+      "settings": {
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa"
+      }
+    },
+    "giva_sec_nzHQwm": {
+      "type": "givaSec",
+      "blocks": {
+        "collection_card_JMhRQc": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "anniversary-gift",
+            "image": "shopify://shop_images/collection2_-_2026-01-07T102351.712.png",
+            "label": "",
+            "custom_link": "shopify://collections/anniversary-gift"
+          }
+        },
+        "collection_card_yKDCcF": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "birthday-gift",
+            "image": "shopify://shop_images/collection2_-_2026-01-07T103511.809.png",
+            "label": "Collection",
+            "custom_link": "shopify://collections/birthday-gift"
+          }
+        },
+        "collection_card_tWEx3R": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "most-gifted",
+            "image": "shopify://shop_images/collection2_-_2026-01-07T104356.632.png",
+            "label": "Collection",
+            "custom_link": "shopify://collections/most-gifted"
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_JMhRQc",
+        "collection_card_yKDCcF",
+        "collection_card_tWEx3R"
+      ],
+      "disabled": true,
+      "name": "OccCollection Carousel",
+      "settings": {
+        "bg_color": "#e4d1c5",
+        "hero_image": "shopify://shop_images/collection2_-_2026-01-06T182742.654_c6d7095e-7983-41a0-a3f4-f59e26f6438f.png",
+        "title": "Shop by",
+        "subtitle": "Occasion",
+        "description": "Thoughtful gifts for all occasions!",
+        "cta_show": true,
+        "cta_text": "Explore",
+        "cta_link": "shopify://collections/all",
+        "title_color": "#c9688e",
+        "subtitle_color": "#1b1b1b",
+        "description_color": "#333333",
+        "cta_gradient": "linear-gradient(90deg, #F29AC3, #FDD5A5)",
+        "cta_text_color": "#ffffff",
+        "overlay_color": "#ffffff"
+      }
+    },
+    "products_rows_Hh8CzP": {
+      "type": "products-rows",
+      "disabled": true,
+      "name": "t:sections.products_row.name",
+      "settings": {
+        "title": "Bracelets",
+        "subtitle": "",
+        "collection": "bracelets",
+        "top-offeset": "small",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "prbox_style": "style1",
+        "grid": 4,
+        "tablet-grid": 4,
+        "mobile-grid": 2,
+        "rows": 4,
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": true,
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "small",
+        "show_view_all": "",
+        "btn-style": "btn",
+        "btn-size-desk": "btn-md",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "collection_list_Ai3aGx": {
+      "type": "collection-list",
+      "blocks": {
+        "featured_collection_ehEicN": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-sister",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_CBYYVg": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-brother",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_aNqUgE": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-husband",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_YQdXch": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-wife",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_erMgLC": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-father",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "featured_collection_UKJQDU": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gift-for-mother",
+            "collection_name": "",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_ehEicN",
+        "featured_collection_CBYYVg",
+        "featured_collection_aNqUgE",
+        "featured_collection_YQdXch",
+        "featured_collection_erMgLC",
+        "featured_collection_UKJQDU"
+      ],
+      "disabled": true,
+      "name": "t:sections.collections.list_name",
+      "settings": {
+        "title": "Gifting Guide",
+        "subtitle": "Describe your products, collection, content etc...",
+        "top-offeset": "small",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "grid-spacing": 6,
+        "grid-spacing-mbl": 5,
+        "grid": 6,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "style": "st1",
+        "enable_carousel": true,
+        "autoplay": false,
+        "speed": 5,
+        "textalign": "tc",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": false,
+        "tfs": 16,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "500",
+        "tlh": 1.2,
+        "cl": "rgba(0,0,0,0)",
+        "bg": "rgba(0,0,0,0)",
+        "opt": 0,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "instagram_shop_iVdiPa": {
+      "type": "instagram-shop",
+      "blocks": {
+        "img_fCcV4b": {
+          "type": "img",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_18.png",
+            "title": "Gold Beaded Bracelet",
+            "cpt": "<p>Add a sprinkle of sparkle to your wrist with our Elegant Gold Beaded Bracelet. Crafted for timeless charm and effortless style. #MohiJewellery #GoldBracelet #EverydayElegance</p>",
+            "url": "https://www.instagram.com/_houseofviya_?igsh=NTlnaWxwczFxa3Uw&utm_source=qr",
+            "product1": "golden-personalised-eternal-necklace-copy-1",
+            "p1_top": 1,
+            "p1_left": 1,
+            "product2": "golden-personalised-eternal-necklace-copy-1",
+            "p2_top": 1,
+            "p2_left": 1,
+            "product3": "rose-gold-dual-heart-bracelet",
+            "p3_top": 1,
+            "p3_left": 1,
+            "product4": "silver-celebrating-pear-danglers",
+            "p4_top": 1,
+            "p4_left": 63
+          }
+        },
+        "img_RpmnqN": {
+          "type": "img",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_20.png",
+            "title": "Classic Silver Stud Earrings",
+            "cpt": "<p>These timeless silver stud earrings feature sparkling stones set in a sleek, minimalist design. Perfect for a subtle yet stunning look, ideal for both casual and formal wear.<br/><br/></p>",
+            "url": "https://www.instagram.com/_houseofviya_?igsh=NTlnaWxwczFxa3Uw&utm_source=qr",
+            "product1": "",
+            "p1_top": 1,
+            "p1_left": 1,
+            "product2": "",
+            "p2_top": 1,
+            "p2_left": 1,
+            "product3": "",
+            "p3_top": 1,
+            "p3_left": 1,
+            "product4": "",
+            "p4_top": 1,
+            "p4_left": 63
+          }
+        },
+        "img_ynLqJi": {
+          "type": "img",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_33.png",
+            "title": "Solitaire Diamond Ring",
+            "cpt": "<p>A flawless solitaire diamond set on a polished silver band, this ring embodies pure elegance and sophistication. Ideal for engagements or as a stunning statement piece.</p>",
+            "url": "https://www.instagram.com/_houseofviya_?igsh=NTlnaWxwczFxa3Uw&utm_source=qr",
+            "product1": "golden-personalised-eternal-necklace-copy-1",
+            "p1_top": 1,
+            "p1_left": 1,
+            "product2": "silver-lakshmi-and-ganesha-idol",
+            "p2_top": 1,
+            "p2_left": 1,
+            "product3": "golden-personalised-eternal-necklace-copy",
+            "p3_top": 1,
+            "p3_left": 1,
+            "product4": "rose-gold-dual-heart-bracelet",
+            "p4_top": 1,
+            "p4_left": 63
+          }
+        },
+        "img_HNWC4K": {
+          "type": "img",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_34.png",
+            "title": "Halo Pendant Necklace in Silver",
+            "cpt": "<p>Light up the room with our Halo Pendant Necklace — where brilliance meets grace. A must-have to complete your jewellery collection! 🌟 #MohiNecklace #HaloPendant #JewelleryGoals</p>",
+            "url": "https://www.instagram.com/_houseofviya_?igsh=NTlnaWxwczFxa3Uw&utm_source=qr",
+            "product1": "giva-signature-solitaire-set-pendant",
+            "p1_top": 1,
+            "p1_left": 1,
+            "product2": "silver-kingpin-bracelet-for-him",
+            "p2_top": 1,
+            "p2_left": 1,
+            "product3": "golden-personalised-eternal-necklace-copy",
+            "p3_top": 1,
+            "p3_left": 1,
+            "product4": "mens-tennis-bracelet-1",
+            "p4_top": 1,
+            "p4_left": 63
+          }
+        }
+      },
+      "block_order": [
+        "img_fCcV4b",
+        "img_RpmnqN",
+        "img_ynLqJi",
+        "img_HNWC4K"
+      ],
+      "disabled": true,
+      "name": "t:sections.instagram.shop",
+      "settings": {
+        "title": "<h2 style=\"font-size: 26px; font-weight: 400;\">\n  INSTAGRAM SHOP\n</h2>",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "bg": "#f5f5f5",
+        "bgg": "",
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 9,
+        "grid": 4,
+        "tablet-grid": 4,
+        "mobile-grid": 2,
+        "enable_carousel": false,
+        "autoplay": true,
+        "speed": 5,
+        "brd": 4,
+        "isbtn": true,
+        "btn": "View on Instagram",
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    },
+    "store_features_wKiCgQ": {
+      "type": "store-features",
+      "blocks": {
+        "text_block_xhzBxf": {
+          "type": "text_block",
+          "settings": {
+            "icons": "",
+            "title": "100% Waterproof",
+            "text": "",
+            "texturl": ""
+          }
+        },
+        "text_block_9n9Hf9": {
+          "type": "text_block",
+          "settings": {
+            "icons": "",
+            "title": "2L+ Happy Cusotmers",
+            "text": "",
+            "texturl": ""
+          }
+        },
+        "text_block_HWKfCH": {
+          "type": "text_block",
+          "settings": {
+            "icons": "",
+            "title": "Sensitive Skin Safe",
+            "text": "",
+            "texturl": ""
+          }
+        },
+        "text_block_VpXM8E": {
+          "type": "text_block",
+          "settings": {
+            "icons": "",
+            "title": "Secure Payment",
+            "text": "",
+            "texturl": ""
+          }
+        },
+        "text_block_kaznwF": {
+          "type": "text_block",
+          "settings": {
+            "icons": "",
+            "title": "Gift-ready Packaging",
+            "text": "",
+            "texturl": ""
+          }
+        },
+        "text_block_XfzfdH": {
+          "type": "text_block",
+          "settings": {
+            "icons": "",
+            "title": "Customer Support",
+            "text": "",
+            "texturl": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_block_xhzBxf",
+        "text_block_9n9Hf9",
+        "text_block_HWKfCH",
+        "text_block_VpXM8E",
+        "text_block_kaznwF",
+        "text_block_XfzfdH"
+      ],
+      "disabled": true,
+      "name": "t:sections.store_features.name",
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "top-offeset": "default",
+        "section_width": false,
+        "section_cov": true,
+        "sec_bg_clr": "#681511",
+        "bgg": "",
+        "hide_mobile": false,
+        "hided": false,
+        "style": "style1",
+        "icon-type": "image",
+        "icons_clr": "#ffffff",
+        "isz": 40,
+        "tcl": "#ffffff",
+        "tfs": 14,
+        "tfsm": 12,
+        "tfw": "600",
+        "tlh": 1.2,
+        "cl": "#ffffff",
+        "border_sep": "#eeeeee"
+      }
+    },
+    "17526491613533bf4a": {
+      "type": "apps",
+      "blocks": {
+        "trustwill_trustoo_barrage_carousel_mJHWxh": {
+          "type": "shopify://apps/trustwill-trustoo/blocks/barrage-carousel/c8f15077-6475-4e86-ad06-b66038d5ba2c",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "trustwill_trustoo_barrage_carousel_mJHWxh"
+      ],
+      "settings": {
+        "top-offeset": "none",
+        "section_width": true,
+        "npd": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa"
+      }
+    },
+    "176347029038648cdc": {
+      "type": "apps",
+      "settings": {
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa"
+      }
+    },
+    "featured_blog_pQR8ep": {
+      "type": "featured-blog",
+      "name": "t:sections.blog.section.name",
+      "settings": {
+        "title": "From the Knowledge Lab",
+        "subtitle": "Expert jewellery care tips, styling guides, and curated insights to elevate your everyday elegance.",
+        "top-offeset": "default",
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": true,
+        "sec_bg_clr": "rgba(0,0,0,0)",
+        "bgg": "",
+        "blog": "knowledge-lab",
+        "img_ratio": "50",
+        "img_rad": 0,
+        "post_limit": 3,
+        "grid": 3,
+        "tablet-grid": 2,
+        "mobile-grid": 1,
+        "blog_show_author": false,
+        "blog_show_date": true,
+        "show_comment": true,
+        "show_mini_des": true,
+        "twords": 50,
+        "show_read_more": true,
+        "color_ttl": "#111111",
+        "blogfs": 16,
+        "blogfsm": 14,
+        "blogtf": "font2",
+        "blogtw": "fw-600",
+        "blh": 1.2,
+        "blog_align": "tl",
+        "show_view_all": false,
+        "btn-style": "btn2",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    }
+  },
+  "order": [
+    "custom_slider_Je3QqT",
+    "collection_list2_WmEYG6",
+    "custom_liquid_VTkH6Q",
+    "collection_list_tiA9Y9",
+    "collection_list_eRg6rC",
+    "collection_list_ajpzkM",
+    "collection_list_KwiT46",
+    "products_rows_mKpL7Y",
+    "collection_list_m8mqPp",
+    "collection_list_NiiLAK",
+    "grid_banners_wnHHRY",
+    "products_rows_diDG4B",
+    "17633584337e0e10ff",
+    "giva_sec_nzHQwm",
+    "products_rows_Hh8CzP",
+    "collection_list_Ai3aGx",
+    "instagram_shop_iVdiPa",
+    "store_features_wKiCgQ",
+    "17526491613533bf4a",
+    "176347029038648cdc",
+    "featured_blog_pQR8ep"
+  ]
+}

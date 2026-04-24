@@ -1,0 +1,246 @@
+<section
+  id="cat-circles-{{ section.id }}"
+  class="cat-circles{% if section.settings.hide_desktop %} hide-desktop{% endif %}{% if section.settings.hide_mobile %} hide-mobile{% endif %}"
+  style="
+    --cc-radius: {{ section.settings.radius_percent | default: 50 }}%;
+    --cc-items-mobile: {{ section.settings.items_mobile | default: 4.5 }};
+    --cc-gap-desktop: {{ section.settings.gap_desktop | default: 24 }}px;
+    --cc-gap-mobile:  {{ section.settings.gap_mobile  | default: 10 }}px;
+    --cc-desktop-size: {{ section.settings.desktop_size | default: 120 }}px;
+    --cc-mobile-size: {{ section.settings.mobile_size  | default: 90 }}px;
+    --cc-title-size: {{ section.settings.title_font_size | default: 12 }}px;
+    --cc-title-transform: {{ section.settings.title_case }};
+    /* ring controls */
+    --cc-ring-width: {% if section.settings.show_ring %}{{ section.settings.ring_width | default: 2 }}{% else %}0{% endif %}px;
+    --cc-rim-size:  {% if section.settings.show_ring %}{{ section.settings.rim_size  | default: 2 }}{% else %}0{% endif %}px;
+    --cc-ring-color: {{ section.settings.ring_color | default: '#222222' }};
+    background-color: {{ section.settings.bg_color }};
+    {% if section.settings.bg_image != blank %}
+      background-image: url({{ section.settings.bg_image | image_url }});
+      background-size: cover; background-position: center;
+    {% endif %}
+    padding: {{ section.settings.padding_desktop }};
+    margin:  {{ section.settings.margin_desktop }};
+  "
+>
+  <div class="cc-wrap">
+    {% if section.settings.heading != blank %}
+      <h2 class="cc-head">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="cc-row{% if section.settings.desktop_align == 'left' %} align-left{% endif %}">
+      {% for block in section.blocks %}
+        {% assign link = block.settings.link %}
+        <div class="cc-item" {{ block.shopify_attributes }}>
+          {% if link %}<a href="{{ link }}">{% endif %}
+            {% if block.settings.image %}
+              <img
+                src="{{ block.settings.image | image_url: width: 360 }}"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+                alt="{{ block.settings.title | escape | default: 'Category' }}"
+                loading="lazy">
+            {% endif %}
+            {% if block.settings.title != blank %}
+              <span class="cc-title">{{ block.settings.title }}</span>
+            {% endif %}
+          {% if link %}</a>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Visibility toggles */
+  @media (min-width: 769px) { #cat-circles-{{ section.id }}.hide-desktop { display: none !important; } }
+  @media (max-width: 768px) { #cat-circles-{{ section.id }}.hide-mobile  { display: none !important; } }
+
+  #cat-circles-{{ section.id }} { color: inherit; }
+  #cat-circles-{{ section.id }} .cc-wrap { width: 100%; }
+
+  /* Optional heading */
+  #cat-circles-{{ section.id }} .cc-head {
+    margin: 0 8px 10px;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  /* Row */
+  #cat-circles-{{ section.id }} .cc-row {
+    display: flex;
+    gap: var(--cc-gap-desktop);
+  }
+
+  /* Items */
+  #cat-circles-{{ section.id }} .cc-item { flex: 0 0 auto; text-align: center; }
+  #cat-circles-{{ section.id }} .cc-item a { text-decoration: none; color: inherit; display: block; }
+
+  /* Images (ring controllable) */
+  #cat-circles-{{ section.id }} img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    border-radius: var(--cc-radius);
+    border: var(--cc-ring-width) solid var(--cc-ring-color);
+    padding: var(--cc-rim-size);
+    background: #fff;
+    margin: 0 auto 8px;
+    box-sizing: border-box;
+  }
+
+  /* Titles (wrap, no ellipsis) */
+  #cat-circles-{{ section.id }} .cc-title {
+    display: block;
+    font-size: var(--cc-title-size);
+    line-height: 1.2;
+    text-transform: var(--cc-title-transform);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  /* MOBILE (fixed) */
+  @media (max-width: 768px) {
+    #cat-circles-{{ section.id }} {
+      padding: {{ section.settings.padding_mobile }} !important;
+      margin:  {{ section.settings.margin_mobile }} !important;
+    }
+    #cat-circles-{{ section.id }} .cc-row {
+      gap: var(--cc-gap-mobile);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      scroll-snap-type: x mandatory;
+      padding: 0 4px;
+    }
+    #cat-circles-{{ section.id }} .cc-row::-webkit-scrollbar { display: none; }
+
+    /* Cell width from items-per-view */
+    #cat-circles-{{ section.id }} .cc-item {
+      flex-basis: calc(100% / var(--cc-items-mobile));
+      max-width: calc(100% / var(--cc-items-mobile));
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* Image capped by cell width to prevent overflow */
+    #cat-circles-{{ section.id }} .cc-item img {
+      width: min(100%, var(--cc-mobile-size));
+      height: auto;
+      aspect-ratio: 1 / 1;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  /* DESKTOP */
+  @media (min-width: 769px) {
+    #cat-circles-{{ section.id }} .cc-row {
+      flex-wrap: wrap;
+      justify-content: center;  /* centered by default */
+      overflow: visible;
+    }
+    #cat-circles-{{ section.id }} .cc-row.align-left { justify-content: flex-start; }
+    #cat-circles-{{ section.id }} .cc-item { width: var(--cc-desktop-size); }
+    #cat-circles-{{ section.id }} img { width: var(--cc-desktop-size); height: var(--cc-desktop-size); }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Category Circles",
+  "settings": [
+    { "type": "checkbox", "id": "hide_desktop", "label": "Hide on desktop (≥769px)", "default": false },
+    { "type": "checkbox", "id": "hide_mobile",  "label": "Hide on mobile (≤768px)",  "default": false },
+
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Top Collections" },
+
+    { "type": "color", "id": "bg_color", "label": "Background color", "default": "#FFF3EA" },
+    { "type": "image_picker", "id": "bg_image", "label": "Background image (optional)" },
+
+    { "type": "range", "id": "radius_percent", "label": "Image corner radius (%)", "min": 0, "max": 50, "step": 1, "default": 50 },
+
+    /* ring controls */
+    { "type": "checkbox", "id": "show_ring",   "label": "Show border ring", "default": true },
+    { "type": "color",    "id": "ring_color",  "label": "Ring color", "default": "#222222" },
+    { "type": "range",    "id": "ring_width",  "label": "Ring width (px)", "min": 0, "max": 8, "step": 1, "default": 2 },
+    { "type": "range",    "id": "rim_size",    "label": "Inner rim (px)",   "min": 0, "max": 8, "step": 1, "default": 2 },
+
+    {
+      "type": "select",
+      "id": "title_case",
+      "label": "Title case",
+      "default": "uppercase",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "uppercase", "label": "UPPERCASE" },
+        { "value": "capitalize", "label": "Capitalized" },
+        { "value": "lowercase", "label": "lowercase" }
+      ]
+    },
+    { "type": "range", "id": "title_font_size", "label": "Title font size (px)", "min": 10, "max": 18, "step": 1, "default": 12 },
+
+    {
+      "type": "select",
+      "id": "desktop_align",
+      "label": "Desktop alignment",
+      "default": "center",
+      "options": [
+        { "value": "center", "label": "Centered" },
+        { "value": "left", "label": "Left" }
+      ]
+    },
+
+    { "type": "range", "id": "desktop_size", "label": "Desktop image size (px)", "min": 90, "max": 180, "step": 2, "default": 120 },
+    { "type": "range", "id": "mobile_size",  "label": "Mobile image size (px)",  "min": 60, "max": 160, "step": 2, "default": 90 },
+
+    /* separate gaps */
+    { "type": "range", "id": "gap_desktop", "label": "Gap between items (desktop px)", "min": 0, "max": 60, "step": 1, "default": 24 },
+    { "type": "range", "id": "gap_mobile",  "label": "Gap between items (mobile px)",  "min": 0, "max": 40, "step": 1, "default": 10 },
+
+    /* items per view on mobile */
+    {
+      "type": "select",
+      "id": "items_mobile",
+      "label": "Items per view (mobile)",
+      "default": "4.5",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "4.5", "label": "4.5 (peek next)" },
+        { "value": "5", "label": "5" }
+      ]
+    },
+
+    /* padding/margin as shorthands */
+    { "type": "text", "id": "padding_desktop", "label": "Section padding (desktop)", "default": "12px 12px 8px" },
+    { "type": "text", "id": "margin_desktop",  "label": "Section margin (desktop)",  "default": "0" },
+    { "type": "text", "id": "padding_mobile",  "label": "Section padding (mobile)",  "default": "12px 8px 8px" },
+    { "type": "text", "id": "margin_mobile",   "label": "Section margin (mobile)",   "default": "0" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Circle item",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Category" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [
+    {
+      "name": "Category Circles",
+      "blocks": [
+        { "type": "item" }, { "type": "item" }, { "type": "item" },
+        { "type": "item" }, { "type": "item" }, { "type": "item" }
+      ]
+    }
+  ]
+}
+{% endschema %}

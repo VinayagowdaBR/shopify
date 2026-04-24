@@ -1,0 +1,403 @@
+{%- assign secSt = section.settings -%}
+{%- capture lookbookSec -%}
+<div class="content-indent {{ section.settings.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="masonary">    
+  <div class="{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}">
+   
+    {% render 'sec-title' %}
+
+     <div class="grid lookbook f-wrap grid-masonary shop gspace" style="--grsp:0 -{{ secSt.grid-spacing | divided_by: 2.0  }}px;--grspi:0 {{ secSt.grid-spacing | divided_by: 2.0  }}px {{secSt.grid-spacing}}px;--grspm:0 -{{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px;--grspim:0 {{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px {{secSt.grid-spacing-mbl}}px;--br:{{secSt.img_rad}}px;">
+        <div class="grid-sizer-{{section.id}} col-{{section.settings.grid-spacing-col}}"></div>
+        {% for block in section.blocks limit: section.blocks.size %}
+            {%- assign blkSt = block.settings -%}
+            {% assign product_box = forloop.index | minus:1 %}
+            {% assign delay_time = 50 | times : product_box %}    	
+
+
+        {% if blkSt.image!= blank %}          
+        <div class="gitem ms-item grid-lookbook {{blkSt.width}} wow fadeInUp" data-wow-delay="{{delay_time}}ms">
+          <div class="cl-item shop">
+            <img class="imgFl lazyload" loading="lazy" src="{{ blkSt.image | img_url: '300x' }}" width="{{ blkSt.image.width }}" height="{{ blkSt.image.height }}"
+                data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '300,500,750,1000,1350,1600,2000' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" />
+            
+            {% comment %} *** Lookbook Shop *** {% endcomment %}
+            {% if blkSt.product1 != blank %}
+            <div class="products" style="top:{{ blkSt.p1_top}}%;left:{{ blkSt.p1_left}}%;">
+              <span class="btn-shop"><i class="at at-plus-r"></i></span>
+              {% render 'product-card-grid-lookbook', slproduct: blkSt.product1, postion: blkSt.dis-pstn1 %}
+            </div>
+            {% endif %}
+            {% if blkSt.product2 != blank %}
+            <div class="products" style="top:{{ blkSt.p2_top}}%;left:{{ blkSt.p2_left}}%;">
+              <span class="btn-shop"><i class="at at-plus-r"></i></span>
+              {% render 'product-card-grid-lookbook',slproduct:blkSt.product2, postion: blkSt.dis-pstn2 %}
+            </div>
+            {% endif %}
+
+            {% if blkSt.product3 != blank %}
+            <div class="products" style="top:{{ blkSt.p3_top}}%;left:{{ blkSt.p3_left}}%;">
+              <span class="btn-shop"><i class="at at-plus-r"></i></span>
+              {% render 'product-card-grid-lookbook',slproduct:blkSt.product3, postion: blkSt.dis-pstn3 %}
+            </div>
+            {% endif %}
+
+            {% if blkSt.product4 != blank %}
+            <div class="products"	style="top:{{ blkSt.p4_top}}%;left:{{ blkSt.p4_left}}%;">
+              <span class="btn-shop"><i class="at at-plus-r"></i></span>
+              {% render 'product-card-grid-lookbook',slproduct:blkSt.product4, postion: blkSt.dis-pstn4 %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+  </div>
+</div>
+{%- endcapture -%}
+{{lookbookSec | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.lookbook.name",
+	"class":"lookbook-section",
+	"max_blocks":50,
+    "settings": [			
+	   {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Lookbook Shop"		
+      },
+ 	  {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "t:sections.all.sub_head",
+        "default": "Describe your products, collection etc..."
+      }, 	
+     {
+		 "type": "paragraph",
+		 "content":"t:sections.lookbook.preview"
+     },	 
+	  {
+        "type": "header",      
+        "content":"t:sections.all.name"
+      }, 	  
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },
+		{
+         "type": "checkbox",
+		 "id": "section_width",
+		 "label":"t:global.fullwidth",
+		 "default": true
+        }, 
+		 {
+			"type":"checkbox",
+			"id":"npd",
+			"label":"t:global.no_padding",
+			"info": "t:global.no_padding_info",
+			"default": false
+		  },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+	  {
+        "type": "header",
+        "content": "t:global.grid.name"
+      },
+	  {
+        "type": "range",
+        "id": "grid-spacing",
+        "label": "t:global.grid.space",
+        "default": 15,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px"
+      },
+     {
+        "type": "range",
+        "id": "grid-spacing-mbl",
+        "label": "t:global.grid.space_mobile",
+        "default": 5,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px",
+        "info": "t:global.grid.space_info"
+      },
+	{
+        "type": "range",
+        "id": "grid-spacing-col",
+        "label": "t:global.grid.column",
+        "default": 2,
+        "min": 2,
+        "max": 5,
+        "step": 1,
+		"info":"t:sections.lookbook.column_guide"
+      },
+	 {
+        "type": "range",
+        "id": "img_rad",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "label": "t:global.image.radius",
+        "unit": "px",
+        "default": 0
+	 }
+	 ],
+	"blocks":[
+		{
+			"name":"t:sections.lookbook.block.name",
+			"type":"lookbook1",
+		 	"settings":[
+			{
+			"type":"image_picker",
+			"id":"image",
+		     "label":"t:global.image.name"
+		    },								     
+		 	 {
+            "type": "select",
+            "id": "width",
+            "label": "t:sections.all.column_width",
+            "default": "wd50-md",
+			"info":"t:sections.all.column_width_info",
+            "options": [
+			 {
+                "value": "wd20-md",
+                "label": "20%"
+              },
+              {
+                "value": "wd25-md",
+                "label": "25%"
+              },
+              {
+                "value": "wd33-md",
+                "label": "33%"
+              },
+              {
+                "value": "wd50-md",
+                "label": "50%"
+              },
+              {
+                "value": "wd66-md",
+                "label": "66%"
+              },
+              {
+                "value": "wd75-md",
+                "label": "75%"
+              },
+              {
+                "value": "wd100",
+                "label": "100%"
+              }
+            ]
+          },
+		  {
+            "type":"header",
+            "content":"t:sections.lookbook.block.add_products"		
+           },
+		  {
+            "type": "product",
+            "id": "product1",
+            "label": "t:sections.lookbook.block.product1"
+          },
+           {
+            "type": "range",
+            "id": "p1_top",
+            "label": "t:sections.lookbook.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p1_left",
+            "label": "t:sections.lookbook.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		 {
+            "type": "select",
+            "id": "dis-pstn1",
+            "label": "Display From",
+            "default": "left",
+			"info": "t:sections.lookbook.block.box_align",
+            "options": [
+			 {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+			]
+		},
+		 {
+            "type": "product",
+            "id": "product2",
+            "label": "t:sections.lookbook.block.product2"
+          },
+		 {		
+            "type": "range",
+            "id": "p2_top",
+            "label": "t:sections.lookbook.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p2_left",
+            "label": "t:sections.lookbook.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		{
+            "type": "select",
+            "id": "dis-pstn2",
+            "label": "Display From",
+            "default": "left",
+			"info":"t:sections.lookbook.block.box_align",
+            "options": [
+			 {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+			]
+		},
+		{
+            "type": "product",
+            "id": "product3",
+            "label": "t:sections.lookbook.block.product3"
+          },
+		 {		
+            "type": "range",
+            "id": "p3_top",
+            "label": "t:sections.lookbook.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p3_left",
+            "label": "t:sections.lookbook.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		{
+            "type": "select",
+            "id": "dis-pstn3",
+            "label": "Display From",
+            "default": "left",
+			"info":"t:sections.lookbook.block.box_align",
+            "options": [
+			 {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+			]
+		},
+		{
+            "type": "product",
+            "id": "product4",
+            "label": "t:sections.lookbook.block.product4"
+          },
+		 {		
+            "type": "range",
+            "id": "p4_top",
+            "label": "t:sections.lookbook.block.top_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "range",
+            "id": "p4_left",
+            "label": "t:sections.lookbook.block.left_position",
+            "default": 1,
+            "min": 1,
+            "max": 90,
+            "step": 1,
+            "unit": "%"
+          },
+		  {
+            "type": "select",
+            "id": "dis-pstn4",
+            "label": "Display From",
+            "default": "left",
+			"info":"t:sections.lookbook.block.box_align",
+            "options": [
+			 {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+			]
+		}
+		 ]
+	   }       
+     ],
+	"presets": [
+      {
+        "name": "t:sections.lookbook.name"       
+      }
+    ]
+  }
+{% endschema %}

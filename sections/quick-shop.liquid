@@ -1,0 +1,92 @@
+{%- liquid
+    assign secSt = section.settings
+    assign current_variant = product.selected_or_first_available_variant
+    assign product_form_id = 'product-form-' | append: section.id
+	assign featured_img = current_variant.featured_media | default: product.featured_image
+-%}
+<div class="w_100" id="quickshop-{{ product.id }}" data-url="{{ product.url }}" data-section-id="{{ product.id }}" data-section-type="quickshop">
+    <a class="closeShop" href="javascript:;"><i class="at at-times-r " aria-hidden="true"></i></a>
+    <product-info id="ProductInfo-{{ section.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}" class="gitem product-single__meta mb30-md">
+        {%- liquid
+            assign compareprice = current_variant.compare_at_price
+            assign price = current_variant.price
+            assign money_price = price | money
+            if settings.curCode
+                assign money_price = price | money_with_currency
+            endif
+        -%}
+      <div id="price-{{ section.id }}" role="status" class="fl f-wrap f-aic f-jcc priceWraper mb15">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+              <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+              <span class="pr_price sale"><span id="ProductPrice-{{ section.id }}">{{ money_price }}</span></span>
+              <s class="pr_price">{{ current_variant.compare_at_price | money }}</s>
+          {%- else -%}
+              <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+              <span class="pr_price"><span id="ProductPrice-{{ section.id }}">{{ money_price }}</span></span>
+              <s class="pr_price hide">{{ current_variant.compare_at_price | money }}</s>
+          {% endif %}
+          <div class="price__unit w_100{% unless current_variant.unit_price_measurement %} hide{% endunless %}">
+            <span data-unit-price>{{ current_variant.unit_price | money }}</span> /
+            <span data-unit-base>
+                  {%- if current_variant.unit_price_measurement -%}
+                    {%- if current_variant.unit_price_measurement.reference_value != 1 -%}{{- current_variant.unit_price_measurement.reference_value -}}{%- endif -%}
+                    {{ current_variant.unit_price_measurement.reference_unit }}
+                  {%- endif -%}
+            </span>
+         </div>
+      </div>
+    {%- render 'variant-picker', product:product, block:block, sectionId:section.id, product_form_id:product_form_id, update_url: false -%}
+    
+        <product-form class="db product-form" data-hide-errors="{{ isgiftcard }}" data-section-id="{{ section.id }}">
+            <div class="product-form__error-message-wrapper errors" role="alert" hidden><span class="product-form__error-message ml5"></span></div>
+            {%- form 'product', product, id: product_form_id, class: 'form', novalidate: validate, data-type: 'add-to-cart-form' -%}
+                        <div class="fl f-wrap f-aic f-jcsb hide">
+                            {%- assign cart_qty = cart | item_count_for_variant: current_variant.id -%}
+                            <label class="quantity__label lblqty v-hidden" for="Quantity-{{ section.id }}">
+                                {{ 'products.product.quantity' | t }}
+                                <span class="quantity__rules-cart no-js-hidden{% if cart_qty == 0 %} hidden{% endif %}"><span class="loading__spinner hidden">{% render 'icon-loading' %}</span><span> ({{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}})</span></span>
+                            </label>
+                            <quantity-input class="qtyField quantity mb15" data-url="{{ product.url }}" data-section="{{ section.id }}">
+                                <button type="button" class="quantity__button qtyBtn minus" name="minus"><i class="at at-minus-r" aria-hidden="true"></i><span class="v-hidden">{{- 'products.quantity.decrease' | t: product: product.title | escape -}}</span></button>
+                                <input class="quantity__input pr_input qty mianQty" type="number" name="quantity" id="Quantity-{{ section.id }}" data-cart-quantity="{{ cart_qty }}"
+                                    data-min="{{ current_variant.quantity_rule.min }}" min="{{ current_variant.quantity_rule.min }}"
+                                    {% if current_variant.quantity_rule.max != null %}data-max="{{ current_variant.quantity_rule.max }}" max="{{ current_variant.quantity_rule.max }}"{% endif %}
+                                    step="{{ current_variant.quantity_rule.increment }}" value="{{ current_variant.quantity_rule.min }}" form="{{ product_form_id }}">
+                                <button type="button" class="quantity__button qtyBtn plus" name="plus"><i class="at at-plus-r" aria-hidden="true"></i><span class="v-hidden">{{- 'products.quantity.increase' | t: product: product.title | escape -}}</span></button>
+                            </quantity-input>
+                        </div>
+
+                    {%- liquid
+                        assign check_against_inventory = true
+                        if current_variant.inventory_management != 'shopify' or current_variant.inventory_policy == 'continue'
+                            assign check_against_inventory = false
+                        endif
+                        if current_variant.quantity_rule.min > current_variant.inventory_quantity and check_against_inventory
+                            assign quantity_rule_soldout = true
+                        endif
+                    -%}
+                    <input type="hidden" name="id" value="{{ current_variant.id }}" {% if current_variant.available == false or quantity_rule_soldout %}disabled{% endif %} class="product-variant-id">
+                    <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="btn product-form__submit" {% if current_variant.available == false or quantity_rule_soldout %}disabled{% endif %}>
+                        <span class="txt">
+                            {%- if current_variant.available == false or quantity_rule_soldout -%}
+                                {{'products.product.sold_out' | t }}
+                            {%- elsif current_variant.available and current_variant.inventory_quantity < 1 and current_variant.inventory_management == "shopify" -%}
+                                {{'products.product.pre_order' | t }}
+                            {%- else -%}
+                                {{ 'products.product.add_to_cart' | t }}
+                            {%- endif -%}
+                        </span>
+                        <div class="btn_spinner hidden"><i class="at at-circle-notch-r at-spin"></i></div>
+                    </button>
+            {%- endform -%}
+        </product-form>
+    </product-info>
+</div>
+<div class="hide">{% for variant in product.variants %}<span id="pvr-{{ variant.id }}">{{variant.inventory_quantity}}</span>{% endfor %}</div>
+{% schema %}
+  {
+    "name": "quick-shop",
+    "class": "quickshopWrap fl f-aic f-jcc w_100",
+    "settings": []
+  }
+{% endschema %}

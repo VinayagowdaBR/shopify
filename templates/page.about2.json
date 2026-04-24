@@ -1,0 +1,174 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page": {
+      "type": "page-template",
+      "disabled": true,
+      "settings": {
+        "section_width": true,
+        "hide_hdft": false,
+        "breadcrumb": false,
+        "bnr": true,
+        "bheight": 300,
+        "bheightipad": 200,
+        "bheightmob": 100,
+        "bnr-wd": 600,
+        "show_collection_name": true,
+        "ftTtl": 42,
+        "ftTtlm": 20,
+        "ttlft": "font2",
+        "ttlwt": "fw-700",
+        "ttlcase": "tt-u",
+        "ftTxt": 15,
+        "ttlclr": "#000000",
+        "clr_bg": "#fffaf7",
+        "width": 1200,
+        "hide_ttl": true
+      }
+    },
+    "16337695579db422ae": {
+      "type": "richtext",
+      "settings": {
+        "top-offeset": "default",
+        "fullwidth": true,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#ffffff",
+        "bgg": "",
+        "max-width": 1000,
+        "img_rad": 0,
+        "title": "ABOUT US",
+        "tcl": "#000000",
+        "tfs": 19,
+        "tfsm": 17,
+        "tff": "ft1",
+        "tfw": "700",
+        "tlh": 1.3,
+        "richtxt": "<p>House of Viya is a contemporary jewellery brand born from a passion for timeless elegance and modern craftsmanship. We specialise in thoughtfully designed <strong>925 silver</strong> and <strong>anti-tarnish gold-plated jewellery</strong> that is made to be worn every day, not just on special occasions. Our aim is to create pieces that feel effortless, refined, and deeply personal—jewellery that seamlessly becomes part of your everyday style.</p><p>At the heart of House of Viya lies a commitment to quality and authenticity. Each piece is carefully crafted using premium materials, ensuring lasting shine, durability, and comfort. From delicate rings and earrings to elegant necklaces, bangles, bracelets, and pendants, our collections are designed with attention to detail and a focus on wearability. We believe that fine jewellery should feel as good as it looks—lightweight, skin-friendly, and made to last.</p>",
+        "cl": "#000000",
+        "fs": 12,
+        "fsm": 13,
+        "lh": 1.7,
+        "btntxt": "",
+        "btnurl": "",
+        "btn-style": "btn",
+        "btntxt1": "",
+        "btnurl1": "",
+        "btn-style2": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm",
+        "txt_align": "tc"
+      }
+    },
+    "1633769564023b4dfb": {
+      "type": "banner-with-text",
+      "blocks": {
+        "1633769564023b4dfb-0": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_17.png",
+            "layout": "left",
+            "title": "Our Mission",
+            "tcl": "#000000",
+            "text": "<p>At House of Viya, our mission is to create jewellery that blends timeless elegance with everyday wearability. We are committed to crafting high-quality 925 silver and anti-tarnish gold-plated pieces that celebrate individuality, confidence, and modern style. Through thoughtful design, ethical craftsmanship, and uncompromising quality, we strive to make fine jewellery accessible for daily moments—so every piece you wear feels meaningful, refined, and enduring.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "text-left",
+            "t_width": 90,
+            "bg": "rgba(0,0,0,0)"
+          }
+        },
+        "3a7419a4-8a61-43ec-b2d7-43113cc5cbdc": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_18.png",
+            "layout": "right",
+            "title": "Our Vision",
+            "tcl": "#000000",
+            "text": "<p>At House of Viya, our vision is to become a trusted destination for timeless yet contemporary jewellery that enhances everyday elegance. We aspire to redefine modern jewellery by offering thoughtfully designed 925 silver and anti-tarnish gold-plated pieces that feel personal, meaningful, and enduring. With a focus on quality, craftsmanship, and authenticity, we envision a world where fine jewellery is effortlessly wearable, responsibly crafted, and cherished for years to come.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "text-left",
+            "t_width": 90,
+            "bg": "rgba(0,0,0,0)"
+          }
+        },
+        "679037ac-fdf7-4af6-9a62-df6890f32c60": {
+          "type": "row",
+          "settings": {
+            "image": "shopify://shop_images/COLLECTION_19.png",
+            "layout": "left",
+            "title": "Why Choose Us?",
+            "tcl": "#000000",
+            "text": "<p>We offer carefully crafted silver and anti-tarnish gold-plated jewellery designed for everyday elegance. Each piece reflects quality craftsmanship, modern aesthetics, and lasting comfort. With a strong focus on authenticity, refined design, and attention to detail, House of Viya creates jewellery that is reliable, timeless, and effortlessly beautiful.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "shopify://collections/all",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "text-left",
+            "t_width": 90,
+            "bg": "rgba(0,0,0,0)"
+          }
+        }
+      },
+      "block_order": [
+        "1633769564023b4dfb-0",
+        "3a7419a4-8a61-43ec-b2d7-43113cc5cbdc",
+        "679037ac-fdf7-4af6-9a62-df6890f32c60"
+      ],
+      "settings": {
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#ffffff",
+        "bgg": "",
+        "bg_rad": 0,
+        "tfs": 18,
+        "tfsm": 20,
+        "tff": "ft1",
+        "tfw": "600",
+        "tlh": 1.3,
+        "tmb": 15,
+        "tmbm": 10,
+        "fs": 11,
+        "fsm": 12,
+        "fw": "500",
+        "lh": 1.6,
+        "mb": 15,
+        "mbm": 10,
+        "img_rad": 0,
+        "btn-size-desk": "btn-md",
+        "btn-size-mob": "mob-btn-sm",
+        "snow_effect": false,
+        "snow_style": "style1"
+      }
+    }
+  },
+  "order": [
+    "page",
+    "16337695579db422ae",
+    "1633769564023b4dfb"
+  ]
+}

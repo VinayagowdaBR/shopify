@@ -1,0 +1,504 @@
+{% assign secSt = section.settings %}
+
+{%- capture styles -%}
+    --dtbg:{{ secSt.cl_bg | color_modify:'alpha', secSt.bg_op}};
+    --tcl:{{ secSt.cl_ttl}};        
+    --tfs:{{secSt.ttlfs}}px;
+    --tfsm:{{secSt.ttlfsm}}px;   
+    --tfw:{{secSt.ttlfw}};   
+{% endcapture %}
+
+{% capture collectionBanner %}
+	<div class="clPageBnr fl f-wrap f-aic f-jcc" style="--bg:{{secSt.bbg}};--ht:{{secSt.bht}}px;--htt:{{secSt.bhtt}}px;--htm:{{secSt.bhtm}}px;">
+	{% if secSt.clbanner != blank %}
+	  <div class="bgImg pa w_100 h_100 lazyload{% if secSt.clbannerm != blank %} hide-sm{%endif%}" data-bgset="{% render 'bgset', image: secSt.clbanner %}" data-sizes="auto" data-parent-fit="contain"></div>
+	{% endif %}
+	{% if secSt.clbannerm != blank %}
+	  <div class="bgImg pa w_100 h_100 lazyload hide-md hide-lg" data-bgset="{% render 'bgset', image: secSt.clbannerm %}" data-sizes="auto" data-parent-fit="contain"></div>
+	{% endif %}
+	<div class="pr w_100{% if secSt.tac %} tc{% endif %}" style="max-width:{{secSt.bnr-wd}}px;padding:0 15px;">
+		{% if secSt.show_collection_name %}
+            <h1 class="bnrTtl ttlTxt mb{{secSt.tmbm}} mb{{secSt.tmb}}-md{%  if secSt.tcase %} tt-u{% endif %}" style="--tcl:{{secSt.tcl}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tff:var(--{{secSt.tff}});--tfw:{{secSt.tfw}};--tlh:{{secSt.tlh}};">{{ collection.title }}</h1>
+        {% endif %}
+		{% if secSt.bnr_desc != blank %}<div class="clbnDes ttlTxt mb{{secSt.dmbm}} mb{{secSt.dmb}}-md" style="--tcl:{{secSt.dcl}};--tfs:{{secSt.dfs}}px;--tfsm:{{secSt.dfsm}}px;--tlh:{{secSt.dlh}};">{{ secSt.bnr_desc }}</div>{% endif %}
+		{% if secSt.bnr_count != blank %}<div class="heroSaleTime atCounter mb0" style="--cl:{{ secSt.ccl }};--bg:{{ secSt.cbg }};" data-date="{{secSt.bnr_count| date: '%FT%T'}}"><span><span class="tm days">00</span>{{'date_formats.days' | t}}</span><span><span class="tm hours">00</span>{{ 'date_formats.hours' | t }}</span><span><span class="tm minutes">00</span>{{'date_formats.minuts' | t}}</span><span><span class="tm seconds">00</span>{{'date_formats.seconds' | t}}</span></div>{% endif %}
+	</div>
+  </div>
+{% endcapture %}
+{{collectionBanner}}
+
+{%- if settings.breadcrumb_cl -%}{%- render 'breadcrumb' -%}{%- else -%}<div class="topSpace"></div>{%- endif -%}
+
+<div class="clbox {{section.settings.style}}{% unless section.settings.section_width %} page-width{% else %} fullwidth{% endunless %}" style="{{ styles }}" id="{{ section.id }}"  data-section-id="{{ section.id }}" >
+  
+  {% if collection.description != blank %}<div class="rte">{{ collection.description }}</div>{% endif %}  
+
+    <div class="grid gspace rwcols-{{secSt.mobile-grid}} rwcols-md-{{secSt.tablet-grid}} rwcols-lg-{{secSt.grid}} collection-grid grid--uniform {{section.settings.style}}"
+       style="--grsp:0 -{{ secSt.grid-spacing | divided_by: 2.0  }}px;--grspi:0 {{ secSt.grid-spacing | divided_by: 2.0  }}px {{secSt.grid-spacing}}px;--grspm:0 -{{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px;--grspim:0 {{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px {{secSt.grid-spacing-mbl}}px;{{styles}}">             
+     {%- assign navName = collection.handle -%}      	
+       {% for link in linklists[navName].links %}
+            <div class="gitem ms-item">
+              {%- assign linkUrl = link.url | split: "/" | last -%}
+              {% include 'collection-grid-item-list-page', collection: collections[linkUrl] %}
+            </div>
+        {% endfor %}        
+    </div>
+ 
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.collections.sub.name",
+    "settings": [
+	 {
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": true
+	  },
+	  {
+        "type": "header",
+        "content": "t:sections.collections.page.banner.name"
+      },
+ 	  {
+        "type": "checkbox",
+        "id": "bnr",
+        "label": "t:global.display",
+        "default": true
+      },	 	 
+	  {
+        "type": "paragraph",
+        "content": "t:sections.collections.page.banner.height"
+      },
+        {
+        "type": "range",
+        "id": "bht",
+        "label": "t:global.devices.desktop",
+        "default": 300,
+        "min": 50,
+        "max": 400,
+        "step": 10,
+		"unit":"px"		
+      },
+ 	  {
+        "type": "range",
+        "id": "bhtt",
+        "label": "t:global.devices.tablet",
+        "default": 200,
+        "min": 50,
+        "max": 400,
+        "step": 10,
+		"unit":"px"		
+      },
+      {
+        "type": "range",
+        "id": "bhtm",
+        "label": "t:global.devices.mobile",
+        "default": 100,
+        "min": 50,
+        "max": 400,
+        "step": 10,
+		"unit":"px"		
+      },	   	       
+      {
+        "type": "image_picker",
+        "id": "clbanner",
+        "label": "t:global.image.name",
+		"info": "t:sections.collections.page.banner.image_info"
+      },
+      {
+        "type": "image_picker",
+        "id": "clbannerm",
+        "label": "t:global.image.mobile",
+		"info": "t:sections.collections.page.banner.image_info"
+      },
+       {
+        "type": "color",
+        "id": "bbg",
+        "label": "t:global.background.color",
+        "default": "#f5f5f5",
+		"info":"t:sections.collections.page.banner.color_info"
+      },
+	  {
+        "type": "paragraph",
+        "content": "t:sections.collections.page.banner.title"
+      },	 
+ 	  {
+        "type": "checkbox",
+        "id": "show_collection_name",
+        "label": "t:global.display",
+        "default": true	
+      },     
+	  {
+        "type": "color",
+        "id": "tcl",
+        "label": "t:global.color.name",
+        "default": "#666"		
+      },
+      {
+          "type": "range",
+          "id": "tfs",
+          "label": "t:global.font.size",
+          "default": 36,
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+      },
+      {
+          "type": "range",
+          "id": "tfsm",
+          "label": "t:global.font.size_mobile",
+          "default": 26,
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px"
+      },
+      {
+          "type": "select",
+          "id": "tff",
+          "label": "t:global.font.family",
+          "default": "ft2",
+          "options": [
+              {
+                  "value": "ft1",
+                  "label": "Font 1"
+              },
+              {
+                  "value": "ft2",
+                  "label": "Font 2"
+              },
+              {
+                  "value": "ft3",
+                  "label": "Font 3"
+              }
+          ]
+      },
+      {
+          "type": "select",
+          "id": "tfw",
+          "label": "t:global.font.weight",
+          "default": "700",
+          "options": [
+              {
+                  "value": "300",
+                  "label": "Light"
+              },
+              {
+                  "value": "400",
+                  "label": "Regular"
+              },
+              {
+                  "value": "500",
+                  "label": "Medium"
+              },
+              {
+                  "value": "600",
+                  "label": "Semi Bold"
+              },
+              {
+                  "value": "700",
+                  "label": "Bold"
+              }
+          ]
+      }, 	
+      {
+          "type": "range",
+          "id": "tlh",
+          "label": "t:global.font.height",
+          "default": 1.2,
+          "min": 1.0,
+          "max": 2.0,
+          "step": 0.1,
+          "info": "t:global.font.height_info"
+      }, 			        
+      {
+        "type": "checkbox",
+        "id": "tcase",
+        "label": "t:global.text.uppercase",
+        "default": false 
+      },
+      {
+          "type": "range",
+          "id": "tmb",
+          "label": "t:sections.all.margin.bottom",
+          "default": 0,
+          "min":0,
+          "max":50,
+          "step":5,
+          "unit": "px"
+      }, 			              
+      {
+          "type": "range",
+          "id": "tmbm",
+          "label": "t:sections.all.margin.bottom_mobile",
+          "default": 0,
+          "min":0,
+          "max":50,
+          "step":5,
+          "unit": "px"
+      },
+	  {
+        "type": "paragraph",
+        "content": "t:sections.all.heading.short"
+      },
+ 	  {
+        "type": "text",
+        "id": "bnr_desc",
+        "label": "t:global.text.text",
+		"info": "t:sections.collections.page.banner.description_info"
+      }, 	           
+	  {
+        "type": "color",
+        "id": "dcl",
+        "label": "t:global.color.name",
+        "default": "#666"		
+      },
+      {
+          "type": "range",
+          "id": "dfs",
+          "label": "t:global.font.size",
+          "default":14,
+          "min": 10,
+          "max": 100,
+          "step": 1,
+          "unit": "px"
+      },
+      {
+          "type": "range",
+          "id": "dfsm",
+          "label": "t:global.font.size_mobile",
+          "default": 13,
+          "min": 10,
+          "max": 60,
+          "step": 1,
+          "unit": "px"
+      }, 	
+      {
+          "type": "range",
+          "id": "dlh",
+          "label": "t:global.font.height",
+          "default": 1.2,
+          "min": 1.0,
+          "max": 2.0,
+          "step": 0.1,
+          "info": "t:global.font.height_info"
+      }, 			  
+      {
+          "type": "range",
+          "id": "dmb",
+          "label": "t:sections.all.margin.bottom",
+          "default":0,
+          "min":0,
+          "max":50,
+          "step":5,
+          "unit": "px"
+      }, 			              
+      {
+          "type": "range",
+          "id": "dmbm",
+          "label": "t:sections.all.margin.bottom_mobile",
+          "default": 0,
+          "min":0,
+          "max":50,
+          "step":5,
+          "unit": "px"
+      },
+	  {
+        "type": "paragraph",
+        "content": "t:sections.all.heading.countdown"
+      },	
+      {
+        "type": "text",
+        "id": "bnr_count",
+        "label": "t:sections.collections.page.banner.date",
+		"info": "t:sections.collections.page.banner.date_info"
+      }, 
+     {
+        "type": "color",
+        "id": "ccl",
+        "label": "t:global.color.name",
+        "default": "#333"		
+      },
+    {
+        "type": "color",
+        "id": "cbg",
+        "label": "t:global.background.color",
+        "default": "#f5f5f5"		
+      },      
+      {
+        "type": "range",
+        "id": "bnr-wd",
+        "label": "t:sections.all.container_width",
+        "default":600,
+        "min": 200,
+        "max": 1600,
+        "step": 100,
+		"unit":"px"		
+      },  
+       {
+        "type": "checkbox",
+        "id": "tac",
+        "label": "t:global.text.align_center",
+        "default": true	
+      },   
+ 	  {
+        "type": "header",
+        "content": "t:sections.collections.sub.grid"
+      },     
+	  {
+        "type": "range",
+        "id": "grid-spacing",
+        "label": "t:global.grid.space",
+        "default": 4,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px"
+      },
+	  {
+        "type": "range",
+        "id": "grid-spacing-mbl",
+        "label": "t:global.grid.space_mobile",
+        "default": 4,
+        "min": 0,
+        "max": 30,
+        "step": 1,
+		"unit":"px",
+		"info":"t:global.grid.space_info"
+      },	
+       {
+        "type": "select",
+        "id": "style",
+        "label": "t:global.grid.style",
+        "default": "st6",
+        "options": [
+			{ "value": "st1", "label": "Style 1" },
+			{ "value": "st2", "label": "Style 2" },
+			{ "value": "st3", "label": "Style 3" },
+			{ "value": "st4", "label": "Style 4" },
+			{ "value": "st5", "label": "Style 5" },
+			{ "value": "st6", "label": "Style 6" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "textalign",
+        "label": "t:global.text.align",
+        "default": "tc",
+        "options": [
+			{ "value": "tl", "label": "Left" },	
+			{ "value": "tc", "label": "Center" }
+        ]
+      }, 
+	  {
+        "type": "paragraph",
+        "content": "t:global.grid.row"
+      }, 	
+      {
+        "type": "range",
+        "id": "grid",
+        "label": "t:global.devices.desktop",
+        "default": 4,
+        "min": 2,
+        "max": 7,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "tablet-grid",
+        "label": "t:global.devices.tablet",
+        "default": 3,
+        "min": 1,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "mobile-grid",
+        "label": "t:global.devices.mobile",
+        "default": 2,
+        "min": 1,
+        "max": 3,
+        "step": 1
+      }, 
+       {
+		"type":"checkbox",
+		"id":"product_count",
+		"label":"t:sections.collections.products_count",
+		"default": true
+	  },  	
+	   {
+        "type": "color",
+        "id": "cl_ttl",
+        "label": "t:global.color.name",
+        "default": "#fff"
+      },
+     { 
+        "type": "range",
+        "id": "ttlfs",
+        "label": "t:global.font.size",
+        "default": 18,
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "range",
+        "id": "ttlfsm",
+        "label": "t:global.font.size_mobile",
+        "default": 16,
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+      },   
+    {
+        "type": "select",
+        "id": "ttlfw",
+        "label": "t:global.font.weight",
+        "default": "400",
+        "options": [
+            {
+                "value": "300",
+                "label": "Light"
+            },
+            {
+                "value": "400",
+                "label": "Regular"
+            },
+            {
+                "value": "500",
+                "label": "Medium"
+            },
+            {
+                "value": "600",
+                "label": "Semi Bold"
+            },
+            {
+                "value": "700",
+                "label": "Bold"
+            }
+        ]
+    }, 	  
+      {
+        "type": "color",
+        "id": "cl_bg",
+        "label": "t:global.background.color",
+        "default": "#000"
+      },
+      {
+        "type": "range",
+        "id": "bg_op",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "label": "t:global.background.opacity",
+        "unit": "%",
+        "default": 0.7
+      }
+    ]
+  }
+{% endschema %}

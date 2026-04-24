@@ -1,0 +1,19 @@
+{% assign product_box = forloop.index | minus:1 %}
+{% assign delay_time = 50 | times : product_box %} 
+{%- assign grid_image_scale = '2' -%}
+{%- liquid
+    assign productUrl = product.url | within: collection
+    if settings.clname
+        assign productUrl = product.url
+    endif
+-%}
+<div class="grid-view-item style1">
+	<div class="gview-img">
+		<a class="gimg-link gitem-img lazyload" href="{{ productUrl }}" data-bgset="{% render 'prgrid-img', image: product.featured_image %}" data-sizes="auto" data-parent-fit="contain"></a>
+    </div>
+    <div class="details">
+      	{% if settings.show_vendor %}<div class="grid-view-item__vendor">{{ product.vendor }}</div>{% endif %}
+        <a href="{{ productUrl }}" class="grid-view-item__title">{{ product.title }}</a>
+        <div class="priceWraper fl f-aic f-jcc f-wrap">{% render 'product-price', product:product %}</div>
+	</div>
+</div>

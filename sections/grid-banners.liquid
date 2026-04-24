@@ -1,0 +1,1383 @@
+{%- assign secSt = section.settings -%}
+{%- capture gridBanners -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}"> {% capture imageGallery %}
+  {% capture styles %}
+  --cl:{{secSt.cl}};--fs:{{secSt.fs}}px;--fsm:{{secSt.fsm}}px;--fw:{{secSt.fw}};--lh:{{secSt.lh}};
+  --tcl:{{secSt.cl2}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tfw:{{secSt.tfw}};--tlh:{{secSt.tlh}};--tff:var(--{{ secSt.tff }});
+  {% if secSt.isbox %}
+  --bg:{{secSt.bg | color_modify:'alpha',secSt.opt}};--bdr:{{secSt.bdr}}px;
+  {% endif %}
+  {% endcapture %}
+  <div class="imgBnrOuter sec-{{section.id}}">
+    <div class="{% if secSt.fullwidth %}fullwidth{% if secSt.npd %} npd{% endif %}{% else %}page-width{%endif%}"style="{{styles}}"> {% render 'sec-title' %}
+      
+      {% if secSt.snow_effect %}
+      <div class="falling-snow{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}">
+      {% endif %}
+      
+      
+      {%- for block in section.blocks -%}
+      {%- assign blkSt = block.settings -%}
+      {%- if block.type == 'style1' -%}
+      <div class="grid-bnr st1{% unless secSt.disable_zoom %} zoom_hov{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image1, title:blkSt.text1, subtitle:blkSt.text1-large, link:blkSt.link1, talign:blkSt.bnr1align, isBox:secSt.isbox, imgSize:'930x620' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="50ms"> {% render 'image-grid',image:blkSt.image2, title:blkSt.text2, subtitle:blkSt.text2-large, link: blkSt.link2, talign:blkSt.bnr2align, isBox:secSt.isbox, imgSize:'460x300' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="100ms"> {% render 'image-grid',image:blkSt.image3, title:blkSt.text3, subtitle:blkSt.text3-large, link: blkSt.link3, talign:blkSt.bnr3align, isBox:secSt.isbox, imgSize:'460x300' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="150ms"> {% render 'image-grid',image:blkSt.image4, title:blkSt.text4, subtitle:blkSt.text4-large, link: blkSt.link4, talign:blkSt.bnr4align, isBox:secSt.isbox, imgSize:'930x300' %} </div>
+      </div>
+      {%- elsif block.type == 'style2' -%}
+      <div class="grid-bnr st2{% unless secSt.disable_zoom %} zoom_hov{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image1, title:blkSt.text1, subtitle:blkSt.text1-large, link: blkSt.link1, talign:blkSt.bnr1align, isBox:secSt.isbox, imgSize:'460x460' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="50ms"> {% render 'image-grid',image:blkSt.image2, title:blkSt.text2, subtitle:blkSt.text2-large, link: blkSt.link2, talign:blkSt.bnr2align, isBox:secSt.isbox, imgSize:'460x460' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="100ms"> {% render 'image-grid',image:blkSt.image3, title:blkSt.text3, subtitle:blkSt.text3-large, link: blkSt.link3, talign:blkSt.bnr3align, isBox:secSt.isbox, imgSize:'930x930' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="150ms"> {% render 'image-grid',image:blkSt.image4, title:blkSt.text4, subtitle:blkSt.text4-large, link: blkSt.link4, talign:blkSt.bnr4align, isBox:secSt.isbox, imgSize:'460x460' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="200ms"> {% render 'image-grid',image:blkSt.image5, title:blkSt.text5, subtitle:blkSt.text5-large, link: blkSt.link5, talign:blkSt.bnr5align, isBox:secSt.isbox, imgSize:'460x460' %} </div>
+      </div>
+      {%- elsif block.type == 'style3' -%}
+      <div class="grid-bnr st3{% unless secSt.disable_zoom %} zoom_hov{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image1, title:blkSt.text1, subtitle:blkSt.text1-large, link: blkSt.link1, talign:blkSt.bnr1align, isBox:secSt.isbox, imgSize:'930x930' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="50ms"> {% render 'image-grid',image:blkSt.image2, title:blkSt.text2, subtitle:blkSt.text2-large, link: blkSt.link2, talign:blkSt.bnr2align, isBox:secSt.isbox, imgSize:'930x455' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="100ms"> {% render 'image-grid',image:blkSt.image3, title:blkSt.text3, subtitle:blkSt.text3-large, link: blkSt.link3, talign:blkSt.bnr3align, isBox:secSt.isbox, imgSize:'930x455' %} </div>
+      </div>
+      {%- elsif block.type == 'style4' -%}
+      <div class="grid-bnr st4{% unless secSt.disable_zoom %} zoom_hov{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image1, title:blkSt.text1, subtitle:blkSt.text1-large, link: blkSt.link1, talign:blkSt.bnr1align, isBox:secSt.isbox, imgSize:'930x700' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image2, title:blkSt.text2, subtitle:blkSt.text2-large, link: blkSt.link2, talign:blkSt.bnr2align, isBox:secSt.isbox, imgSize:'460x718' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image3, title:blkSt.text3, subtitle:blkSt.text3-large, link: blkSt.link3, talign:blkSt.bnr3align, isBox:secSt.isbox, imgSize:'460x342' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image4, title:blkSt.text4, subtitle:blkSt.text4-large, link: blkSt.link4, talign:blkSt.bnr4align, isBox:secSt.isbox, imgSize:'460x342' %} </div>
+      </div>
+      {%- elsif block.type == 'style5' -%}
+      <div class="grid-bnr st5{% unless secSt.disable_zoom %} zoom_hov{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image1, title:blkSt.text1, subtitle:blkSt.text1-large, link: blkSt.link1, talign:blkSt.bnr1align, isBox:secSt.isbox, imgSize:'712x340' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image2, title:blkSt.text2, subtitle:blkSt.text2-large, link: blkSt.link2, talign:blkSt.bnr2align, isBox:secSt.isbox, imgSize:'712x340' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image3, title:blkSt.text3, subtitle:blkSt.text3-large, link: blkSt.link3, talign:blkSt.bnr3align, isBox:secSt.isbox, imgSize:'1068x700' %} </div>
+      </div>
+      {%- elsif block.type == 'style6' -%}
+      <div class="grid-bnr st6{% unless secSt.disable_zoom %} zoom_hov{% endunless %}" {{ block.shopify_attributes }}>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image1, title:blkSt.text1, subtitle:blkSt.text1-large, link: blkSt.link1, talign:blkSt.bnr1align, isBox:secSt.isbox, imgSize:'640x640' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image2, title:blkSt.text2, subtitle:blkSt.text2-large, link: blkSt.link2, talign:blkSt.bnr2align, isBox:secSt.isbox, imgSize:'640x640' %} </div>
+        <div class="imgBnr wow fadeInUp" data-wow-delay="0ms"> {% render 'image-grid',image:blkSt.image3, title:blkSt.text3, subtitle:blkSt.text3-large, link: blkSt.link3, talign:blkSt.bnr3align, isBox:secSt.isbox, imgSize:'640x640' %} </div>
+      </div>
+      {%- endif -%}
+      {%- endfor -%}
+      {%- if section.blocks.size == 0 -%}{% include 'no-blocks' %}{%- endif -%}
+      {% if secSt.snow_effect %}</div>
+    {% endif %} </div>
+</div>
+{% endcapture %}
+  {{imageGallery | strip_newlines | remove: "  " | remove: "	" }}
+  </div>
+{%- endcapture -%}
+{{gridBanners | strip_newlines | remove: "  " | remove: "	" }}
+<style>
+	.sec-{{section.id}} .imgBnr { border-radius: {{secSt.img_rad}}px;}
+</style>
+{% schema %}
+  {
+    "name": "t:sections.grid_banner.name",
+    "class": "index-section imgBanners",
+    "settings": [	
+     {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Heading"		
+      }, 		
+     {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "t:sections.all.sub_head",
+        "default": "Describe your products, collection etc..."
+      },	
+	 {
+		 "type": "paragraph",
+		 "content":"t:sections.grid_banner.styles"
+      }, 	
+	  {
+		 "type": "header",
+		 "content":"t:sections.all.name"
+      }, 	 
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        }, 
+		 {
+         "type": "checkbox",
+		 "id": "fullwidth",
+		 "label": "t:global.fullwidth",
+		 "default": false
+      },
+       {
+			"type":"checkbox",
+			"id":"npd",
+			"label":"t:global.no_padding",
+			"info": "t:global.no_padding_info",
+			"default": true
+		  },  
+        {
+           "type": "checkbox",
+           "id": "hide_mobile",
+           "label": "t:global.devices.mobile_hide",
+           "default": false
+        },	
+        {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+      {
+		"type":"paragraph",
+		"content":"t:sections.grid_banner.text1"
+	  },
+ 	 {
+        "type": "color",
+        "id": "cl",
+        "label": "t:global.color.name",
+        "default": "#000"
+      }, 
+      {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 13,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 12,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "fw",
+            "label": "t:global.font.weight",
+            "default": "400",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "lh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+      {
+		"type":"paragraph",
+		"content":"t:sections.grid_banner.text2"
+	  },
+ 	 {
+        "type": "color",
+        "id": "cl2",
+         "label": "t:global.color.name",
+        "default": "#000"
+      }, 
+      {
+            "type": "range",
+            "id": "tfs",
+            "label": "t:global.font.size",
+            "default": 18,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "tfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 18,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "tff",
+            "label": "t:global.font.family",
+            "default": "ft2",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "500",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "tlh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+      {
+		"type":"paragraph",
+		"content":"----------------------------------------"
+	  },
+    {
+		"type":"checkbox",
+		"id":"isbox",
+		"label": "t:global.add_box",
+		"default": true
+	  },
+      {
+        "type": "color",
+        "id": "bg",
+        "label": "t:global.background.box",
+        "default": "#fff"
+     },
+	 {
+        "type": "range",
+        "id": "opt",
+        "min": 0,
+        "max": 1,
+        "step": 0.1,
+        "label": "t:global.background.opacity",
+        "unit": "%",
+        "default": 0.8
+      },
+	 {
+        "type": "range",
+        "id": "bdr",
+        "min": 0,
+        "max":50,
+        "step": 1,
+        "label": "t:global.border_radius",
+        "unit": "px",
+        "default": 7
+      },
+	 {
+        "type": "range",
+        "id": "img_rad",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "label": "t:global.image.radius",
+        "unit": "px",
+        "default": 0
+    },
+    {
+		"type":"checkbox",
+		"id":"disable_zoom",
+		"label":"t:sections.grid_banner.disable_image_zoom",
+		"default": false
+	  },
+	  {
+        "type": "header",
+        "content": "t:global.snow.title"
+      },
+		{
+		"type":"checkbox",
+		"id":"snow_effect",
+		"label":"t:global.enable",
+		"default": false,
+		"info":"For Christmas"
+	   },
+        {
+          "type": "select",
+          "id": "snow_style",
+          "label": "t:global.snow.style",
+          "default": "style1",         
+          "options": [
+            {
+            "value": "style1",
+            "label": "Falling Down"
+            },
+            {
+            "value": "style2",
+            "label": "Falling From Left"
+            }
+            ]
+          }
+    ],
+    "blocks": [
+      {
+        "type": "style1",
+        "name": "t:sections.grid_banner.blocks.block1",
+        "settings": [
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner1"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image1",
+			"label":"t:global.image.name"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+	 	  {
+ 			"type":"textarea",
+			"id":"text1-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		 },
+          {
+            "type": "select",
+            "id": "bnr1align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link1",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner2"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image2",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"			
+		  },
+		{
+ 			"type":"textarea",
+			"id":"text2-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr2align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link2",
+			"label": "t:global.link"
+          },
+	 	  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner3"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image3",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+	      {
+ 			"type":"textarea",
+			"id":"text3-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr3align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link3",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner4"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image4",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text4",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text4-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr4align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link4",
+			"label": "t:global.link"
+          }
+        ]
+      },
+	  {
+        "type": "style2",
+        "name": "t:sections.grid_banner.blocks.block2",
+        "settings": [
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner1"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image1",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		 {
+ 			"type":"textarea",
+			"id":"text1-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+			
+		  },
+          {
+            "type": "select",
+            "id": "bnr1align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link1",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner2"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image2",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+			
+		  },
+          {
+            "type": "select",
+            "id": "bnr2align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link2",
+			"label": "t:global.link"
+          },
+	 	  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner3"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image3",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text3",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+			
+		  },
+          {
+            "type": "select",
+            "id": "bnr3align",
+           "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link3",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner4"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image4",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text4",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text4-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+			
+		  },
+          {
+            "type": "select",
+            "id": "bnr4align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link4",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner5"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image5",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text5",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text5-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr5align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link5",
+			"label": "t:global.link"
+          }
+        ]
+      },
+	  {
+        "type": "style3",
+        "name": "t:sections.grid_banner.blocks.block3",
+        "settings": [
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner1"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image1",
+			"label":"t:global.image.name"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr1align",
+             "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link1",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner2"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image2",
+			"label":"t:global.image.name"
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text2",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr2align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link2",
+			"label": "t:global.link"
+          },
+	 	  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner3"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image3",
+			"label":"t:global.image.name"
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text3",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr3align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link3",
+			"label": "t:global.link"
+          }
+        ]
+      },
+	  {
+        "type": "style4",
+        "name": "t:sections.grid_banner.blocks.block4",
+        "settings": [
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner1"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image1",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text1",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr1align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link1",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner2"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image2",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text2",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr2align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link2",
+			"label": "t:global.link"
+          },
+	 	  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner3"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image3",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr3align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link3",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner4"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image4",
+			"label":"t:global.image.name"			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text4",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+			
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text4-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr4align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link4",
+			"label": "t:global.link"
+          }
+        ]
+      },
+	  {
+        "type": "style5",
+        "name": "t:sections.grid_banner.blocks.block5",
+        "settings": [
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner1"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image1",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text1",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr1align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link1",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner2"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image2",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text2",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr2align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link2",
+			"label": "t:global.link"
+          },
+	 	  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner3"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image3",
+			"label":"t:global.image.name"			
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text3",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr3align",
+           "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link3",
+			"label": "t:global.link"
+          }
+        ]
+      },
+		  {
+        "type": "style6",
+        "name": "t:sections.grid_banner.blocks.block6",
+        "settings": [
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner1"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image1",
+			"label":"t:global.image.name",
+			"info":"image height is flexible"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text1-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr1align",
+             "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link1",
+			"label": "t:global.link"
+          },
+		  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner2"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image2",
+			"label":"t:global.image.name",
+			"info":"image height is flexible"
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text2",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text2-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr2align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link2",
+			"label": "t:global.link"
+          },
+	 	  {
+			"type":"header",
+			"content":"t:sections.grid_banner.blocks.banner3"
+		  },
+		  {
+			"type":"image_picker",
+			"id":"image3",
+			"label":"t:global.image.name",
+			"info":"image height is flexible"
+		  },
+		   {
+ 			"type":"textarea",
+			"id":"text3",
+			"label":"t:sections.grid_banner.blocks.text1",
+			"default":"LIMITED EDITION"
+		  },
+		  {
+ 			"type":"textarea",
+			"id":"text3-large",
+			"label":"t:sections.grid_banner.blocks.text2",
+			"default":"Autumn Trending"
+		  },
+          {
+            "type": "select",
+            "id": "bnr3align",
+            "label": "t:global.text.position",
+            "default": "f-jcc f-aie tc",
+            "options": [
+              { "label": "Top Left",      "value": "f-ais f-jcs" },
+  			  { "label": "Top Center",    "value": "f-jcc f-ais tc" },
+  			  { "label": "Top Right",     "value": "f-jce f-ais tr" },             
+			  { "label": "Left",          "value": "f-aic f-jcs" },
+ 			  { "label": "Center",        "value": "f-jcc f-aic tc" },
+			  { "label": "Right",         "value": "f-jce f-aic tr" },
+ 			  { "label": "Bottom Left",   "value": "f-aie f-jcs" },						 
+              { "label": "Bottom Center", "value": "f-jcc f-aie tc" }, 						 
+			  { "label": "Bottom Right",  "value": "f-jce f-aie tr" }
+            ]
+          },
+		  {
+            "type": "url",
+			"id": "link3",
+			"label": "t:global.link"
+          }
+        ]
+      }
+		
+    ],
+    "presets": [
+      {
+        "name": "Grid Banners"       
+      }
+    ]
+  }
+{% endschema %} 

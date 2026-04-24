@@ -1,0 +1,75 @@
+{%- unless product.has_only_default_variant -%}
+{%- liquid
+    assign blkst = block.settings
+    assign cltype = settings.sw_type
+    assign othervr = settings.othervr
+    assign hidesoldout = ''
+    if settings.swsold
+        assign hidesoldout = 'hidesoldout'
+    endif
+    if isQuick
+        if settings.qvrsold
+            assign hidesoldout = 'hidesoldout'
+        else
+            assign hidesoldout = ''
+        endif
+        assign cltype = settings.cltype
+        assign othervr = settings.othervr
+    endif    
+-%}
+<variant-selects id="variant-selects-{{ sectionId }}" class="db mb{{ blkst.bm | default: 20 }} {{ hidesoldout }}" data-section="{{ sectionId }}" data-msldier="pis{{ sectionId }}" data-url="{{ product.url }}"
+    {%- if update_url == false %} data-update-url="false"{% endif %} {{ block.shopify_attributes }}>
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign optionIndex = option.position | minus: 1
+        assign is_color = false
+        assign sizechart = false
+        assign downcased_option = option.name | downcase
+        assign colorOptions = settings.colorOpt | downcase | replace:", ","," | replace:" , ","," | replace:" ,","," | split: ","
+        if colorOptions contains downcased_option
+            assign is_color = true 
+        endif
+        if sizeOptions contains downcased_option 
+            assign sizechart = true
+        endif
+      -%}
+      {% capture sizechartlink %}
+          {%- if sizechart and settings.sizechart_link -%}
+            <a href="#sizechart" class="mfp sizelink" data-effect="mfp-zoom-in"><i class="at at-ruler"></i> {{ 'products.product.size_chart' | t }}</a>
+        {%- endif -%}
+      {% endcapture %}
+    {%- if is_color and cltype != 'dd' -%}
+          <fieldset class="product-form__input swatch fl f-wrap pvOpt{{ optionIndex }}">
+            <div class="header">{{ option.name }}: <span class="ml5" data-opt="{{ option.name }}">{{- option.selected_value -}}</span></div>
+            {%- render 'variant-options', product:product, product_form_id:product_form_id, sectionId:sectionId, option:option, cltype:cltype, othervr:othervr, is_color:is_color -%}
+        </fieldset>
+    {%- elsif is_color and cltype == 'dd' -%}
+        <div class="product-form__input w_100 pvOpt{{ optionIndex }}">
+          <label class="header" for="Option-{{ sectionId }}-{{ forloop.index0 }}">{{ option.name }}: <span class="ml5" data-opt="options[{{ option.name | escape }}]">{{- option.selected_value -}}</span></label>
+            <select id="Option-{{ sectionId }}-{{ forloop.index0 }}" class="single-option-selector w_100" name="options[{{ option.name | escape }}]" form="{{ product_form_id }}">
+                {%- render 'variant-options', product: product, product_form_id:product_form_id, option:option, cltype:cltype, othervr:othervr -%}
+            </select>
+        </div>
+    {%- elsif othervr == 'sw' -%}
+        <fieldset class="product-form__input mfp-link swatch fl f-wrap pvOpt{{ optionIndex }}">
+            <div class="header fl f-jcs f-aic">
+                <span>{{ option.name }}: <span class="ml5" data-opt="{{ option.name }}">{{- option.selected_value -}}</span></span>
+                {{- sizechartlink -}}
+            </div>
+            {%- render 'variant-options', product:product, product_form_id:product_form_id, sectionId:sectionId, option: option, cltype:cltype, othervr:othervr, is_color: false -%}
+        </fieldset>
+    {%- else -%}
+        <div class="product-form__input w_100 mfp-link pvOpt{{ optionIndex }}">
+            <div class="header fl f-jcs f-aic" for="Option-{{ sectionId }}-{{ forloop.index0 }}">
+                <span>{{ option.name }}: <span class="ml5" data-opt="options[{{ option.name | escape }}]">{{- option.selected_value -}}</span></span>
+                {{- sizechartlink -}}
+            </div>
+            <select id="Option-{{ sectionId }}-{{ forloop.index0 }}" class="single-option-selector w_100" name="options[{{ option.name | escape }}]" form="{{ product_form_id }}">
+                {%- render 'variant-options', product:product, product_form_id:product_form_id, option: option, cltype:cltype, othervr:othervr -%}
+            </select>
+        </div>
+    {%- endif -%}
+    {%- endfor -%}
+    <script type="application/json" id="variants{{ sectionId }}">{{ product.variants | json }}</script>
+  </variant-selects>
+{%- endunless -%}

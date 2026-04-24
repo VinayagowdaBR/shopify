@@ -1,0 +1,305 @@
+{%- assign secSt = section.settings -%}
+<div class="content-indent {{ section.settings.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">   
+  {% if section.settings.section_cov %}<div class="section-cover" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};">{% endif%} 
+  <div class="page-width" style="max-width:{{section.settings.max-width}}px;">
+	{% render 'sec-title' %}
+    <div class="faq-{{section.settings.pagestyle}}">
+      <div id="{{section.id}}" class="faqList" style="--tcl:{{secSt.tcl}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tff:var(--{{secSt.tff}});--tfw:{{secSt.tfw}};--tbg:{{secSt.tbg}};
+            --qcl:{{secSt.qcl}};--qfs:{{secSt.qfs}}px;--qfsm:{{secSt.qfsm}}px;--qfw:{{secSt.qfw}};">
+        {% for block in section.blocks limit: section.blocks.size%}                 
+			{% if block.type == 'faqsection' and block.settings.sectiontitle != blank %}<h3 class="ttlTxt mb0">{{block.settings.sectiontitle}}</h3>{% endif %}
+			{% if block.type == 'faqs' %}
+			<{% if section.settings.pagestyle == 'style1' %}details{% else %}div{% endif %} class="faq-body">
+			  <summary class="panel-title fl f-jcsb j-aic">{{ block.settings.title}}{% if section.settings.pagestyle =='style1' %}<i class="at at-plus-l"></i>{% endif %}</summary>
+			  <div id="{{ block.id }}" class="panel-content rte">{{ block.settings.answer}}</div>
+			</{% if section.settings.pagestyle == 'style1' %}details{% else %}div{% endif %}>
+			{% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% if section.settings.section_cov %}</div> {% endif%}  
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.faqs.name",
+	"settings": [	  	 		
+		{
+			"type": "text",
+			"id": "title",
+			"label": "t:sections.all.head",
+            "default":"FAQs"
+		},
+		{
+			"type": "text",
+			"id": "subtitle",
+			"label": "t:sections.all.sub_head"         
+		},
+       {
+			"type": "select",
+			"id": "top-offeset",
+			"label": "t:sections.all.top_offSet",
+			"default": "default",
+			"options": [
+				{
+					"value": "default",
+					"label": "Default"
+				},
+				{
+					"value": "small",
+					"label": "Small"
+				},
+				{
+					"value": "none",
+					"label": "None"
+				}
+			]
+		},	
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+		{
+			"type": "checkbox",
+			"id": "section_cov",
+			"label": "t:global.background.add",
+			"default": true
+		},
+		{
+			"type": "color",
+			"id": "sec_bg_clr",
+			"label": "t:global.background.color",
+			"default":"#fafafa"
+		},
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+		{
+			"type": "select",
+			"id": "pagestyle",
+			"label": "t:sections.faqs.style",
+			"default": "style1",
+			"options": [
+				{
+					"value": "style1",
+					"label": "Style 1"
+				},
+				{
+					"value": "style2",
+					"label": "Style 2"
+				}
+			]
+		},	
+		{
+			"type": "range",
+			"id": "max-width",
+			"label": "t:sections.all.container_width",
+			"default": 800,
+			"min": 600,
+			"max": 1200,
+			"step": 100
+		},
+      {
+		"type":"paragraph",
+		"content":"t:sections.faqs.title"
+	  },
+		{
+			"type": "color",
+			"id": "tcl",
+			"label": "t:global.color.text",
+			"default": "#eee"
+		},     
+		{
+			"type": "color",
+			"id": "tbg",
+			"label": "t:global.background.color",
+			"default": "#333"
+		},
+       {
+                    "type": "range",
+                    "id": "tfs",
+                    "label": "t:global.font.size",
+                    "default": 24,
+                    "min": 10,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "range",
+                    "id": "tfsm",
+                    "label": "t:global.font.size_mobile",
+                    "default": 18,
+                    "min": 10,
+                    "max": 60,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "select",
+                    "id": "tff",
+                    "label": "t:global.font.family",
+                    "default": "ft2",
+                    "options": [
+                        {
+                            "value": "ft1",
+                            "label": "Font 1"
+                        },
+                        {
+                            "value": "ft2",
+                            "label": "Font 2"
+                        },
+                        {
+                            "value": "ft3",
+                            "label": "Font 3"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "tfw",
+                    "label": "t:global.font.weight",
+                    "default": "600",
+                    "options": [
+                        {
+                            "value": "300",
+                            "label": "Light"
+                        },
+                        {
+                            "value": "400",
+                            "label": "Regular"
+                        },
+                        {
+                            "value": "500",
+                            "label": "Medium"
+                        },
+                        {
+                            "value": "600",
+                            "label": "Semi Bold"
+                        },
+                        {
+                            "value": "700",
+                            "label": "Bold"
+                        }
+                    ]
+                }, 	               
+      {
+		"type":"paragraph",
+		"content":"t:sections.faqs.question_title"
+	  },
+		{
+			"type": "color",
+			"id": "qcl",
+			"label": "t:global.color.text",
+			"default": "#333"
+		},
+      {
+                    "type": "range",
+                    "id": "qfs",
+                    "label": "t:global.font.size",
+                    "default": 16,
+                    "min": 10,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "range",
+                    "id": "qfsm",
+                    "label": "t:global.font.size_mobile",
+                    "default": 14,
+                    "min": 10,
+                    "max": 60,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "select",
+                    "id": "qfw",
+                    "label": "t:global.font.weight",
+                    "default": "400",
+                    "options": [
+                        {
+                            "value": "300",
+                            "label": "Light"
+                        },
+                        {
+                            "value": "400",
+                            "label": "Regular"
+                        },
+                        {
+                            "value": "500",
+                            "label": "Medium"
+                        },
+                        {
+                            "value": "600",
+                            "label": "Semi Bold"
+                        },
+                        {
+                            "value": "700",
+                            "label": "Bold"
+                        }
+                    ]
+                }
+	],
+	"blocks":[
+		{
+			"type": "faqsection",
+			"name": "t:sections.faqs.section_title",
+			"settings": [
+				{
+					"type": "text",
+					"id": "sectiontitle",
+					"label": "t:global.text.title"
+				}
+			]
+		},
+		{
+			"type":"faqs",
+			"name":"t:sections.faqs.faq",
+			"settings":[			
+				{
+					"type":"text",
+					"id":"title",
+					"label":"t:sections.faqs.question",
+					"default":"How can I get assistance if I need it?"
+				},
+				{
+					"type":"richtext",
+					"id":"answer",
+					"label":"t:sections.faqs.answer",
+					"default":"<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>"
+				}
+			]
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.faqs.name",        
+			"category": "4. Text",
+			"blocks": [
+				{
+					"type": "faqs"
+				},
+				{
+					"type": "faqs"
+				},
+				{
+					"type": "faqs"
+				} 
+			]
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,153 @@
+{% comment %}
+  Section: Responsive Banner
+  - Keeps the same section name "Responsive Banner"
+  - Adds two toggles: Show on Desktop / Show on Mobile
+  - Uses CSS media queries + Liquid to hide the section on desktop/mobile when toggles are off
+{% endcomment %}
+
+<style>
+  /* Banner layout */
+  .banner-section {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+
+  .banner-section a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+  }
+
+  .banner-section picture {
+    width: 100%;
+    display: block;
+  }
+
+  .banner-section img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Utility classes controlled by schema toggles */
+  /* When this class is present, hide on desktop (>=769px) */
+  @media (min-width: 769px) {
+    .hide-on-desktop {
+      display: none !important;
+    }
+  }
+
+  /* When this class is present, hide on mobile (<=768px) */
+  @media (max-width: 768px) {
+    .hide-on-mobile {
+      display: none !important;
+    }
+  }
+</style>
+
+{% comment %}
+  Build hide-classes string depending on toggles.
+  If "Show on Desktop" is unchecked -> add hide-on-desktop
+  If "Show on Mobile" is unchecked  -> add hide-on-mobile
+{% endcomment %}
+{% assign hide_classes = '' %}
+{% unless section.settings.show_on_desktop %}
+  {% assign hide_classes = hide_classes | append: ' hide-on-desktop' %}
+{% endunless %}
+{% unless section.settings.show_on_mobile %}
+  {% assign hide_classes = hide_classes | append: ' hide-on-mobile' %}
+{% endunless %}
+
+{%- comment -%}
+  If both images are missing, render nothing.
+  If only one exists, the <picture> will fall back to the img src.
+{%- endcomment -%}
+{% if section.settings.desktop_banner or section.settings.mobile_banner %}
+  <div class="banner-section{{ hide_classes }}">
+    <a href="{{ section.settings.banner_link | default: '#' }}" aria-label="Banner link">
+      <picture>
+        {%- if section.settings.desktop_banner %}
+          <source
+            media="(min-width: 769px)"
+            srcset="{{ section.settings.desktop_banner | img_url: 'master' }}"
+            type="image/webp">
+          {%- comment -%}
+            The 'type="image/webp"' is harmless if the image served isn't webp;
+            Shopify will deliver an appropriate variant when available.
+          {%- endcomment -%}
+        {%- endif %}
+
+        {%- if section.settings.mobile_banner %}
+          <img
+            src="{{ section.settings.mobile_banner | img_url: 'master' }}"
+            alt="{{ section.settings.banner_alt | escape | default: 'Banner' }}"
+            loading="lazy"
+            fetchpriority="high"
+            width="100%" height="auto">
+        {%- else %}
+          {%- comment -%}
+            Fallback to desktop image in case mobile image is not supplied
+          {%- endcomment -%}
+          <img
+            src="{{ section.settings.desktop_banner | img_url: 'master' }}"
+            alt="{{ section.settings.banner_alt | escape | default: 'Banner' }}"
+            loading="lazy"
+            fetchpriority="high"
+            width="100%" height="auto">
+        {%- endif %}
+      </picture>
+    </a>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Responsive Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_banner",
+      "label": "Desktop Banner"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_banner",
+      "label": "Mobile Banner"
+    },
+    {
+      "type": "text",
+      "id": "banner_alt",
+      "label": "Banner Alt Text",
+      "default": "Banner"
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Banner Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_desktop",
+      "label": "Show on Desktop",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_mobile",
+      "label": "Show on Mobile",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Responsive Banner",
+      "category": "Image"
+    }
+  ]
+}
+{% endschema %}

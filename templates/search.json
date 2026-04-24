@@ -1,0 +1,89 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "search": {
+      "type": "main-search",
+      "blocks": {
+        "categories_hP86n9": {
+          "type": "categories",
+          "settings": {
+            "title": "Categories",
+            "side_categories": "sidebar"
+          }
+        },
+        "f6314cd5-acc8-4fd0-b91a-0e8d4ac217e7": {
+          "type": "filter_by",
+          "settings": {
+            "title": "Filter By",
+            "column": "Size, PRODUCT TYPE, BRAND",
+            "clrsz": 20,
+            "clrbdr": 20
+          }
+        },
+        "301d098d-759f-4ddc-8013-8bf28d37bd73": {
+          "type": "products",
+          "settings": {
+            "title": "Popular Products",
+            "side_prod_opt": "list",
+            "sidebar_products": "home-page",
+            "num_of_products": "3",
+            "side_all_products": false,
+            "btn_txt": "View All"
+          }
+        },
+        "5067180f-d863-45f1-b20e-25b4c855fc2d": {
+          "type": "image_bnr",
+          "settings": {
+            "side_bnr_img": "shopify://shop_images/Pro014.webp",
+            "side_bnr_link": ""
+          }
+        },
+        "772d0adb-582b-4272-abf0-e64456989abf": {
+          "type": "static_text",
+          "settings": {
+            "title": "About our Brand",
+            "text": "<p>Nimra is a contemporary imitation jewellery brand that celebrates timeless beauty with a modern touch. Each piece is thoughtfully crafted to reflect elegance, confidence, and individuality — perfect for every occasion, from everyday wear to festive moments. At Nimra, we believe that jewellery should not just adorn you, but express who you are — graceful, bold, and uniquely radiant.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "categories_hP86n9",
+        "f6314cd5-acc8-4fd0-b91a-0e8d4ac217e7",
+        "301d098d-759f-4ddc-8013-8bf28d37bd73",
+        "5067180f-d863-45f1-b20e-25b4c855fc2d",
+        "772d0adb-582b-4272-abf0-e64456989abf"
+      ],
+      "settings": {
+        "fullwidth": false,
+        "dis_prod_cnt": true,
+        "prbox_style": "style1",
+        "secondary_image": true,
+        "show_vendor": false,
+        "prlist_btn_show": false,
+        "btn_mobiles": false,
+        "show_color_swatch": true,
+        "color_type": "color",
+        "vr_bg_position": "50% 0",
+        "color_size": "small",
+        "grid": 3,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "rows": "24",
+        "pagination": "button",
+        "collection_sidebar": true,
+        "sidebar_position": "left"
+      }
+    }
+  },
+  "order": [
+    "search"
+  ]
+}

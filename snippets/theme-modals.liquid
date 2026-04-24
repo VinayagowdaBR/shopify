@@ -1,0 +1,232 @@
+{% capture themeModels %}
+<div class="loadingBox"><i class="at at-spinner4 at-spin"></i></div>
+<div class="modalOverly"></div>
+  
+{% comment %} search popup {% endcomment %}
+<div id="searchPopup">
+ <div class="page-width">
+	 <button type="button" class="btn-link closeSearch" aria-label="Close"><i class="at at-times-l" aria-hidden="true"></i></button>
+  <p class="h4 fw-600">{{ 'general.search.title' | t }}</p>
+  {% render 'search-form' %}
+  {% if settings.en_searchwords %}
+    <div class="s_suggestion">
+        {% if settings.en_searchwords %}
+            {% assign searchwords = settings.searchwords | replace:", ","," | replace:" , ","," | replace:" ,","," | split: ',' %}  	
+            <p class="popkeywords">
+                <span class="fw-500">{{settings.searchlabel}}</span> &nbsp;
+                {% for searchvalue in searchwords %}<a href="/search?type=product&options%5Bprefix%5D=none&q={{ searchvalue}}&options%5Bprefix%5D=last"><u>{{searchvalue}}</u></a> &nbsp;{% endfor %}
+            </p>
+        {% endif %}
+        {%- assign scollection = collections[settings.srcprs] -%}
+        {% if settings.sprttl != blank and scollection.products.size > 0 %}
+            <p class="popttl mb20">{{ settings.sprttl }}</p>
+            <hr class="mt5" />
+            <div id="pop-search-pr" class="grid rwcols-2 rwcols-md-3 rwcols-lg-4">
+              {%- for product in scollection.products limit: 8 -%}
+                    <div class="gitem">{% render 'product-card-grid-columns', product: product, grid_image_width: image_size %}</div>
+              {%- endfor -%}
+            </div>
+        {% endif %}
+    </div>
+  {% endif %}	
+</div>
+</div>
+
+{% comment %} newsletter popup {% endcomment %}
+{% if settings.newsletter_popup %}
+<div id="newsletter-modal" class="{{settings.newsltr-style}} mfp-hide mfp-with-anim" {% if settings.newsltr-style == "style3" and settings.newsletter_img != blank %} style="background-image: url('{{ settings.newsletter_img | img_url: 'master' }}');"{% endif %}>		
+  {% if settings.newsltr-style == "style2" %} <div class="fl newsltr-tbl"> {% endif %}
+    {% if settings.newsletter_img != blank %}
+      {% if settings.newsltr-style != "style3" %}
+       <div class="fl1 newsltr-img hide-sm{% if settings.img-pad %} pd10{% endif %}">
+         <div class="bgImg lazyload" data-bgset="{% render 'prgrid-img', image: settings.newsletter_img %}" data-sizes="auto" data-parent-fit="contain" style="padding-bottom:{{ 1 | divided_by: settings.newsletter_img.aspect_ratio | times: 100}}%;"></div>
+  	   </div>
+      {% endif %}
+    {% endif %}
+  <div class="fl1 newsltr-text tc">				
+    <div class="wraptext">
+      <h2>{{settings.newsletter_popup_title }}</h2>
+      <p class="sub-text">{{settings.newsletter_popup_subtitle }} </p>                  
+      {%- assign formId = 'newsletterPopup' -%}
+      {% render 'newsletter-form', formId: newspopup %}
+      {% if settings.show_social_icons %}{% render 'social-media' %}{% endif %}
+      {% if settings.show_gnote %}
+      <p>{{ 'general.newsletter_form.note' | t }}</p>
+      {% endif %}
+
+      {% if settings.show_closetrext %}
+      <p class="checkboxlink"><input type="checkbox" id="dontshow" checked /> <label for="dontshow">{{ 'general.newsletter_form.hide_message' | t }}</label></p>				
+      {% endif %}
+    </div>		
+  </div>	
+  {% if settings.newsltr-style == "style2" %} </div> {% endif %}
+</div>
+{% endif %}
+
+{% comment %} product notification {% endcomment %}
+{%- assign ntCollection = collections[settings.notify_collection] -%}
+{%- if settings.show_notification and ntCollection.products.size > 0 -%}
+{%- assign colections = ntCollection.products -%}
+{%- assign randomNumber = "now" | date: "%N" | modulo: colections.size | plus: 0 -%}
+{%- assign fake_location = settings.notify_location | replace: ' | ', '|' | replace: ' |', '|' | replace: '| ', '|' | split: '|' -%}
+<div id="prodNotify" class="fl customized{% if settings.hide_notification_mb %} hide-sm{% endif %}">
+	
+  <button type="button" class="btn-link closeNotify" title="Close"><i class="at at-times-l" aria-hidden="true"></i></button>
+ 
+	<a href="{{ntCollection.products[randomNumber].url}}" class="db imgLink mr20"><img class="pImg lazyload" data-src="{{ntCollection.products[randomNumber] | img_url: '100x'}}" width="100" height="100" alt="{{ntCollection.products[randomNumber].title}}" />
+	</a>
+	
+  <div class="details">
+    {%- if settings.notify_msg != blank -%}<p class="msg">{{settings.notify_msg}}</p>{%- endif -%}
+    <p class="pname"><a href="{{ntCollection.products[randomNumber].url}}">{{ntCollection.products[randomNumber].title}}</a></p>
+    <p class="timelocation">{%- if settings.fake_time -%}<span class="time">10</span> {{settings.time_msg}} {%- endif -%}{%- if settings.notify_location != blank -%}{{settings.location_msg}} <span class="location">{{ fake_location[3] }}</span>{%- endif -%}</p>
+  </div>
+	
+</div>
+{% endif %}
+<script>
+{%- if settings.dynamicTtl -%}
+    {% capture titletext %}{%- if settings.dynamicTxt1 != blank -%}{{settings.dynamicTxt1}}{%- endif -%}{%- if settings.dynamicTxt2 != blank -%}{%- if settings.dynamicTxt1 != blank -%}!;{%- endif -%}{{settings.dynamicTxt2}}{%- endif -%}{% endcapture %}
+    let l = { "message": {{titletext | split:"!;" | json}},"delay": 1000,"titleTag": document.getElementsByTagName("title")[0] };
+    l.titleTag && (l.originalTitle = l.titleTag.innerText,l.isSingle = l.message.length < 2,l.isActive = !1,l.myTimer,
+    document.addEventListener('visibilitychange',()=>{
+        document.visibilityState === 'visible' ? function () {
+            if (!l.isActive) return;
+            clearInterval(l.myTimer), l.titleTag.innerText = l.originalTitle
+        }():function(){
+            let e=0,t=l.message[e];
+            if (l.isActive = !0, l.titleTag.innerText = t, l.isSingle) return;
+            l.myTimer = setInterval(function () {
+                let i = l.message[++e];
+                i || (e = 0, i = t), l.titleTag.innerText = i
+            }, l.delay)
+        }()
+    }));
+{%- endif -%}
+window.addEventListener('DOMContentLoaded',function(){
+	$(document).ready(function(){
+      	{%- if settings.terms_checkbox -%}
+          $(document).on('change', '#cartDWtearm', function(e){if(this.checked == true){$('.cartDWcheckout').removeAttr("disabled");}else{$('.cartDWcheckout').attr("disabled","disabled");}});
+        {%- endif -%}
+
+      	{%- if settings.show_notification and ntCollection.products.size > 0 -%}
+        	if((typeof Shopify)==='undefined'){Shopify={};}
+			Shopify.pnProduct = function(handle, callback) {
+				$.ajax({ url: '/products/' + handle + '.js', dataType: 'json', success: function(data){ callback(data); }, cache:true, timeout: {{settings.notify_display | plus: 700}} });
+			};
+    		function productNotify(){
+                var productsArray = {{ colections | map:'handle' | json }},
+                	curproductIndex = Math.floor((Math.random() * productsArray.length - 1) + 1);
+      			$('#prodNotify').addClass("active");
+				setTimeout(function(){
+            		Shopify.pnProduct(productsArray[curproductIndex],function(data){
+						var fakeTimeOrder = Math.floor((Math.random() * 60) + 1),
+                            {%- if settings.notify_location != blank -%}fklocations = {{ fake_location | json }},rand = Math.floor(Math.random() *{{fake_location.size}}),{% endif %}
+                            pimg = data.featured_image,
+             	 			pimg_path = pimg.replace(/(\.[^\.]*$|$)/, '_100x' + '$&');
+						$('#prodNotify .pname a').html(data.title).attr('href','/collections/{{ntCollection.handle}}'+data.url);
+                        $('#prodNotify .imgLink').attr('href','/collections/{{ntCollection.handle}}'+data.url);
+                        $('#prodNotify img').attr( { 'data-src':pimg_path, alt:data.title } ).addClass("lazyload");
+                        $('#prodNotify .time').html(fakeTimeOrder);
+                        {%- if settings.notify_location != blank -%}$('#prodNotify .location').html(fklocations[rand]);{%- endif -%}
+                        $('#prodNotify').removeClass("active");
+					});
+				}, {{settings.notify_display}});
+			}
+			setInterval(productNotify, {{ settings.notify_display | plus: settings.notify_delay | plus: 100 }});
+            $('.closeNotify').click(function(){ $('#prodNotify').remove(); });
+		{%- endif -%}
+        
+		{%- if settings.newsletter_popup -%}
+        var cookieSignup = "cookieSignup",
+            date = new Date();
+         if(getCookie('cookieSignup') != 'true' && window.location.href.indexOf("challenge#newsletterPopup") <= -1){
+            setTimeout( function(){
+              if($('#newsletter-modal').length){
+                $.magnificPopup.open({
+                   items: { src:'#newsletter-modal' },
+                   type:'inline', 
+                   removalDelay:300, 
+                   mainClass: 'mfp-zoom-in',
+                   callbacks: {
+					 close: function(){
+                    	nwCookie();
+                        $.magnificPopup.proto.close.call(this);
+                     }
+                   }
+                });
+              }
+            }, {{settings.newsletter_popup_time}});
+        }
+        $("#newsletter-modal form").submit(function(){nwCookie()});
+        function nwCookie(){
+            if($("#dontshow").prop("checked") == true){setCookie('cookieSignup','true',1)}
+        } 
+        {%- endif -%}
+              
+		{%- if settings.mailChimp_url != blank -%}
+            $(".mcNewsletter").submit(function(e){
+                  var $form = $(this);
+                  e.preventDefault();
+                  $.ajax({
+                      type: 'GET',
+                      url: $(this).attr('action'),
+                      data: $(this).serialize(),
+                      cache: false,
+                      dataType: 'json',
+                      contentType: "application/json; charset=utf-8",
+                      error: function(err){ alert("Could not connect to the registration server. Please try again later."); },
+                      success: function(data){
+                          if (data.result == "success"){
+                              $($form).find(".form-success").html(data.msg).show();
+                              $($form).find(".errors").hide();
+                          }else{
+                              $($form).find(".errors").html(data.msg).show();
+                          }
+                      }
+                  });
+            });
+        {%- endif -%}
+	});
+});
+
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "{{ shop.name }}",
+  {% if settings.logo != blank %}
+    "logo": "https:{{settings.logo | img_url: 'master'}}",
+  {% endif %}
+  "sameAs": [
+    "{{ settings.social_twitter_link }}",
+    "{{ settings.social_facebook_link }}",
+    "{{ settings.social_pinterest_link }}",
+    "{{ settings.social_instagram_link }}",
+    "{{ settings.social_tumblr_link }}",
+    "{{ settings.social_snapchat_link }}",
+    "{{ settings.social_youtube_link }}",
+    "{{ settings.social_vimeo_link }}"
+  ],
+  "url": "{{ shop.url }}{{ page.url }}"
+}
+</script>
+
+{% if template.name == 'index' %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": "{{ shop.name }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ shop.url }}/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "url": "{{ shop.url }}{{ page.url }}"
+    }
+  </script>
+{% endif %}
+{% endcapture %}
+{{themeModels | strip_newlines | remove: "  " | remove: "	" }}

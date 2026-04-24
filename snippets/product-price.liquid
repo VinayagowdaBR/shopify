@@ -1,0 +1,63 @@
+{%- liquid
+    if product.title
+      assign compare_at_price = product.compare_at_price
+      assign price = product.price
+      assign price_varies = product.price_varies
+      assign available = product.available
+      assign min_price = product.price_min | money
+      assign max_price = product.price_max | money
+    else
+      assign compare_at_price = 1999
+      assign price = 1999
+      assign price_varies = false
+      assign available = true
+    endif
+    
+    assign compare_price = compare_at_price | money
+    assign money_price = price | money
+    if settings.curCode
+        assign compare_price = compare_at_price | money_with_currency
+        assign money_price = price | money_with_currency
+        assign min_price = product.price_min | money_with_currency
+        assign max_price = product.price_max | money_with_currency
+    endif
+-%}
+
+{% if compare_at_price > price %}
+  {% if price_varies %}
+    <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+    <s class="pr_price regular">{{ compare_price }}</s>
+	<span class="pr_price sale">
+       {% if settings.price_lbl %}{{settings.price_lbl_txt }}{% endif %}
+       {% if settings.price_style == 'default' %}{{ money_price }}{% else %}{{ min_price }} - {{ max_price }}{% endif %}
+	</span>
+  {% else %}
+    <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+    <s class="pr_price regular">{{ compare_price }}</s>
+    <span class="pr_price sale">{{ money_price }}</span>
+  {% endif %}
+{% else %}
+  {% if price_varies %}
+       	<span class="pr_price">
+          {% if settings.price_lbl %}{{settings.price_lbl_txt }}{% endif %}
+       	  {% if settings.price_style == 'default' %}{{ money_price }}{% else %}{{ min_price }} - {{ max_price }}{% endif %}
+		</span>
+    {% else %}
+    <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+    <span class="pr_price">{{ money_price }}</span>
+  {% endif %}
+{% endif %}
+{%- assign variant = product.selected_or_first_available_variant -%}
+{% if variant.unit_price_measurement %}
+<div class="price__unit">
+    <span data-unit-price>{{ variant.unit_price | money }}</span> /
+    <span data-unit-price-base-unit>
+          {%- if variant.unit_price_measurement -%}
+            {%- if variant.unit_price_measurement.reference_value != 1 -%}
+              {{- variant.unit_price_measurement.reference_value -}}
+            {%- endif -%}
+            {{ variant.unit_price_measurement.reference_unit }}
+          {%- endif -%}
+	</span>
+</div>
+{% endif %}

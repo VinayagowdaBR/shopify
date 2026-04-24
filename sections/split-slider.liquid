@@ -1,0 +1,179 @@
+<section class="split-slider">
+  <div class="split-content">
+    <!-- Left Side (Sliding Banners) -->
+    <div class="split-left">
+      <div class="slider-container">
+        {% for block in section.blocks %}
+          <div class="slider-item">
+            <a href="{{ block.settings.left_banner_link }}" target="_blank">
+              <picture>
+                <source media="(min-width: 768px)" srcset="{{ block.settings.left_desktop_image | image_url }}">
+                <img src="{{ block.settings.left_mobile_image | image_url }}" alt="Left Banner">
+              </picture>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Right Side (Static Banner) -->
+    <div class="split-right">
+      {% if section.blocks.size > 0 %}
+        <a href="{{ section.blocks[0].settings.right_banner_link }}" target="_blank">
+          <picture>
+            <source media="(min-width: 768px)" srcset="{{ section.blocks[0].settings.right_desktop_image | image_url }}">
+            <img src="{{ section.blocks[0].settings.right_mobile_image | image_url }}" alt="Right Banner">
+          </picture>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<style>
+.split-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.split-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.split-left,
+.split-right {
+  width: 50%;
+  position: relative;
+}
+
+.slider-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slider-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.slider-item.active {
+  opacity: 1;
+}
+
+.split-left img,
+.split-right img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Mobile-specific Styles */
+@media screen and (max-width: 767px) {
+  .split-content {
+    flex-direction: column;
+  }
+
+  .split-left,
+  .split-right {
+    width: 100%;
+  }
+
+  .split-left img,
+  .split-right img {
+    width: 100%;
+    object-fit: cover;
+  }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  let slideIndex = 0;
+  const sliderItems = document.querySelectorAll('.slider-item');
+  const totalSlides = sliderItems.length;
+
+  // Ensure all slides have the same height
+  if (totalSlides > 0) {
+    const firstSlide = sliderItems[0];
+    const height = firstSlide.offsetHeight;
+    sliderItems.forEach(item => item.style.height = `${height}px`);
+    sliderItems[0].classList.add('active');
+  }
+
+  function showNextSlide() {
+    if (totalSlides <= 1) return; // Exit if only one slide
+    sliderItems[slideIndex].classList.remove('active');
+    slideIndex = (slideIndex + 1) % totalSlides;
+    sliderItems[slideIndex].classList.add('active');
+  }
+
+  // Auto fade every 3 seconds
+  if (totalSlides > 1) {
+    setInterval(showNextSlide, 3000);
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Split Banner Slider",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "left_desktop_image",
+          "label": "Left Desktop Banner Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_mobile_image",
+          "label": "Left Mobile Banner Image"
+        },
+        {
+          "type": "url",
+          "id": "left_banner_link",
+          "label": "Left Banner Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_desktop_image",
+          "label": "Right Desktop Banner Image",
+          "info": "Only the first block's right banner is displayed."
+        },
+        {
+          "type": "image_picker",
+          "id": "right_mobile_image",
+          "label": "Right Mobile Banner Image",
+          "info": "Only the first block's right banner is displayed."
+        },
+        {
+          "type": "url",
+          "id": "right_banner_link",
+          "label": "Right Banner Link",
+          "info": "Only the first block's right banner link is used."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Banner Slider",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

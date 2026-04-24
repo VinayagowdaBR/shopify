@@ -1,0 +1,800 @@
+{%- liquid
+    assign isRtl = false
+    assign lisRtl = 'ar,dv,ha,he,ku,fa,ur,ug' | split: ','
+    if lisRtl contains request.locale.iso_code or settings.rtl
+        assign isRtl = true
+    endif
+-%}
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" {% if isRtl %}dir="rtl"{% endif %}><head><!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WXXWZFFC');</script>
+<!-- End Google Tag Manager --><!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+  {%- capture metaTags -%}
+	<meta charset="utf-8">
+  	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="{{ settings.mob_browser }}">
+	<meta name="format-detection" content="telephone=no">
+  {% if template.name == 'index' %}<meta name="keywords" content="House of Viya, demi fine jewellery, anti tarnish jewellery, gold plated jewellery online, 18k gold plated jewellery, waterproof jewellery India, tarnish free jewellery, affordable gold jewellery, everyday jewellery for women, demi fine jewellery online India">{% endif %} 
+	<link rel="canonical" href="{{ canonical_url }}">
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+	<link rel="dns-prefetch" href="https://{{shop.domain}}" crossorigin>
+	<link rel="dns-prefetch" href="https://{{shop.permanent_domain}}" crossorigin>
+	{%- unless settings.header_font.system? and settings.body_font.system? and settings.fonts == '2' -%}
+      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {%- endunless -%}
+
+    {%- if settings.favicon != blank -%}<link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png">{%- endif -%}
+    {%- if settings.favicon_retina != blank -%}<link rel="apple-touch-icon-precomposed" type="image/png" sizes="152x152" href="{{ settings.favicon_retina | img_url: '152x' }}">{%- endif -%}
+
+  	<title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+  	{%- if page_description -%}<meta name="description" content="{{ page_description | escape }}">{%- endif -%}
+  	{%- render 'social-meta-tags' -%}
+  {%- endcapture -%}
+  {{metaTags  | strip_newlines | remove: "  " | remove: "	" }}
+
+  {%- capture mainjs -%}
+  	{%- render 'head-css', isRtl:isRtl -%}
+  	<link rel="stylesheet" href="{% if isRtl %}{{ 'themeRtl.css' | asset_url }}{% else %}{{ 'theme.css' | asset_url }}{% endif %}" type="text/css" media="all">
+    <script src="{{ 'lazysizes.js' | asset_url }}" async></script>
+  	<script src="{{ 'jquery.min.js' | asset_url }}"defer="defer"></script>
+	<script>
+		var theme = {
+			strings:{
+				showMore:{{ 'general.filters.show_more' | t | json }},showLess:{{ 'general.filters.show_less' | t | json }}
+			},
+			mlcurrency:{%- if settings.show_multiple_currencies and settings.currency_opt == 'script' -%}true{%- else -%}false{% endif %},moneyFormat:{% if settings.curCode %}{{ shop.money_with_currency_format | json }}{% else %}{{ shop.money_format | json }}{% endif %},shopCurrency:{{ shop.currency | json }},autoCurrencies:{{ settings.auto_currencies }},money_currency_format:{{ shop.money_with_currency_format | strip_html | json }},money_format:{{ shop.money_format | strip_html | json }},
+			ajax_cart:{{settings.ajax_cart }},fixedHeader:{{settings.show_sticky_header }},animation:{{settings.enable_site_animation }},animationMobile:{{settings.site_animation_mobile }},searchresult:{{ 'general.search.all' | t | json }},wlAvailable:{{ 'products.wishlist.available' | t | json }},rtl:{{ isRtl }},
+		};
+		document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+        var alpha = "Abcdefghijklmnopqrstuvwxyz".split(""), thm = alpha[0]+alpha[21]+alpha[14]+alpha[13]+alpha[4], shpeml = '{{shop.email}}', dmn = window.location.hostname;
+        window.lazySizesConfig = window.lazySizesConfig || {};
+		window.lazySizesConfig.loadMode = 1;
+      	window.lazySizesConfig.loadHidden = false;
+        window.shopUrl = '{{ request.origin }}';
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      };
+      window.cartStrings = {
+        error: `{{ 'cart.general.error' | t }}`,
+        quantityError: `{{ 'cart.general.quantity_error_html' | t: quantity: '[quantity]' }}`
+      };
+      window.variantStrings = {addToCart: `{{ 'products.product.add_to_cart' | t }}`,preOrder: `{{ 'products.product.pre_order' | t }}`,soldOut: `{{ 'products.product.sold_out' | t }}`,unavailable: `{{ 'products.product.unavailable' | t }}`,unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`,};
+	</script>
+	<script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
+  {%- endcapture -%}
+  {{mainjs | strip_newlines | remove: "	" }}  
+  {{ content_for_header }}
+  {%- comment -%}{%- render 'header-content' -%}{%- endcomment -%}
+
+
+{% if settings.show_announcement_bar %}
+  <style>
+    .announcement-marquee {
+      background-color: {{ settings.announcement_bg }};
+      color: {{ settings.announcement_text_color }};
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 12px;
+      line-height: 19px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 400;
+      padding: 6px 0;
+      position: relative;
+      z-index: 0;
+    }
+
+    .marquee-track {
+      display: flex;
+      white-space: nowrap;
+      will-change: transform;
+      animation: marqueeScroll 20s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-block;
+      margin-right: 60px;
+    }
+
+    @keyframes marqueeScroll {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-100%);
+      }
+    }
+  </style>
+
+  <div class="announcement-marquee">
+    <div class="marquee-track" id="marqueeTrack">
+      {% assign items = settings.announcement_text | split: "|" %}
+      {% for i in (1..1) %}
+        {% for item in items %}
+          <div class="marquee-item">{{ item }}</div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const track = document.getElementById("marqueeTrack");
+      const parent = track.parentElement;
+
+      // Clone marquee items till track is long enough
+      while (track.scrollWidth < parent.offsetWidth * 2) {
+        const cloneItems = track.querySelectorAll(".marquee-item");
+        cloneItems.forEach(item => {
+          const cloned = item.cloneNode(true);
+          track.appendChild(cloned);
+        });
+      }
+
+      // Dynamically set animation duration based on content width
+      const contentWidth = track.scrollWidth;
+      const screenWidth = window.innerWidth;
+
+      // Speed factor: lower = faster, higher = slower
+      let speedFactor = 250;
+
+      if (screenWidth < 768) {
+        // Mobile speed (slightly faster for small screen)
+        speedFactor = 250;
+      }
+
+      const duration = contentWidth / speedFactor; // Adjust factor to fine-tune
+      track.style.animationDuration = duration + "s";
+    });
+  </script>
+{% endif %}
+
+
+  <script src='https://bridge.shopflo.com/js/shopflo.bundle.js' async></script>
+</head>
+<body id="{{ page_title | handle }}" class="template-{{ template | split: '.' | first }}{% if settings.bodybg_img %} lazyload{% endif %}{%- if isRtl -%} rtl{%- endif -%}"
+	{%- if settings.bodybg_img %} data-bgset="{% render 'bgset', image: settings.bodybg_img %}" data-sizes="auto" data-parent-fit="cover" style="background-image:url('{{ settings.bodybg_img | img_url: '50x50' }});"{%- endif -%}>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WXXWZFFC"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+    {%- if settings.enable_age_varification -%}{% render 'age-check' %}{%- endif -%}
+    {%- if settings.layout_style == "boxedlayout" -%}<div class="page-wrapper layout-boxed">{%- endif -%}
+        {%- if settings.info-bar == 'top' -%}{% section 'top-info-panel' %}{%- endif -%}
+  		{%- render 'header' -%}
+    	{%- if settings.info-bar == 'below' -%}{% section 'top-info-panel' %}{%- endif -%}
+		<main id="PageContainer" class="main-content {{ template | split: '.' | first }}" id="MainContent" role="main">{{ content_for_layout }}</main>  
+{%- section 'footer' -%}
+        {%- section 'mobile-toolbar' -%}
+  	{% if settings.layout_style == "boxedlayout" %}</div>{% endif %}
+	{% section 'custom-colors' %}
+<link rel="stylesheet" href="{% if isRtl %}{{ 'defaultRtl.css' | asset_url }}{% else %}{{ 'default.css' | asset_url }}{% endif %}" type="text/css" media="all">
+<script src="{{ 'option_selection.js' | shopify_asset_url }}" defer="defer"></script>
+{%- if template.directory == 'customers' -%}
+    <script src="{{ 'shopify_common.js' | shopify_asset_url }}" defer="defer"></script>
+    <script src="{{ 'customer.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+{%- if content_for_layout contains 'data-stellar-background-ratio' -%}<script src="{{ 'stellar.js' | asset_url }}" defer></script>{%- endif -%}
+{%- if content_for_layout contains 'grid-masonary' or request.design_mode -%}<script src="{{ 'masonry.js' | asset_url }}" defer="defer"></script>{%- endif -%}
+{%- if settings.show_multiple_currencies and settings.currency_opt == 'script' -%}{%- render 'currencies' -%}{%- endif -%}
+{%- if settings.enable_site_animation -%}<script src="{{ 'wow.min.js' | asset_url }}" async></script>{%- endif -%}
+<script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+{%- if request.design_mode -%}
+    <script src="{{ 'admin.js' | asset_url }}" defer="defer"></script>
+    {{ 'admin.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+{%- if settings.ajax_cart and template != 'cart' -%}{%- render 'cart-drawer' -%}{%- endif -%}
+{% section 'exit-product-popup' %}
+{%- render 'theme-modals' -%}
+{%- if settings.show_sticky_arrow -%}<span id="site-scroll"><i class="at at-arw-up" aria-hidden="true"></i></span>{%- endif -%}
+<script src="{{ 'custom.js' | asset_url }}"></script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.body.addEventListener("submit", function (e) {
+      const form = e.target.closest('.product-form');
+      if (!form) return;
+
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const spinner = form.querySelector('.btn_spinner');
+      if (spinner) spinner.classList.remove('hidden');
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('✅ Product added');
+
+        // ✅ Open cart drawer
+        const cartTrigger = document.querySelector('#cartLink');
+        if (cartTrigger) cartTrigger.click();
+
+        // ✅ Update cart count
+        fetch('/cart.js')
+          .then(res => res.json())
+          .then(cart => {
+            const cartCount = cart.item_count;
+            const countElement = document.querySelector('#CartCount');
+            if (countElement) {
+              countElement.textContent = cartCount;
+              countElement.classList.remove('hidden');
+            }
+          });
+
+        // ✅ Re-render cart drawer content
+        fetch('/?sections=cart-drawer')
+          .then(res => res.json())
+          .then(data => {
+            const parser = new DOMParser();
+            const html = parser.parseFromString(data['cart-drawer'], 'text/html');
+            const newDrawerContent = html.querySelector('.cart-drawer');
+
+            const existingDrawer = document.querySelector('.cart-drawer');
+            if (existingDrawer && newDrawerContent) {
+              existingDrawer.innerHTML = newDrawerContent.innerHTML;
+            }
+          });
+
+      })
+      .catch(error => {
+        console.error('🚨 Error adding to cart:', error);
+        alert('Something went wrong.');
+      })
+      .finally(() => {
+        if (spinner) spinner.classList.add('hidden');
+      });
+    });
+  });
+</script>
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  function initializeSwiper() {
+    if (document.querySelector('.cart-reco-swiper')) {
+      const existingSwiper = document.querySelector('.cart-reco-swiper').swiper;
+      if (existingSwiper) existingSwiper.destroy(true, true);
+
+      new Swiper('.cart-reco-swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 12,
+        freeMode: true,
+        simulateTouch: true, // ✅ Desktop swipe enable
+        scrollbar: {
+          hide: true
+        },
+      });
+    }
+  }
+
+  document.addEventListener('cart:updated', initializeSwiper);
+
+  const drawer = document.querySelector('.drawer__upsell');
+  if (drawer) {
+    const observer = new MutationObserver(function () {
+      if (drawer.offsetParent !== null) {
+        initializeSwiper();
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+
+  initializeSwiper();
+
+  // ✅ AJAX Add to Cart with full cart update
+  window.addToCartAjax = function(variantId, button) {
+    // Disable button and show "Adding..."
+    button.disabled = true;
+    button.classList.add('adding');
+    const textSpan = button.querySelector('.text');
+    if (textSpan) textSpan.textContent = 'Adding...';
+
+    const spinner = button.querySelector('.btn_spinner');
+    if (spinner) spinner.classList.remove('hidden');
+
+    // Add to cart via AJAX
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: variantId, quantity: 1 }] }),
+    })
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.json();
+    })
+    .then(data => {
+      console.log('✅ Product added to cart');
+
+      // ✅ Open cart drawer
+      const cartTrigger = document.querySelector('#cartLink');
+      if (cartTrigger) cartTrigger.click();
+
+      // ✅ Update cart count
+      fetch('/cart.js')
+        .then(res => res.json())
+        .then(cart => {
+          const cartCount = cart.item_count;
+          const countElement = document.querySelector('#CartCount');
+          if (countElement) {
+            countElement.textContent = cartCount;
+            countElement.classList.remove('hidden');
+          }
+        });
+
+      // ✅ Reload cart drawer content
+      fetch('/?sections=cart-drawer')
+        .then(res => res.json())
+        .then(data => {
+          const parser = new DOMParser();
+          const html = parser.parseFromString(data['cart-drawer'], 'text/html');
+          const newDrawer = html.querySelector('.cart-drawer');
+          const oldDrawer = document.querySelector('.cart-drawer');
+          if (oldDrawer && newDrawer) {
+            oldDrawer.innerHTML = newDrawer.innerHTML;
+          }
+
+          // ✅ Reinitialize Swiper after content load
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+        });
+    })
+    .catch(error => {
+      console.error('🚨 Error adding to cart:', error);
+      alert('Something went wrong while adding the product.');
+    })
+    .finally(() => {
+      // Reset button
+      button.disabled = false;
+      button.classList.remove('adding');
+      if (textSpan) textSpan.textContent = 'Add to Cart';
+      if (spinner) spinner.classList.add('hidden');
+    });
+  };
+});
+</script>
+
+
+
+ {% if request.host == '' or request.host == '' %}
+  <div id="customize-lock-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f8f9fa; z-index: 10000000; display: none; flex-direction: column; justify-content: center; align-items: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    
+    <img src="https://cdn.shopify.com/s/files/1/0949/0268/1890/files/lets_advertise_1_1.png?v=1751297259" alt="Logo" style="width: 150px; margin-bottom: 30px;" />
+
+    <div style="background: #fff; padding: 40px 30px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; min-width: 320px;">
+      <h2 style="font-size: 24px; margin-bottom: 15px; color: #333;">🔒 Coming Soon</h2>
+      <input type="password" id="customize-unlock-code" placeholder="Enter Your Code" style="padding: 12px 15px; width: 100%; max-width: 280px; text-align: center; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 15px;" autocomplete="off" />
+      <button onclick="unlockCustomize()" style="background-color: #007BFF; color: white; padding: 10px 24px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">Unlock</button>
+      <p id="error-msg" style="margin-top: 10px; color: red; display: none;">❌ Incorrect Code</p>
+    </div>
+
+    <p style="margin-top: 25px; color: #b30000; font-size: 15px; font-weight: bold; text-align: center; max-width: 600px; padding: 0 20px;">
+      ⚠Your website is under construction, when your website will be ready, then we will close this project from our side and this password will be removed automatically, thank you so much!
+    </p>
+
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const overlay = document.getElementById("customize-lock-overlay");
+      const input = document.getElementById("customize-unlock-code");
+
+      function maintainFocus() {
+        if (overlay.style.display === "flex" && document.activeElement !== input) {
+          input.focus();
+        }
+      }
+
+      if ((window.location.host === 'house-of-viya.myshopify.com' || window.location.host === 'houseofviya.in') && !window.location.search.includes('customize')) {
+        if (sessionStorage.getItem("theme_customizer_unlocked") !== "yes") {
+          overlay.style.display = "flex";
+          setTimeout(() => input.focus(), 100);
+          document.addEventListener("focusin", maintainFocus);
+
+          input.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              unlockCustomize();
+            }
+          });
+        } else {
+          overlay.style.display = "none";
+        }
+      } else {
+        overlay.style.display = "none";
+      }
+    });
+
+    function unlockCustomize() {
+      const inputVal = document.getElementById("customize-unlock-code").value.trim();
+
+      if (inputVal === "123") {
+        sessionStorage.setItem("theme_customizer_unlocked", "yes");
+        document.getElementById("customize-lock-overlay").style.display = "none";
+        document.removeEventListener("focusin", maintainFocus);
+      } else {
+        document.getElementById("error-msg").style.display = "block";
+        document.getElementById("customize-unlock-code").value = "";
+        setTimeout(() => {
+          document.getElementById("error-msg").style.display = "none";
+        }, 2000);
+      }
+    }
+  </script>
+{% endif %}
+
+
+
+
+<!-- ============ HOUSE OF VIYA - PREMIUM UX UPGRADE ============ -->
+<style id="viya-ux-upgrade">viya-category-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 32px;
+    padding: 10px 0;
+    background: #fafaf8;
+      border-bottom: 1px solid #f0ece4;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .viya-category-strip a {
+      color: #666;
+      text-decoration: none;
+      font-weight: 400;
+      transition: color 0.3s ease;
+      position: relative;
+      }
+    .viya-category-strip a:hover {
+      color: #C8B28A;
+    }
+    .viya-category-strip a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 0;
+        height: 1px;
+        background: #C8B28A;
+        transition: width 0.3s ease;
+        }
+        .viya-category-strip a:hover::after {
+          width: 100%;
+        }
+        
+        /* ===== 6. SHOP DROPDOWN ===== */
+        .viya-shop-dropdown {
+          position: absolute;
+          top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            border: 1px solid #f0ece4;
+              border-radius: 4px;
+              padding: 12px 0;
+                min-width: 180px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+                  opacity: 0;
+                  visibility: hidden;
+                  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+                  transform: translateX(-50%) translateY(8px);
+                  z-index: 999;
+                }
+                .viya-shop-parent {
+                  position: relative !important;
+                }
+                .viya-shop-parent:hover .viya-shop-dropdown {
+                  opacity: 1;
+                  visibility: visible;
+                    transform: translateX(-50%) translateY(0);
+                  }
+                  .viya-shop-dropdown a {
+                    display: block;
+                    padding: 8px 24px;
+                    color: #555;
+                    font-size: 12px;
+                    letter-spacing: 1.5px;
+                    text-decoration: none;
+                    transition: color 0.2s ease, background 0.2s ease;
+                  }
+                  .viya-shop-dropdown a:hover {
+                    color: #C8B28A;
+                    background: #fafaf8;
+                  }
+                  
+                  /* ===== 7. MOBILE OPTIMIZATIONS ===== */
+                @media (max-width: 768px) {
+                  /* Sticky header on mobile */
+                  #header-section,
+                  [data-section-id="header"],
+                  .header-section {
+                      position: sticky !important;
+                        top: 0 !important;
+                          z-index: 999 !important;
+                          }
+                          /* Hide full search bar on mobile, show icon only */
+                          .custom-search-wrapper {
+                              max-width: 40px !important;
+                                width: 40px !important;
+                                  overflow: hidden !important;
+                                    transition: max-width 0.3s ease, width 0.3s ease !important;
+                                      border-radius: 25px !important;
+                                      }
+                                      .custom-search-wrapper.expanded {
+                                          max-width: 100% !important;
+                                            width: 100% !important;
+                                            }
+                                            .custom-search-wrapper input[type="text"] {
+                                                opacity: 0;
+                                                  transition: opacity 0.3s ease !important;
+                                                  }
+                                                  .custom-search-wrapper.expanded input[type="text"] {
+                                                      opacity: 1;
+                                                      }
+                                                      /* Category strip scrollable on mobile */
+                                                      .viya-category-strip {
+                                                          overflow-x: auto;
+                                                            gap: 20px;
+                                                              padding: 8px 16px;
+                                                                justify-content: flex-start;
+                                                                  -webkit-overflow-scrolling: touch;
+                                                                    scrollbar-width: none;
+                                                                    }
+                                                                    .viya-category-strip::-webkit-scrollbar {
+                                                                        display: none;
+                                                                        }
+                                                                        .viya-category-strip a {
+                                                                            flex-shrink: 0;
+                                                                            }
+                                                                          }
+                                                                          
+                                                                        /* ===== 8. HEADER GENERAL POLISH ===== */
+                                                                      .site-header {
+                                                                        padding: 12px 0 !important;
+                                                                        border-bottom: 1px solid #f0ece4 !important;
+                                                                      }
+                                                                      /* Remove excess bold from any header text */
+                                                                    .site-header * {
+                                                                      font-smoothing: antialiased;
+                                                                      -webkit-font-smoothing: antialiased;
+                                                                    }
+                                                                  </style>
+                                                                
+                                                                <script id="viya-ux-upgrade-js">
+                                                                  document.addEventListener('DOMContentLoaded', function() {
+                                                                  
+                                                                    /* ===== 1. UPDATE ANNOUNCEMENT BAR TEXT ===== */
+                                                                    var annBar = document.querySelector('.notification-bar .ttlTxt');
+                                                                    if (annBar) {
+                                                                        annBar.innerHTML = 'Free Shipping for Prepaid Orders above ₹999 &nbsp;|&nbsp; Skin-Safe &nbsp;|&nbsp; Everyday Wear &nbsp;|&nbsp; Waterproof Jewellery';
+                                                                        }
+                                                                      
+                                                                        /* ===== 2. UPDATE SEARCH PLACEHOLDER ===== */
+                                                                        var searchInputs = document.querySelectorAll('[data-input-search], #dynamic-placeholder-input');
+                                                                        searchInputs.forEach(function(input) {
+                                                                            input.setAttribute('placeholder', 'Search jewellery\u2026');
+                                                                            });
+                                                                            // Also update any overlay/modal search inputs
+                                                                            var allSearchInputs = document.querySelectorAll('input[type="search"], input[placeholder*="Search for"]');
+                                                                            allSearchInputs.forEach(function(input) {
+                                                                                input.setAttribute('placeholder', 'Search jewellery\u2026');
+                                                                                });
+                                                                              
+                                                                                /* ===== 3. ADD TOOLTIP DATA ATTRIBUTES TO ICONS ===== */
+                                                                                var accountIcon = document.querySelector('a[href="/account"], a.hdicon[href*="account"]');
+                                                                                if (accountIcon) accountIcon.setAttribute('data-tooltip', 'Account');
+                                                                              
+                                                                                var wishlistIcons = document.querySelectorAll('a.hdicon[href*="wishlist"]');
+                                                                                wishlistIcons.forEach(function(icon) {
+                                                                                    icon.setAttribute('data-tooltip', 'Wishlist');
+                                                                                    });
+                                                                                  
+                                                                                    var cartIcon = document.querySelector('a[id="cartlink"], a[href*="/cart"]');
+                                                                                    if (cartIcon) cartIcon.setAttribute('data-tooltip', 'Cart');
+                                                                                  
+                                                                                    /* ===== 4. RESTRUCTURE NAVIGATION ===== */
+                                                                                    var siteNav = document.getElementById('siteNav');
+                                                                                    if (siteNav) {
+                                                                                        var navItems = siteNav.querySelectorAll(':scope > li');
+                                                                                          
+                                                                                          navItems.forEach(function(item) {
+                                                                                                var link = item.querySelector(':scope > a');
+                                                                                                    if (!link) return;
+                                                                                                        var text = link.textContent.trim().toUpperCase();
+                                                                                                      
+                                                                                                            // Hide Knowledge Lab (move concept to footer)
+                                                                                                                if (text === 'KNOWLEDGE LAB') {
+                                                                                                                        item.style.display = 'none';
+                                                                                                                            }
+                                                                                                                          
+                                                                                                                                // Rename "ANTI-TARNISH JEWELLERY" to "SHOP" with dropdown
+                                                                                                                                    if (text === 'ANTI-TARNISH JEWELLERY' || text.includes('ANTI-TARNISH')) {
+                                                                                                                                            link.innerHTML = 'Shop <i class="at at-angle-down-l" style="font-size:10px;margin-left:4px;"></i>';
+                                                                                                                                                  item.classList.add('viya-shop-parent');
+                                                                                                                                                        
+                                                                                                                                                        // Create enhanced dropdown
+                                                                                                                                                              var existingDropdown = item.querySelector('ul, .megamenu');
+                                                                                                                                                                    if (existingDropdown) {
+                                                                                                                                                                              var dropdownDiv = document.createElement('div');
+                                                                                                                                                                                      dropdownDiv.className = 'viya-shop-dropdown';
+                                                                                                                                                                                              dropdownDiv.innerHTML = '<a href="/collections/imitation-rings">Rings</a>' +
+                                                                                                                                                                                                        '<a href="/collections/imitation-bracelets">Bracelets</a>' +
+                                                                                                                                                                                                                  '<a href="/collections/imitation-bangles">Anklets</a>' +
+                                                                                                                                                                                                                            '<a href="/collections/all">Chains</a>' +
+                                                                                                                                                                                                                                      '<a href="/collections/imitation-earrings">Earrings</a>' +
+                                                                                                                                                                                                                                                '<a href="/collections/imitation-necklaces">Necklaces</a>' +
+                                                                                                                                                                                                                                                          '<a href="/collections/imitation-pendants">Pendants</a>';
+                                                                                                                                                                                                                                                                  item.appendChild(dropdownDiv);
+                                                                                                                                                                                                                                                                          existingDropdown.style.display = 'none';
+                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                                                        // Rename BESTSELLER -> Bestsellers
+                                                                                                                                                                                                                                                                                            if (text === 'BESTSELLER' || text === 'BESTSELLERS') {
+                                                                                                                                                                                                                                                                                                    link.textContent = 'Bestsellers';
+                                                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                            // Rename ABOUT US -> About
+                                                                                                                                                                                                                                                                                                                if (text === 'ABOUT US') {
+                                                                                                                                                                                                                                                                                                                        link.textContent = 'About';
+                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                                                // Hide CONTACT US (declutter)
+                                                                                                                                                                                                                                                                                                                                    if (text === 'CONTACT US') {
+                                                                                                                                                                                                                                                                                                                                            item.style.display = }}}}}}})}})})})}})}}}}}}}}}}}}}}}}}}}}
+  /* ===== 1. TOP ANNOUNCEMENT STRIP - Trust Signals ===== */
+  .notification-bar {
+    background: #1a1a1a !important;
+      font-size: 12px !important;
+        letter-spacing: 1.5px !important;
+          padding: 8px 0 !important;
+            text-transform: uppercase !important;
+            }
+            .notification-bar .ttlTxt {
+              font-weight: 300 !important;
+                color: #C8B28A !important;
+                }
+
+                /* ===== 2. SEARCH BAR - Elegant & Compact ===== */
+                .custom-search-wrapper {
+                  max-width: 380px !important;
+                    width: 380px !important;
+                    }
+                    .custom-search-wrapper input[type="text"] {
+                      font-size: 13px !important;
+                      letter-spacing: 0.5px !important;
+                        padding: 8px 16px !important;
+                          border: 1px solid #d4d4d4 !important;
+                            border-radius: 25px !important;
+                              transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
+                              }
+                              .custom-search-wrapper input[type="text"]:focus {
+                                border-color: #C8B28A !important;
+                                box-shadow: 0 0 0 2px rgba(200, 178, 138, 0.15) !important;
+                                outline: none !important;
+                                }
+                                .custom-search-wrapper .t4s-search-header__submit {
+                                  right: 8px !important;
+                                }
+                                
+                                /* ===== 3. HEADER ICON LABELS & SPACING ===== */
+                                .icons-col {
+                                  gap: 20px !important;
+                                }
+                                .icons-col > a,
+                              .icons-col > .hdicon,
+                              a.hdicon {
+                                position: relative !important;
+                                display: inline-flex !important;
+                                  align-items: center !important;
+                                  margin: 0 6px !important;
+                                  }
+                                  /* Tooltip labels for icons */
+                                  a.hdicon::after,
+                                  a[id="cartlink"]::after {
+                                    content: attr(data-tooltip);
+                                      position: absolute;
+                                      bottom: -24px;
+                                        left: 50%;
+                                        transform: translateX(-50%) translateY(4px);
+                                          background: #333;
+                                            color: #fff;
+                                              font-size: 10px;
+                                                letter-spacing: 0.8px;
+                                                  padding: 3px 8px;
+                                                    border-radius: 3px;
+                                                    white-space: nowrap;
+                                                    opacity: 0;
+                                                    pointer-events: none;
+                                                      transition: opacity 0.25s ease, transform 0.25s ease;
+                                                      z-index: 1000;
+                                                      font-family: inherit;
+                                                    }
+                                                  a.hdicon:hover::after,
+                                                a[id="cartlink"]:hover::after {
+                                                  opacity: 1;
+                                                  transform: translateX(-50%) translateY(0);
+                                                }
+                                              
+                                              /* ===== 4. NAVIGATION - Luxury Feel ===== */
+                                            #siteNav {
+                                              display: flex !important;
+                                              justify-content: center !important;
+                                              gap: 8px !important;
+                                            }
+                                            #siteNav > li > a {
+                                              font-weight: 300 !important;
+                                              letter-spacing: 2.5px !important;
+                                              font-size: 11.5px !important;
+                                              text-transform: uppercase !important;
+                                              color: #333 !important;
+                                              padding: 12px 16px !important;
+                                              position: relative !important;
+                                              transition: color 0.3s ease !important;
+                                            }
+                                            /* Champagne gold hover */
+                                          #siteNav > li > a:hover {
+                                            color: #C8B28A !important;
+                                          }
+                                          /* Smooth underline animation */
+                                        #siteNav > li > a::after {
+                                          content: '';
+                                          position: absolute;
+                                          bottom: 6px;
+                                          left: 50%;
+                                          width: 0;
+                                          height: 1px;
+                                          background: #C8B28A;
+                                          transition: width 0.35s ease, left 0.35s ease;
+                                        }
+                                        #siteNav > li > a:hover::after {
+                                          width: 60%;
+                                          left: 20%;
+                                        }
+                                      
+                                      /* ===== 5. CATEGORY QUICK ACCESS STRIP ===== */
+                                    .}}}}}}}}}
+                                      </script>
+                                      <!-- ===== END HOUSE OF VIYA PREMIUM UX UPGRADE v2 ===== -->
+!-- Lazy Loading for Below-the-Fold Images -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var viewportHeight = window.innerHeight;
+          var images = document.querySelectorAll('img:not([loading])');
+              images.forEach(function(img) {
+                    var rect = img.getBoundingClientRect();
+                          if (rect.top >= viewportHeight) {
+                                  img.setAttribute('loading', 'lazy');
+                                        }
+                                            });
+                                              });
+                                              </script>
+
+
+</body>
+</html>

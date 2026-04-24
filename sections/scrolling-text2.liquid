@@ -1,0 +1,368 @@
+{%- assign secSt = section.settings -%}
+
+{%- capture topHeader -%}
+<div class="top-header fl f-aic f-col f-row-md fullwidth" style="background:{% if secSt.header_bgg != blank %}{{ secSt.header_bgg }}{% else %}{{ secSt.header_bg }}{% endif %};padding:{{ secSt.header_padding }}px 0;color:{{ secSt.header_cl }};">
+    <div class="header-txt fl1 left-hdr hide-sm hide-md">
+        {% if secSt.phone != blank %}
+            <i class="at at-phone-l"></i> {{ secSt.phone }}
+        {% endif %}
+        {% if secSt.email != blank %}
+            <i class="at at-envelope1"></i> {{ secSt.email }}
+        {% endif %}
+    </div>
+    <div class="header-txt fl1 middle-hdr tc">
+        {{ secSt.free_shipping_text }}
+    </div>
+    <div class="header-social fl1 right-hdr tr hide-sm hide-md">
+        <ul class="list list--inline social-icons">
+            {% if secSt.facebook_url != blank %}
+            <li>
+                <a class="social-link" href="{{ secSt.facebook_url }}" title="{{ shop.name }} on Facebook" target="_blank">
+                    <i class="at at-facebook" aria-hidden="true"><span class="sr-only">Facebook</span>
+                </a>
+            </li>
+            {% endif %}
+            {% if secSt.twitter_url != blank %}
+                <li>
+                    <a class="social-link" href="{{ secSt.twitter_url }}" title="{{ shop.name }} on Twitter" target="_blank">
+                    <i class="at at-twitter-x" aria-hidden="true"><span class="sr-only">Twitter</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if secSt.pinterest_url != blank %}
+                <li>
+                    <a class="social-link" href="{{ secSt.pinterest_url }}" title="{{ shop.name }} on Pinterest" target="_blank">
+                    <i class="at at-pinterest-p" aria-hidden="true"><span class="sr-only">Pinterest</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if secSt.instagram_url != blank %}
+            <li>
+                <a class="social-link" href="{{ secSt.instagram_url }}" title="{{ shop.name }} on Instagram" target="_blank">
+                    <i class="at at-instagram" aria-hidden="true"><span class="sr-only">Instagram</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{%- endcapture -%}
+
+{%- capture topInfoBar -%}
+<div class="top-bar fl f-aic{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.bg}}{% endif %};padding:{{secSt.padding}}px 0;">
+    <div class="page-width wd100" id="carousel-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="scrolling">
+        <div class="fl scrollingBar" id="st{{ section.id }}" style="--spd:{{ secSt.speed }}s;--spdm:{{ secSt.speedm }}s;--tcl:{{ secSt.cl }};--tfs:{{ secSt.fs }}px;--tfsm:{{ secSt.fsm }}px;--tff:var(--{{secSt.ff}});--tfw:{{ secSt.tfw }};">
+            {% for block in section.blocks limit: section.blocks.size %}
+                {%- assign blkSt = block.settings -%}
+                {% if blkSt.title != blank %}
+                    <div class="ttlTxt fl1 tc std{{ section.id }}" {{ block.shopify_attributes }}>
+                        <{% if blkSt.url == blank %}span{% else %}a href="{{ blkSt.url }}"{% endif %}>
+                            {% if blkSt.icn != blank %}<i class="at {{ blkSt.icn }} mr10"></i>{% endif %} {{ blkSt.title }}
+                        </{% if blkSt.url == blank %}span{% else %}a{% endif %}>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% for block in section.blocks limit: section.blocks.size %}
+                {%- assign blkSt = block.settings -%}
+                {% if blkSt.title != blank %}
+                    <div class="ttlTxt fl1 tc">
+                        <{% if blkSt.url == blank %}span{% else %}a href="{{ blkSt.url }}"{% endif %}>
+                            {% if blkSt.icn != blank %}<i class="at {{ blkSt.icn }} mr10"></i>{% endif %} {{ blkSt.title }}
+                        </{% if blkSt.url == blank %}span{% else %}a{% endif %}>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    var textWd = document.querySelectorAll('.std{{ section.id }}'),
+        element = document.getElementById('st{{ section.id }}'),
+        winWd = window.innerWidth,
+        width = 0;
+    for (var i = 0; i < textWd.length; i++) {
+        width += textWd[i].offsetWidth;
+    }
+    if (winWd < width) {
+        element.style.width = width * 2 + 'px';
+    } else {
+        element.style.width = window.innerWidth * 2 + 'px';
+    }
+</script>
+{%- endcapture -%}
+
+{{ topHeader | strip_newlines | remove: "  " | remove: "	" }}
+{{ topInfoBar | strip_newlines | remove: "  " | remove: "	" }}
+
+{% schema %}
+{
+    "name": "t:sections.scrolling_text.name",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "header",
+            "content": "Top Header Settings"
+        },
+        {
+            "type": "color",
+            "id": "header_cl",
+            "label": "t:global.color.text",
+            "default": "#fff"
+        },
+        {
+            "type": "color",
+            "id": "header_bg",
+            "label": "t:global.background.color",
+            "default": "#111"
+        },
+        {
+            "type": "color_background",
+            "id": "header_bgg",
+            "label": "t:global.background.gradient"
+        },
+        {
+            "type": "range",
+            "id": "header_padding",
+            "label": "t:sections.textline.padding",
+            "min": 5,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 10
+        },
+        {
+            "type": "text",
+            "id": "phone",
+            "label": "Phone Number",
+            "default": "+91 78775 93451"
+        },
+        {
+            "type": "text",
+            "id": "email",
+            "label": "Email Address",
+            "default": "Jaipuremearald06@gmail.com"
+        },
+        {
+            "type": "text",
+            "id": "free_shipping_text",
+            "label": "Free Shipping Message",
+            "default": "FREE SHIPPING on order above $99"
+        },
+        {
+            "type": "url",
+            "id": "facebook_url",
+            "label": "Facebook URL"
+        },
+        {
+            "type": "url",
+            "id": "twitter_url",
+            "label": "Twitter URL"
+        },
+        {
+            "type": "url",
+            "id": "pinterest_url",
+            "label": "Pinterest URL"
+        },
+        {
+            "type": "url",
+            "id": "instagram_url",
+            "label": "Instagram URL"
+        },
+        {
+            "type": "header",
+            "content": "Scrolling Text Settings"
+        },
+        {
+            "type": "color",
+            "id": "cl",
+            "label": "t:global.color.text",
+            "default": "#fff"
+        },
+        {
+            "type": "color",
+            "id": "bg",
+            "label": "t:global.background.color",
+            "default": "#111"
+        },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+        {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 12,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 12,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "ff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "500",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "padding",
+            "label": "t:sections.textline.padding",
+            "min": 5,
+            "max": 100,
+            "step": 1,
+            "unit": "px",
+            "default": 20
+        },
+        {
+            "type": "range",
+            "id": "speed",
+            "label": "t:sections.top_bar.scrolling_speed",
+            "default": 12,
+            "min": 5,
+            "max": 50,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "speedm",
+            "label": "t:sections.top_bar.scrolling_speed_mobile",
+            "default": 5,
+            "min": 5,
+            "max": 50,
+            "step": 1
+        },
+        {
+            "type": "paragraph",
+            "content": "If text length is short, add new column with same text again so it does not break loop"
+        },
+        {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "hided",
+            "label": "t:global.devices.desktop_hide",
+            "default": false
+        }
+    ],
+    "blocks": [
+        {
+            "type": "text_block",
+            "name": "Column",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "icn",
+                    "label": "t:sections.store_features.icon_class",
+                    "info": "[Find icons here](http:\/\/www.adornthemes.com\/optimal-icons\/)"
+                },
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "t:sections.all.head",
+                    "default": "BIG OFFER - CYBER WEEK SALE. GET 50% OFF NOW."
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "t:global.link"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "t:sections.scrolling_text.name",
+            "blocks": [
+                {
+                    "type": "text_block",
+                    "settings": {
+                        "title": "BIG OFFER - CYBER WEEK SALE. GET 50% OFF NOW."
+                    }
+                },
+                {
+                    "type": "text_block",
+                    "settings": {
+                        "title": "LOWEST PRICE OF THE YEAR - GET 50% OFF NOW."
+                    }
+                },
+                {
+                    "type": "text_block",
+                    "settings": {
+                        "title": "BIG OFFER - CYBER WEEK SALE. GET 50% OFF NOW."
+                    }
+                },
+                {
+                    "type": "text_block",
+                    "settings": {
+                        "title": "LOWEST PRICE OF THE YEAR - GET 50% OFF NOW."
+                    }
+                },
+                {
+                    "type": "text_block",
+                    "settings": {
+                        "title": "BIG OFFER - CYBER WEEK SALE. GET 50% OFF NOW."
+                    }
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,771 @@
+{%- assign secSt = section.settings -%}
+{%- if section.blocks.size != 0 -%}
+<div class="{% unless secSt.section_width %} page-width{% else %} fullwidth{% endunless %}" id="ProductSection-{{ section.id }}" data-section-id="{{section.id}}" data-section-type="productTabs">       
+    <div id="productTabs" style="--bbrd:{{ section.settings.bbrd }}px;--tfs:{{section.settings.tfs}}px;--tff:var(--{{section.settings.tff}});--tfw:{{section.settings.tfw}};--cl:{{section.settings.cl}};--cla:{{section.settings.cla}};--tbg:{{section.settings.tbg}};--tbga:{{section.settings.tbga}};--bdr:{{section.settings.bdr}};--bdra:{{section.settings.bdra}};--clm:{{section.settings.clm}};--clam:{{section.settings.clam}};--tbgm:{{section.settings.tbgm}};--tbgam:{{section.settings.tbgam}};--bdrm:{{section.settings.bdrm}};--bdram:{{section.settings.bdram}};" {{ block.shopify_attributes }}>
+        <ul class="fl f-wrap product-tabs stl{{section.settings.tab_style}}{% if section.settings.tab_align == "center" %} f-jcc{% endif %}">
+            {%- for block in section.blocks -%}
+                {%- if block.type == 'desc' -%}
+                    <li><a class="tablink tc" href="#ptabDesc">{{block.settings.title}}</a></li>
+                {%- elsif block.type == 'review' -%}
+                    <li><a class="tablink tc" href="#ptabReview">{{block.settings.title}}</a></li>
+                {%- elsif block.type == 'schart' -%}
+                    <li><a class="tablink tc" href="#ptabsize">{{block.settings.title}}</a></li>
+                {%- elsif block.type == 'richtext' -%}
+                    {%- if block.settings.content != blank -%}
+                    <li><a class="tablink tc" href="#tab{{block.id}}">{{block.settings.title}}</a></li>
+                    {%- endif -%}
+                {%- elsif block.type == 'spec' -%}
+                    {%- if block.settings.content != blank -%}
+                    <li><a class="tablink tc" href="#tab{{block.id}}">{{block.settings.title}}</a></li>
+                    {% endif %}
+                {%- elsif block.type == 'faq' -%}
+                    {% if product.metafields.custom.faqs != blank %}
+                    <li><a class="tablink tc" href="#tab{{block.id}}">{{block.settings.title}}</a></li>
+                    {% endif %}
+                {%- else -%}
+                    <li><a class="tablink tc" href="#tab{{block.id}}">{{block.settings.title}}</a></li>
+                {%- endif -%}
+            {%- endfor -%}
+        </ul>
+        <div class="tab-container mb30{% unless section.settings.tabs %} noTabs{% endunless %}">
+            {%- for block in section.blocks -%}
+                {%- assign blkSt = block.settings -%}
+                {%- if block.type == 'desc' -%}
+                    <div id="ptabDesc" class="tab-content"><div class="tb_pr_desc rte">{{ product.description }}</div></div>
+                {%- elsif block.type == 'review' -%}
+                    <div id="ptabReview" class="reviewtab tab-content">{% render 'reviews', blkst:block.settings %}</div>
+                {%- elsif block.type == 'schart' -%}
+                    <div id="ptabsize" class="tab-content">
+                        {%- assign prtype = product.type | handleize | append: "-size-chart" -%}
+                        {%- assign prbrand = product.vendor | handleize | append: "-size-chart" -%}
+                        {%- if product.metafields.my_fields.sizechart != blank -%}
+                            {{ product.metafields.my_fields.sizechart }}
+                        {%- elsif settings.sizechart_type == "type" and pages[prtype].content != empty -%}
+                            {{ pages[prtype].content }}
+                        {%- elsif settings.sizechart_type == "brand" and pages[prbrand].content != empty -%}
+                            {{ pages[prbrand].content }}
+                        {%- else -%}
+                            {{ pages[settings.sizechart_page].content }}
+                        {%- endif -%}
+                    </div>
+                {%- elsif block.type == 'richtext' -%}
+                    <div id="tab{{block.id}}" class="tab-content rte">{{block.settings.content}}</div>
+                {%- elsif block.type == 'spec' and block.settings.content != blank -%}
+                    <div id="tab{{block.id}}" class="tab-content specInfo{{ blkSt.style }}" style="--gr:{{ blkSt.grid }};--grt:{{ blkSt.tgrid }};--grm:{{ blkSt.mgrid }};--bdr:{{ blkSt.bdr }};">
+                        {{ block.settings.content | replace: '<li class="metafield-single_line_text_field">','<li class="metafield-single_line_text_field"><span>' | replace: ':','</span>' }}
+                    </div>
+                {%- elsif block.type == 'faq' and product.metafields.custom.faqs != blank -%}
+                    <div id="tab{{block.id}}" class="tab-content rte" style="--qcl:{{blkSt.qcl}};--qfs:{{blkSt.qfs}}px;--qfsm:{{blkSt.qfsm}}px;--qfw:{{blkSt.qfw}};--bdr:{{ blkSt.bdr }};padding:15px;">
+                        {% for faq in product.metafields.custom.faqs.value %}
+                            <details class="faq-body">
+                              <summary class="panel-title fl f-jcsb j-aic">{{ faq.question }} <i class="at at-plus-l"></i></summary>
+                              <div id="{{ block.id }}" class="panel-content rte">{{ faq.answer | metafield_tag}}</div>
+                            </details>
+                        {% endfor %}
+                    </div>
+                {%- elsif block.type == 'custom' -%}
+                    <div id="tab{{block.id}}" class="tab-content rte">{{block.settings.content}}</div>
+                {%- endif -%}
+            {%- endfor -%}
+        </div>
+    </div>
+</div>
+<style>
+    /* Tab styling for all devices */
+    .product-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        padding: 0;
+        margin: 0 0 20px;
+        border-bottom: 1px solid var(--bdr);
+    }
+    
+    .product-tabs li {
+        margin: 0;
+    }
+    
+    .product-tabs .tablink {
+        display: block;
+        padding: 12px 20px;
+        text-decoration: none;
+        font-size: var(--tfs);
+        font-family: var(--tff);
+        font-weight: var(--tfw);
+        color: var(--cl);
+        background-color: var(--tbg);
+        border: 1px solid var(--bdr);
+        border-bottom: none;
+        border-radius: var(--bbrd) var(--bbrd) 0 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .product-tabs .tablink.active,
+    .product-tabs .tablink:hover {
+        color: var(--cla);
+        background-color: var(--tbga);
+        border-color: var(--bdra);
+    }
+    
+    /* Tab style variations */
+    .product-tabs.stl1 .tablink {
+        border: none;
+        border-bottom: 2px solid transparent;
+        background: transparent;
+    }
+    
+    .product-tabs.stl1 .tablink.active,
+    .product-tabs.stl1 .tablink:hover {
+        border-bottom-color: var(--bdra);
+        background: transparent;
+    }
+    
+    .product-tabs.stl2 .tablink {
+        margin-right: 5px;
+        margin-bottom: -1px;
+    }
+    
+    .product-tabs.stl3 .tablink {
+        border: none;
+        border-bottom: 3px solid transparent;
+        background: transparent;
+        padding-bottom: 9px;
+    }
+    
+    .product-tabs.stl3 .tablink.active,
+    .product-tabs.stl3 .tablink:hover {
+        border-bottom-color: var(--bdra);
+        background: transparent;
+    }
+    
+    /* Tab content */
+    .tab-content {
+        display: none;
+        padding: 20px 0;
+        animation: fadeIn 0.3s ease;
+    }
+    
+    .tab-content.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    /* Specification styles */
+    .specInfo1 ul.metafield-single_line_text_field-array { 
+        display:grid; 
+        grid-template-columns:repeat(var(--grm), 1fr); 
+        column-gap:20px; 
+        list-style: none;
+        padding: 0;
+    }
+    
+    .specInfo1 ul.metafield-single_line_text_field-array li { 
+        border-bottom: 1px solid var(--bdr); 
+        padding:15px 0; 
+    }
+    
+    .specInfo1 .metafield-single_line_text_field-array span { 
+        display:block; 
+        font-size:85%; 
+        opacity:0.7; 
+    }
+    
+    .specInfo2 ul.metafield-single_line_text_field-array { 
+        list-style: none;
+        padding: 0;
+    }
+    
+    .specInfo2 ul.metafield-single_line_text_field-array li { 
+        padding:10px 15px; 
+        border-bottom: 1px solid var(--bdr); 
+    }
+    
+    .specInfo2 ul.metafield-single_line_text_field-array li:nth-child(odd) { 
+        background-color:var(--bdr); 
+    }
+    
+    .specInfo2 ul.metafield-single_line_text_field-array li span { 
+        font-weight:600; 
+        width:200px; 
+    }
+    
+    /* Mobile responsive adjustments */
+    @media only screen and (max-width: 768px) {
+        .product-tabs {
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            padding-bottom: 5px;
+        }
+        
+        .product-tabs li {
+            flex-shrink: 0;
+        }
+        
+        .product-tabs .tablink {
+            padding: 10px 15px;
+            font-size: calc(var(--tfs) - 1px);
+        }
+        
+        .specInfo1 ul.metafield-single_line_text_field-array { 
+            grid-template-columns:repeat(var(--grm), 1fr); 
+            column-gap:15px; 
+        }
+        
+        .specInfo1 ul.metafield-single_line_text_field-array li { 
+            padding:10px 0; 
+        }
+        
+        .specInfo2 ul.metafield-single_line_text_field-array li span { 
+            width: auto;
+            display: inline-block;
+            margin-right: 10px;
+        }
+    }
+    
+    @media only screen and (min-width:769px){
+        .specInfo1 ul.metafield-single_line_text_field-array { 
+            grid-template-columns:repeat(var(--grt), 1fr); 
+            column-gap:40px; 
+        }
+    }
+    
+    @media only screen and (min-width:1024px){
+        .specInfo1 ul.metafield-single_line_text_field-array { 
+            margin-top:30px; 
+            grid-template-columns:repeat(var(--gr), 1fr); 
+        }
+        
+        .specInfo1 ul.metafield-single_line_text_field-array li { 
+            padding:25px 0; 
+        }
+        
+        .specInfo2 ul.metafield-single_line_text_field-array li { 
+            display:flex; 
+            align-items:center; 
+        }
+    }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const productTabsSection = document.getElementById('ProductSection-{{ section.id }}');
+    
+    if (!productTabsSection) return;
+    
+    const tabLinks = productTabsSection.querySelectorAll('.tablink');
+    const tabContents = productTabsSection.querySelectorAll('.tab-content');
+    
+    // Function to show a specific tab
+    function showTab(tabId) {
+        // Hide all tab contents
+        tabContents.forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Remove active class from all tab links
+        tabLinks.forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Show the selected tab content
+        const activeTabContent = productTabsSection.querySelector(tabId);
+        if (activeTabContent) {
+            activeTabContent.classList.add('active');
+        }
+        
+        // Add active class to the clicked tab link
+        const activeTabLink = productTabsSection.querySelector(`.tablink[href="${tabId}"]`);
+        if (activeTabLink) {
+            activeTabLink.classList.add('active');
+        }
+        
+        // Save active tab to sessionStorage for persistence
+        sessionStorage.setItem('activeProductTab-' + {{ section.id | json }}, tabId);
+    }
+    
+    // Initialize tabs
+    function initializeTabs() {
+        // Check for saved active tab
+        const savedTabId = sessionStorage.getItem('activeProductTab-' + {{ section.id | json }});
+        
+        if (savedTabId && productTabsSection.querySelector(savedTabId)) {
+            // Show saved tab
+            showTab(savedTabId);
+        } else if (tabLinks.length > 0) {
+            // Show first tab by default
+            const firstTabId = tabLinks[0].getAttribute('href');
+            showTab(firstTabId);
+        }
+        
+        // Add click event listeners to tab links
+        tabLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tabId = this.getAttribute('href');
+                showTab(tabId);
+                
+                // Scroll to tabs section on mobile for better UX
+                if (window.innerWidth < 769) {
+                    const tabSection = document.getElementById('productTabs');
+                    if (tabSection) {
+                        const offsetTop = tabSection.offsetTop - 20;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    }
+    
+    // Initialize tabs when DOM is ready
+    initializeTabs();
+    
+    // Re-initialize tabs when section is reloaded via AJAX
+    if (typeof Shopify !== 'undefined') {
+        document.addEventListener('shopify:section:load', function(event) {
+            if (event.target.contains(productTabsSection)) {
+                initializeTabs();
+            }
+        });
+    }
+});
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+    "name": "bestseller tabs",
+    "class": "content-indent default",
+    "settings": [       
+      {
+        "type":"checkbox",
+        "id":"section_width",
+        "label":"t:global.fullwidth",
+        "default": false
+       },       
+       {
+        "type": "select",
+        "id": "tab_style",
+        "label": "t:sections.products_tab.design",
+        "default": "1",      
+        "options": [
+          {
+            "value": "1",
+            "label": "Style 1 - Horizontal Border"
+          },
+          {
+            "value": "2",
+            "label": "Style 2 - Background and Border"
+          },
+          {
+            "value": "3",
+            "label": "Style 3 - Only Bottom Border"
+          } 
+        ]
+      },
+      {
+        "type": "select",
+        "id": "tab_align",
+        "label": "t:sections.products_tab.alignment",
+        "options": [
+          {
+            "value": "left",
+            "label": "Left"
+          },
+          {
+            "value": "center",
+            "label": "Center"
+          }
+        ],
+        "default": "left"
+      },
+      {
+        "type": "range",
+        "id": "tfs",
+        "label": "t:global.font.size",
+        "default": 13,
+        "min": 10,
+        "max": 40,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type": "select",
+        "id": "tff",
+        "label": "t:global.font.family",
+        "default": "ft1",
+        "options": [
+          {
+            "value": "ft1",
+            "label": "Font 1"
+          },
+          {
+            "value": "ft2",
+            "label": "Font 2"
+          },
+          {
+            "value": "ft3",
+            "label": "Font 3"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "tfw",
+        "label": "t:global.font.weight",
+        "default": "600",
+        "options": [
+          {
+            "value": "300",
+            "label": "Light"
+          },
+          {
+            "value": "400",
+            "label": "Regular"
+          },
+          {
+            "value": "500",
+            "label": "Medium"
+          },
+          {
+            "value": "600",
+            "label": "Semi Bold"
+          },
+          {
+            "value": "700",
+            "label": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "color",
+        "id": "cl",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "tbg",
+        "label": "t:global.background.color",
+        "default": "#eee"
+      },      
+      {
+        "type": "color",
+        "id": "bdr",
+        "label": "t:global.color.border",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "cla",
+        "label": "t:global.color.active_text",
+        "default": "#eee"
+      },      
+      {
+        "type": "color",
+        "id": "tbga",
+        "label": "t:global.background.active_color",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "bdra",
+        "label": "t:sections.products_tab.active_tab_border",
+        "default": "#eee"
+      },
+      {
+        "type": "range",
+        "id": "bbrd",
+        "label": "t:global.border_radius",
+        "default": 0,
+        "min": 0,
+        "max": 25,
+        "step": 1,
+        "unit": "px"
+      },
+      {
+        "type":"header",
+        "content":"t:sections.products_tab.mobile_tab"
+      },
+      {
+        "type": "color",
+        "id": "clm",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "tbgm",
+        "label": "t:global.background.color",
+        "default": "#eee"
+      },      
+      {
+        "type": "color",
+        "id": "bdrm",
+        "label": "t:global.color.border",
+        "default": "#fff"
+      },
+      {
+        "type": "color",
+        "id": "clam",
+        "label": "t:global.color.active_text",
+        "default": "#eee"
+      },      
+      {
+        "type": "color",
+        "id": "tbgam",
+        "label": "t:global.background.active_color",
+        "default": "#000"
+      },
+      {
+        "type": "color",
+        "id": "bdram",
+        "label": "t:sections.products_tab.active_tab_border",
+        "default": "#eee"
+      } 
+    ],
+    "blocks": [
+        {
+            "type": "desc",
+            "name": "t:sections.products_tab.blocks.descriptions",
+            "limit": 1,
+            "settings": [
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"Product Details"
+                }
+            ]
+        },
+        {
+            "type": "review",
+            "name": "t:sections.products_tab.blocks.review",
+            "limit": 1,
+            "settings": [                
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"Reviews"
+                },
+                { 
+                "type":"paragraph",             
+                "content":"t:sections.products_tab.blocks.review_info"
+                }, 
+                {
+                    "type": "liquid",
+                    "id": "otherapp",
+                    "label": "t:sections.products_tab.blocks.other_app"
+                }
+            ]
+        },
+        {
+            "type": "schart",
+            "name": "t:sections.products_tab.blocks.sizechart",
+            "limit": 1,
+            "settings": [
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"Size & Fit",
+                    "info":"t:sections.products_tab.blocks.sizechart_info" 
+                }
+            ]
+        },
+        {
+            "type": "custom",
+            "name": "t:sections.products_tab.blocks.global",
+            "limit": 3,
+            "settings": [
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"Custom Text"
+                },
+                {
+                    "type": "liquid",
+                    "id": "content",
+                    "label": "t:sections.products_tab.blocks.content"
+                }
+            ]
+        },
+        {
+            "type": "richtext",
+            "name": "t:sections.products_tab.blocks.richtext",           
+            "settings": [
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"Rich Text"
+                },
+                {
+                    "type": "richtext",
+                    "id": "content",
+                    "label": "t:sections.products_tab.blocks.content",
+                    "info": "t:sections.products_tab.blocks.metafield_info"
+                }
+            ]
+        },
+        {
+            "type": "spec",
+            "name": "t:sections.products_tab.blocks.specifications",
+            "settings": [
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"Specifications"
+                },
+                {
+                    "type": "richtext",
+                    "id": "content",
+                    "label": "t:sections.products_tab.blocks.content",
+                    "info":"[How to add product specification tab?](https://www.adornthemes.com/knowledge-base/how-to-display-product-specification-tab-on-product-page/)"
+                },
+                {
+                    "type": "select",
+                    "id": "style",
+                    "label": "t:sections.products_tab.blocks.spec_style",
+                    "default": "1",
+                    "options": [
+                        {
+                            "value": "1",
+                            "label": "Grid"
+                        },
+                        {
+                            "value": "2",
+                            "label": "List"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "content": "t:sections.products_tab.blocks.spec_per_row"
+                },
+                {
+                    "type": "range",
+                    "id": "grid",
+                    "label": "t:global.devices.desktop",
+                    "default": 4,
+                    "min": 2,
+                    "max": 7,
+                    "step": 1
+                },
+                {
+                    "type": "range",
+                    "id": "tgrid",
+                    "label": "t:global.devices.tablet",
+                    "default": 3,
+                    "min": 1,
+                    "max": 5,
+                    "step": 1
+                },
+                {
+                    "type": "range",
+                    "id": "mgrid",
+                    "label": "t:global.devices.mobile",
+                    "default": 2,
+                    "min": 1,
+                    "max": 3,
+                    "step": 1
+                },
+                {
+                    "type": "color",
+                    "id": "bdr",
+                    "label": "t:global.color.border",
+                    "default": "#ddd"
+                }
+            ]
+        },
+        {
+            "type": "faq",
+            "name": "t:sections.products_tab.blocks.faq",
+            "settings": [
+                { 
+                    "type":"text",
+                    "id":"title",
+                    "label":"t:global.text.title",
+                    "default":"FAQ's",
+                    "info":"[How to display?](https://www.adornthemes.com/knowledge-base/how-to-display-faqs-tab-on-product-detail-page/)"
+                },                 
+                {
+                    "type":"paragraph",
+                    "content":"t:sections.faqs.question_title"
+                },
+                {
+                    "type": "color",
+                    "id": "qcl",
+                    "label": "t:global.color.text",
+                    "default": "#333"
+                },
+                {
+                    "type": "range",
+                    "id": "qfs",
+                    "label": "t:global.font.size",
+                    "default": 16,
+                    "min": 10,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "range",
+                    "id": "qfsm",
+                    "label": "t:global.font.size_mobile",
+                    "default": 14,
+                    "min": 10,
+                    "max": 60,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "select",
+                    "id": "qfw",
+                    "label": "t:global.font.weight",
+                    "default": "400",
+                    "options": [
+                        {
+                            "value": "300",
+                            "label": "Light"
+                        },
+                        {
+                            "value": "400",
+                            "label": "Regular"
+                        },
+                        {
+                            "value": "500",
+                            "label": "Medium"
+                        },
+                        {
+                            "value": "600",
+                            "label": "Semi Bold"
+                        },
+                        {
+                            "value": "700",
+                            "label": "Bold"
+                        }
+                    ]
+                },
+                {
+                    "type": "color",
+                    "id": "bdr",
+                    "label": "t:global.color.border",
+                    "default": "#ddd"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

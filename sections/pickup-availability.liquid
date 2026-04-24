@@ -1,0 +1,89 @@
+<div class="pickup-availability-container">
+  	{%- assign pick_up_availabilities = product_variant.store_availabilities | where: 'pick_up_enabled', true -%}
+	{%- if pick_up_availabilities.size > 0 -%}
+    <div class="pickup-availability-information pickwrap mfp-link fl{% if settings.txt-center %} f-jcc{% endif %}">
+      {%- assign closest_location = pick_up_availabilities.first -%}
+
+      {%- if closest_location.available -%}<i class="at at-check-badge tl mt5"></i>{%- else -%}<i class="tl at at-times-cil mt4"></i>{%- endif -%}
+
+      <div class="pickup-availability-information-container">
+        {%- if closest_location.available -%}
+          <p class="mb0">{{ 'products.pickup_availability.pick_up_available_at_html' | t: location_name: closest_location.location.name }}</p>
+          <p class="small-font">{{ closest_location.pick_up_time }}</p>
+       
+          <a href="#pickupDrawer" id="ShowPickupAvailabilityDrawer" class="tdu btn-link mfp" data-effect="mfp-zoom-in">
+          {%- if pick_up_availabilities.size == 1 -%}
+            {{ 'products.pickup_availability.view_store_info' | t }}
+          {%- else -%}
+            {{ 'products.pickup_availability.check_other_stores' | t }}
+          {%- endif -%}
+          </a>
+      
+        {%- else -%}
+          <div class="pickup-availability-information__title mb0">
+            {{ 'products.pickup_availability.pick_up_unavailable_at_html' | t: location_name: closest_location.location.name }}
+          </div>
+
+          {%- if pick_up_availabilities.size > 1 -%}
+            <div><a href="#pickupDrawer" id="ShowPickupAvailabilityDrawer" class="tdu btn-link mfp" data-effect="mfp-zoom-in">{{ 'products.pickup_availability.check_other_stores' | t }}</a></div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+    <div id="pickupDrawer" class="pickup_drawer mfpbox mfp-hide mfp-with-anim" role="dialog" aria-modal="true" aria-labelledby="PickupAvailabilitiesModalProductTitle" style="--ic1:{{blkSt.ic1}};--ic2:{{blkSt.ic2}};--br:{{blkSt.br}};">
+      <div class="fl f-jcsb mb10">
+        <h2 class="h3 m0 fwm">{{ product_variant.product.title | escape }}</h2>
+      </div>
+      {%- unless product_variant.product.has_only_default_variant -%}
+        <p>
+          {%- for product_option in product_variant.product.options_with_values -%}
+          {%- assign option_index = forloop.index0 -%}
+          <span class="option{{option_index | plus: 1}}">
+            {{ product_option.name | escape }}:&nbsp;
+            {%- for value in product_option.values -%}
+              {%- if product_option.selected_value == value -%}
+                <span class="slVariant">{{ value | escape }}</span>
+              {%- endif -%}
+            {%- endfor -%}
+            {%- unless forloop.last -%},&nbsp;{%- endunless forloop.last -%}
+            </span>
+          {%- endfor -%}
+        </p>
+      {%- endunless -%}
+      <hr/>
+      <ul role="list" data-store-availability-drawer-content>
+        {%- for availability in pick_up_availabilities -%}
+          <li class="mb20">
+            <h3 class="h4 fwm">{{ availability.location.name | escape }}</h3>
+            {%- if availability.available -%}
+            <p class="fl">            
+              <i class="at at-check-badge tl mr5"></i> <span>{{ 'products.pickup_availability.pick_up_available' | t }}, {{ availability.pick_up_time | downcase }}  </span>          
+            </p>
+            {%- endif -%}
+            {%- assign address = availability.location.address -%}
+            <address class="ml5">
+              {{ address | format_address }}
+              {%- if address.phone.size > 0 -%}<p>{{ address.phone }}</p>{%- endif -%}
+            </address>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  	{%- endif -%}
+  <style>
+	.pickup-availability-preview .icon-unavailable { height: 1.6rem; margin-top:.1rem}
+    .pickup-availability-info * { margin:0 0 .6rem}
+  	.mt2 {margin-top:2px;}
+  	 ul .at-check-r {margin-right:5px;}
+    @media only screen and (min-width:766px) {
+      #pickupDrawer {padding:40px 40px 20px; max-width:500px;}
+    }
+</style>
+</div>
+
+{% schema %}
+{
+  "name": {},
+  "settings": []
+}
+{% endschema %}

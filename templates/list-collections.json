@@ -1,0 +1,180 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "list-collections": {
+      "type": "list-collections-template",
+      "blocks": {
+        "collection_U7VAVh": {
+          "type": "collection",
+          "settings": {
+            "collection": "earrings",
+            "custom_name": ""
+          }
+        },
+        "collection_B8fMtd": {
+          "type": "collection",
+          "settings": {
+            "collection": "necklaces",
+            "custom_name": ""
+          }
+        },
+        "collection_QGcPHn": {
+          "type": "collection",
+          "settings": {
+            "collection": "necklace-sets",
+            "custom_name": ""
+          }
+        },
+        "collection_hycRrL": {
+          "type": "collection",
+          "settings": {
+            "collection": "bangles-and-kadas",
+            "custom_name": ""
+          }
+        },
+        "collection_WAtGmg": {
+          "type": "collection",
+          "settings": {
+            "collection": "bracelets",
+            "custom_name": ""
+          }
+        },
+        "collection_8MUbVa": {
+          "type": "collection",
+          "settings": {
+            "collection": "rings",
+            "custom_name": ""
+          }
+        },
+        "collection_RdpU7p": {
+          "type": "collection",
+          "settings": {
+            "collection": "anklets",
+            "custom_name": ""
+          }
+        },
+        "collection_fHQWNc": {
+          "type": "collection",
+          "settings": {
+            "collection": "hip-belts",
+            "custom_name": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_U7VAVh",
+        "collection_B8fMtd",
+        "collection_QGcPHn",
+        "collection_hycRrL",
+        "collection_WAtGmg",
+        "collection_8MUbVa",
+        "collection_RdpU7p",
+        "collection_fHQWNc"
+      ],
+      "settings": {
+        "section_width": false,
+        "page_title": "Shop by Category",
+        "display_type": "selected",
+        "sort": "alphabetical",
+        "product_count": false,
+        "grid-spacing": 16,
+        "grid-spacing-mbl": 10,
+        "style": "st4",
+        "grid": 3,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "tfs": 18,
+        "tfsm": 16,
+        "tff": "ft3",
+        "tfw": "400",
+        "tlh": 1.1,
+        "cl": "#111111",
+        "bg": "#ffffff",
+        "bgo": 0.5
+      }
+    },
+    "1643274866da4d9256": {
+      "type": "collections-banners",
+      "blocks": {
+        "featured_collection_FHnmB3": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "chains",
+            "collection_name": "",
+            "collection_name2": "",
+            "collection_btn": "Shop Now",
+            "url": "",
+            "talign": "tc",
+            "text_pos": "f-jcc f-aie",
+            "width": "50"
+          }
+        },
+        "featured_collection_rcpL8E": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "earrings",
+            "collection_name": "",
+            "collection_name2": "",
+            "collection_btn": "Shop Now",
+            "url": "",
+            "talign": "tc",
+            "text_pos": "f-jcc f-aie",
+            "width": "50"
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_FHnmB3",
+        "featured_collection_rcpL8E"
+      ],
+      "disabled": true,
+      "settings": {
+        "title": "",
+        "subtitle": "",
+        "top-offeset": "none",
+        "section_width": false,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 5,
+        "grid-spacing-col": 2,
+        "box-width": 40,
+        "cl": "#000000",
+        "isbox": true,
+        "bg": "#ffffff",
+        "bxopt": 1,
+        "bdr": 0,
+        "ibdr": 0,
+        "disable_zoom": false,
+        "tfs": 15,
+        "tfsm": 15,
+        "tff": "ft1",
+        "tfw": "600",
+        "tlh": 1.2,
+        "fs": 13,
+        "fsm": 12,
+        "fw": "400",
+        "lh": 1.2,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-sm",
+        "btn-size-mob": "mob-btn-sm",
+        "snow_effect": false,
+        "snow_style": "style1"
+      }
+    }
+  },
+  "order": [
+    "list-collections",
+    "1643274866da4d9256"
+  ]
+}

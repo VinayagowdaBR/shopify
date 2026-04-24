@@ -1,0 +1,14 @@
+{% assign crp = product %}
+{% if product.metafields.custom.more_colors != blank %}
+<div class="moreColors  mb{{block.bm}}" {{ block.shopify_attributes }}>
+    <h4 class="ttlTxt mb10" style="--tcl:{{block.cl}};--tfs:{{block.fs}}px;--tfsm:{{block.fsm}}px;--tfw:{{block.fw}}">{{ block.title }}</h4>
+    <div class="grid gspace" style="--grsp:0 -5px;--grspi:0 5px 10px;--grspm:0 -5px;--grspim:0 5px 10px;">
+        {%- for product in product.metafields.custom.more_colors.value -%}
+            <div class="gitem tc" style="width:{{block.wd}}px">
+                <a href="{{product.url}}" class="gitem-img lazyload" data-bgset="{% render 'prgrid-img', image: product.featured_image, sizes: sizes %}" data-sizes="auto" data-parent-fit="contain"
+                   {% if product == crp %}style="border:1px solid {{block.bd}}"{% endif %}></a>
+            </div>
+        {%- endfor -%}
+    </div>
+</div>
+{% endif %}

@@ -1,0 +1,216 @@
+<section class="custom-slider">
+  <div class="slider-container">
+    {% for block in section.blocks %}
+      {% assign has_valid_image = false %}
+      {% if block.settings.desktop_banner_image %}
+        {% assign has_valid_image = true %}
+        <div class="slider-item desktop-only">
+          <a href="{{ block.settings.banner_link | default: '#' }}" target="_blank">
+            <div class="glossy-image-wrapper">
+              <picture>
+                <source media="(min-width: 768px)" srcset="{{ block.settings.desktop_banner_image | image_url: width: 1920, format: 'webp', quality: 90 }}">
+                <img src="{{ block.settings.desktop_banner_image | image_url: width: 1920, quality: 90 }}" alt="Desktop Banner" loading="lazy" onerror="this.src='{{ 'fallback-image.jpg' | asset_url }}';">
+              </picture>
+            </div>
+          </a>
+        </div>
+      {% endif %}
+      {% for i in (1..4) %}
+        {% assign mobile_key = "mobile_banner_image_" | append: i %}
+        {% assign mobile_img = block.settings[mobile_key] %}
+        {% if mobile_img != blank %}
+          {% assign has_valid_image = true %}
+          <div class="slider-item mobile-only">
+            <a href="{{ block.settings.banner_link | default: '#' }}" target="_blank">
+              <div class="glossy-image-wrapper">
+                <picture>
+                  <source media="(max-width: 767px)" srcset="{{ mobile_img | image_url: width: 768, format: 'webp', quality: 90 }}">
+                  <img src="{{ mobile_img | image_url: width: 768, quality: 90 }}" alt="Mobile Banner {{ i }}" loading="lazy" onerror="this.src='{{ 'fallback-image.jpg' | asset_url }}';">
+                </picture>
+              </div>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endfor %}
+    {% if section.blocks.size == 0 or section.blocks.size == 0 %}
+      <p>No slides configured. Please add slides in the theme editor.</p>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+.custom-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.slider-container {
+  display: flex;
+  width: 100%;
+  min-height: 200px; /* Adjust based on your design */
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+.slider-item {
+  flex: 0 0 100%;
+  min-width: 100%;
+}
+
+.slider-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Glossy Shine */
+.glossy-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.glossy-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.05) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  animation: softGloss 3s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes softGloss {
+  0% { transform: translateX(-75%) skewX(-20deg); }
+  100% { transform: translateX(100%) skewX(-20deg); }
+}
+
+/* Responsive Visibility */
+.desktop-only { display: none; }
+.mobile-only { display: block; }
+
+@media (min-width: 768px) {
+  .desktop-only { display: block; }
+  .mobile-only { display: none; }
+}
+
+/* Fallback for empty slider */
+.slider-container:empty::after {
+  content: 'No slides available';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+  font-size: 1.2rem;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const sliderContainer = document.querySelector('.slider-container');
+  let slideIndex = 0;
+
+  // Function to get visible slides based on viewport
+  function getVisibleSlides() {
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    return Array.from(document.querySelectorAll('.slider-item')).filter(item =>
+      isMobile ? item.classList.contains('mobile-only') : item.classList.contains('desktop-only')
+    );
+  }
+
+  let sliderItems = getVisibleSlides();
+  let totalSlides = sliderItems.length;
+
+  if (totalSlides === 0) {
+    console.warn('No visible slides found.');
+    return;
+  }
+
+  function setSlide(position) {
+    sliderContainer.style.transform = `translateX(-${position * 100}%)`;
+  }
+
+  function autoSlide() {
+    sliderItems = getVisibleSlides();
+    totalSlides = sliderItems.length;
+    if (totalSlides === 0) return;
+    slideIndex = (slideIndex + 1) % totalSlides;
+    setSlide(slideIndex);
+  }
+
+  // Update slides on window resize
+  window.addEventListener('resize', () => {
+    sliderItems = getVisibleSlides();
+    totalSlides = sliderItems.length;
+    slideIndex = Math.min(slideIndex, totalSlides - 1);
+    setSlide(slideIndex);
+  });
+
+  setInterval(autoSlide, 3000);
+});
+</script>
+
+{% schema %}
+{
+  "name": "Custom Slider",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "desktop_banner_image",
+          "label": "Desktop Banner Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_banner_image_1",
+          "label": "Mobile Banner Image 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_banner_image_2",
+          "label": "Mobile Banner Image 2"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_banner_image_3",
+          "label": "Mobile Banner Image 3"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_banner_image_4",
+          "label": "Mobile Banner Image 4"
+        },
+        {
+          "type": "url",
+          "id": "banner_link",
+          "label": "Banner Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Slider",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

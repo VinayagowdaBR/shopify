@@ -1,0 +1,405 @@
+{%- assign secSt = section.settings -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">   
+ {% if secSt.section_cov %}<div class="section-cover" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};">{% endif%} 
+  <div class="richtxt id-{{section.id}} wow fadeIn">  		      
+    <div class="{% if secSt.fullwidth %}fullwidth{% else %}page-width{%endif%}">
+      {% if secSt.image != blank %}        
+      	{%- assign img_url = secSt.image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+          <p class="{{secSt.txt_align}}">
+              <img class="lazyload" src="{{ secSt.image | img_url: '50x' }}" width="{{secSt.image.width}}"
+                data-srcset="{% render 'lazyload', image: secSt.image, sizes: '180, 360, 540, 720, 900' %}" data-sizes="auto" alt="{{ secSt.image.alt | escape }}" style="border-radius:{{ secSt.img_rad }}px;" ></p>
+      {%- endif -%}
+
+      <div class="page-width {{secSt.txt_align}}" style="max-width:{{secSt.max-width}}px;">                   
+          {% if secSt.title != blank %}<h2 class="ttlTxt" style="--tcl:{{secSt.tcl}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tff:var(--{{secSt.tff}});--tfw:{{secSt.tfw}};--tlh:{{secSt.tlh}}">{{ secSt.title}}</h2>{% endif %}
+          {% if secSt.richtxt != blank %}<div class="rgTxt mb20" style="--cl:{{secSt.cl}};--fs:{{secSt.fs}}px;--fsm:{{secSt.fsm}}px;--lh:{{secSt.lh}}">{{ secSt.richtxt }}</div>{% endif %}
+    
+        {% if secSt.btntxt != blank and secSt.btnurl != blank %}                             
+            <a class="btn {{secSt.btn-size-mob}} {{secSt.btn-size-desk}} {{secSt.btn-style}}" href="{{secSt.btnurl}}">{{ secSt.btntxt }}</a>
+        {% endif %}
+        {% if secSt.btntxt1 != blank and secSt.btnurl1 != blank %}                             
+            <a class="btn {{secSt.btn-size-mob}} {{secSt.btn-size-desk}} {{secSt.btn-style2}}" href="{{secSt.btnurl1}}">{{ secSt.btntxt1 }}</a>
+        {% endif %}
+
+      </div>
+    </div> 
+  </div>
+ {% if secSt.section_cov %}</div> {% endif%}   
+</div>   
+{% schema %}
+  {
+    "name": "t:sections.richtext.name",
+	"settings":[	
+	 {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },	
+       {
+         "type": "checkbox",
+		 "id": "fullwidth",
+		 "label":"t:global.fullwidth",
+		 "default": true
+       },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+       	 {
+            "type": "checkbox",
+            "id": "section_cov",
+            "label": "t:global.background.add",
+            "default": false
+          },
+		{
+            "type": "color",
+            "id": "sec_bg_clr",
+            "label": "Background Color",
+			"default":"#fafafa"	
+		 },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+      	{
+              "type": "range",
+              "id": "max-width",
+              "label": "t:sections.all.container_width",
+              "default":700,
+              "min": 500,
+              "max": 1200,
+              "step": 10,
+              "unit": "px"
+        },
+		{
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:global.image.name"
+          },
+         {
+          "type": "range",
+          "id": "img_rad",
+          "min": 0,
+          "max": 30,
+          "step": 1,
+          "label": "t:global.border_radius",
+          "unit": "px",
+          "default": 0
+        },
+		{
+		 "type":"paragraph",
+		 "content":"t:sections.all.heading.title"
+	    },
+		{
+        "type": "text",
+        "id": "title",
+        "label": "t:global.text.title",
+		"default": "I AM RICH TEXT BLOCK"		
+        },
+		{
+            "type": "color",
+            "id": "tcl",
+            "label": "t:global.color.name",
+			"default":"#000"	
+		},
+        {
+            "type": "range",
+            "id": "tfs",
+            "label": "t:global.font.size",
+            "default":26,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "tfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 20,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "tff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "700",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "tlh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+		{
+			"type":"paragraph",
+			"content":"t:sections.all.heading.details"
+	    },
+		{
+        "type": "richtext",
+        "id": "richtxt",
+        "label": "t:global.text.text",
+		"default": "<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.</p>"		
+        },
+		{
+            "type": "color",
+            "id": "cl",
+            "label": "t:global.color.name",
+			"default":"#000"	
+		 },
+      {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 14,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 13,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },       
+        {
+            "type": "range",
+            "id": "lh",
+            "label": "t:global.font.height",
+            "default": 1.6,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.richtext.button1"
+        },
+	    {
+            "type": "text",
+            "id": "btntxt",
+            "label": "t:global.button.text",
+            "default": "Read More"
+          },
+		  {
+            "type": "url",
+            "id": "btnurl",
+            "label": "t:global.link",
+			"default": "/"
+          },
+	   {
+            "type": "select",
+            "id": "btn-style",
+            "label": "t:global.button.select",
+            "default": "btn",
+            "options": [
+              {
+              "label": "Solid Button 1",
+              "value": "btn"
+              },
+              {
+              "label": "Solid Button 2",
+              "value": "btn2"
+              },
+              {
+              "label": "Solid Button 3",
+              "value": "btn3"
+              },
+              {
+              "label": "Border Button 1",
+              "value": "bdr-btn1"
+              },
+              {
+              "label": "Border Button 2",
+              "value": "bdr-btn2"
+              } 
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.richtext.button2"
+        },
+		  {
+            "type": "text",
+            "id": "btntxt1",
+            "label": "Button Text 2"
+            
+          },
+		  {
+            "type": "url",
+            "id": "btnurl1",
+            "label": "URL"
+			
+          },
+		 {
+            "type": "select",
+            "id": "btn-style2",
+            "label": "t:global.button.select",
+            "default": "btn",
+            "options": [
+              {
+              "label": "Solid Button 1",
+              "value": "btn"
+              },
+              {
+              "label": "Solid Button 2",
+              "value": "btn2"
+              },
+              {
+              "label": "Solid Button 3",
+              "value": "btn3"
+              },
+              {
+              "label": "Border Button 1",
+              "value": "bdr-btn1"
+              },
+              {
+              "label": "Border Button 2",
+              "value": "bdr-btn2"
+              } 
+            ]
+        },
+		{
+          "type": "select",
+          "id": "btn-size-desk",
+          "label": "t:global.button.size",
+          "default": "btn-md",
+          "options": [
+          {
+          "label": "Small",
+          "value": "btn-sm"
+          },
+          {
+          "label": "Medium",
+          "value": "btn-md"
+          },
+          {
+          "label": "Large",
+          "value": "btn-lg"
+          }	
+          ]
+          }, 
+          {
+          "type": "select",
+          "id": "btn-size-mob",
+          "label": "t:global.button.size_mobile",
+          "default": "mob-btn-sm",
+          "options": [
+          {
+          "label": "Small",
+          "value": "mob-btn-sm"
+          },
+          {
+          "label": "Medium",
+          "value": "mob-btn-md"
+          },
+          {
+          "label": "Large",
+          "value": "mob-btn-lg"
+          }	
+          ]
+          },      	
+		{
+        "type": "select",
+        "id": "txt_align",
+        "label": "t:global.text.align",
+        "default": "tc",
+        "options": [
+          {
+            "value": "tl",
+            "label": "Left"
+          },
+          {
+            "value": "tc",
+            "label": "Center"
+          }
+        ]
+      }
+	],
+	"presets": [
+      {
+		 "name": "Rich Text Block"         
+	 }
+   ]
+  }
+{% endschema %}
+

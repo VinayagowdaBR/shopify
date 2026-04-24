@@ -1,0 +1,255 @@
+{%- assign secSt = section.settings -%}
+{%- capture productsColumn -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">
+   {% if secSt.section_cov %} <div class="section-cover" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"> {% endif%}  
+  		<div class="{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %} collection-columns" id="{{ section.id }}" data-section-id="{{ section.id }}">
+              <div class="grid rwcols-1 rwcols-md-2 rwcols-lg-{{secSt.grid}}">
+              {% for block in section.blocks limit: section.blocks.size %}
+                <div class="gitem">
+                {%- assign collection = collections[block.settings.collection] -%}
+                  <h4 class="column-ttl ttlTxt mb20-md" style="--tcl:{{secSt.cl}};--tfs:{{secSt.fs}}px;--tfsm:{{secSt.fsm}}px;--tff:var(--{{secSt.ff}});--tfw:{{secSt.fw}};--tlh:{{secSt.lh}};">{{ block.settings.tab_name }}</h4>
+                  <div id="collection-{{ block.id }}" class="list-products">
+                      {% for product in collection.products limit: secSt.rows %}
+                          <div class="item">{% render 'product-card-grid-columns', product: product, sizes: "150,300,400" %}</div>
+                        {% else %}
+                          {% for i in (1..secSt.rows) %}
+							<div class="gitem">
+								<div class="list-columns flex wow fadeIn" data-wow-delay="{{delay_time}}ms">
+								  <div class="gview-img">
+									<a class="gimg-link gitem-img lazyload" href="#">{% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}{{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}</a>
+								  </div>
+								  <div class="details">
+									<a href="#" class="grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</a>
+									 {%- unless settings.hide-price -%}<div class="priceWraper fl f-aic f-jcc f-wrap">{% include 'product-price' %}</div>{% endunless %}
+									{% if settings.show_product_review %}<div class="product-review"> {% include 'ratings' %}</div>{% endif %}
+								  </div>
+								</div>
+							</div>
+                          {% endfor %}
+                        {% endfor %}
+                    </div>
+                </div>
+              {% endfor %}
+              </div>      	
+      <!-- collection tab end --> 	
+  	</div>
+  {% if secSt.section_cov %}</div> {% endif%}
+</div>
+{%- endcapture -%}
+{{productsColumn | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.products_columns.name",
+    "class": "index-section",
+    "max_blocks": 8,
+    "settings": [ 
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+      },
+      {
+         "type": "checkbox",
+		 "id": "section_width",
+		 "label":"t:global.fullwidth",
+		 "default": false
+        }, 
+	 {
+		"type":"checkbox",
+		"id":"npd",
+		"label":"t:global.no_padding",
+		"info": "t:global.no_padding_info",
+		"default": false
+	  },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+	  {
+        "type": "checkbox",
+        "id": "section_cov",
+        "label": "t:global.background.add",
+        "default": false
+      },
+	  {
+        "type": "color",
+        "id": "sec_bg_clr",
+        "label": "t:global.background.color",
+		"default":"#fafafa",
+		"info":"select light color"
+	  },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },     
+	  {
+        "type": "select",
+        "id": "grid",
+        "label": "t:sections.products_columns.columns",
+        "default": "3",
+        "options": [        
+          { "value": "2", "label": "2" },
+          { "value": "3", "label": "3" },
+          { "value": "4", "label": "4" }          
+        ]
+      },
+	  {
+        "type": "text",
+        "id": "rows",
+        "label": "t:sections.products_columns.products_per_col",
+        "default": "4"
+      }, 	  	             
+	  {
+        "type": "header",
+        "content": "t:global.appearance"
+      },
+      {
+		"type":"paragraph",
+		"content":"t:sections.all.heading.title"
+	  },
+	  {
+        "type": "color",
+        "id": "cl",
+        "label": "t:global.color.name",
+		"default":"#333"
+	  },
+      {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default":18,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 16,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "ff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "fw",
+            "label": "t:global.font.weight",
+            "default": "600",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "lh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        }
+	],
+	"blocks": [
+      {
+        "type": "collection_column",
+        "name": "t:sections.products_columns.block_name",
+        "settings": [			 
+ 		{
+          "type": "textarea",
+          "id": "tab_name",
+          "label": "t:global.text.title",
+          "default": "Column Title"
+        },
+       	 {
+          "id": "collection",
+          "type": "collection",
+          "label": "t:sections.all.select_collection"
+    	  }          
+      	]
+     }
+	],
+    "presets": [
+      {
+        "name": "t:sections.products_columns.name",            
+        "blocks": [
+          {
+            "type": "collection_column"
+          },
+          {
+            "type": "collection_column"
+          },
+          {
+            "type": "collection_column"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %} 

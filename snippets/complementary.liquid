@@ -1,0 +1,54 @@
+<product-complementary class="complementary-products" data-url="{{ routes.product_recommendations_url }}?section_id={{ sectionId }}&product_id={{ product.id }}&limit={{ block.limit }}&intent=complementary">
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <aside aria-label="{{ 'accessibility.complementary_products' | t }}" {{ block.shopify_attributes }} class="mb{{block.bm}}">
+        <p class="ttlTxt mb15" style="--tcl:{{block.cl}};--tfs:{{block.fs}}px;--tfsm:{{block.fsm}}px;--tfw:{{block.fw}}">{{ block.title }}</p>
+       
+		<div class="grid gspace complementary {{block.pstyle}} rwcols-{{block.gridmb}} rwcols-md-{{block.gridtb}} rwcols-lg-{{block.grid}}"  role="list"  {% if block.pstyle == '1' %}data-flickity='{ "cellAlign":"left","groupCells":true,"wrapAround":true,"pageDots":false{%- if section.settings.autoplay -%},"autoPlay":{{section.settings.speed | times: 1000}}{% endif %}{%- if isRtl -%},"rightToLeft": true{%- endif -%} }' {% endif %}  style="--grsp:0 -7px;--grspi:0 7px;--grspm:0 -5px;--grspim:0 5px;--lbg:{{block.lbg}}; --bdr:{{block.lbg | color_darken:8}};">
+			
+            {%- for product in recommendations.products limit: block.settings.products_per_page offset: continue -%}
+                <div class="gitem tc">
+                    <a class="grid_lnk" href="{{ product.url | within: collection }}">
+                        <div class="gitem-img mb15 lazyload{% if secondImg and product.images.size > 1 %} primary{% endif %}" data-bgset="{% render 'prgrid-img', image: product.featured_image, sizes: sizes %}" data-sizes="auto" data-parent-fit="contain"></div>
+                    </a>
+                    <div class="cpdetail">
+						<a href="{{ product.url | within: collection }}" class="grid-view-item__title">{{ product.title }}</a>
+                        {% unless settings.catalogmode %}<div class="priceWraper fl f-aic f-jcc f-wrap">{% render 'product-price', product: product %}</div>{% endunless %}
+					</div>
+                </div>
+            {%- endfor -%}
+        </div>
+		
+    </aside>
+    {%- endif -%}
+</product-complementary>
+<script>
+class ProductComplementary extends HTMLElement {
+  constructor(){super();}
+  connectedCallback() {
+    const handleIntersection = (entries, observer) => {
+      if(!entries[0].isIntersecting) return;
+      observer.unobserve(this);
+
+      fetch(this.dataset.url).then(response => response.text()).then(text => {
+          const html = document.createElement('div');
+          html.innerHTML = text;
+          const complementary = html.querySelector('product-complementary');
+          if(complementary && complementary.innerHTML.trim().length){
+            this.innerHTML = complementary.innerHTML;
+          }
+		  {% if block.pstyle == '1' %}
+          if(html.querySelector('.complementary')){
+            var option = $('.complementary').attr("data-flickity") || '{}';
+            var flkty = new Flickity('.complementary.st1',JSON.parse(option));
+          }
+		  {% endif %}
+        })
+        .catch(e => {
+          console.error(e);
+        });
+    }
+    new IntersectionObserver(handleIntersection.bind(this), {rootMargin: '0px 0px 400px 0px'}).observe(this);
+  }
+}
+customElements.define('product-complementary', ProductComplementary);
+</script>

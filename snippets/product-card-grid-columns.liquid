@@ -1,0 +1,27 @@
+{%- liquid
+    assign sold_out = true
+    if product.available 
+        assign sold_out = false 
+    endif
+    assign product_box = forloop.index | minus:1
+    assign delay_time = 50 | times : product_box
+
+    assign productUrl = product.url | within: collection
+    if settings.clname
+        assign productUrl = product.url
+    endif
+-%}
+<div class="list-columns fl f-aic mb20 wow fadeIn" data-wow-delay="{{delay_time}}ms">
+  <div class="gview-img">
+    <a class="gimg-link gitem-img lazyload" href="{{ productUrl }}" data-bgset="{% render 'prgrid-img', image: product.featured_image, sizes: '100,220,360,500' %}" data-sizes="auto" data-parent-fit="contain">
+      <span class="v-hidden">{{ product.title }}</span>
+    </a>
+    {% if sold_out %}<div class="product-labels {{ settings.select_label_style }}"><span class="lbl sold-out">{{ 'products.product.sold_out' | t}}</span></div>{% endif %}
+  </div>
+  <div class="details fl1">
+    <a href="{{ productUrl }}" class="grid-view-item__title">{{ product.title }}</a>
+    {% if settings.show_vendor %}<div class="grid-view-item__vendor">{{ product.vendor }}</div>{% endif %}
+   	{% unless settings.catalogmode %}<div class="priceWraper fl f-aic f-jcc f-wrap">{% render 'product-price', product: product %}</div>{% endunless %}
+    {% if settings.show_product_review %}<div class="product-review"> {% render 'ratings', product: product %}</div>{% endif %}
+  </div>
+</div>

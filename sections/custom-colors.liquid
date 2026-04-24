@@ -1,0 +1,464 @@
+{% capture colors %}
+<style type="text/css">
+  {% for block in section.blocks %}
+  	{%- if block.settings.title1 != blank -%}
+      {%- assign color1 = block.settings.title1 | handleize -%}
+      .swt{{color1}}{
+        {% if block.settings.image1 == blank %}
+            background-color:{{block.settings.color1}} !important;
+        {% else %}
+            background:{{block.settings.color1}} url({{block.settings.image1 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title2 != blank -%}
+      {%- assign color2 = block.settings.title2 | handleize -%}
+      .swt{{color2}}{
+        {% if block.settings.image2 == blank %}
+            background-color:{{block.settings.color2}} !important;
+        {% else %}
+            background:{{block.settings.color2}} url({{block.settings.image2 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title3 != blank -%}
+      {%- assign color3 = block.settings.title3 | handleize -%}
+      .swt{{color3}}{
+        {% if block.settings.image3 == blank %}
+            background-color:{{block.settings.color3}} !important;
+        {% else %}
+            background:{{block.settings.color3}} url({{block.settings.image3 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title4 != blank -%}
+      {%- assign color4 = block.settings.title4 | handleize -%}
+      .swt{{color4}}{
+        {% if block.settings.image4 == blank %}
+            background-color:{{block.settings.color4}} !important;
+        {% else %}
+            background:{{block.settings.color4}} url({{block.settings.image4 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title5 != blank -%}
+      {%- assign color5 = block.settings.title5 | handleize -%}
+      .swt{{color5}}{
+        {% if block.settings.image5 == blank %}
+            background-color:{{block.settings.color5}} !important;
+        {% else %}
+            background:{{block.settings.color5}} url({{block.settings.image5 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title6 != blank -%}
+      {%- assign color6 = block.settings.title6 | handleize -%}
+      .swt{{color6}}{
+        {% if block.settings.image6 == blank %}
+            background-color:{{block.settings.color6}} !important;
+        {% else %}
+            background:{{block.settings.color6}} url({{block.settings.image6 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title7 != blank -%}
+      {%- assign color7 = block.settings.title7 | handleize -%}
+      .swt{{color7}}{
+        {% if block.settings.image7 == blank %}
+            background-color:{{block.settings.color7}} !important;
+        {% else %}
+            background:{{block.settings.color7}} url({{block.settings.image7 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title8 != blank -%}
+      {%- assign color8 = block.settings.title8 | handleize -%}
+      .swt{{color8}}{
+        {% if block.settings.image8 == blank %}
+            background-color:{{block.settings.color8}} !important;
+        {% else %}
+            background:{{block.settings.color8}} url({{block.settings.image8 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title9 != blank -%}
+      {%- assign color9 = block.settings.title9 | handleize -%}
+      .swt{{color9}}{
+        {% if block.settings.image9 == blank %}
+            background-color:{{block.settings.color9}} !important;
+        {% else %}
+            background:{{block.settings.color9}} url({{block.settings.image9 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title10 != blank -%}
+      {%- assign color10 = block.settings.title10 | handleize -%}
+      .swt{{color10}}{
+        {% if block.settings.image10 == blank %}
+            background-color:{{block.settings.color10}} !important;
+        {% else %}
+            background:{{block.settings.color10}} url({{block.settings.image10 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title11 != blank -%}
+      {%- assign color11 = block.settings.title11 | handleize -%}
+      .swt{{color11}}{
+        {% if block.settings.image11 == blank %}
+            background-color:{{block.settings.color11}} !important;
+        {% else %}
+            background:{{block.settings.color11}} url({{block.settings.image11 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title12 != blank -%}
+      {%- assign color12 = block.settings.title12 | handleize -%}
+      .swt{{color12}}{
+        {% if block.settings.image12 == blank %}
+            background-color:{{block.settings.color12}} !important;
+        {% else %}
+            background:{{block.settings.color12}} url({{block.settings.image12 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title13 != blank -%}
+      {%- assign color13 = block.settings.title13 | handleize -%}
+      .swt{{color13}}{
+        {% if block.settings.image13 == blank %}
+            background-color:{{block.settings.color13}} !important;
+        {% else %}
+            background:{{block.settings.color13}} url({{block.settings.image13 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title14 != blank -%}
+      {%- assign color14 = block.settings.title14 | handleize -%}
+      .swt{{color14}}{
+        {% if block.settings.image14 == blank %}
+            background-color:{{block.settings.color14}} !important;
+        {% else %}
+            background:{{block.settings.color14}} url({{block.settings.image14 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  	{%- if block.settings.title15 != blank -%}
+      {%- assign color15 = block.settings.title15 | handleize -%}
+      .swt{{color15}}{
+        {% if block.settings.image15 == blank %}
+            background-color:{{block.settings.color15}} !important;
+        {% else %}
+            background:{{block.settings.color15}} url({{block.settings.image15 | img_url: '80x'}}) no-repeat 50% 50%/cover !important;
+        {% endif %}
+      }
+  	{% endif %}
+  {% endfor %}  
+  
+  {% if shop.permanent_domain == "avon-demo.myshopify.com" or shop.permanent_domain == "avone-demo.myshopify.com" %}
+  	html { padding:0 !important; }
+  	iframe[src="https://avone-demo.myshopify.com/preview_bar"], iframe[src="https://avon-demo.myshopify.com/preview_bar"] { display:none !important; }
+  {% endif %}
+</style>
+{% endcapture %}
+{{colors | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.custom_colors.name",
+    "settings": [               	 
+	  {
+        "type": "checkbox",
+        "id": "custom_colors",
+        "label": "t:global.enable",
+        "default": true
+      }
+    ],
+	"blocks": [
+      {
+        "type": "Color",
+        "name": "t:sections.custom_colors.block_name",
+        "settings": [
+         	{
+              "type":"text",
+              "id":"title1",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color1",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image1",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title2",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color2",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image2",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title3",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color3",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image3",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title4",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color4",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image4",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title5",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color5",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image5",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title6",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color6",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image6",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title7",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color7",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image7",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title8",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color8",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image8",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title9",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color9",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image9",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title10",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color10",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image10",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title11",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color11",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image11",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title12",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color12",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image12",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title13",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color13",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image13",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title14",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color14",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image14",
+              "label": "t:sections.custom_colors.image"
+            },
+            {
+              "type": "paragraph",
+              "content": "- - - - - - - - - - - - - - - - - - - - - - "
+            },
+			{
+              "type":"text",
+              "id":"title15",
+              "label":"t:sections.custom_colors.color_name"
+          	},
+            {
+              "type": "color",
+              "id": "color15",
+              "label": "t:global.color.name"
+            },
+            {
+              "type": "image_picker",
+              "id": "image15",
+              "label": "t:sections.custom_colors.image"
+            }
+        ]
+      }
+	]
+  }
+{% endschema %}

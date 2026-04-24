@@ -1,0 +1,50 @@
+{% schema %}
+{
+  "name": "Small Flower Image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "flower_image",
+      "label": "Flower Image"
+    },
+    {
+      "type": "range",
+      "id": "position_percent",
+      "label": "Image Position (%)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image Width (px)",
+      "min": 20,
+      "max": 150,
+      "step": 5,
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "Small Flower Image"
+    }
+  ]
+}
+{% endschema %}
+
+{% if section.settings.flower_image != blank %}
+  <div style="width: 100%; position: relative; margin: 10px 0;">
+    <img
+      src="{{ section.settings.flower_image | img_url: 'master' }}"
+      alt="Decorative Flower"
+      style="
+        width: {{ section.settings.image_width }}px;
+        height: auto;
+        display: block;
+        margin-left: {{ section.settings.position_percent }}%;
+      "
+    >
+  </div>
+{% endif %}

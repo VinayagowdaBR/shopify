@@ -1,0 +1,165 @@
+{% assign secSt = section.settings %}
+{% capture upsellBundel %}
+{%- assign crProduct = product -%}
+{%- assign fbtCollection = collections[section.settings.collection] -%}
+{% if fbtCollection.products.size > 1 %}
+<style>
+    .fbtwraper .sec-ttl { text-align:left !important; }
+    .fbtwraper .sec-ttl p { max-width:100%; }
+    .fbtGroup .imgCol { width:160px; max-width:100%; }
+    .fbtGroup .imgCol + .imgCol:before { content:"+"; position:absolute; top:44%; left:-6px; font-weight: 400; font-size: 19px; }
+    .fbtCol:not(.checked) { opacity:0.5; }
+    .fbtCol.data > * { margin-bottom:10px; }
+    .fbtCol label { cursor:pointer; }
+    .fbtCol label.mainPr { pointer-events:none; }
+    .fbtCol .price { color:{{settings.gprice_clr}}; }
+    .fbtbtnCall { width:100%;}
+    .fbtPrice { color:{{settings.gprice_clr}}; font-size:120%; }
+    .fbtGroup .imgCol a {display: block;padding: 5px; background: #fff; border: 1px solid #eee;}
+  
+    @media only screen and (min-width:766px){
+        .fbtbtnCall { width:250px; margin-left: 40px; }
+    }
+    @media only screen and (max-width:999px){
+        .fbtGroup .imgCol { width:90px; padding: 0 10px;}
+    }
+</style>
+
+<div class="content-indent {{ section.settings.top-offeset}}{% if section.settings.section_cov %} section-cover{% endif%}{% if secSt.hidem %} hide-sm{% endif %}"
+     {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif%}
+     style="--sbg:{{secSt.bg}};--sst:{{secSt.sst}}px;--ssb:{{secSt.ssb}}px;--sstm:{{secSt.sstm}}px;--ssbm:{{secSt.ssbm}}px">
+        <div class="page-width fbtwraper" id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="upsale">
+                {% render 'sec-title' %}
+                <product-bundel>
+                    {%- assign product_form_id = 'product-upsell-' | append: section.id -%}
+                    {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+                        <div class="fbtGroup fl f-ais f-col f-row-md">
+                            <div>
+                                <div class="grid">
+                                    {% for product in fbtCollection.products %}
+                                        {%- assign index = forloop.index -%}
+                                            <div class="gitem pr fbtCol imgCol fbtImg{{index}} checked">
+                                                <a class="grid-view-item__link" href="{{ product.url }}">
+                                                    <div class="gitem-img lazyload" data-bgset="{{ product.featured_image | img_url: '200x' }}"></div>
+                                                </a>
+                                            </div>
+                                    {% endfor %}
+                                </div>
+                                <p class="mb20"></p>
+                                {% for product in fbtCollection.products %}
+                                    {%- assign current_variant = product.selected_or_first_available_variant -%}
+                                    {%- assign index = forloop.index -%}
+                                    {%- assign cu_pr = current_variant.price -%}
+                                    {%- assign price = price | plus:cu_pr -%}
+                                    <div class="fbtCol data fl f-aic f-wrap checked" data-img=".fbtImg{{index}}">
+                                        <label class="fblbl mr15{% if crProduct == product %} mainPr{% endif %}">
+                                            <input type="checkbox" id="fbtCk{{index}}" class="custCheck fbtCheck" checked="checked"><span class="checkbox"></span>
+                                            {% if crProduct == product %}<b>{{ 'products.fbt.this_item' | t}}</b>:{% endif %} {{product.title | truncatewords: 12}}
+                                        </label>
+                                        <b class="price mr15">{{current_variant.price | money}}</b>
+                                        <select name="items[][id]" id="PrSelect-{{ product.id }}" class="fbtVr{% if product.variants[0].title == 'Default Title'  %} hide{% endif %}{%- unless current_variant.available -%} disable{% endunless %}">
+                                            {%- for variant in product.variants -%}
+                                                {%- if variant.available -%}<option{% if variant == current_variant %} selected="selected"{% endif %} value="{{ variant.id }}" {%- if variant.image -%}data-img="{{variant.image | default:pr.featured_image | img_url:'200x'}}"{% endif %} data-price="{{variant.price}}">{{ variant.title }}</option>{%- endif -%}
+                                            {%- endfor -%}
+                                        </select>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="fbtbtnCall">
+                                <p class="fw-500">{{ 'products.fbt.total' | t}}: <b class="fbtPrice" data-total="{{price}}" data-pr="{{price}}">{{price | money}}</b></p>
+                                <div class="pform-error-wrap errors" role="alert" hidden> <span class="ml5 pform-error-msg"></span></div>
+                                <p>
+                                    <button type="submit" name="add" id="AddToCart-{{ section.id }}" class="btn upsellAddToCart">
+                                        <span class="txt">{{ 'products.fbt.add_to_cart' | t}}</span>
+                                        <div class="loading-overlay__spinner hidden"><i class="at at-circle-notch-r at-spin"></i></div>
+                                    </button>
+                                </p>
+                                <div>{{fbtCollection.description}}</div>
+                            </div>
+                        </div>
+                    {%- endform -%}
+                </product-bundel>
+            </div>
+    </div>
+
+<script src="{{ 'upsell-bundle.js' | asset_url }}" defer="defer"></script>
+{% endif %}
+{% endcapture %}
+{{ upsellBundel | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.upsell.name",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "paragraph",
+            "content": "t:sections.upsell.guide"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "label": "t:sections.all.head",
+            "default": "Frequently Bought Together"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "t:sections.all.sub_head",
+            "default": "Describe your products, collection etc..."
+        },
+        {
+            "id": "collection",
+            "type": "collection",
+            "label": "t:sections.all.select_collection"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.name"
+        },
+        {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "none",
+                    "label": "None"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "section_cov",
+            "label": "t:global.background.add",
+            "default": false
+        },
+        {
+            "type": "color",
+            "id": "sec_bg_clr",
+            "label": "t:global.background.color",
+            "default": "#fafafa",
+            "info": "select light color"
+        },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+        {
+            "type": "checkbox",
+            "id": "hidem",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        }
+    ]
+}
+{% endschema %}

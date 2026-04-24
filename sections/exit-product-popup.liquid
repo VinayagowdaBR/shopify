@@ -1,0 +1,336 @@
+{% capture exitPrPopup %}
+<style>
+    #shopify-section-exit-product-popup .sec-ttl { padding-bottom:15px; }
+  #shopify-section-exit-product-popup { border-radius:5px; max-width:900px;}
+  #shopify-section-exit-product-popup .mfp-close {right:15px; top:15px;}
+</style>
+{%- assign secSt = section.settings -%}
+{%- capture showexitpp -%}{% if section.settings.ex-index %}index,{% endif %}{% if section.settings.ex-product %}product,{% endif %}{% if section.settings.ex-collection %}collection,{% endif %}{% if section.settings.ex-article %}article,{% endif %}{% if section.settings.ex-blog %}blog,{% endif %}{% if section.settings.ex-cart %}cart,{% endif %}{% if section.settings.ex-page %}page{% endif %}{%- endcapture -%}
+{%- if section.settings.popup and showexitpp contains request.page_type -%}
+<div id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="carousel">
+    {% render 'sec-title' %}
+
+    {%- liquid
+    	case section.settings.grid
+      		when 2
+    			assign image_size = '150,350,550,750,950'
+      		when 3 
+                assign image_size = '150,350,550,750'
+      		when 4 
+                assign image_size = '150,350,550,750'
+      		when 5 
+                assign image_size = '150,350,550'
+      		when 6 
+                assign image_size = '130,300,500'
+      		when 7
+                assign image_size = '130,280,400'
+    	endcase
+    -%}
+
+    {% if section.settings.collection != blank %}
+        <div id="productSlider-{{ section.id }}" class="grid rwcols-{{secSt.mobile-grid}} rwcols-md-{{secSt.tablet-grid}} rwcols-lg-{{secSt.grid}} grid-products carousel" data-flickity='{ "cellAlign":"left","groupCells":true,"wrapAround":true,"pageDots":false{%- if secSt.autoplay -%},"autoPlay":{{secSt.autoplay_speed | times: 1000}}{% endif %}{%- if settings.rtl -%},"rightToLeft": true{%- endif -%} }'>
+          {%- assign collection = collections[section.settings.collection] -%}
+          {% for product in collection.products limit: section.settings.rows %}
+          <div class="gitem">{% render 'product-card-grid', product: product, secSt: secSt, sizes: image_size %}</div>
+          {% else %}
+            {% for i in (1..section.settings.rows) %}
+            <div class="gitem">
+              <div class="grid-view-item">
+                <a href="#" class="gimg-link">
+                  <div class="gview-img">{% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}{{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}</div>
+                  <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                  <div class="priceWraper fl f-aic f-jcc f-wrap">{% include 'product-price' %}</div>
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        {% if section.settings.show_view_all != blank %}<div class="tc mt10"><a href="{{ collection.url }}" class="btn btn-md btnpop">{{ section.settings.show_view_all}}</a></div>{% endif %}
+    {% else %}
+        <p class="tc">Please select a collection to display the products</p>
+    {% endif %}
+</div>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  $(document).on('mouseleave', function(e){
+    if(e.clientY < 0 && getCookie('exitprpopup') != 'true'){
+		$.magnificPopup.open({
+        	items: { src:'#shopify-section-exit-product-popup' },
+            type:'inline', 
+            removalDelay:300, 
+            mainClass: 'mfp-zoom-in',
+            callbacks: {
+              open: function(){
+                  $('#productSlider-{{section.id}}').flickity('resize');
+              },
+              close: function(){
+                  setCookie('exitprpopup','true',1);
+                  $.magnificPopup.proto.close.call(this);
+              }
+            }
+        });
+	}
+  });
+});
+</script>
+{% endif %}
+{% endcapture %}
+{{ exitPrPopup | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.exit_intent.name",
+    "class": "exitprPopup mfpbox mfp-hide mfp-with-anim",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "popup",
+        "label": "t:global.display",
+        "default": false
+      },
+      {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Can't find what you're looking for?"		
+      },
+ 	  {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "t:sections.all.sub_head",
+        "default": "Describe your products, collection etc..."
+      },
+      {
+         "id": "collection",
+         "type": "collection",
+         "label": "t:sections.all.select_collection"
+      },
+      {
+        "type": "checkbox",
+        "id": "secondary_image",
+        "label": "t:settings_schema.product_grid.other_options.second_image",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "t:settings_schema.product_grid.other_options.show_vendor",
+        "default": false
+      },         
+      {
+        "type": "checkbox",
+        "id": "prlist_btn_show",
+        "label": "t:settings_schema.product_grid.buttons.hide",
+        "default": false,
+        "info": "add to cart,wishlist,quickview"
+      },
+      {
+        "type": "checkbox",
+        "id": "btn_mobiles",
+        "label": "t:settings_schema.product_grid.buttons.hide_mobile",
+        "default": false
+      },
+ 	{
+	 
+        "type": "text",
+        "id": "show_view_all",
+        "label": "t:global.button.text",
+		"info":"t:sections.exit_intent.button_info"
+		
+      },
+      {
+        "type": "header",
+        "content": "t:settings_schema.product_grid.swatch.heading"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_color_swatch",
+        "label": "t:global.display",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "color_type",
+        "label": "t:settings_schema.product_grid.swatch.type",
+        "default": "color",
+        "info": "t:settings_schema.product_grid.swatch.type_info",
+        "options": [
+          {
+            "value": "color",
+            "label": "Color Swatch"
+          },
+          {
+            "value": "vrimage",
+            "label": "Variant Image"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "vr_bg_position",
+        "label": "t:global.image.position",
+        "default": "50% 0",
+        "options": [
+          {
+            "value": "50% 0",
+            "label": "Center Top"
+          },
+          {
+            "value": "50% 50%",
+            "label": "Center Center"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "color_size",
+        "label": "t:settings_schema.product_grid.swatch.size",
+        "default": "small",
+        "options": [
+          {
+            "value": "small",
+            "label": "Small"
+          },
+          {
+            "value": "medium",
+            "label": "Medium"
+          },
+          {
+            "value": "large",
+            "label": "Large"
+          }
+        ]
+      },
+	  {
+        "type": "header",
+        "content": "t:global.grid.name"
+      },
+	  {
+        "type": "select",
+        "id": "prbox_style",
+        "label": "t:global.grid.style",
+        "default": "style1",
+        "options": [
+          {
+            "value": "style1",
+            "label": "Style 1 - Default Info Center"
+          },
+          {
+            "value": "style2",
+            "label": "Style 2 - Info Hover Image"
+          },
+          {
+            "value": "style3",
+            "label": "Style 3 - Info Below Image"
+          },
+          {
+            "value": "style4",
+            "label": "Style 4 - Default Info Left"
+          },
+		   {
+            "value": "style5",
+            "label": "Style 5 - Display Text Button"
+          }
+        ],
+		"info":"t:settings_schema.product_grid.style_info"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:sections.all.products_per_row"
+      },
+      {
+        "type": "range",
+        "id": "grid",
+        "label": "t:global.devices.desktop",
+        "default": 4,
+        "min": 2,
+        "max": 5,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "tablet-grid",
+        "label": "t:global.devices.tablet",
+        "default": 3,
+        "min": 1,
+        "max": 4,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "mobile-grid",
+        "label": "t:global.devices.mobile",
+        "default": 2,
+        "min": 1,
+        "max": 3,
+        "step": 1
+      },
+      {
+        "type": "text",
+        "id": "rows",
+        "label": "t:sections.all.number_of_product",
+        "default": "5"
+      },
+	  {
+        "type": "header",
+        "content": "t:sections.all.carousel.name"
+      }, 	  
+	  {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "t:sections.all.carousel.autoplay",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "autoplay_speed",
+        "label": "t:sections.all.carousel.speed",
+        "default": 5,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+		"unit": "Sec"
+      },
+      {
+        "type": "header",
+        "content": "t:global.pages.select"
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-index",
+        "label": "t:global.pages.home",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-product",
+        "label": "t:global.pages.product"
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-collection",
+        "label": "t:global.pages.collection"
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-article",
+        "label": "t:global.pages.article"
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-blog",
+        "label": "t:global.pages.blog"
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-cart",
+        "label": "t:global.pages.cart"
+      },
+      {
+        "type": "checkbox",
+        "id": "ex-page",
+        "label": "t:global.pages.other"
+      }
+	 ]
+  }
+{% endschema %}

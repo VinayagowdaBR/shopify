@@ -1,0 +1,1680 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "global": {
+    "appearance": "Appearance",
+    "color": {
+      "name": "Color",
+      "name_hover": "Hover color",
+      "text": "Text Color",
+      "hover_text": "Hover Text Color",
+      "active_text": "Active Text Color",
+      "text_links": "Text & Links",
+      "text_icon": "Text & Icons",
+      "element": "Element Color",
+      "border": "Border Color",
+      "hover_border": "Hover Border Color",
+      "hover_border_background": "Hover Border & Background",
+      "line": "Separation Line",
+      "icon": "Icons color",
+      "icon_hover": "Icons hover color",
+      "title": "Title Color"
+    },
+    "background": {
+      "color": "Background Color",
+      "hover_color": "Hover Background Color",
+      "active_color": "Active Background Color",
+      "image": "Background Image",
+      "repeat": "Background Repeat",
+      "repeat_info": "[how to repeat the background image](https://w3schools.com/cssref/pr_background-repeat.asp)",
+      "position": "Background Position",
+      "position_info": "[position of the background images](https://w3schools.com/cssref/pr_background-position.asp)",
+      "size": "Background Size",
+      "size_info": "[Specifies the size of the background image](https://w3schools.com/cssref/css3_pr_background-size.asp)",
+      "attachment": "Background Attachment",
+      "attachment_info": "[Specifies background image is fixed or scrolls with page](https://w3schools.com/cssref/pr_background-attachment.asp)",
+      "icon": "Icons background",
+      "icon_hover": "Icons hover background",
+      "add": "Add Background?",
+      "box": "Box Background",
+      "gradient": "Gradient Background",
+      "opacity": "Background Opacity",
+      "radius": "Background Radius",
+      "title": "Title Background"
+    },
+    "font": {
+      "family": "Font Family",
+      "weight": "Font Weight",
+      "style": "Font Style",
+      "size": "Font Size",
+      "size_mobile": "Font Size (Mobile)",
+      "height": "Line Height",
+      "height_info": "Space between text lines. Default is set to 1.3",
+      "spacing": "Letter Spacing",
+      "case": "Font Case"
+    },
+    "text": {
+      "text": "Text",
+      "title": "Title",
+      "sub_title": "Sub title",
+      "detail": "Detail",
+      "align": "Text Align",
+      "transform": "Text Transform",
+      "position": "Text Position",
+      "uppercase": "Text Uppercase?",
+      "align_center": "Text Center?",
+      "text_width": "Text Width"
+    },
+    "image": {
+      "name": "Image",
+      "mobile": "Mobile Image",
+      "size": "Image Size",
+      "position": "Image Position",
+      "alignment": "Image Alignment",
+      "radius": "Image Border Radius"
+    },
+    "button": {
+      "name": "Button ----",
+      "select": "Select Button",
+      "text": "Button Text",
+      "color": "Button Color",
+      "link": "Button Link",
+      "size": "Button Size",
+      "size_mobile": "Button Size (mobile)"
+    },
+    "devices": {
+      "desktop": "Desktop",
+      "tablet": "Tablet",
+      "mobile": "Mobile",
+      "mobile_hide": "Hide in Mobile?",
+      "desktop_hide": "Hide on Desktop?"
+    },
+    "grid": {
+      "name": "Grid ====",
+      "style": "Grid Style",
+      "space": "Grid Spacing",
+      "space_info": "Margin between two box",
+      "space_mobile": "Grid Spacing (mobile)",
+      "row": "Items per row ====",
+      "column": "Grid Column"
+    },
+    "pages": {
+      "select": "Select page to display ====",
+      "home": "Home Page",
+      "product": "Product Page",
+      "collection": "Collection Page",
+      "article": "Article Page",
+      "blog": "Blog Page",
+      "cart": "Cart Page",
+      "other": "Other Page"
+    },
+    "enable": "Enable?",
+    "display": "Display?",
+    "fullwidth": "Fullwidth?",
+    "no_padding": "No Padding?",
+    "no_padding_info": "Remove left/right padding when fullwidth",
+    "link": "Link",
+    "open_new_tab": "Open in new tab?",
+    "icon_size": "Icons Size",
+    "add_box": "Add Box?",
+    "add_box_mobile": "Add Box(mobile)?",
+    "border_radius": "Border Radius",
+    "snow": {
+      "title": "Snow Effect ====",
+      "style": "Snow Style"
+    }
+  },
+  "settings_schema": {
+    "customer-note": {
+      "name": "Dear Customers!",
+      "note": "If you are facing a problem with installation, creating navigation, or configuring our theme, please read our [documentation online](http://adornthemes.com/documentation/avon). Or feel free to create a support ticket from the [support page](https://www.adornthemes.com/support/). We will help you as soon as possible. We have tried our best to make our theme easy to use and customise. Thank you for choosing AdornThemes and being our customer! We appreciate it.",
+      "tutorial": "[Basic tutorial by shopify](https://webdesign.tutsplus.com/courses/how-to-create-an-online-store-with-shopify)"
+    },
+    "layout_style": {
+      "name": "Layout Style",
+      "layout": "Select Layout",
+      "container_width": "Container Width",
+      "boxed_layout": "Boxed Layout Background",
+      "appearance": "Body Appearance ====",
+      "theme_sections": {
+        "title": "Theme Sections",
+        "fullwidth": "Fullwidth Section Left/Right Padding",
+        "space": {
+          "title": "Space between sections ====",
+          "default": "Default",
+          "default_mobile": "Default (mobile)",
+          "small": "Small",
+          "small_mobile": "Small (mobile)",
+          "info": "You can select default or small from each individual sections"
+        },
+        "heading": {
+          "title": "Sections Heading =====",
+          "style": "Headings Style",
+          "style_info": "Style 4 & 5 Not avaialble for left align text.",
+          "svg": "Custom SVG code",
+          "element_width": "Element Width",
+          "alignment": "Alignment",
+          "head_color": "Headings Color",
+          "head_element_color": "Headings Element Color",
+          "sub_heading_font": "Sub Heading Font Size",
+          "sub_heading_color": "Subheadings Color"
+        }
+      }
+    },
+    "general_settings": {
+      "name": "General Settings",
+      "top_info_bar": "Top Information Bar",
+      "top_info1": "Above Header",
+      "top_info2": "Below Header",
+      "top_info3": "Don't Show",
+      "site_animation": "Enable Scroll Animation Effect",
+      "site_animation_mobile": "Disable Scroll Animation (mobile)",
+      "rtl": "Enable RTL",
+      "rtl_info": "Text Direction will be right to left",
+      "catalog_mode": "Enable Catalog Mode",
+      "catalog_mode_info": "Hide cart and add to cart buttons",
+      "catalog_mode_price": "Hide Price for Catalog Mode?",
+      "catalog_mode_price_info": "Hide product price",
+      "scroll_to_top": "Show Scroll to top arrow?",
+      "wishList": {
+        "title": "WishList ====",
+        "enable": "Enable WishList?",
+        "select_page": "Select WishList page",
+        "page_info": "First create page and select template page.wishlist"
+      },
+      "search": {
+        "title": "Search ====",
+        "enable": "Enable Search?",
+        "suggestions": "Enable Search Suggestions?",
+        "only_products": "Search Only Products?",
+        "soldout_products": "Soldout Products",
+        "keywords": {
+          "title": "Popular Keywords ======",
+          "enable": "Enable",
+          "info": "Display suggestion words below text field",
+          "label": "Label",
+          "keywords": {
+            "label": "Keywords",
+            "info": "Add words separated by comma. I.e. Jeans, Dress, Top, Summer..."
+          }
+        },
+        "products": {
+          "title": "Popular Products ======",
+          "label": "Label",
+          "collection": "Select Collection"
+        }
+      },
+      "review": {
+        "title": "Product Reviews ==== ",
+        "app": {
+          "title": "Select Review App",
+          "loox": "[Loox Reviews app](https://loox.io/app/AdornLoox)",
+          "growave": "[Growave Reviews app](https://growave.io/?ref=sanjay)",
+          "other": "[Other apps? Please follow steps](https://www.adornthemes.com/knowledge-base/add-reviews-code-in-theme-files)"
+        },
+        "on_products": "Show Reviews On Product Page?",
+        "on_products_grid": "Show Reviews On Products Grid?"
+      },
+      "favicon": {
+        "title": "Favicon image ==== ",
+        "image": {
+          "label": "Image",
+          "info": "Upload image: png, ico, Will be scaled down to 32 x 32px"
+        },
+        "retina_image": {
+          "label": "Retina Image",
+          "info": "Upload image: png, ico, Will be scaled down to 152 x 152px"
+        }
+      },
+      "seo": {
+        "title": "Home Page SEO Data ==== ",
+        "keywords": {
+          "label": "Meta Keywords",
+          "info": "Enter keywords for search engines"
+        },
+        "author": {
+          "label": "Author Name",
+          "info": "Enter Author name for your shop"
+        }
+      },
+      "tab_title": {
+        "title": "Dynamic Browser Tab Title ==== ",
+        "info": "Changing browser title dynamically when user leave tab",
+        "show": "Show Tab Title?",
+        "reminder1": "Reminder Text 1",
+        "reminder2": "Reminder Text 2"
+      },
+      "breadcrumb": {
+        "title": "Breadcrumb ==== ",
+        "brheight": "Min. Height",
+        "enable_on_collection": "Enable in Collections",
+        "enable_on_products": "Enable in Products",
+        "enable_on_pages": "Enable in Web Pages",
+        "enable_on_blog": "Enable in Blog Pages"
+      },
+      "free_shipping": {
+        "title": "Free Shipping Message ==== ",
+        "info": "Add new product for free shipping with a minimum amount.",
+        "product": {
+          "label": "Free shipping Product",
+          "info": "[how to add product](https://www.adornthemes.com/knowledge-base/how-to-set-free-shipping)"
+        },
+        "show_icon": "Show Shipping Icon?",
+        "message": {
+          "label": "Free Shipping Message",
+          "info": "Use the '$' sign to show price in the message."
+        },
+        "claim": "Free Shipping claim Message",
+        "show_cart_drawer": "Show in Cart Drawer?"
+      },
+      "terms_conditions": {
+        "title": "Terms & Conditions ======",
+        "message": "Text Message"
+      },
+      "age_verification": {
+        "title": "Age Verification ======",
+        "show_birthdate": "Show Birthdate on Verification Popup?",
+        "heading": "Heading",
+        "text": "Text"
+      }
+    },
+    "fonts_colors": {
+      "name": "Fonts, Colors and Styles",
+      "guide": "[Guide - class name for further development and use](https://avon-demo.myshopify.com/pages/typography)",
+      "fonts": {
+        "title": "Fonts =====",
+        "source": "Font Source",
+        "shopify": "Shopify Fonts =====",
+        "google": "Google Fonts =====",
+        "font1": "Font 1",
+        "font2": "Font 2",
+        "font3": "Font 3",
+        "google_font": "[Find google font name](https://fonts.google.com/)",
+        "info": "Selecting a different font can affect the speed of your store."
+      },
+      "body": {
+        "title": "Body Text ======"
+      },
+      "headings": {
+        "title": "Headings ======",
+        "h1": "H1 Font Size",
+        "h2": "H2 Font Size",
+        "h3": "H3 Font Size",
+        "h4": "H4 Font Size",
+        "h5": "H5 Font Size",
+        "h6": "H6 Font Size"
+      },
+      "form_fields": {
+        "title": "Form Fields ======"
+      },
+      "buttons": {
+        "title": "Buttons ======",
+        "style": {
+          "label": "Styles",
+          "info": "checkout different [button style](https://avon-demo.myshopify.com/pages/button-styles)"
+        },
+        "solid1": "Solid Button 1 =======",
+        "solid2": "Solid Button 2 =======",
+        "solid3": "Solid Button 3 =======",
+        "border1": "Border Button 1 =======",
+        "border2": "Border Button 2 =======",
+        "link": "Link Button ======="
+      },
+      "navigation": {
+        "title": "Navigation ======",
+        "min_height": "Navigation min. height",
+        "border_info": "when navigation is displayed below logo(optional)",
+        "bar_background": "Bar background",
+        "links": {
+          "link": "Links",
+          "hover": "Link hover",
+          "hover_active": "Links hover & active",
+          "background": "Links background",
+          "hover_background": "Link hover background",
+          "background_info": "Color apply to main links background in MM Advanced",
+          "divider": "Links divider",
+          "labels": "Links Labels ======",
+          "label1": "Label 1",
+          "label2": "Label 2",
+          "label3": "Label 3",
+          "label4": "Label 4",
+          "label5": "Label 5"
+        },
+        "megamenu": {
+          "title": "Megamenu ======",
+          "box_shadow": "Enable box shadow",
+          "column": "Column Title ---"
+        },
+        "dropdown": {
+          "title": "DropDown Menu ======"
+        },
+        "mobile": {
+          "title": "Mobile Navigation =======",
+          "sub_links": "Sub links background shade",
+          "sub_links_info": "if background is dark, Select lighten else darken",
+          "close": "Close menu button ---"
+        }
+      },
+      "sidebar": {
+        "title": "Collection & Blog Sidebar =====",
+        "block_title": "Block title ---",
+        "links": "Links",
+        "links_hover": "Hover links",
+        "active_filters": "Active Filters ---"
+      },
+      "footer": {
+        "title": "Footer ====",
+        "top": "Footer Top ====",
+        "column": "Column Title ======",
+        "details": "Details ======",
+        "icon": "Social Icons ======",
+        "bottom": "Footer Bottom ======",
+        "newsletter": {
+          "field": "Newsletter Textfield ----",
+          "button": "Newsletter Button ----",
+          "tf_bg": "Textfield Background",
+          "tf_txt": "Textfield Text"
+        }
+      },
+      "pages": {
+        "title": "Pages Title ===="
+      },
+      "carousel": {
+        "title": "Carousel ====",
+        "arrows": "Arrows",
+        "arrows_background": "Arrows background",
+        "dots": "Dots",
+        "dots_active": "Active Dot"
+      },
+      "other": {
+        "title": "Other Colors ====",
+        "mobile_browser": "Mobile Browser Theme",
+        "scroll_top": "Scroll to Top Arrow",
+        "links": "Text Links",
+        "links_hover": "Text Links Hover",
+        "table_header": "Table Header",
+        "border_lines": "Borders & Lines",
+        "tooltip_text": "Tooltip Text",
+        "tooltip_bg": "Tooltip Background"
+      }
+    },
+    "promotion_bar": {
+      "title": "Top Promotion Bar",
+      "min_h": "Min. Height"
+    },
+    "header": {
+      "title": "Header",
+      "styles": "[preview header styles](https://avon-demo.myshopify.com/pages/header-styles)",
+      "bottom_border": "Bottom border",
+      "top": {
+        "title": "Top Header ====",
+        "icon_info": "For icons use code like <i class='at at-phone-l'></i>. [Find icons here](http://www.adornthemes.com/optimal-icons/). use shortcode [social-icons] to show social icons.",
+        "left_column": "Left column",
+        "center_column": "Center column",
+        "right_column": "Right column",
+        "column_info": "Wrap text in <p>, <a> or <span> tags [Find icons from here](http://www.adornthemes.com/optimal-icons/)",
+        "social_info": "Shortcode [social-icons] will not work here"
+      },
+      "main": {
+        "title": "Main Header ====",
+        "logo": {
+          "image": "Logo Image",
+          "align": "Logo Alignment",
+          "width": "Logo Maximum Width",
+          "width_info": "Set Maximum width in pixels, min-width:50, max-width:500",
+          "width_mobile": "Logo Maximum Width(Mobile)",
+          "width_mobile_info": "Set maximum width in pixels, min-width:50, max-width:150"
+        },
+        "height": "Header Height",
+        "height_info": "Set maximum height in pixels, min-height:40, max-height:220",
+        "mobile_height": "Header Height (Mobile)",
+        "mobile_height_info": "Set Maximum height in pixels, min-height:40, max-height:100",
+        "navigation_below": "Navigation Below Logo ====",
+        "navigation_below_text_info": "Display text on left OR center when navigation is displayed below the logo.",
+        "navigation_info": "Configure Navigation from sections --> Main Navigation",
+        "sticky": "Sticky Header ====",
+        "icon_style": "Icon Style",
+        "account": {
+          "title": "My Account ======",
+          "popup_text": "Popup Text",
+          "popup_bg": "Popup Background",
+          "line": "Separation Line"
+        },
+        "cart": {
+          "title": "Cart ======",
+          "count_text": "Count Text",
+          "count_bg": "Count Background"
+        },
+        "transparent": {
+          "title": "Transparent Header ===",
+          "info": "enable transparent header on home page only. This style will not work when navigation is displayed below logo",
+          "logo_info": "show different logo for transparent header(optional)"
+        }
+      }
+    },
+    "cart": {
+      "title": "Cart",
+      "ajax": "Ajax Cart (Drawer) ======",
+      "shipping_tax_message": "Display Shipping & Tax Message?",
+      "view_cart_button": "View Cart Button ---",
+      "checkout_button": "Checkout Button ---",
+      "cart_note": "Cart Note ---",
+      "gift_wrap": {
+        "title": "Gift Wrap ======",
+        "info": "[How to add gift wrapping?](https://www.adornthemes.com/knowledge-base/how-to-add-gift-wrapping-vogal/)",
+        "product": "Select Gift Wrap Product",
+        "message": "Message",
+        "message_info": "Use $ sign to display price",
+        "button_info": "Cart page only"
+      },
+      "discount": {
+        "heading": "Discount Coupon ======",
+        "title": ""
+      }
+    },
+    "product_grid": {
+      "heading": "Products Grid",
+      "style": "Grid Style",
+      "style_info": "[chekout grid style](https://avon-demo.myshopify.com/pages/grid-style)",
+      "image": {
+        "heading": "Grid Images ====",
+        "ratio": "Aspect Ratio",
+        "size_info": "Images will get cropped in full size option when products have different image size."
+      },
+      "swatch": {
+        "heading": "Color Swatches ====",
+        "max_colors": "Max Colors to show",
+        "type": "Swatch Type",
+        "type_info": "Some colors appear white? Add custom colors from 'Custom Colors' section which appear below footer section",
+        "size": "Swatch Size",
+        "active": "Active Swatch Border",
+        "width": "Border Width"
+      },
+      "title": {
+        "heading": "Products Title ====",
+        "trim": "Trim products title text",
+        "trim_line": "Title text line to show"
+      },
+      "price": {
+        "heading": "Products Price ====",
+        "regular": "Regular Price",
+        "sale": "Sale Price",
+        "format": "Price Format",
+        "format_info": "[check preview](https://avon-demo.myshopify.com/pages/price-format)",
+        "append_label": "Append Label before price?",
+        "label": "Label"
+      },
+      "buttons": {
+        "heading": "Grid Buttons ====",
+        "quick_shop": "Enable Quick Shop",
+        "info": "Add to Cart, Wishlist, Quickview",
+        "radius": "Button Radius",
+        "hide": "Hide Buttons?",
+        "hide_mobile": "Hide Buttons on Mobile?"
+      },
+      "countdown": "Countdown Timer ====",
+      "other_options": {
+        "heading": "Other Options ====",
+        "box_border": "Box Border",
+        "second_image": "Show Second Image on hover?",
+        "collection_name": "Remove Collection name from URL?",
+        "show_vendor": "Show Vendor Name?",
+        "vendor": "Vendor Color"
+      },
+      "labels": {
+        "heading": "Product Labels ====",
+        "style": "Label Style",
+        "show_sale": "Show Sale Label?",
+        "show_sale_info": "Compare price must be greater than sale price to show label",
+        "select_sale": "Select Sale Label",
+        "sale_label": "Sale Label",
+        "show_sold_out": "Show Sold Out Label?",
+        "sold_out_info": "Label will show when item inventory is 0",
+        "sold_out": "Sold Out Label",
+        "label1": "1st Label ---",
+        "label2": "2nd Label ---",
+        "label3": "3rd Label ---",
+        "text": "Label Text",
+        "color": "Label Color",
+        "info": "Same label name add as a tag to related products"
+      }
+    },
+    "product_page": {
+      "heading": "Product Page",
+      "layout": "Product Layout",
+      "image_col_width": "Image Column Width",
+      "image_height": "Image maximum height",
+      "image_height_info": "Set maximum height for product images when you have different size images or need to show small size image",
+      "image_zoom": "Enable Image Zoom?",
+      "lightbox": "Enable Lightbox?",
+      "thumbnail_position": "Thumbnail Position",
+      "hide_arrow": "Hide Arrows on Mobile?",
+      "hide_arrow_info": "Main image arrows",
+      "hide_arrow_thumb": "Hide Thumbs Arrows on Mobile?",
+      "siechart": {
+        "heading": "Size Chart ===",
+        "sizelink": "Show Size Chart Link?",
+        "sizelink_info": "Show link above the size swatch that, when clicked, will open a popup displaying the size chart.",
+        "type": "Size Chart Type",
+        "type_info": "[how to set size chart?](https://www.adornthemes.com/knowledge-base/how-to-set-size-chart)",
+        "page": "Select Default Page",
+        "variant_names": "Add variant option name you want to show size chart",
+        "variant_info": "Eg: Size, Dimension, Taille, Velikost, talla, Taglia"
+      },
+      "social": {
+        "heading": "Social Sharing Icons ======",
+        "label": "Label"
+      },
+      "variants": {
+        "heading": "Variant Options =====",
+        "color_type": "Color Swatch Style",
+        "type": "Other Variant Style",
+        "type_info": "Custom color name should be predefined in 'Custom Colors' section.",
+        "image_position": "Variant Image Position",
+        "size": "Swatch Size",
+        "color_swatch": "Add variant option name you want to show color swatches",
+        "color_swatch_info": "Eg: Color, couleur, Farbe, Kleur, Farge",
+        "hide_soldout": "Hide Soldout Variants?",
+        "square_style": "Keep size or other Variant style in square only?",
+        "swatch_bg": "Swatch background",
+        "swatch_text": "Swatch text",
+        "activ_swatch_text": "Active swatch text",
+        "activ_swatch_bg": "Active swatch background",
+        "swatch_border": "Swatch Border",
+        "activ_swatch_border": "Active swatch Border"
+      },
+      "navigation": "Product Navigation ===",
+      "in_stock": "In stock label",
+      "outstock": "Out of stock label",
+      "cart_button": "Add To Cart Button ====",
+      "button_animation": "Zoom Animation",
+      "checout_button": {
+        "heading": "Dynamic Checkout Button ====",
+        "info": "Lets customers checkout directly using a familiar payment method. [Learn more](https://help.shopify.com/manual/using-themes/change-the-layout/dynamic-checkout)"
+      },
+      "collapsible_tab": "Collapsible Tab ====",
+      "sticky_cart": {
+        "heading": "Sticky Cart ====",
+        "button": "Add to cart button ---"
+      }
+    },
+    "currency_language": {
+      "heading": "Currency & Language",
+      "currency": {
+        "heading": "Currency Conversion ====",
+        "manage": "Currency Manage by",
+        "shopify": "1) Shopify: This feature is only available for stores using Shopify Payments. First Check [list of supported countries](https://help.shopify.com/en/manual/payments/shopify-payments/shopify-payments-requirements#can-I-use-shopify-payments)",
+        "shopify_info": "Your customers can pay for their orders and receive refunds in their local currency. [Enabling multiple currencies](https://help.shopify.com/manual/payments/multi-currency/setup).",
+        "adornthemes": "2) AdornThemes: Even though prices are displayed in different currencies, orders will still be processed in your store's currency. You need to [edit your store's currency formatting](https://www.adornthemes.com/knowledge-base/multiple-currencies-setup/).",
+        "auto_currency": "Enable Auto currency switcher",
+        "title": "Title text",
+        "code": "Show Currency Codes",
+        "code_info": "show currecny code with product price",
+        "supported_currencies": "Supported Currencies",
+        "supported_currencies_info": "Use the country's ISO [currency code](http://www.xe.com/iso4217.php). Separate your currency codes with a space.",
+        "default": "Default currency"
+      },
+      "language": {
+        "heading": "Language ====",
+        "manage_by": "Manage by",
+        "weglot_info": "[Install weglot app to use weglot translate on your store](https://dashboard.weglot.com/register?fp_ref=adornthemes)",
+        "show_flag": "Show Flag?",
+        "flag_info": "[Download flag zip file](https://www.adornthemes.com/documentation/vogal/flags.zip), then  Upload flag SVG file from Admin -> Content --> Files)",
+        "title": "Title text",
+        "default": "Default Language",
+        "menu": "Choose Language menu",
+        "menu_info": "[How to create languages menu for weglot?](https://www.adornthemes.com/knowledge-base/how-to-create-languages-menu-for-weglot/)"
+      },
+      "button": "Button",
+      "active_button": "Active Button",
+      "button_radius": "Button Radius"
+    },
+    "product_notification": {
+      "heading": "Product Notification Popup",
+      "collection": "Collection to use",
+      "show_fake_time": "Show Fake Time?",
+      "time_text": "Time Text",
+      "location_text": "Location text",
+      "locations": "Fake Locations",
+      "delay_time": "Delay Time",
+      "delay_time_info": "in miliseconds (1000 = 1 seconds)",
+      "display_time": "Display Time",
+      "display_time_info": "in miliseconds (5000 = 5 seconds)"
+    },
+    "quickview": {
+      "heading": "Quickview Popup",
+      "vendor": "Show Vendor?",
+      "availability": "Show Product Availability?",
+      "sku": "Show Product SKU?",
+      "short_description": "Show Short Description?",
+      "quantity": "Show Quantity Selector?",
+      "details_button": "Show View Full Details Button?"
+    },
+    "newsletter": {
+      "heading": "Newsletter",
+      "form": "Form ====",
+      "mailchimp": "MailChimp form action URL",
+      "mailchimp_info": "[Find your MailChimp form action URL](https://www.adornthemes.com/where-do-i-find-the-mailchimp-signup-url/).",
+      "custom": "Custom Code",
+      "custom_info": "If you are using third party app for newsletter then add form code here",
+      "popup": "Newsletter Popup ====",
+      "time": "Show After seconds",
+      "time_info": "Add value in miliseconds(5000=5 Seconds)",
+      "style": "Select Style",
+      "image_info": "Style 1: maximum width: 500px. Style 2: width:400px, height:550px. Style 3: width: 500px.",
+      "padding": "Padding around image",
+      "close_icon": "Close Icon",
+      "social_icons": "Social Icons ----",
+      "general_notes": "Display general notes?",
+      "close_popup_text": "Display close popup text?"
+    },
+    "social_media": {
+      "heading": "Social Media",
+      "sharing": {
+        "heading": "Sharing Options ====",
+        "facebook": "Share on Facebook",
+        "twitter": "Tweet on Twitter",
+        "pinterest": "Pin on Pinterest",
+        "linkedIn": "Share On LinkedIn",
+        "telegram": "Share On Telegram",
+        "whatsapp": "Share on Whatsapp",
+        "email": "Share by Email"
+      },
+      "account": {
+        "header": "Account Links",
+        "facebook": "Facebook",
+        "twitter": "Twitter",
+        "pinterest": "Pinterest",
+        "instagram": "Instagram",
+        "linkedIn": "LinkedIn",
+        "tumblr": "Tumblr",
+        "youtube": "YouTube",
+        "vimeo": "Vimeo",
+        "tiktok": "Tiktok",
+        "whatsapp": "Whatsapp",
+        "whatsapp_info": "Add your number with country code. Ie. your number is 3456789715 and country code +39 then add number 393456789715"
+      }
+    }
+  },
+  "sections": {
+    "all": {
+      "name": "Section ====",
+      "top_offSet": "Top OffSet",
+      "head": "Heading",
+      "sub_head": "Sub Heading",
+      "background_info": "select light color",
+      "select_collection": "Select Collection",
+      "select_product": "Select Product",
+      "products_per_row": "Products Per Row ----",
+      "number_of_product": "Number of Product to show",
+      "column_width": "Column Width",
+      "column_width_info": "Total width of all blocks in a row must not be more than 100%.",
+      "container_width": "Container Width",
+      "banner_height": "Banner Height ====",
+      "align_center": "Align center?",
+      "url": "URL",
+      "carousel": {
+        "name": "Carousel ====",
+        "autoplay": "Carousel Autoplay?",
+        "speed": "Autoplay Speed",
+        "arrows": "Arrows ====",
+        "dots": "Dot Navigation ===="
+      },
+      "heading": {
+        "title": "Title ======",
+        "pre": "Pre Heading ======",
+        "big": "Big Heading ======",
+        "details": "Details ======",
+        "short": "Sort Description ======",
+        "button": "Button ======",
+        "countdown": "Countdown ======"
+      },
+      "margin": {
+        "bottom": "Margin Bottom",
+        "bottom_mobile": "Margin Bottom (mobile)"
+      }
+    },
+    "404": {
+      "name": "404 Page"
+    },
+    "apps": {
+      "name": "Apps"
+    },
+    "blog": {
+      "name": "Blog Page",
+      "banner": {
+        "name": "Banner ======",
+        "info": "Use metafield option to show banner image in pages. [How to set this?](https://www.adornthemes.com/knowledge-base/create-metafield-for-page-banner/)",
+        "height": "Banner Height ======",
+        "container_width": "Container Width",
+        "bg_info": "if image is not available",
+        "title": "Title ======",
+        "description": "Description ======"
+      },
+      "page": {
+        "name": "Page ====",
+        "hide_title": "Hide Page Title",
+        "layout": "Blog List Layout",
+        "image_ratio": "Image Aspect Ratio",
+        "image_ratio_info": "Used for grid style only"
+      },
+      "section": {
+        "name": "Blog Posts",
+        "blog": "Blog ====",
+        "select": "Select Blog",
+        "posts_limit": "Posts Limit",
+        "post_per_row": "Post Per Row ====",
+        "read_more": "Show Read More Button?",
+        "read_all": "Show 'Read All' button?"
+      },
+      "sidebar_position": "Sidebar Position",
+      "content_align": "Content Align",
+      "blog_title": "Blog Title ====",
+      "post_per_row": "Post Per Row (Grid) ====",
+      "number_of_post": "Number of Post to Show per page",
+      "title": "Post Title ====",
+      "featured_image": "Show Featured Image?",
+      "author": "Show Author?",
+      "date": "Show Date?",
+      "comment": "Show Comment?",
+      "tags": "Tags",
+      "tags_info": "For List View only",
+      "short_description": "Show Short Description?",
+      "words": "Truncate Words?",
+      "social_sharing": "Show Social Sharing Buttons?",
+      "related_products": "Related Products by Metafield ===",
+      "related_products_info": "[How to set metafield for this?](https://www.adornthemes.com/knowledge-base/show-specific-products-in-article-page/)",
+      "posts": {
+        "name": "Blog Post Page"
+      },
+      "blocks": {
+        "menu": {
+          "name": "Navigation Menu",
+          "select_menu": "Select Categories"
+        },
+        "search": {
+          "name": "Search"
+        },
+        "recent_posts": {
+          "name": "Recent Posts",
+          "number_of_posts": "Number of posts to show"
+        },
+        "tags": {
+          "name": "Blog Tags"
+        },
+        "products": {
+          "name": "Products",
+          "collection": "Select Collection",
+          "number_of_products": "Number of products to show",
+          "view_all": "View all products button",
+          "display_type": "Display Type"
+        },
+        "image": {
+          "name": "Image Banner"
+        },
+        "text": {
+          "name": "Static Text"
+        }
+      }
+    },
+    "banner_with_text": {
+      "name": "Banner With Text",
+      "image_border_radius": "Image Border Radius",
+      "box_border_radius": "Box Border Radius",
+      "block": {
+        "name": "Block",
+        "select_menu": "Select Categories"
+      }
+    },
+    "brands_list": {
+      "name": "Brands List",
+      "container_width": "Container Width",
+      "hide_page_title": "Hide Page Title?",
+      "hide_breadcrumb": "Hide Breadcrumb?",
+      "alphabetically_list": "Alphabetically List ====",
+      "navigation": "Display Navigation ?"
+    },
+    "cart": {
+      "name": "Cart Page",
+      "layout": "Layout Style",
+      "header_bg": "Header Background",
+      "summery_bg": "Summery Background",
+      "currency_note": "Currency Note ====",
+      "notes": "Notes",
+      "notes_info": "Use [shop.currency] for default currency and [selected.currency] for adtivated currency on store.",
+      "shipping_rates": "Shipping Rates Calculator ====",
+      "default_country": "Default country selection",
+      "country_info": "If your customer is logged-in, the country in his default shipping address will be selected. If you are not sure about the  spelling to use here, refer to the first checkout page.",
+      "calculating": "Calculating Button Text",
+      "bloks": {
+        "total": {
+          "name": "Sub Total",
+          "saving": "Display Total Savings?"
+        },
+        "checkout": {
+          "name": "Checkout Button",
+          "continue_shopping": "Continue Shopping Buttons ====",
+          "additional_checkout": "Display Additional Checkout Buttons"
+        },
+        "shipping": {
+          "name": "Shipping Message",
+          "free_ship": "Display Free shipping message?",
+          "free_ship_info": "Manage from theme settings > General Settings > Free Shipping Message",
+          "shipping_tax": "Display Shipping & Tax Message?"
+        },
+        "badge": {
+          "name": "Secure Payment Badge"
+        }
+      }
+    },
+    "collections": {
+      "list_name": "Collections List",
+      "banner_name": "Collections Banners (Masonry)",
+      "style": "[preview style](https://www.adornthemes.com/different-style-for-collection-list/)",
+      "banner_style": "[Preview possible grid style](https://www.adornthemes.com/different-collection-banner-style/)",
+      "text_left_padding": "Text Left Padding Zero",
+      "text_left_padding_info": "Enable this if you want to display text on left and transparent background as displayed in Jewellery demo",
+      "products_count": "Show Products Count?",
+      "disable_image_zoom": "Disable Image Hover Zoom Effect?",
+      "column_guide": "[Column Selection guide](https://www.adornthemes.com/masonry-column-selection/)",
+      "box_width": "Detail Box Width",
+      "add_box": "Add Box?",
+      "box_bg": "Box Background",
+      "block": {
+        "name": "Collection",
+        "custom_name": "Custom Name",
+        "link": "Link (optional)",
+        "link_info": "Keep it empty to use 'collection url'."
+      },
+      "list_page": {
+        "name": "Collections List Page",
+        "source": "Select Collections to Show",
+        "source_info": "All collections are listed by default. To customize your list, choose 'Selected' and add collections.",
+        "Short_by": "Sort By",
+        "Short_by_info": "Sorting only applies when 'All' is selected"
+      },
+      "page": {
+        "name": "Collection Page",
+        "banner": {
+          "name": "Collection Banner ======",
+          "position": "Banner Position",
+          "height": "Banner Height ======",
+          "image_info": "Insert dynamic source to show different image for each collection. [How to set?](https://www.adornthemes.com/knowledge-base/set-collection-banners-by-metafields/)",
+          "color_info": "When image is not available.",
+          "title": "Collection Title ======",
+          "description_info": "Insert dynamic source to show different description. [How to set?](https://www.adornthemes.com/knowledge-base/set-collection-banners-by-metafields/)",
+          "date": "Date",
+          "date_info": "Insert dynamic source. [How to set?](https://www.adornthemes.com/knowledge-base/set-collection-banners-by-metafields/)"
+        },
+        "default_description": "Default Description",
+        "default_description_info": "display from each collection",
+        "horizontal_menu": "Horizontal Menu ====",
+        "menu_info": "[How to display?](https://www.adornthemes.com/knowledge-base/sub-collection-list/)",
+        "menu_position": "Menu Position",
+        "select_menu": "Select Menu",
+        "enable_sorting": "Enable Sorting",
+        "grid_icons": "Grid Icons",
+        "products_grid": "Products Grid ====",
+        "products_per_page": "Products per page (grid only)",
+        "pagination": "Pagination Type",
+        "sidebar": {
+          "name": "Sidebar & Filters",
+          "position": "Sidebar Position",
+          "position_info": "Only filter blocks show while select Popup Box option.",
+          "info": "Change title and links look from Theme Settings -> Fonts, Colors and Style -> Collection & Blog Sidebar"
+        },
+        "blocks": {
+          "categories": {
+            "name": "Categories",
+            "select": "Select Menu"
+          },
+          "dynamic_filters": {
+            "name": "Dynamic Filters",
+            "app_info": "Customize filters with the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/filters).",
+            "tags_info": "This options will not work  with tag base filters. Either choose dynamic filters OR filters by tags.[How to set?]",
+            "two_columns": "Add filter title names that need to show in two columns.",
+            "two_columns_info": "Eg: Size, Product type, Brand ...",
+            "color_swatch": "Color swatch ===="
+          },
+          "tags_filter": {
+            "name": "Filter By Tags",
+            "color": "Filter By Color Tags",
+            "info": "This options will not work  with dynamic product filters. You can choose either dynamic filters OR product filters using tags. [How to set?]",
+            "title_info": "i.e 'Filter by Size, Filter by Brands'",
+            "add_tag": "Add tag names",
+            "add_tag_info": "Separate by a comma, i.e \"Tag1, Tag2, Tag3\".",
+            "add_color_info": "Separate by a comma, i.e \"Black, Red, Blue\". Filters will not work untill you don't assign the same TAG NAME to relavant products.  Custom color name should be predefined in 'Custom Colors' section.",
+            "two_column": "Show List in two column"
+          },
+          "products": {
+            "name": "Products",
+            "style": "Display Style",
+            "select": "Select Collection",
+            "products_to_show": "Number of products to show",
+            "view_all": "View all products button"
+          },
+          "image": "Image Banner",
+          "text": "Static Text",
+          "slidshow": {
+            "name": "Slideshow at content area",
+            "info": "Upload same size images",
+            "display_on_mobile": "Display Slideshow on Mobile",
+            "banner1": "Banner Image 1 ====",
+            "banner2": "Banner Image 2 ====",
+            "banner3": "Banner Image 3 ====",
+            "banner4": "Banner Image 4 ====",
+            "banner5": "Banner Image 5 ===="
+          }
+        }
+      },
+      "sub": {
+        "name": "Sub Collection List",
+        "grid": "Collection Grid ===="
+      }
+    },
+    "product_tabs": {
+      "name": "Tabs + Products Slider",
+      "appearance": "Tabs Appearance ====",
+      "tabs_style": "Tab Style",
+      "tabs_style_info": "[tab style](https://www.adornthemes.com/different-tab-styles/)",
+      "active_tab": "Active Tab ====",
+      "tabs_on_mobile": "Tabs On Mobile ====",
+      "tab_name": "Tab Name"
+    },
+    "contact": {
+      "page_name": "Contact Page",
+      "form_name": "Contact Form",
+      "style": "Select Style",
+      "hide_page_title": "Hide Page Title?",
+      "hide_breadcrumb": "Hide Breadcrumb?",
+      "hide_phone": "Hide Phone?",
+      "hide_subject": "Hide Subject?",
+      "google_map": "Embed Google map code",
+      "google_map_info": "[Guide to Embed map](https://support.google.com/maps/answer/144361?co=GENIE.Platform%3DDesktop&hl=en#). In the iframe code, set width = '100%' and height as needed.",
+      "opening_hours": "Opening Hours ====",
+      "store_time": "Store Time",
+      "contact_details": "Contact Details ====",
+      "logo": "Logo Image",
+      "address": "Store Address",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "socials": "Socials Icons ====",
+      "custom_txt": "Custom Text"
+    },
+    "custom_colors": {
+      "name": "Cutom Colors",
+      "block_name": "Colors",
+      "color_name": "Color Name",
+      "image": "Color Image"
+    },
+    "custom_content": {
+      "name": "Custom Block",
+      "masonry": "Custom Block (Masonry)",
+      "product_grid_style": "Product Grid Style",
+      "blocks": {
+        "block_text": "Text / Image & Text",
+        "vertical_alignment": "Vertical Alignment",
+        "horizontal_alignment": "Horizontal Alignment",
+        "block_image": "Image",
+        "block_video": "Video",
+        "block_product": "Product",
+        "block_collection": "Collection",
+        "block_liquid": "Custom Liquid",
+        "grid_column_guide": "[Column Selection guide](https://www.adornthemes.com/masonry-column-selection/)",
+        "show_swatch": "Show Color Swatch?"
+      }
+    },
+    "video_section": {
+      "name": "Video",
+      "mp4_video": "Or Shopify-hosted video",
+      "select_video": "Select Video",
+      "select_video_mobile": "Select Video (mobile)",
+      "embed_video": "Embed Video from URL",
+      "video_url": "Video URL",
+      "video_info": "Supported file type .mp4, .mov. - video will play in loop",
+      "mobile_video_info": "Optional. If you have different video for mobile view",
+      "enable_controls": "Enable Controls",
+      "controls_info": "Display Video play/pause buttons",
+      "enable_autoplay": "Enable Autoplay",
+      "autoplay_info": "Autoplay will not work with sound",
+      "text_position_info": "Text position work only in large screen",
+      "hide_button_mobile": "Hide Button in Mobile",
+      "hide_text_mobile": "Hide Text in Mobile?",
+      "hide_text_info": "Hide button or text due to the limited space on mobile"
+    },
+    "custom_liquid": {
+      "name": "Custom Liquid",
+      "code": "Liquid Code"
+    },
+    "exit_intent": {
+      "name": "Exit Intent Popup",
+      "button_info": "display button to view collection page"
+    },
+    "faqs": {
+      "name": "FAQ's",
+      "style": "FAQs Style",
+      "title": "Block Title ====",
+      "question_title": "Question ====",
+      "section_title": "Section Title",
+      "faq": "FAQ",
+      "question": "Question",
+      "answer": "Answer"
+    },
+    "footer_section": {
+      "name": "Footer",
+      "copyright_text": "Copyright Text",
+      "designed_by": "Show Designed by",
+      "payment_options": "Payment Options ====",
+      "payment_image": "Payment Options Image",
+      "payment_image_info": "Use image instead of Payment icons",
+      "max_width": "Max. Width",
+      "container_width": "Container Width",
+      "container_width_info": "The combined width of all blocks must not exceed 100%",
+      "align_center": "Align Center?",
+      "blocks": {
+        "menu": {
+          "name": "Menu",
+          "select": "Select Menu"
+        },
+        "contact": {
+          "name": "Contact Details",
+          "logo": "Logo Image",
+          "address": "Address",
+          "phone": "Phone",
+          "email": "Email",
+          "show_icons": "Show Icons"
+        },
+        "custom": {
+          "name": "Custom Block"
+        },
+        "newsletter": {
+          "name": "Newsletter Signup"
+        },
+        "instagram": {
+          "name": "Instagram",
+          "note": "Note: Instagram will not work at 2 place at the same time. Either you can display in section or footer",
+          "api_key": "Instagram API Key",
+          "api_key_info": "Add Instagram Access Token Key here. [How to get Instagram Access Token?](https://insta-app.etssoft.net/docs/how-to-get-instagram-access-token)",
+          "photos_show": "Number of photos to show",
+          "photos_per_row": "Photos Per Row ---"
+        },
+        "social": {
+          "name": "Social Icons"
+        },
+        "line": {
+          "name": "Horizontal Line"
+        },
+        "space": {
+          "name": "Extra Column for space",
+          "width": "This column width is 10%"
+        }
+      }
+    },
+    "grid_banner": {
+      "name": "Grid Banners",
+      "styles": "[preview grid style](https://www.adornthemes.com/different-grid-style/)",
+      "text1": "Text 1 ====",
+      "text2": "Text 2 ====",
+      "disable_image_zoom": "Disable Image Hover Zoom Effect?",
+      "blocks": {
+        "block1": "Style 1",
+        "block2": "Style 2",
+        "block3": "Style 3",
+        "block4": "Style 4",
+        "block5": "Style 5",
+        "block6": "Style 6",
+        "banner1": "Banner 1 ====",
+        "banner2": "Banner 2 ====",
+        "banner3": "Banner 3 ====",
+        "banner4": "Banner 4 ====",
+        "banner5": "Banner 5 ====",
+        "text1": "Text 1",
+        "text2": "Text 2"
+      }
+    },
+    "hero": {
+      "name": "Parallax Banner",
+      "styles": "[Preview style](https://www.adornthemes.com/parallax-banner/)",
+      "enable_parallax": "Enable Parallax Scrolling",
+      "parallax_info": "Only applies to desktop. For Parallax Effect Recommanded Image Size 2000x1000 px.",
+      "image_info": "For Best Resolution recommended image width 2000px and height should be as per your above selections.",
+      "mobile_image_info": "Recommended width 750px and height as per above mobile height. If mobile image is blank, dekstop image will be used.",
+      "link_on_image": "Display link on entire image",
+      "link_on_image_info": "This option will add link on entire image instead of only button",
+      "countdown": "Countdown Timer ====",
+      "countdown_info": "Please click save button to view",
+      "enter_date": "Enter Date",
+      "date_info": "Date Formate should be Month/Day/Year. i.e 12/25/2024"
+    },
+    "slideshow": {
+      "name": "Slideshow",
+      "column": "Slideshow (Columns)",
+      "image_name": "Image Slideshow",
+      "container": "Container Width?",
+      "height": "Height",
+      "image_overlay": "Image Overlay?",
+      "overlay_color": "Overlay Color",
+      "overlay_opacity": "Overlay Opacity",
+      "enable_animation": "Enable Text Animation",
+      "animation_style": "Text Animation Style",
+      "blocks": {
+        "image": "Image Slide",
+        "desktop_img_info": "Recommended width 2000px and height as per section height if custom height is selected.",
+        "mobile_img_info": "Recommended width 800px and height as per section height if custom height is selected. If mobile image is blank, desktop image will be shown.",
+        "column_img_info": "Recommended size: 700x900. Use the same size image in all slides.",
+        "big_text_info": "add <span>BRAND</span> tag for outline text",
+        "button2": "Button 2 ====",
+        "align_left": "Text Align Left?",
+        "position": "Position",
+        "position_mobile": "Position (mobile)",
+        "video_slide": "Video Slide",
+        "video_overly": "Video Overlay"
+      }
+    },
+    "instagram": {
+      "name": "Instagram",
+      "shop": "Instagram Shop",
+      "api": "API Key",
+      "api_info": "Add Instagram Access Token Key here. [How to get Instagram Access Token?](https://www.adornthemes.com/knowledge-base/how-to-get-instagram-access-token/)",
+      "style": "Select Style",
+      "enable_space": "Enable Grid Space",
+      "number_of_photos": "Number of Photos to Display",
+      "photos_per_row": "Photos Per Row ====",
+      "button_in_popup": "Show Button in Popup?",
+      "block": {
+        "name": "Image",
+        "title": "Instagram Title",
+        "caption": "Instagram Caption",
+        "link": "Instagram Link",
+        "add_products": "Add Products ====",
+        "product1": "Select Product 1",
+        "product2": "Select Product 2",
+        "product3": "Select Product 3",
+        "product4": "Select Product 4",
+        "top_position": "Top Position",
+        "left_position": "Left Position"
+      }
+    },
+    "logo_list": {
+      "name": "Logo List",
+      "block": "Logo"
+    },
+    "lookbook": {
+      "name": "Lookbook Shop",
+      "preview": "[preview grid style](https://www.adornthemes.com/different-collection-banner-style/)",
+      "column_guide": "[Column Selection guide](https://www.adornthemes.com/masonry-column-selection/)",
+      "block": {
+        "name": "Lookbook",
+        "add_products": "Add Products ====",
+        "product1": "Select Product 1",
+        "product2": "Select Product 2",
+        "product3": "Select Product 3",
+        "product4": "Select Product 4",
+        "top_position": "Top Position",
+        "left_position": "Left Position",
+        "box_align": "display product box on left/right"
+      }
+    },
+    "map": {
+      "name": "Map",
+      "address": "Address and Hours",
+      "map_address": "Map Address",
+      "map_address_info": "Google maps will find the exact location",
+      "api_key": "Google Maps API key",
+      "api_key_info": "You’ll need to [register a Google Maps API Key](https://help.shopify.com/manual/using-themes/troubleshooting/map-section-api-key) to display the map",
+      "show_directions_button": "Show 'Get directions' button?"
+    },
+    "mobile_toolbar": {
+      "name": "Mobile Toolbar",
+      "hide_text": "Hide Text?",
+      "icon_size": "Icon Size",
+      "blocks": {
+        "home": "Home",
+        "menu": "Menu",
+        "shop": "Shop",
+        "account": "Account",
+        "search": "Search",
+        "filter": "Filter",
+        "filter_info": "Filter icons will display on collection page",
+        "cart": "Cart",
+        "wishlist": "Wishlist",
+        "custom": "Custom",
+        "icon_name": "Icon class name",
+        "icon_info": "[Find icons here](http://www.adornthemes.com/optimal-icons/)"
+      }
+    },
+    "navigation": {
+      "name": "Main Navigation",
+      "check_style": "[chekout all styles and how to set](https://www.adornthemes.com/knowledge-base/how-to-use-megamenu-navigation/).",
+      "change_style": "Change fonts size and colors from Theme Settings --> Fonts, Colors and Styles --> Navigation",
+      "show_arrow": "Show Arrow?",
+      "alignment": "Menu Alignment",
+      "mobile_mav": "Mobile Navigation ====",
+      "different_menu": "Different menu for mobile?",
+      "select_menu": "Select Menu",
+      "show_image": "Show Image with Links ---",
+      "grid_view": "Grid view for 2nd level ---",
+      "grid_view_info": "Grid view supporting two level navigation only.",
+      "show_image_info": "[how to add image?](https://www.adornthemes.com/knowledge-base/how-to-display-images-for-mobile-menu-items/)",
+      "labels": "Menu Labels ====",
+      "label1": "Label 1",
+      "label2": "Label 2",
+      "label3": "Label 3",
+      "label4": "Label 4",
+      "label5": "Label 5",
+      "link_name": "Link Name",
+      "new_tab": "Open Link in New Window?",
+      "select_columns": "Select Columns",
+      "column_width": "Column Width",
+      "custom_size": "Custom size & Align ====",
+      "box_width": "Box Width",
+      "box_align": "Box Align",
+      "navigation_below_logo": "When Navigation below logo ====",
+      "container_width": "Enable container width?",
+      "container_width_info": "Set inner content width max to layout width",
+      "blocks": {
+        "home": "Home Link",
+        "single": "Single Link",
+        "login": {
+          "name": "Login Link",
+          "info": "You can add store login  here Or you can display store login with top right icon",
+          "account_info": "You need to select 'Accounts are optional' from Store Settings --> Checkout"
+        },
+        "simple": {
+          "name": "MM Simple",
+          "image_columns": "Image Columns ====",
+          "position": "Images Position",
+          "position_info": "You can show images at right or bottom of links",
+          "column_width_info": "Option work when images show right of links",
+          "image_row": "Image per row",
+          "image1": "Image 1 ====",
+          "image2": "Image 2 ====",
+          "image3": "Image 3 ====",
+          "image4": "Image 4 ====",
+          "border": "Show Border?"
+        },
+        "products": {
+          "name": "MM Products",
+          "products_limit": "Products Limit",
+          "featured_column": "Featured Column ====",
+          "title_size": "Title font Size",
+          "subtitle_size": "Sub Title Font Size"
+        },
+        "image_columns": {
+          "name": "MM Top Image Columns",
+          "column1": "Column 1 ====",
+          "column2": "Column 2 ====",
+          "column3": "Column 3 ====",
+          "column4": "Column 4 ====",
+          "column5": "Column 5 ===="
+        },
+        "background_image": {
+          "name": "MM Background Image",
+          "space": "Space for Image"
+        },
+        "links_image": {
+          "name": "MM Links with Image",
+          "image_info": "Upload images for each menu link. The image name must be the same as the link name, and no spaces should be used. Example: Women Clothing = women-clothing.jpg Upload images at 'Store admin > Content > Files.",
+          "title_possition": "Title Possition"
+        },
+        "custom": {
+          "name": "MM Custom HTML",
+          "info": "This link block show in desktop only. It will not come in mobiles.",
+          "custom_code": "Custom Code",
+          "custom_code_info": "Enter your custom code here."
+        },
+        "advanced": {
+          "name": "MM Advanced",
+          "products": "Products Block ====",
+          "collection1": "Lnk 1 Collection",
+          "collection2": "Lnk 2 Collection",
+          "collection3": "Lnk 3 Collection",
+          "collection4": "Lnk 4 Collection",
+          "collection5": "Lnk 5 Collection",
+          "collection6": "Lnk 6 Collection",
+          "collection7": "Lnk 7 Collection",
+          "collection8": "Lnk 8 Collection",
+          "collection9": "Lnk 9 Collection",
+          "collection10": "Lnk 10 Collection",
+          "products_row": "Products Per Row"
+        },
+        "dropdown": {
+          "name": "Dropdown Menu",
+          "info": "This link block show in desktop only. It will not come in mobiles.",
+          "custom_code": "Custom Code",
+          "custom_code_info": "Enter your custom code here."
+        }
+      }
+    },
+    "newsletter": {
+      "name": "Newsletter",
+      "info": "Any customers who sign up will have an account created for them in Shopify. [View customers](/admin/customers?query=&accepts_marketing=1)",
+      "input_bg": "Input Background",
+      "input_text": "Input Text",
+      "button_text": "Button Text",
+      "button_bg": "Button"
+    },
+    "page_sec": {
+      "name": "Page",
+      "hide_header_footer": "Hide Header and Footer?",
+      "hide_header_footer_info": "You can use this option when creating a landing page without a header or footer.",
+      "hide_breadcrumb": "Hide Breadcrumb?",
+      "page_banner": "Page Banner ====",
+      "page_banner_info": "Use metafield option to show banner image in pages. [How to set this?](https://www.adornthemes.com/knowledge-base/create-metafield-for-page-banner/)",
+      "banner_title": "Banner Title ====",
+      "banner_text": "Banner Text ====",
+      "bg_info": "if image is not available",
+      "page_data": "Page Data ====",
+      "hide_title": "Hide Page Title?"
+    },
+    "password_page": {
+      "name": "Password Page",
+      "logo": "Logo Image",
+      "logo_width": "Custom logo width (in pixels)",
+      "newsletter": "Newsletter Signup ====",
+      "newsletter_info": "[Tell your visitors about a launch day discount](https://www.shopify.com/blog/15514000-14-ways-to-use-offers-coupons-discounts-and-deals-to-drive-revenue-and-customer-loyalty)",
+      "placeholder_text": "Placeholder Text",
+      "social": "Social Sharing Icons"
+    },
+    "photo_gallery": {
+      "name": "Photo Gallery",
+      "preview": "[preview grid style](https://www.adornthemes.com/different-collection-banner-style/)",
+      "column_guide": "[Column Selection guide](https://www.adornthemes.com/masonry-column-selection/)",
+      "zoom_icon": "Zoom Icon",
+      "zoom_icon_bg": "Zoom Icon Background",
+      "block": {
+        "name": "Image",
+        "link_info": "Link is apply only to text"
+      }
+    },
+    "recommended_products": {
+      "name": "Recommended Products"
+    },
+    "recently_viewed": {
+      "name": "Recently Viewed Products"
+    },
+    "related_products": {
+      "name": "Related Products",
+      "display_products": "Display Products",
+      "display_products_info": "[How this work?](https://www.adornthemes.com/knowledge-base/related-products-shopify/)"
+    },
+    "products_columns": {
+      "name": "Products Columns",
+      "columns": "Columns Per Row",
+      "products_per_col": "Products Per Column",
+      "block_name": "Collection"
+    },
+    "products_slider": {
+      "name": "Products Slider",
+      "columns": "Columns Per Row",
+      "button_info": "Button to access the collection page"
+    },
+    "products_row": {
+      "name": "Products Row"
+    },
+    "products_tab": {
+      "name": "Products Tabs",
+      "design": "Tab Design",
+      "alignment": "Tab Alignment",
+      "active_tab_border": "Active Tab Border",
+      "mobile_tab": "Mobile Collapsible Tab ====",
+      "blocks": {
+        "descriptions": "Default Descriptions",
+        "review": "Review",
+        "review_info": "Display Reviews from app. Choose app from General Settings -> Products Reviews",
+        "other_app": "Add other app reviews snippet here",
+        "sizechart": "Size Chart",
+        "sizechart_info": "Set content for size chart from Theme Settings -> Product Page -> Size Chart Type",
+        "global": "Global Text",
+        "content": "Content",
+        "richtext": "Rich Text",
+        "metafield_info": "[How to set different data for each products?](https://www.adornthemes.com/knowledge-base/vogal-display-different-tab-details-for-each-product/)",
+        "specifications": "Specifications",
+        "spec_style": "Select Style",
+        "spec_per_row": "Specification Per row",
+        "faq": "FAQ's"
+      }
+    },
+    "products": {
+      "page": "Product Page",
+      "featured": "Featured Product",
+      "info": "Manage some global product options from Theme Settings -> Product Page",
+      "blocks": {
+        "divider": "Divider/Space",
+        "divider_info": "You can also use this block to add more space between 2 blocks",
+        "title": "Product Title",
+        "price": {
+          "name": "Price",
+          "sale": "Sale Price",
+          "discount_badge": "Show Discount Saved Badge?",
+          "discount_badge_info": "Display right after price if product have discount",
+          "tax_info": "Show tax and shipping information label?"
+        },
+        "vendor": {
+          "name": "Vendor/Brand",
+          "show_logo": "Show vendor logo?",
+          "logo_info": "Need to create png logo image with same name as vendor name and upload at settings > files. Example: Coca Cola = coca-cola.png, Nike = nike.png",
+          "logo_width": "Logo width",
+          "discount_badge_info": "Display right after price if product have discount",
+          "tax_info": "Show tax and shipping information label?"
+        },
+        "description": {
+          "name": "Product Description",
+          "show": "Show",
+          "metafield": "[Description by metafield?](https://www.adornthemes.com/knowledge-base/vogal-product-metafields/)",
+          "limit": "Short Description Limit",
+          "read_more": "Description Read More?",
+          "read_more_info": "Keep it blank if you do not want to show read more link below short description"
+        },
+        "variants": {
+          "name": "Variant Options",
+          "info": "Manage swatch style from Theme Settings-> Product Page"
+        },
+        "wishlist_and_links": {
+          "name": "Wishlist & Popup Links",
+          "enquiry_link": "Show Enquiry Link?",
+          "enquiry_info": "Open Popup and send email direct to ask about product",
+          "delivery_returns": "Show Delivery & Returns Link?",
+          "delivery_returns_info": "Below shipping page content will appear in a popup",
+          "delivery_page": "Select Page"
+        },
+        "buy_button": {
+          "name": "Quantity & Buy Button",
+          "show_quantity": "Show Quantity Selector?",
+          "gift_recipient": "Gift Cards Recipient Form ====",
+          "gift_recipient_info": "Allows buyers to send gift cards on a scheduled date along with a personal message. [Learn more](https://help.shopify.com/manual/online-store/themes/customizing-themes/add-gift-card-recipient-fields)",
+          "notify": "Back in stock Notify ===="
+        },
+        "countdown": {
+          "name": "Countdown",
+          "info": "[How to set Countdown timer?](https://www.adornthemes.com/knowledge-base/how-to-add-product-countdown-shopify/)",
+          "style": "Select Style",
+          "number_font_size": "Number Font Size",
+          "text_font_size": "Text Font Size"
+        },
+        "image": "Image",
+        "rating_availability_sku": {
+          "name": "Rating/Availability/SKU",
+          "review_info": "Display Ratings from app. Choose app from General Settings -> Products Reviews",
+          "show_availability": "Show Product Availability?",
+          "show_sku": "Show Product SKU?"
+        },
+        "collapsible_tab": {
+          "name": "Collapsible Tab",
+          "source": "Content Source",
+          "open": "Open by default?",
+          "info": "Manage color and fonts from theme settings > product page > Collapsible Tab"
+        },
+        "quantity_message": {
+          "name": "Quantity Message",
+          "max": "Max Quantity",
+          "max_info": "Display stock left number when product stock is less than selected numbers"
+        },
+        "custom_option": {
+          "name": "Custom Option",
+          "info": "Custom Options are used to collect customization information for an item added to the cart. [Guidelines](https://www.adornthemes.com/knowledge-base/vogal-how-to-add-product-custom-option)",
+          "field_type": "Select Field Type",
+          "field_info": "IMPORTANT: Upload file do not support dynamic checkout button. This extra field will not show up in the quick shop and quick view popup.",
+          "label": "Field Label",
+          "field_options": "Options if using radio buttons, drop-down select or checkbox group",
+          "field_options_info": "Separate options with a comma.",
+          "required": "Required",
+          "required_info": "If you select this, the checkbox need to be checked or text should be add in text field to add the item to the cart.",
+          "show_at_checkout": "Show at checkout, cart",
+          "show_at_checkout_info": "Uncheck this if you don't want the information to be shown in the cart or checkout page with order details.",
+          "set_visibility": "Set visibility ====",
+          "visibility": "Visibility",
+          "visibility_info": "How you want to display custom option for products",
+          "visibility_select": "If visibility is set By Type or By Tags",
+          "visibility_select_info": "Separate Product Types/Tags name with a comma.",
+          "by_product": "If visibility is set By Product",
+          "by_product_info": "Select up to 50 products only.",
+          "by_metafield": "If visibility is set By metafield",
+          "by_metafield_info": "Create True or false metafield and copy full key name and add here. Key name should look like this {{ product.metafields.custom.your_name }}"
+        },
+        "fake_order": {
+          "name": "Fake Order",
+          "max_items": "Max Items",
+          "order_time": "Order time",
+          "message": "Orders Message",
+          "message_info": "Use '[orders]' for items counts and '[hours]' for hours counts"
+        },
+        "fake_visitor": {
+          "name": "Fake Visitor",
+          "max_visitors": "Max Visitors",
+          "interval_time": "Interval time",
+          "message": "Visitors Message",
+          "message_info": "Use '[visitors]' to show user counts"
+        },
+        "shipping_estimate": {
+          "name": "Shipping Estimate",
+          "info": "Display same time for all products, To set different for each product [follow this article](https://www.adornthemes.com/knowledge-base/show-shipping-estimated-time-for-specific-product-2/)",
+          "days": "Shipping Estimated Days",
+          "days_info": "Add value in days like 4/10 and customer will show date after 4 to 10 days from today date.",
+          "message": "Shipping Estimate Message",
+          "message_info": "Use '[startdate]' and [enddate] for date to show with message"
+        },
+        "free_ship": "Free Shipping",
+        "free_ship_info": "Manage free shipping message from Theme Settings -> General Settings -> Free Shipping Message",
+        "pickup": {
+          "name": "Pickup Availability",
+          "available_icon": "Pickup Available Icon",
+          "not_available": "Pickup Not Available",
+          "padding": "Text Padding"
+        },
+        "liquid": {
+          "name": "HTML/Liquid",
+          "code": "Code",
+          "info": "Add app snippets or other Liquid code to create advanced customizations."
+        },
+        "complementary": {
+          "name": "Complementary products",
+          "info": "To select complementary products, add the Search & Discovery app. [Learn more](https://help.shopify.com/manual/online-store/search-and-discovery/product-recommendations)",
+          "style": "Style",
+          "list_bg": "List Background"
+        },
+        "more_colors": {
+          "name": "More Colors",
+          "info": "To select color products, add the metafields. [Learn more](https://www.adornthemes.com/knowledge-base/more-color-products/)",
+          "image_width": "Image Width",
+          "active_border": "Active Border"
+        },
+        "feature_points": {
+          "name": "Featured Points",
+          "text1": "Feature Text 1",
+          "text2": "Feature Text 2",
+          "text3": "Feature Text 3",
+          "text4": "Feature Text 4"
+        },
+        "feature_text": {
+          "name": "Featured Text",
+          "icon": "Icon Class Name",
+          "icon_info": "[Find icons here](http://www.adornthemes.com/optimal-icons/)",
+          "text3": "Feature Text 3",
+          "text4": "Feature Text 4"
+        },
+        "product_type": "Product Type",
+        "product_collection": "Product Collection",
+        "product_tags": "Product Tags"
+      }
+    },
+    "testimonials": {
+      "name": "Testimonials",
+      "style": "Select Style",
+      "rating_stars": "Rating Stars",
+      "image_info": "Style 1 & Style 2: recommended size 100x100. Style 3: recommended size 500x300",
+      "author": "Author",
+      "display_ratings": "Display Ratings?",
+      "select_rating": "Select Rating"
+    },
+    "richtext": {
+      "name": "Rich Text",
+      "button1": "Button 1 ====",
+      "button2": "Button 2 ===="
+    },
+    "textline": {
+      "name": "Text Line",
+      "text_info": "Add text in <span> tags if you enable scrolling text",
+      "find_icon": "[Find icons here](http://www.adornthemes.com/optimal-icons/)",
+      "padding": "Text Padding",
+      "enable_text_scrolling": "Enable text scrolling?",
+      "scrolling_info": "Hover effect will not work on touch device. If the text in the loop is too short, you must add the same text more than once to avoid loop break.",
+      "scrolling_speed": "Text scrolling speed",
+      "scrolling_speed_mobile": "Text scrolling speed (mobile)"
+    },
+    "store_features": {
+      "name": "Store Features",
+      "style": "Select Style",
+      "icons": "Icons ----",
+      "icon_type": "Icon Type",
+      "icon_size": "Icon Size",
+      "separation": "Separation Border",
+      "feature": "Feature",
+      "icon_class": "Icon class name",
+      "icon_info": "[Find icons here](http://www.adornthemes.com/optimal-icons/)"
+    },
+    "top_bar": {
+      "name": "Top Information Bar",
+      "hide_info": "Hide this section for mobile site",
+      "columns": "Number Of Column to display",
+      "min_height": "Min. height",
+      "enable_marquee": "Enable marquee text",
+      "marquee_info": "We have used pure css for this effect so there will be little jerk once text line start to repeat in loop. hover effect will not work on touch device",
+      "scrolling_speed": "Text scrolling speed",
+      "scrolling_speed_mobile": "Text scrolling speed(mobile)"
+    },
+    "scrolling_text": {
+      "name": "Scrolling Text"
+    },
+    "upsell": {
+      "name": "Upsell Product Bundle",
+      "guide": "[How to set?](https://www.adornthemes.com/knowledge-base/how-to-set-upsell-product-bundle/)"
+    },
+    "before-after": {
+      "name": "Before / After Slider",
+      "image_info": "Use same size images for below & after",
+      "before": "Before ====",
+      "after": "After ====",
+      "option": "Slider Option ====",
+      "arrow": "Arrow Color",
+      "shadow": "Shadow Color"
+    },
+    "space": "Section Extra Space",
+    "other_pages": {
+      "search": "Search Page",
+      "login": "Login",
+      "register": "Register",
+      "reset_password": "Reset Password",
+      "image_name": "Image Slideshow",
+      "account": "Account",
+      "order": "Order"
+    }
+  }
+}

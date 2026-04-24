@@ -1,0 +1,271 @@
+<style>
+  {% if section.settings.bnr and page.metafields.custom.banner_image != blank %}
+  	.clPageBnr{ background-color:{{section.settings.clr_bg}}; min-height:{{section.settings.bheightmob}}px; }
+	.clPageBnr * { color:{{section.settings.ttlclr}} }
+	.bnrTtl { font-size:{{section.settings.ftTtlm}}px; }
+	.clbnDes { font-size:{{section.settings.ftTxt | times: 0.9 | floor}}px; }
+    @media only screen and (min-width:767px){ 
+		.clPageBnr { min-height:{{section.settings.bheightipad}}px; }
+		.bnrTtl { font-size:{{section.settings.ftTtl}}px; }
+		.clbnDes { font-size:{{section.settings.ftTxt}}px; }
+	}
+    @media only screen and (min-width:1024px){
+		.clPageBnr { min-height:{{section.settings.bheight}}px;}
+	}
+  {% endif %}
+  #PageContainer .page-width { max-width:{{section.settings.width}}px }
+  {%- if section.settings.hide_hdft -%}#header,.top-header-wrapper,#shopify-section-footer { display:none; }{%- endif -%}
+</style>
+{% if section.settings.bnr and page.metafields.custom.banner_image != blank %}
+<div class="clPageBnr fl f-aic f-jcc f-wrap">
+	{% if page.metafields.custom.banner_image != blank %}
+		{% assign bannerImg = page.metafields.custom.banner_image %}
+	  <div class="bgImg pa w_100 h_100 lazyload{% if page.metafields.custom.mobile_banner_image != blank %} hide-sm{%endif%}" data-bgset="{{page.metafields.custom.banner_image | img_url: '2000x'}}" data-sizes="auto" data-parent-fit="contain"></div>
+	{% endif %}
+	{% if page.metafields.custom.mobile_banner_image != blank %}
+	  <div class="bgImg pa w_100 h_100 lazyload hide-md hide-lg" data-bgset="{{page.metafields.custom.mobile_banner_image | img_url: '1000x' }}" data-sizes="auto" data-parent-fit="contain"></div>
+	{% endif %}
+	<div class="tc pr" style="max-width:{{section.settings.bnr-wd}}px">
+		{% if section.settings.show_collection_name %}<h1 class="bnrTtl {{section.settings.ttlft}} {{section.settings.ttlwt}} {{section.settings.ttlcase}}">{{ page.title }}</h1>{% endif %}
+		{% if page.metafields.custom.short_des != blank %}<div class="clbnDes">{{ page.metafields.custom.short_des }}</div>{% endif %}
+	</div>
+  </div>
+{% endif %}
+{% unless section.settings.breadcrumb %}{%- if settings.breadcrumb_pg -%}{%- render 'breadcrumb' -%}{%- else -%}<div class="topSpace"></div>{%- endif -%}{% endunless %}
+<div class="pageCnt{% unless section.settings.section_width %} page-width{% else %} fullwidth{% endunless %}">
+  {% unless section.settings.hide_ttl %}<h1 class="page-title">{{page.title}}</h1>{% endunless %}
+  {% unless page.content == blank %}<div class="rte">{{ page.content }}</div>{% endunless %}
+</div>
+{% schema %}
+  {
+    "name": "t:sections.page_sec.name",
+    "settings": [
+	  {
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": false
+	  },
+	  {
+      	"type": "checkbox",
+        "id": "hide_hdft",
+        "label": "t:sections.page_sec.hide_header_footer",
+        "default": false,
+		"info": "t:sections.page_sec.hide_header_footer_info"
+      },
+	  {
+      	"type": "checkbox",
+        "id": "breadcrumb",
+        "label": "t:sections.page_sec.hide_breadcrumb",
+        "default": false
+      },
+	  {
+        "type": "header",
+        "content": "t:sections.page_sec.page_banner"
+      },
+ 	  {
+        "type": "checkbox",
+        "id": "bnr",
+        "label": "t:global.display",
+        "default": true
+      },	 	 
+      {
+        "type": "paragraph",
+        "content": "t:sections.page_sec.page_banner_info"
+      },	 	 
+      {
+        "type": "paragraph",
+        "content": "t:sections.all.banner_height"
+      }, 	  
+ 	  {
+        "type": "range",
+        "id": "bheight",
+        "label": "t:global.devices.desktop",
+        "default": 240,
+        "min": 50,
+        "max": 400,
+        "step": 10,
+		"unit":"px"		
+      },
+ 	  {
+        "type": "range",
+        "id": "bheightipad",
+        "label": "t:global.devices.tablet",
+        "default": 180,
+        "min": 50,
+        "max": 400,
+        "step": 10,
+		"unit":"px"		
+      },
+      {
+        "type": "range",
+        "id": "bheightmob",
+        "label": "t:global.devices.mobile",
+        "default": 150,
+        "min": 50,
+        "max": 400,
+        "step": 10,
+		"unit":"px"		
+      },	
+ 	  {
+        "type": "range",
+        "id": "bnr-wd",
+        "label": "t:sections.all.container_width",
+        "default":600,
+        "min": 200,
+        "max": 1200,
+        "step": 10,
+		"unit":"px"		
+      },
+      {
+        "type": "paragraph",      
+        "content": "t:sections.page_sec.banner_title"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_collection_name",
+        "label": "t:global.display",
+        "default": true	
+      },
+      {
+        "type": "range",
+        "id": "ftTtl",
+        "label": "t:global.font.size",
+        "default": 28,
+        "min": 12,
+        "max": 100,
+        "step": 1,
+		"unit":"px"
+      },
+       {
+        "type": "range",
+        "id": "ftTtlm",
+        "label": "t:global.font.size_mobile",
+        "default": 20,
+        "min": 12,
+        "max": 50,
+        "step": 1,
+		"unit":"px"
+      },
+      {
+        "type": "select",
+        "id": "ttlft",
+        "label": "t:global.font.family",
+        "default": "font2",
+        "options": [
+          {
+            "value": "font1",
+            "label": "Font 1"
+          },
+          {
+            "value": "font2",
+            "label": "Font 2"
+          },
+          {
+            "value": "font3",
+            "label": "Font 3"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "ttlwt",
+        "label": "t:global.font.weight",
+        "default": "fw-600",
+        "options": [
+          {
+            "value": "fw-300",
+            "label": "Light"
+          },
+          {
+            "value": "fw-400",
+            "label": "Regular"
+          },
+          {
+            "value": "fw-500",
+            "label": "Medium"
+          },
+          {
+            "value": "fw-600",
+            "label": "Semi Bold"
+          },
+          {
+            "value": "fw-700",
+            "label": "Bold"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "ttlcase",
+        "label": "t:global.font.case",
+        "default": "tt-u",
+        "options": [
+          {
+            "value": "tt-u",
+            "label": "Uppercase"
+          },
+          {
+            "value": "tt-c",
+            "label": "Capitalize"
+          },
+          {
+            "value": "tt-l",
+            "label": "Lowercase"
+          },
+          {
+            "value": "tt-n",
+            "label": "None"
+          }
+        ]
+      },
+      {
+        "type": "paragraph",      
+        "content": "t:sections.page_sec.banner_text"
+      },    
+      {
+        "type": "range",
+        "id": "ftTxt",
+        "label": "t:global.font.size",
+        "default": 15,
+        "min": 10,
+        "max": 30,
+        "step": 1,
+		"unit":"px"
+      },	
+	  {
+        "type": "color",
+        "id": "ttlclr",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },	
+	  {
+        "type": "color",
+        "id": "clr_bg",
+        "label": "t:global.background.color",
+        "default": "#f5f5f5",
+		"info":"t:sections.page_sec.bg_info"
+      },
+	  {
+        "type": "header",
+        "content": "t:sections.page_sec.page_data"
+      },
+      {
+        "type": "range",
+        "id": "width",
+        "label": "t:sections.all.container_width",
+        "default":1200,
+        "min": 800,
+        "max": 1800,
+        "step": 10,
+        "unit": "px"
+      },
+	  {
+      	"type": "checkbox",
+        "id": "hide_ttl",
+        "label": "t:sections.page_sec.hide_title",
+        "default": false
+      }
+	]
+  }
+{% endschema %}

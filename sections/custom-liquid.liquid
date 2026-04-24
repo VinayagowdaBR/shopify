@@ -1,0 +1,92 @@
+{%- assign secSt = section.settings -%}
+<div class="content-indent {{ section.settings.top-offeset}}{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif%}>
+  <div class="page-width" id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="carousel">
+    {% render 'sec-title' %}
+    {% if section.settings.custom_liquid != blank %}{{ section.settings.custom_liquid }}{% endif %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.custom_liquid.name",
+    "class": "index-section",
+    "settings": [	  		
+      {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Custom Liquid"
+      },	  
+	  {
+         "type": "textarea",
+         "id": "subtitle",
+         "label": "t:sections.all.sub_head",
+         "default": "Describe about this section..."
+      },
+      {
+         "id": "custom_liquid",
+         "type": "liquid",
+         "label": "t:sections.custom_liquid.code"
+      }, 	
+	  {
+		 "type": "header",
+		 "content":"t:sections.all.name"
+      },
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+      }, 
+      {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+      {
+        "type": "checkbox",
+        "id": "section_cov",
+        "label": "t:global.background.add",
+        "default": false
+      },
+	  {
+        "type": "color",
+        "id": "sec_bg_clr",
+        "label": "t:global.background.color",
+		"default":"#fafafa",
+		"info":"select light color"
+	  },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        }
+	 ],
+    "presets": [
+      {
+        "name": "t:sections.custom_liquid.name"
+        
+      }
+    ]
+  }
+{% endschema %}

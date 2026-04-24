@@ -1,0 +1,179 @@
+{%- capture toolbar -%}
+{%- assign secSt = section.settings -%}
+<style>
+  .mbtlwraper { position:fixed; bottom:0; z-index:10; width:100%; box-shadow:0 0 10px rgba(0,0,0,0.05); background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{ secSt.bg }}{% endif %}; }
+  .mbtoolbar { overflow-x:auto; -webkit-overflow-scrolling:touch; display:flex; justify-content:space-between; align-items:center; gap:6px; padding:6px 8px; }
+  .mbtoolbar a { color:{{ secSt.cl }}; font-size:{{ secSt.fs }}px; font-weight:{{ secSt.fw }}; line-height:1.2; padding:8px 6px; margin:0; display:flex; flex-direction:column; align-items:center; text-decoration:none; }
+  .mbtoolbar .ico { display:block; margin:{% unless secSt.hdtxt %}0 auto 6px{% else %}0 auto{% endunless %}; width:{{ secSt.fsicon | plus: 8 }}px; height:{{ secSt.fsicon | plus: 8 }}px; }
+  /* Force thin, stroke-only look for all supplied SVGs */
+  .mbtoolbar svg { width:100%; height:100%; stroke:currentColor !important; fill:none !important; stroke-width:1.2 !important; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .mbtoolbar .label { font-size:{{ secSt.fs }}px; line-height:1; display:block; white-space:nowrap; }
+  .mbtoolbar li { list-style:none; flex:1 1 0; text-align:center; }
+  {% if section.settings.showmt %}
+    @media only screen and (max-width:767px){
+      body { padding-bottom:54px; }
+      .mbtlwraper { padding-bottom:env(safe-area-inset-bottom); }
+    }
+  {% endif %}
+</style>
+
+<div class="sec_cov{% if secSt.hidem %} hide-sm{% endif %}" style="--sst:{{ secSt.sst }}px;--ssb:{{ secSt.ssb }}px;--sstm:{{ secSt.sstm }}px;--ssbm:{{ secSt.ssbm }}px">
+  <ul class="fl f-aic f-jcsb mbtoolbar w_100 tc" style="{{ style }}">
+    <!-- HOME (user SVG #1) -->
+    <li>
+      <a href="{{ routes.root_url }}" class="db" aria-label="Home">
+        <span class="ico" aria-hidden="true">
+          <!-- user-provided home SVG (forced stroke-only via CSS) -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <path d="M22 12.2039V13.725C22 17.6258 22 19.5763 20.8284 20.7881C19.6569 22 17.7712 22 14 22H10C6.22876 22 4.34315 22 3.17157 20.7881C2 19.5763 2 17.6258 2 13.725V12.2039C2 9.91549 2 8.77128 2.5192 7.82274C3.0384 6.87421 3.98695 6.28551 5.88403 5.10813L7.88403 3.86687C9.88939 2.62229 10.8921 2 12 2C13.1079 2 14.1106 2.62229 16.116 3.86687L18.116 5.10812C20.0131 6.28551 20.9616 6.87421 21.4808 7.82274" stroke="#000" stroke-width="1.5" stroke-linecap="round"></path>
+            <path d="M15 18H9" stroke="#000" stroke-width="1.5" stroke-linecap="round"></path>
+          </svg>
+        </span>
+        {% unless secSt.hdtxt %}<span class="label">Home</span>{% endunless %}
+      </a>
+    </li>
+
+    <!-- CATEGORIES (user SVG #4, link to provided collection URL) -->
+    <li>
+      <a href="https://houseofviya.in/collections/best-seller" class="db" aria-label="Categories">
+        <span class="ico" aria-hidden="true">
+          <!-- user-provided categories SVG -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <g clip-path="url(#clip0_429_11052)">
+              <circle cx="17" cy="7" r="3" stroke="#292929" stroke-width="1.176" stroke-linecap="round" stroke-linejoin="round"></circle>
+              <circle cx="7" cy="17" r="3" stroke="#292929" stroke-width="1.176" stroke-linecap="round" stroke-linejoin="round"></circle>
+              <path d="M14 14H20V19C20 19.5523 19.5523 20 19 20H15C14.4477 20 14 19.5523 14 19V14Z" stroke="#292929" stroke-width="1.176" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M4 4H10V9C10 9.55228 9.55228 10 9 10H5C4.44772 10 4 9.55228 4 9V4Z" stroke="#292929" stroke-width="1.176" stroke-linecap="round" stroke-linejoin="round"></path>
+            </g>
+            <defs>
+              <clipPath id="clip0_429_11052">
+                <rect width="24" height="24" fill="white"></rect>
+              </clipPath>
+            </defs>
+          </svg>
+        </span>
+        {% unless secSt.hdtxt %}<span class="label">Categories</span>{% endunless %}
+      </a>
+    </li>
+
+    <!-- SEARCH (user SVG #3) -->
+    <li class="search-circle">
+      <a href="{{ routes.search_url }}" class="db searchIco" aria-label="Search">
+        <span class="ico" aria-hidden="true">
+          <!-- user-provided search SVG (the 32px one) -->
+          <svg width="64px" height="64px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16.6725 16.6412L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#000000" stroke-width="0.8640000000000001" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        </span>
+        {% unless secSt.hdtxt %}<span class="label">Search</span>{% endunless %}
+      </a>
+    </li>
+
+    <!-- CART (user SVG #5) -->
+    <li>
+      <a href="{{ routes.cart_url }}" class="db mbCart" aria-label="Cart">
+        <span class="ico" aria-hidden="true">
+          <!-- user-provided cart SVG (filled originally; CSS forces stroke-only) -->
+          <svg viewBox="0 0 23 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+            <g>
+              <path d="M1.5,32h20c0.827,0,1.5-0.673,1.5-1.5v-20C23,9.673,22.327,9,21.5,9H19c-0.276,0-0.5,0.224-0.5,0.5 S18.724,10,19,10h2.5c0.275,0,0.5,0.224,0.5,0.5v20c0,0.276-0.225,0.5-0.5,0.5h-20C1.225,31,1,30.776,1,30.5v-20 C1,10.224,1.225,10,1.5,10H4c0.276,0,0.5-0.224,0.5-0.5S4.276,9,4,9H1.5C0.673,9,0,9.673,0,10.5v20C0,31.327,0.673,32,1.5,32z"></path>
+              <path d="M6.5,13.5C6.776,13.5,7,13.276,7,13V5.764C7,3.137,9.019,1,11.5,1S16,3.137,16,5.764V13 c0,0.276,0.224,0.5,0.5,0.5S17,13.276,17,13V5.764C17,2.586,14.532,0,11.5,0S6,2.586,6,5.764V13C6,13.276,6.224,13.5,6.5,13.5z"></path>
+              <path d="M9,9C8.724,9,8.5,9.224,8.5,9.5S8.724,10,9,10h5c0.276,0,0.5-0.224,0.5-0.5S14.276,9,14,9H9z"></path>
+            </g>
+          </svg>
+        </span>
+        {% unless secSt.hdtxt %}<span class="label">Cart</span>{% endunless %}
+      </a>
+    </li>
+
+    <!-- WHATSAPP (user SVG #2, opens wa.me with given number) -->
+    <li>
+      <a href="https://wa.me/8296706504" class="db target-blank" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+        <span class="ico" aria-hidden="true">
+          <!-- user-provided whatsapp SVG -->
+            <svg width="64px" height="64px" viewBox="0 0 48.00 48.00" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Whatsapp-color</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Icons" stroke-width="0.00048000000000000007" fill="none" fill-rule="evenodd"> <g id="Color-" transform="translate(-700.000000, -360.000000)" fill="#45cc38"> <path d="M723.993033,360 C710.762252,360 700,370.765287 700,383.999801 C700,389.248451 701.692661,394.116025 704.570026,398.066947 L701.579605,406.983798 L710.804449,404.035539 C714.598605,406.546975 719.126434,408 724.006967,408 C737.237748,408 748,397.234315 748,384.000199 C748,370.765685 737.237748,360.000398 724.006967,360.000398 L723.993033,360.000398 L723.993033,360 Z M717.29285,372.190836 C716.827488,371.07628 716.474784,371.034071 715.769774,371.005401 C715.529728,370.991464 715.262214,370.977527 714.96564,370.977527 C714.04845,370.977527 713.089462,371.245514 712.511043,371.838033 C711.806033,372.557577 710.056843,374.23638 710.056843,377.679202 C710.056843,381.122023 712.567571,384.451756 712.905944,384.917648 C713.258648,385.382743 717.800808,392.55031 724.853297,395.471492 C730.368379,397.757149 732.00491,397.545307 733.260074,397.27732 C735.093658,396.882308 737.393002,395.527239 737.971421,393.891043 C738.54984,392.25405 738.54984,390.857171 738.380255,390.560912 C738.211068,390.264652 737.745308,390.095816 737.040298,389.742615 C736.335288,389.389811 732.90737,387.696673 732.25849,387.470894 C731.623543,387.231179 731.017259,387.315995 730.537963,387.99333 C729.860819,388.938653 729.198006,389.89831 728.661785,390.476494 C728.238619,390.928051 727.547144,390.984595 726.969123,390.744481 C726.193254,390.420348 724.021298,389.657798 721.340985,387.273388 C719.267356,385.42535 717.856938,383.125756 717.448104,382.434484 C717.038871,381.729275 717.405907,381.319529 717.729948,380.938852 C718.082653,380.501232 718.421026,380.191036 718.77373,379.781688 C719.126434,379.372738 719.323884,379.160897 719.549599,378.681068 C719.789645,378.215575 719.62006,377.735746 719.450874,377.382942 C719.281687,377.030139 717.871269,373.587317 717.29285,372.190836 Z" id="Whatsapp"> </path> </g> </g> </g></svg>
+        </span>
+        {% unless secSt.hdtxt %}<span class="label">WhatsApp</span>{% endunless %}
+      </a>
+    </li>
+
+  </ul>
+</div>
+{%- endcapture -%}
+{% if section.settings.showmt %}{{ toolbar | strip_newlines | remove: "  " | remove: "	" }}{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.mobile_toolbar.name",
+  "class": "mbtlwraper hide-md hide-lg",
+  "settings":[
+    {
+      "type": "checkbox",
+      "id": "showmt",
+      "label": "t:global.enable",
+      "default": true,
+      "info":"Recommended to display up to 5 links"
+    },
+    {
+      "type": "checkbox",
+      "id": "hdtxt",
+      "label": "t:sections.mobile_toolbar.hide_text",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "fsicon",
+      "label": "t:sections.mobile_toolbar.icon_size",
+      "default": 16,
+      "min": 10,
+      "max": 30,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "fs",
+      "label": "t:global.font.size",
+      "default": 12,
+      "min": 8,
+      "max": 15,
+      "step": 1,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "fw",
+      "label": "t:global.font.weight",
+      "default": "600",
+      "options": [
+        { "value": "300", "label": "Light" },
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semi Bold" },
+        { "value": "700", "label": "Bold" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "cl",
+      "label": "t:global.color.name",
+      "default":"#333"
+    },
+    {
+      "type": "color",
+      "id": "bg",
+      "label": "t:global.background.color",
+      "default": "#fff"
+    },
+    {
+      "type": "color_background",
+      "id": "bgg",
+      "label": "t:global.background.gradient"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Mobile toolbar (fixed – fused SVGs)"
+    }
+  ]
+}
+{% endschema %}

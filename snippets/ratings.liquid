@@ -1,0 +1,20 @@
+{%- if settings.reviews == 'shopify' -%}
+    <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+{%- elsif settings.reviews == 'loox' -%}
+    <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}"></div>
+{%- elsif settings.reviews == 'growave' -%}
+    {%- capture the_snippet_review_avg -%}{% render 'ssw-widget-avg-rate-listing', product: product %}{%- endcapture -%}
+    {%- unless the_snippet_review_avg contains 'Liquid error' -%}{{ the_snippet_review_avg }}{%- endunless -%}
+{%- elsif settings.reviews == 'yotpo' -%}
+    <div class="yotpo bottomLine" data-appkey="qItprOFJXO14x3q8jvbmDQFlq5wTZdnn5Vwh2gkk" data-domain="{{ shop.permanent_domain | escape }}" data-product-id="{{ product.id }}" data-product-models="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: 'large' |replace: '?', '%3F' | replace: '&','%26' }}" data-description="{{ product.description | escape }}" data-bread-crumbs="{% for tag in product.tags %}{{ tag | escape }};{% endfor %}"></div>
+{%- elsif settings.reviews == 'judgeme' -%}
+    <div style='{{ jm_style }}' class='jdgm-widget jdgm-preview-badge' data-id='{{ product.id }}'>{{ product.metafields.judgeme.badge }}</div>
+{%- elsif settings.reviews == 'rivyo' -%}
+    <div class="wc_product_review_badge" data-handle="{{ product.handle }}" data-product_id="{{ product.id }}"></div>
+{%- elsif settings.reviews == 'stamped' -%}
+    <span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ product.id }}" data-product-sku="{{ product.handle }}" data-product-title="{{ product.title }}" data-product-type="{{ product.type }}" style="display: block;">{{ product.metafields.stamped.badge }}</span>
+{%- elsif settings.reviews == 'ryviu' -%}
+    <div class="ryviu-collection"><ryviu-widget-total collection=1 product_id="{{ product.id }}" handle="{{ product.handle }}" reviews_data="{{ product.metafields.ryviu.product_reviews_info | escape }}"></ryviu-widget-total></div>
+{%- elsif settings.reviews == 'other' -%}
+    {{ settings.otherapp }}                                             
+{%- endif -%}

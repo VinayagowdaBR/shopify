@@ -1,0 +1,16 @@
+{%- if link != blank -%}<a href="{{link}}">{%- endif -%}
+{%- if image != blank -%}
+    <img class="imgFl lazyload" src="{{ image | img_url: '50x' }}" width="{{image.width}}" height="{{image.height}}"
+         data-srcset="{% render 'lazyload', image: image, sizes: '200,400,600,800,1000,1200,1400' %}" data-sizes="auto" alt="{{ block.settings.image1.alt | escape }}">
+{%- else -%}
+    {{ 'https://dummyimage.com/' | append: imgSize | append: '/F4F4F4/ccc' | img_tag }}
+{%- endif -%}
+{%- if title != blank or subtitle != blank %}
+<div class="gbtxtwrap {{talign}}">
+    <div class="txt{% if isBox %} bx{% endif %}">
+      {%- if title != blank -%}<p class="rgTxt mb0">{{title}}</p>{%- endif -%}
+      {%- if subtitle != blank -%}<p class="ttlTxt mb0">{{subtitle}}</p>{%- endif -%}
+    </div>
+</div>
+{%- endif -%}
+{%- if link != blank -%}</a>{%- endif -%}

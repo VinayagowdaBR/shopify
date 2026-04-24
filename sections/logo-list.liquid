@@ -1,0 +1,261 @@
+{%- liquid
+    assign isRtl = false
+    assign lisRtl = 'ar,dv,ha,he,ku,fa,ur,ug' | split: ','
+    if lisRtl contains request.locale.iso_code or settings.rtl
+        assign isRtl = true
+    endif
+   assign secSt = section.settings
+-%}
+{%- capture logobar -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif%}>
+  <div class="logo-bar wow fadeIn{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}" id="carousel-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="carousel" style="--br:{{secSt.img_rad}}px;">
+    {% render 'sec-title' %}
+    {% if section.blocks.size > 0 %}
+    <div class="grid rwcols-{{secSt.mobile-grid}} rwcols-md-{{secSt.tablet-grid}} rwcols-lg-{{secSt.grid}} f-jcc{% if secSt.enable_carousel %} carousel arwOut{% endif %}" {% if secSt.enable_carousel %}data-flickity='{ "cellAlign":"left","groupCells":true,"wrapAround":true,"pageDots":false{%- if secSt.autoplay -%},"autoPlay":{{secSt.speed | times: 1000}}{% endif %}{%- if isRtl -%},"rightToLeft": true{%- endif -%} }'{% endif %}>
+      {% for block in section.blocks %}
+        {%- assign blkSt = block.settings -%}
+        <div class="gitem" id="{{block.id}}" {{ block.shopify_attributes }}>
+          {% if blkSt.link != blank %}
+            <a href="{{ blkSt.link }}" class="logo-bar__link" {% if blkSt.opentab %} target="_blank"{% endif %}>
+          {% endif %}
+          
+          {% if blkSt.image != blank %}
+            <img class="logoImg db autoHt lazyload"
+                loading="lazy"
+                src="{{ blkSt.image | img_url: '150x' }}"
+                width="{{ blkSt.image.width }}"
+                height="{{ blkSt.image.height }}"
+                data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '150,260,380,500' %}"
+                data-sizes="auto"
+                alt="{{ blkSt.image.alt | escape }}">
+          {% else %}
+            {{ 'logo' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% endif %}
+          
+          {% if blkSt.link != blank %}
+            </a>
+          {% endif %}
+
+          {%- if blkSt.text != blank -%}
+            <div class="logo-text">{{ blkSt.text }}</div>
+          {%- endif -%}
+        </div>
+      {% endfor %}
+
+    </div>
+    {% endif %}
+    {% if section.blocks.size == 0 %}{% include 'no-blocks' %}{% endif %}
+  </div>
+</div>  
+{%- endcapture -%}
+{{logobar | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.logo_list.name",
+    "class": "index-section",
+    "max_blocks": 20,
+    "settings": [		
+      {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:sections.all.head",
+        "default": "Logo list"	
+      },
+ 	  {
+        "type": "textarea",
+        "id": "subtitle",
+        "label": "t:sections.all.sub_head",
+        "default": "Describe your products, collection, content etc..."
+      },
+        {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+       },
+		 {
+         "type": "checkbox",
+		 "id": "section_width",
+		 "label":"t:global.fullwidth",
+		 "default": false
+        }, 
+	 {
+		"type":"checkbox",
+		"id":"npd",
+		"label":"t:global.no_padding",
+        "info": "t:global.no_padding_info",
+		"default": false
+	  },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+		{
+            "type": "checkbox",
+            "id": "section_cov",
+            "label": "t:global.background.add",
+            "default": false
+        },
+		 {
+            "type": "color",
+            "id": "sec_bg_clr",
+            "label": "t:global.background.color",
+			"default":"#fafafa"	
+		 },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        }, 
+	 {
+        "type": "range",
+        "id": "img_rad",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "label": "t:global.image.radius",
+        "unit": "px",
+        "default": 0
+	 },
+      {
+        "type": "paragraph",
+        "content": "t:global.grid.row"
+      },
+      {
+        "type": "range",
+        "id": "grid",
+        "label": "t:global.devices.desktop",
+        "default": 6,
+        "min": 1,
+        "max": 8,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "tablet-grid",
+        "label": "t:global.devices.tablet",
+        "default": 5,
+        "min": 1,
+        "max": 6,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "mobile-grid",
+        "label": "t:global.devices.mobile",
+        "default": 3,
+        "min": 1,
+        "max": 4,
+        "step": 1
+      },
+	  {
+        "type": "header",
+        "content": "t:sections.all.carousel.name"
+      },
+ 	 {
+		"type":"checkbox",
+		"id":"enable_carousel",
+		"label":"t:global.enable",
+		"default": true
+	  },       	 	    
+	  {
+        "type": "checkbox",
+        "id": "autoplay",
+        "label": "t:sections.all.carousel.autoplay",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "speed",
+        "label": "t:sections.all.carousel.speed",
+        "default": 5,
+        "min": 1,
+        "max": 30,
+        "step": 1,
+		"unit": "Sec"
+      },
+ 	  {
+        "type": "paragraph",
+        "content": "Upload all logo of same size"        
+      }
+    ],
+    "blocks": [
+      {
+        "type": "logo_image",
+        "name": "t:sections.logo_list.block",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:global.image.name"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "t:global.link",
+            "info": "Optional"
+          },
+          {
+            "type": "checkbox",
+            "id": "opentab",
+            "label": "t:global.open_new_tab",
+            "default": false
+          },
+          {
+            "type": "text",
+            "id": "text",
+            "label": "Text below logo",
+            "default": "Brand Name"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.logo_list.name",        
+        "blocks": [
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          },
+ 		 {
+            "type": "logo_image"
+          },
+          {
+            "type": "logo_image"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

@@ -1,0 +1,349 @@
+{%- assign secSt = section.settings -%}
+<style>
+
+.rangeSlider { position:absolute; top:0; left:0; z-index:20; width:100%; height:100%; margin:0; padding:0;
+  background-color:transparent; border:none; -webkit-appearance:none; -moz-appearance:none; appearance:none; outline:none; cursor:ew-resize; }
+
+@media (hover) {
+  .rangeSlider:hover ~ .imgSlider .sliderThumb { transform: scale(1.2); }
+}
+.image-comparison {border-radius:{{secSt.img_rad}}px;}
+.image-comparison .rangeSlider:active ~ .imgSlider .sliderThumb,
+.image-comparison .rangeSlider:focus ~ .imgSlider .sliderThumb,
+.image-comparison .comparison-active ~ .imgSlider .sliderThumb { transform:scale(0.8); background-color:var(--bg); }
+
+.baImg-figure.before { top:0; left:0; width:calc(50% + 1px); height:100%; overflow:hidden; }
+.baImg-figure.after { padding-top:var(--pdm); }
+@media only screen and (min-width: 766px){
+    .baImg-figure.after { padding-top:var(--pd); }
+}
+
+.ba-img { object-fit:cover; object-position:0 50%; }
+.before .ba-img { z-index:1; }
+
+.imgCaption { white-space:nowrap; bottom:20px; color:var(--cl); font-family:var(--ff); background-color:var(--bg); text-transform:uppercase; padding:5px 15px; border-radius:30px; }
+.imgCaption.before { left:20px; z-index:2; }
+.imgCaption.after { right:20px; }
+
+.imgSlider { position:absolute; top:0; left:50%; width:2px; height:100%; background-color:var(--bg); transition:background-color 0.3s ease-in-out; z-index:10; }
+.comparison-active ~ .imgSlider { background-color: rgba(255, 255, 255, 0); }
+
+.sliderThumb { top:calc(50% - 20px); left:calc(50% - 20px); width:40px; height:40px;
+    color:var(--cl); background-color:var(--bg); border-radius:50%; box-shadow:0 0 22px 0 var(--sd);
+    transform-origin:center; transition:transform 0.3s ease-in-out, background-color 0.3s ease-in-out; }
+
+.rangeSlider::-webkit-slider-runnable-track { width:40px; height:40px; opacity:0; }
+.rangeSlider::-moz-range-thumb { width:40px; height:40px; opacity:0; }
+.rangeSlider::-webkit-slider-thumb { width:40px; height:40px; opacity:0; }
+
+.rangeSlider::-ms-fill-lower { background-color: transparent; }
+.rangeSlider::-ms-track { position:relative; top:0; left:0; width:100%; height:100%; border:none; margin:0; padding:0; background-color:transparent; color:transparent; outline:none; cursor:col-resize; }
+.rangeSlider::-ms-thumb { width: 0.5%; height: 100%; opacity: 0; }
+.rangeSlider::-ms-tooltip { display: none; }
+
+</style>
+
+{%- capture heroBanner -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif%}>
+    <div class="{% unless secSt.section_width %}page-width{% else %}fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}">
+        {% render 'sec-title' %}
+        <before-after class="db image-comparison pr of_hidden" id="ba-{{ section.id }}" data-component="image-comparison-slider" style="--cl:{{secSt.cl}};--bg:{{ secSt.bg}};--fs:{{secSt.fs}}px;--fsm:{{secSt.fsm}}px;--ff:var(--{{secSt.ff}});--fw:{{secSt.fw}};">
+            <label for="image-comparison-range" class="v-hidden">Move image comparison slider</label>
+            <input type="range" min="0" max="100" value="50" class="rangeSlider" id="rs-{{ section.id }}" data-image-comparison-range="">
+
+            <figure class="baImg-figure pa before m0" data-image-comparison-overlay="">
+                <picture class="comparison-image">
+                    {% if secSt.image != blank %}
+                        {% if secSt.imagem != blank %}
+                            <source media="(max-width:767px)" srcset="{{ secSt.imagem | img_url: '800x' }}">
+                        {% endif %}
+                        <img class="imgFt ba-img" loading="lazy" src="{{ secSt.image | img_url: 'master' }}" width="{{ secSt.image.width }}" height="{{ secSt.image.height }}" alt="{{ secSt.image.alt | escape }}">
+                    {% else %}
+                        <img class="imgFt ba-img" src="https://dummyimage.com/2000x1000/ddd/ffffff.png&text=Before" width="2000" height="1000" alt="Before">
+                    {% endif %}
+                </picture>
+                <figcaption class="imgCaption rgTxt pa before">{{ secSt.blbl }}</figcaption>
+            </figure>
+            <div class="imgSlider" data-image-comparison-slider="" style="--cl:{{ secSt.scl }};--bg:{{ secSt.sbg }};--sd:{{ secSt.sd }}5;">
+                <span class="sliderThumb pa fl f-aic f-jcc" data-image-comparison-thumb="">
+                    <svg class="image-comparison__thumb-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="10" viewBox="0 0 18 10" fill="currentColor">
+                        <path class="image-comparison__thumb-icon--left" d="M12.121 4.703V.488c0-.302.384-.454.609-.24l4.42 4.214a.33.33 0 0 1 0 .481l-4.42 4.214c-.225.215-.609.063-.609-.24V4.703z"></path>
+                        <path class="image-comparison__thumb-icon--right" d="M5.879 4.703V.488c0-.302-.384-.454-.609-.24L.85 4.462a.33.33 0 0 0 0 .481l4.42 4.214c.225.215.609.063.609-.24V4.703z"></path>
+                    </svg>
+                </span>
+            </div>
+            {%- liquid
+                assign padding = 1 | divided_by: secSt.imagea.aspect_ratio | times: 100
+                assign paddingm = 1 | divided_by: secSt.imagea.aspect_ratio | times: 100
+                if secSt.imageam != blank
+                    assign paddingm = 1 | divided_by: secSt.imageam.aspect_ratio | times: 100
+                endif
+            -%}
+            <figure class="baImg-figure after m0" style="--pd:{{ padding | default: 50 }}%;--pdm:{{ paddingm | default: 66.666666667 }}%;">
+                <picture class="comparison-image">
+                    {% if secSt.imagea != blank %}
+                        {% if secSt.imageam != blank %}
+                            <source media="(max-width:767px)" srcset="{{ secSt.imageam | img_url: '800x' }}">
+                        {% endif %}
+                        <img class="imgFt ba-img" loading="lazy" src="{{ secSt.imagea | img_url: 'master' }}" width="{{ secSt.imagea.width }}" height="{{ secSt.imagea.height }}" alt="{{ secSt.imagea.alt | escape }}">
+                    {% else %}
+                        <img class="imgFt ba-img" src="https://dummyimage.com/2000x1000/f4f4f4/cccccc.png&text=After" width="2000" height="1000" alt="Before">
+                    {% endif %}
+                </picture>
+                <figcaption class="imgCaption rgTxt pa after">{{ secSt.albl }}</figcaption>
+            </figure>
+        </before-after>
+    </div>
+</div>
+{%- endcapture -%}
+{{heroBanner | strip_newlines | remove: "  " | remove: "	" }}
+<script>
+
+
+</script>
+{% schema %}
+  {
+    "name": "t:sections.before-after.name",
+    "class": "before-after",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "t:sections.all.head",
+            "default": "Before/After Comparison"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "t:sections.all.sub_head",
+            "default": "Describe your products, collection, content etc..."
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.name"
+        },	
+	 {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },
+		{
+            "type":"checkbox",
+            "id":"section_width",
+            "label":"t:global.fullwidth",
+            "default": false
+            },
+          {
+                "type":"checkbox",
+                "id":"npd",
+                "label":"t:global.no_padding",
+                "info": "t:global.no_padding_info",
+                "default": true
+          },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "section_cov",
+            "label": "t:global.background.add",
+            "default": true
+        },
+        {
+            "type": "color",
+            "id": "sec_bg_clr",
+            "label": "t:global.background.color",
+            "default": "#fafafa",
+            "info": "select light color"
+        },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+       {
+        "type": "range",
+        "id": "img_rad",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "label": "t:global.image.radius",
+        "unit": "px",
+        "default": 0
+      },
+      {
+		"type":"header",
+		"content": "t:sections.before-after.before"
+	  },  
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:global.image.name",
+        "info": "t:sections.before-after.image_info"
+      },
+	  {
+        "type": "image_picker",
+        "id": "imagem",
+        "label": "t:global.image.mobile"
+      },
+      {
+        "type": "text",
+        "id": "blbl",
+        "label": "t:global.text.text",
+        "default": "Before"
+      },
+	  {
+        "type": "header",
+        "content": "t:sections.before-after.after"
+      },  
+      {
+        "type": "image_picker",
+        "id": "imagea",
+        "label": "t:global.image.name",
+        "info": "t:sections.before-after.image_info"
+      },
+	  {
+        "type": "image_picker",
+        "id": "imageam",
+        "label": "t:global.image.mobile"
+      },
+      {
+        "type": "text",
+        "id": "albl",
+        "label": "t:global.text.text",
+        "default": "After"
+      }, 
+	  {
+        "type": "color",
+        "id": "cl",
+        "label": "t:global.color.text",
+        "default": "#fff"
+      }, 
+	  {
+        "type": "color",
+        "id": "bg",
+        "label": "t:global.background.color",
+        "default": "#000"
+      },
+      {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 18,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 16,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "ff",
+            "label": "t:global.font.family",
+            "default": "ft2",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "fw",
+            "label": "t:global.font.weight",
+            "default": "700",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type":"header",
+            "content": "t:sections.before-after.option"
+        }, 
+          {
+            "type": "color",
+            "id": "scl",
+            "label": "t:sections.before-after.arrow",
+            "default": "#000"
+          }, 
+          {
+            "type": "color",
+            "id": "sbg",
+            "label": "t:global.background.color",
+            "default": "#fff"
+          }, 
+          {
+            "type": "color",
+            "id": "sd",
+            "label": "t:sections.before-after.shadow",
+            "default": "#000"
+          }
+    ],
+    "presets": [
+      {
+        "name": "t:sections.before-after.name"
+      }
+    ]
+  }
+{% endschema %}

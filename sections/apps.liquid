@@ -1,0 +1,79 @@
+<div class="content-indent {{ section.settings.top-offeset}}">
+  {% if section.settings.section_cov %}<div class="section-cover" style="background-color:{{section.settings.sec_bg_clr}};">{% endif%}
+  <div class="{% unless secSt.section_width %}page-width {% else %}fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}" id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="carousel">
+   {%- for block in section.blocks -%}
+    {% render block %}
+  {%- endfor -%}
+  </div>
+  {% if section.settings.section_cov %}</div>{% endif %}
+</div>
+
+<div class="{% if section.settings.include_margins %}page-width{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+  
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+      }, 
+	  {
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": true
+	   }, 
+	 {
+		"type":"checkbox",
+		"id":"npd",
+		"label":"t:global.no_padding",
+        "info": "t:global.no_padding_info",
+		"default": false
+	  }, 		
+      {
+        "type": "checkbox",
+        "id": "section_cov",
+        "label": "t:global.background.add",
+        "default": false
+      },
+	  {
+        "type": "color",
+        "id": "sec_bg_clr",
+        "label": "t:global.background.color",
+		"default":"#fafafa",
+		"info":"t:sections.all.background_info"
+	  }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.apps.name"
+    }
+  ]
+}
+{% endschema %}

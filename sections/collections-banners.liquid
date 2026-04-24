@@ -1,0 +1,644 @@
+{%- assign secSt = section.settings -%}
+{%- capture collectionBanner -%}
+
+{%- capture styles -%}
+    --tcl:{{secSt.cl}};
+    --dtbg:{{secSt.bg | color_modify:'alpha', secSt.bxopt}};
+    --dtbdr:{{secSt.bdr}}px;	
+    --tfs:{{secSt.tfs}}px;
+    --tfsm:{{secSt.tfsm}}px;
+    --dttff:var(--{{secSt.tff}});
+    --tfw:{{secSt.tfw}};
+    --tlh:{{secSt.tlh}};
+    --dtfs:{{secSt.fs}}px;
+    --dtfsm:{{secSt.fsm}}px;
+    --dtfw:{{secSt.fw}};
+    --dtlh:{{secSt.lh}};
+{% endcapture %}
+
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}">
+  <div class="clbnrs sec-{{ section.id}}{% unless secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" id="{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="masonary">
+
+      {% render 'sec-title' %}
+
+      <div class="grid f-ais gspace grid-masonary{% if secSt.disable_zoom %} no-zoom{% endif %}"
+           style="--grsp:0 -{{ secSt.grid-spacing | divided_by: 2.0  }}px;--grspi:0 {{ secSt.grid-spacing | divided_by: 2.0  }}px {{secSt.grid-spacing}}px;--grspm:0 -{{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px;--grspim:0 {{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px {{secSt.grid-spacing-mbl}}px;
+            {{styles}}">
+        <div class="grid-sizer-{{section.id}} pa col-{{secSt.grid-spacing-col}}"></div>
+        {% for block in section.blocks limit: section.blocks.size %}      
+        	{% case block.settings.width %}
+              {% when '20' %}{%- assign image_size = '150,350,550,750' -%}
+              {% when '25' %}{%- assign image_size = '150,350,550,750' -%}
+              {% when '33' %}{%- assign image_size = '150,350,550,750' -%}
+              {% when '40' %}{%- assign image_size = '150,350,550,750' -%}
+              {% when '50' %}{%- assign image_size = '150,350,550,750,950' -%}
+              {% when '60' %}{%- assign image_size = '550,750,950,1200,1500' -%}
+              {% when '66' %}{%- assign image_size = '550,750,950,1200,1500' -%}
+              {% when '75' %}{%- assign image_size = '550,750,950,1200,1500,1800' -%}
+              {% when '80' %}{%- assign image_size = '550,750,950,1200,1500,1800' -%}
+            {% endcase %}
+        {% assign product_box = forloop.index | minus:1 %}
+        {% assign delay_time = 50 | times : product_box %}
+        <div class="gitem ms-item wd{{ block.settings.width }}-md wow fadeInUp" {{ block.shopify_attributes }} data-wow-delay="{{delay_time}}ms">
+          {%- assign collection = collections[block.settings.collection] -%}
+          {% render 'collection-grid-item', collection: collection, blkSt: block.settings, secSt: section.settings, masonary:true %}
+        </div>
+        {% endfor %}
+      </div>
+    {% if section.blocks.size == 0 %}{% render 'no-blocks' %}{% endif %}
+  </div>
+</div>
+{%- endcapture -%}
+{{collectionBanner | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.collections.banner_name",
+    "class": "index-section",
+    "max_blocks": 15,
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "t:sections.all.head",
+            "default": "Collection Banner"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "t:sections.all.sub_head",
+            "default": "Describe your products, collection, content etc..."
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.collections.banner_style"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.name"
+        },
+        {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "none",
+                    "label": "None"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "section_width",
+            "label": "t:global.fullwidth",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "npd",
+            "label": "t:global.no_padding",
+            "info": "t:global.no_padding_info",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+        {
+            "type": "header",
+            "content": "t:global.grid.name"
+        },
+        {
+            "type": "range",
+            "id": "grid-spacing",
+            "label": "t:global.grid.space",
+            "default": 15,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "grid-spacing-mbl",
+            "label": "t:global.grid.space_mobile",
+            "default": 5,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "info": "t:global.grid.space_info"
+        },
+        {
+            "type": "range",
+            "id": "grid-spacing-col",
+            "label": "t:global.grid.column",
+            "default": 2,
+            "min": 2,
+            "max": 5,
+            "step": 1,
+            "info": "t:sections.collections.column_guide"
+        },
+        {
+            "type": "paragraph",
+            "content": "----------------------------------------"
+        },
+        {
+            "type": "range",
+            "id": "box-width",
+            "label": "t:sections.collections.box_width",
+            "default": 50,
+            "min": 30,
+            "max": 90,
+            "step": 10,
+            "unit": "%"
+        },
+        {
+            "type": "color",
+            "id": "cl",
+            "label": "t:global.color.text",
+            "default": "#000"
+        },
+        {
+            "type": "checkbox",
+            "id": "isbox",
+            "label": "t:sections.collections.add_box",
+            "default": true
+        },
+        {
+            "type": "color",
+            "id": "bg",
+            "label": "t:sections.collections.box_bg",
+            "default": "#fff"
+        },
+        {
+            "type": "range",
+            "id": "bxopt",
+            "label": "t:global.background.opacity",
+            "default": 0.9,
+            "min": 0,
+            "max": 1,
+            "step": 0.1
+        },
+        {
+            "type": "range",
+            "id": "bdr",
+            "label": "t:global.border_radius",
+            "default": 0,
+            "min": 0,
+            "max": 50,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "ibdr",
+            "label": "t:global.image.radius",
+            "default": 0,
+            "min": 0,
+            "max": 50,
+            "step": 1
+        },
+        {
+            "type": "checkbox",
+            "id": "disable_zoom",
+            "label": "t:sections.collections.disable_image_zoom",
+            "default": false
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.all.heading.title"
+        },
+        {
+            "type": "range",
+            "id": "tfs",
+            "label": "t:global.font.size",
+            "default": 18,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "tfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 16,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "tff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "600",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "tlh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.all.heading.details"
+        },
+        {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 13,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 12,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "fw",
+            "label": "t:global.font.weight",
+            "default": "400",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "lh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.all.heading.button"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_buttons",
+            "label": "t:global.display",
+            "default": true
+        },
+        {
+            "type": "select",
+            "id": "btn-style",
+            "label": "t:global.button.select",
+            "default": "btn",
+            "options": [
+                {
+                    "label": "Solid Button 1",
+                    "value": "btn"
+                },
+                {
+                    "label": "Solid Button 2",
+                    "value": "btn2"
+                },
+                {
+                    "label": "Solid Button 3",
+                    "value": "btn3"
+                },
+                {
+                    "label": "Border Button 1",
+                    "value": "bdr-btn1"
+                },
+                {
+                    "label": "Border Button 2",
+                    "value": "bdr-btn2"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "btn-size-desk",
+            "label": "t:global.button.size",
+            "default": "btn-md",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "btn-lg"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "btn-size-mob",
+            "label": "t:global.button.size_mobile",
+            "default": "mob-btn-md",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "mob-btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "mob-btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "mob-btn-lg"
+                }
+            ]
+        },
+        {
+            "type": "header",
+            "content": "t:global.snow.title"
+        },
+        {
+            "type": "checkbox",
+            "id": "snow_effect",
+            "label": "t:global.enable",
+            "default": false,
+            "info": "For Christmas"
+        },
+        {
+            "type": "select",
+            "id": "snow_style",
+            "label": "t:global.snow.style",
+            "default": "style1",
+            "options": [
+                {
+                    "value": "style1",
+                    "label": "Falling Down"
+                },
+                {
+                    "value": "style2",
+                    "label": "Falling From Left"
+                }
+            ]
+        }
+    ],
+    "blocks": [
+        {
+            "type": "featured_collection",
+            "name": "t:sections.collections.block.name",
+            "settings": [
+                {
+                    "label": "t:sections.collections.block.name",
+                    "id": "collection",
+                    "type": "collection"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "collection_image",
+                    "label": "t:global.image.name"
+                },
+                {
+                    "type": "textarea",
+                    "id": "collection_name",
+                    "label": "t:sections.collections.block.custom_name",
+                    "default": "NEW ARRIVALS"
+                },
+                {
+                    "type": "textarea",
+
+                    "id": "collection_name2",
+                    "label": "t:global.text.detail",
+                    "default": "From world's top designer"
+                },
+                {
+                    "type": "text",
+                    "id": "collection_btn",
+                    "label": "t:global.button.text",
+                    "default": "Shop Now"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "t:sections.collections.block.link",
+                    "info": "t:sections.collections.block.link_info"
+                },
+                {
+                    "type": "select",
+                    "id": "talign",
+                    "label": "t:global.text.align",
+                    "default": "tc",
+                    "options": [
+                        {
+                            "value": "tl",
+                            "label": "Left"
+                        },
+                        {
+                            "value": "tc",
+                            "label": "Center"
+                        },
+                        {
+                            "value": "tr",
+                            "label": "Right"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "text_pos",
+                    "label": "t:global.text.position",
+                    "default": "f-jcc f-aie",
+                    "options": [
+                        {
+                            "label": "Top Left",
+                            "value": "f-ais f-jcs"
+                        },
+                        {
+                            "label": "Top Center",
+                            "value": "f-jcc f-ais"
+                        },
+                        {
+                            "label": "Top Right",
+                            "value": "f-jce f-ais"
+                        },
+                        {
+                            "label": "Left",
+                            "value": "f-jcs f-aic"
+                        },
+                        {
+                            "label": "Center",
+                            "value": "f-jcc f-aic"
+                        },
+                        {
+                            "label": "Right",
+                            "value": "f-jce f-aic"
+                        },
+                        {
+                            "label": "Bottom Left",
+                            "value": "f-aie f-jcs"
+                        },
+                        {
+                            "label": "Bottom Center",
+                            "value": "f-jcc f-aie"
+                        },
+                        {
+                            "label": "Bottom Right",
+                            "value": "f-jce f-aie"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "50",
+                    "info": "t:sections.all.column_width_info",
+                    "options": [
+                        {
+                            "value": "20",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "25",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "33",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "40",
+                            "label": "40%"
+                        },
+                        {
+                            "value": "50",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "60",
+                            "label": "60%"
+                        },
+                        {
+                            "value": "66",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "75",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "80",
+                            "label": "80%"
+                        },
+                        {
+                            "value": "100",
+                            "label": "100%"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "t:sections.collections.banner_name",
+            "blocks": [
+                {
+                    "type": "featured_collection"
+                },
+                {
+                    "type": "featured_collection"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

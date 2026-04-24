@@ -1,0 +1,75 @@
+{%- assign colorType = secSt.color_type | default: settings.color_type -%}
+{%- assign colorSize = secSt.color_size | default: settings.color_size -%}
+{%- assign imgPosition = secSt.vr_bg_position | default: settings.vr_bg_position -%}
+{%- if colorSwatch and product.options.size > 0 -%}
+{% capture colorSwatches %}
+  <ul class="gridSwatches fl f-aic {% unless secSt.prbox_style == "style4" or secSt.prbox_style == "style6" %}f-jcc{% endunless %}">
+    {%- for option in product.options_with_values -%}
+       {%- liquid
+          assign optionIndex = option.position | minus: 1
+          assign is_color = false
+          assign downcased_option = option.name | downcase
+          assign colorOptions = settings.colorOpt | downcase | replace:", ","," | replace:" , ","," | replace:" ,","," | split: ","
+          if colorOptions contains downcased_option
+              assign is_color = true 
+          endif
+       %}
+        {%- if is_color -%}
+            {%- liquid
+                assign variants_available_arr = product.variants | map: 'available'
+                assign variants_option1_arr = product.variants | map: 'option1'
+                assign variants_option2_arr = product.variants | map: 'option2'
+                assign variants_option3_arr = product.variants | map: 'option3'
+              -%}
+              {%- for value in option.values -%}
+                {%- liquid
+                  assign ClOpt = forloop.index
+                  assign option_disabled = true
+
+                  for option1_name in variants_option1_arr
+                    case option.position
+                      when 1
+                        if variants_option1_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                          assign option_disabled = false
+                        endif
+                      when 2
+                        if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                          assign option_disabled = false
+                        endif
+                      when 3
+                        if option1_name == product.selected_or_first_available_variant.option1 and variants_option2_arr[forloop.index0] == product.selected_or_first_available_variant.option2 and variants_option3_arr[forloop.index0] == value and variants_available_arr[forloop.index0]
+                          assign option_disabled = false
+                        endif
+                    endcase
+                  endfor
+
+                  assign optionIndex = option.position | minus: 1
+                  for variant in product.variants
+                      if variant.options[optionIndex] == value
+                        assign vrImg = variant.image
+                        break
+                      endif
+                  endfor
+                -%}
+                    {% if colorType == "color" %}
+                      <li class="swatch {{ colorSize }} clrswt swt{{ value | handle }}{% if vrImg == null %} noImg{% endif %}{% if option_disabled %} disabled{% endif %}{% if ClOpt > settings.clcount %} hide{% endif %}" title="{{ value }}"
+                          style="background-color:{{ value | handle }};" {% if vrImg != null %}rel="{{ vrImg | image_url: width: '400x' }}"{% endif %}>
+                          <span class="tooltip-label top">{{ value }}</span>
+                      </li>
+                    {% elsif vrImg != null %}
+                      <li class="swatch {{ colorSize }} clrswt swt{{ value | handle }} lazyload{% if option_disabled %} disabled{% endif %}{% if ClOpt > settings.clcount %} hide{% endif %}" title="{{ value }}"
+                          style="background-color:{{ value | handle }};background-position:{{ imgPosition }};"
+                          data-bgset="{{ vrImg | image_url: width: '70x'  }}" data-sizes="auto" data-parent-fit="contain" rel="{{ vrImg | image_url: width: '400x' }}">
+                          <span class="tooltip-label top">{{ value }}</span>
+                      </li>
+                    {% endif %}
+              {%- endfor -%}
+              {%- if ClOpt > settings.clcount -%}
+                  <li class="numb">{{ option.values.size | minus: settings.clcount }}+</li>
+              {%- endif -%}
+        {%- endif -%}
+    {% endfor %}
+  </ul>
+{% endcapture %}
+{{colorSwatches | strip_newlines | remove: "  " | remove: "	" }}
+{%- endif -%}

@@ -1,0 +1,47 @@
+<div id="{{ section.id }}">
+  
+</div>
+<style>
+  #{{ section.id }} { background:{{section.settings.color_bg}}; height:{{section.settings.mdesk}}px; }
+  @media only screen and (min-width:768px) {
+   #{{ section.id }} {height:{{section.settings.sdesk}}px; }
+}
+</style>
+{% schema %}
+  {
+    "name": "t:sections.space",
+    "settings": [
+	{
+        "type": "range",
+        "id": "sdesk",
+        "label": "t:global.devices.desktop",
+        "default": 30,
+        "min": 1,
+        "max": 100,
+        "step": 1
+      },
+      {
+        "type": "range",
+        "id": "mdesk",
+        "label": "t:global.devices.mobile",
+        "default": 15,
+        "min": 1,
+        "max": 100,
+        "step": 1
+      },
+       {
+        "type": "color",
+        "id": "color_bg",
+        "label": "t:global.background.color",
+        "default": "#fff"
+      }
+    ],
+	 "presets": [
+      {
+        "name": "t:sections.space",
+        "category": "Other"       
+      }
+    ]
+  }
+{% endschema %}
+

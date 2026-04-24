@@ -1,0 +1,168 @@
+{% assign secSt = section.settings %}
+
+{%- capture contactform -%}
+<div class="contact-frm form-vertical">   
+  {% form 'contact' %}
+    {% if form.posted_successfully? %}<p class="note form-success">{{ 'contact.form.post_success' | t }}</p>{% endif %}
+    
+    {{ form.errors | default_errors }} 
+    <div class="grid">
+      <div class="gitem wd50-md">
+        <input type="text" id="ContactFormName" name="contact[name]" placeholder="{{ 'contact.form.name' | t }}" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+      </div>       
+      <div class="gitem wd50-md">
+        <input type="email" id="ContactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="{% if form.errors contains 'email' %}input--error{% endif %}">
+      </div>              
+    </div>
+    {% unless section.settings.show_phone %}
+    <input type="tel" id="ContactFormPhone" name="contact[phone]" pattern="[0-9\-]*" placeholder="{{ 'contact.form.phone' | t }}" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+    {% endunless %} 
+    {% unless section.settings.show_subject %}
+    <input type="text" id="ContactFormSubject" name="contact[email subject]" placeholder="{{ 'contact.form.subject' | t }}" value="{% if form[subject] %}{{ form[subject] }}{% endif %}">
+    {% endunless %}
+    <textarea rows="10" id="ContactFormMessage" name="contact[body]" placeholder="{{ 'contact.form.message' | t }}">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+    <input type="submit" class="btn w_100" value="{{ 'contact.form.submit' | t }}">
+  {% endform %}
+  </div>   
+{%- endcapture -%}
+
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif %}> 	
+ <div class="page-width">
+  <div class="w_100 m_auto" style="max-width:{{section.settings.page_Width}}px;">                  
+        {% if section.settings.layout == "1" %} 
+           <div class="grid">
+                <div class="gitem wd33-md">                   
+                     <h3 class="h3 {{settings.sechdft}}"><span class="dbi pr">{{ section.settings.title }}</span></h3>
+                     {%- if section.settings.subtitle != blank -%}<div class="mb20">{{section.settings.subtitle}}</div>{%- endif -%}                                                 
+                </div>  
+                <div class="gitem wd66-md">                                                
+                    {{ contactform }}                 
+                </div>  
+           </div>  
+       {%  else %}
+             <div class="sec-ttl tc">
+                <h3 class="h3 {{settings.sechdft}}"><span class="dbi pr">{{ section.settings.title }}</span></h3>
+                {%- if section.settings.subtitle != blank -%}<p>{{section.settings.subtitle}}</p>{%- endif -%}                  
+            </div>
+           {{ contactform }}
+      {%  endif %}          
+  </div>
+ </div>  
+</div>
+{% schema %}
+{
+    "name": "t:sections.contact.form_name",
+    "class":"contact-form",
+    "settings": [
+      {
+          "type": "checkbox",
+          "id": "hide_mobile",
+          "label": "t:global.devices.mobile_hide",
+          "default": false
+      },
+      {
+          "type": "checkbox",
+          "id": "hided",
+          "label":"t:global.devices.desktop_hide",
+          "default": false
+      },
+      {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.contact.style",
+      "default": "2",
+      "options": [
+        {
+        "value": "1",
+        "label": "Style 1"
+        },        
+        {
+        "value": "2",
+        "label": "Style 2"
+        }
+      ]
+   },   
+  {
+        "type": "range",
+        "id": "page_Width",
+        "label": "t:sections.all.container_width",
+        "default": 700,
+        "min": 600,
+        "max": 1600,
+        "step": 10,
+        "unit": "px"
+   },  
+  {
+    "type": "text",
+    "id": "title",
+    "label": "t:global.text.title",
+    "default": "Drop Us A Line"
+  },
+  {
+    "type": "textarea",
+    "id": "subtitle",
+    "label": "t:global.text.text",
+    "default": "Get in touch and let us know how we can help. Have a question but aren’t sure who to contact? Get in touch and a member of our team will reach out to you."
+  },
+  {
+	  "type": "checkbox",
+	  "id": "show_phone",
+	  "label": "t:sections.contact.hide_phone",
+	  "default":false
+  },
+  {
+	  "type": "checkbox",
+	  "id": "show_subject",
+	  "label": "t:sections.contact.hide_subject",
+	  "default":false
+  },      
+ {
+        "type": "header",
+        "content":"t:sections.all.name"
+      },	 
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        }, 
+	 {
+        "type": "checkbox",
+        "id": "section_cov",
+        "label": "t:global.background.add",
+        "default": true
+      },
+	  {
+        "type": "color",
+        "id": "sec_bg_clr",
+        "label": "t:global.background.color",
+		"default":"#fafafa",
+		"info":"select light color"
+	  },
+		{
+			"type": "color_background",
+			"id": "bgg",
+			"label": "t:global.background.gradient"
+		}		
+     ],
+    "presets": [
+      {
+        "name": "t:sections.contact.form_name"
+      }
+    ]
+}
+{% endschema %}

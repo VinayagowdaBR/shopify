@@ -1,0 +1,230 @@
+{%- assign secSt = section.settings -%}
+{%- capture topInfoBar -%}
+<style>
+    {%- if settings.classic_header %}
+        .template-index #shopify-section-top-information-bar {display:none;}
+    {%- endif -%} 
+    .top-bar img { display:inline-block; vertical-align:text-bottom; margin-right:8px; }    
+
+    {% if secSt.m_text %}
+        .marquee-text { box-sizing:border-box; align-items:center; overflow:hidden; }
+        .top-bar a {white-space:nowrap; letter-spacing:0.0{{secSt.letter_space}}em;}
+        .top-info-bar { width:200%; animation: marquee {{secSt.m_speed}}s linear infinite running;} 
+        .top-info-bar:hover { -webkit-animation-play-state: paused;  -moz-animation-play-state: paused;  -o-animation-play-state: paused;  -ms-animation-play-state: paused; animation-play-state: paused;}
+        .top-info-bar .fl1 { padding-left:30px; padding-right:30px; display:inline-flex;align-items:center;justify-content:center; white-space:nowrap; }
+        
+        @-moz-keyframes marquee{0%{-webkit-transform:translateX(0);-moz-transform:translateX(0);-o-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translate(-50%);-moz-transform:translate(-50%);-o-transform:translate(-50%);-ms-transform:translate(-50%);transform:translate(-50%)}}@-webkit-keyframes marquee{0%{-webkit-transform:translateX(0);-moz-transform:translateX(0);-o-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translate(-50%);-moz-transform:translate(-50%);-o-transform:translate(-50%);-ms-transform:translate(-50%);transform:translate(-50%)}}@-o-keyframes marquee{0%{-webkit-transform:translateX(0);-moz-transform:translateX(0);-o-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translate(-50%);-moz-transform:translate(-50%);-o-transform:translate(-50%);-ms-transform:translate(-50%);transform:translate(-50%)}}@keyframes marquee{0%{-webkit-transform:translateX(0);-moz-transform:translateX(0);-o-transform:translateX(0);-ms-transform:translateX(0);transform:translateX(0)}100%{-webkit-transform:translate(-50%);-moz-transform:translate(-50%);-o-transform:translate(-50%);-ms-transform:translate(-50%);transform:translate(-50%)}}
+
+        @media only screen and (max-width:766px){
+            .top-info-bar { -webkit-animation: marquee {{secSt.m_speedm}}s linear infinite running; -moz-animation: marquee {{secSt.m_speedm}}s linear infinite running; -o-animation: marquee {{secSt.m_speedm}}s linear infinite running; -ms-animation: marquee {{secSt.m_speedm}}s linear infinite running; animation: marquee {{secSt.m_speedm}}s linear infinite running;} 
+        }
+    {%- endif -%}
+</style>
+<div class="top-bar fl f-aic {% if secSt.topbarmobile %}hide-sm{% endif %}" style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.info_bg}}{% endif %};min-height:{{secSt.min_h}}px;">
+    <div class="page-width wd100{% if secSt.fullwidth %} fullwidth{% endif %}" id="carousel-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="carousel">        
+        {% if secSt.m_text %}<div class="marquee-text">{% endif %}
+            <div class="{% if secSt.m_text %}fl mrq{% else %}grid rwcols-md-{{secSt.grid}}{% endif %} tc top-info-bar{% unless secSt.m_text %} carousel{% endunless %}" 
+                {% unless secSt.m_text %}data-flickity='{ "cellAlign":"left","groupCells":true,"wrapAround":true,"prevNextButtons":false,"pageDots":false,"autoPlay":5000{%- if settings.rtl -%},"rightToLeft": true{%- endif -%} }'{% endunless %}>
+
+                {% for block in section.blocks limit: section.blocks.size %}
+                    {%- assign blkSt = block.settings -%}
+                    {% if blkSt.title %}
+                        <div class="{% unless secSt.m_text %}gitem{% endunless %} fl1 {{ blkSt.align_text}}-md ttlTxt" {{ block.shopify_attributes }}  style="--tcl:{{secSt.text_clr}};--tfs:{{secSt.info_font}}px;--tfw:{{secSt.tfw}};">
+                            <{% if blkSt.url == blank %}span{% else %}a href="{{ blkSt.url}}"{% endif %}>{% if blkSt.image %}<img src="{{blkSt.image | img_url: '50x' }}" alt="" /> {% endif %}{{ blkSt.title}}</{% if blkSt.url == blank %}span{% else %}a{% endif %}>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                {% if secSt.m_text %}
+                    {% for block in section.blocks limit: section.blocks.size %}
+                        {%- assign blkSt = block.settings -%}
+                        {% if blkSt.title %}
+                            <div class="fl1 ttlTxt {{ blkSt.align_text}}-md" {{ block.shopify_attributes }} style="--tcl:{{secSt.text_clr}};--tfs:{{secSt.info_font}}px;--tfw:{{secSt.tfw}};">
+                                <{% if blkSt.url == blank %}span{% else %}a href="{{ blkSt.url}}"{% endif %}>{% if blkSt.image %}<img src="{{blkSt.image | img_url: '50x' }}" alt="" /> {% endif %}{{ blkSt.title}}</{% if blkSt.url == blank %}span{% else %}a{% endif %}>
+                            </div>
+                        {% endif %}
+                    {% endfor %} 
+
+                    {% for block in section.blocks limit: section.blocks.size %}
+                        {%- assign blkSt = block.settings -%}
+                        {% if blkSt.title %}
+                            <div class="fl1 ttlTxt {{ blkSt.align_text}}-md" {{ block.shopify_attributes }} style="--tcl:{{secSt.text_clr}};--tfs:{{secSt.info_font}}px;--tfw:{{secSt.tfw}};">>
+                                <{% if blkSt.url == blank %}span{% else %}a href="{{ blkSt.url}}"{% endif %}>{% if blkSt.image %}<img src="{{blkSt.image | img_url: '50x' }}" alt="" /> {% endif %}{{ blkSt.title}}</{% if blkSt.url == blank %}span{% else %}a{% endif %}>
+                            </div>
+                        {% endif %}
+                    {% endfor %}        
+                {% endif %}
+            </div>
+        {% if secSt.m_text %} </div>{% endif %}
+    </div>
+</div>
+{%- endcapture -%}
+{{ topInfoBar | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+{
+    "name": "t:sections.top_bar.name",
+    "class": "index-section",
+    "max_blocks": 4,
+    "settings":[
+        {
+            "type": "checkbox",
+            "id": "fullwidth",
+            "label":"t:global.fullwidth",
+            "default": false
+        },
+        { 
+            "type":"checkbox",
+            "id":"topbarmobile",
+            "label":"t:global.devices.mobile_hide",
+            "default":true,
+            "info":"t:sections.top_bar.hide_info"
+        },
+        {
+            "type": "color",
+            "id": "text_clr",
+            "label": "t:global.color.text",
+            "default": "#fff"
+        },
+        {
+            "type": "color",
+            "id": "info_bg",
+            "label": "t:global.background.color",
+            "default": "#111"
+        },
+		{
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+        {
+            "type": "range",
+            "id": "grid",
+            "label": "t:sections.top_bar.columns",
+            "default": 3,
+            "min": 1,
+            "max": 3,
+            "step": 1
+        },
+        {
+            "type": "range",
+            "id": "info_font",
+            "label": "t:global.font.size",
+            "default": 12,
+            "min": 10,
+            "max": 16,
+            "step": 1,
+            "unit": "px"
+        },
+      {
+            "type": "select",
+            "id": "tfw",
+            "label": "t:global.font.weight",
+            "default": "500",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+          "type": "range",
+          "id": "letter_space",
+          "label": "t:global.font.spacing",
+          "default": 1,
+          "min": 0,
+          "max": 9,
+          "step": 1,
+          "unit": "em"
+        },
+        {
+            "type": "range",
+            "id": "min_h",
+            "label": "t:sections.top_bar.min_height",
+            "default": 40,
+            "min": 25,
+            "max": 50,
+            "step": 1
+        },		
+        {
+            "type": "checkbox",
+            "id": "m_text",
+            "label": "t:sections.top_bar.enable_marquee",		
+            "default": false,
+            "info":"t:sections.top_bar.marquee_info"
+        },
+        {
+            "type": "range",
+            "id": "m_speed",
+            "label": "t:sections.top_bar.scrolling_speed",
+            "default": 12,
+            "min": 5,
+            "max": 50,
+            "step": 1,
+            "info":"Recommended speed 12"
+        },
+        {
+            "type": "range",
+            "id": "m_speedm",
+            "label": "t:sections.top_bar.scrolling_speed_mobile",
+            "default": 5,
+            "min": 5,
+            "max": 30,
+            "step": 1,
+            "info":"Recommended speed 5"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "text_block",
+            "name": "Column",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "t:global.image.name"
+                },
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "t:sections.all.head",
+                    "default": "This is your text line",
+                    "info":"[Find icons here](http:\/\/www.adornthemes.com\/optimal-icons\/)"
+                },
+                {
+                    "type": "select",
+                    "id": "align_text",
+                    "label": "t:global.text.align",
+                    "default": "tc",
+                    "options": [
+                        {"value": "tl", "label": "Left"},
+                        {"value": "tc", "label": "Center" },
+                        {"value": "tr", "label": "Right" }
+                    ]
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "t:global.link"
+                }
+            ]
+        }
+    ]    
+}
+{% endschema %}

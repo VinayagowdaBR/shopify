@@ -1,0 +1,874 @@
+{%- assign secSt = section.settings -%}
+{%- capture slideShowSec -%}
+<div class="content-indent {{ section.settings.top-offeset}}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" data-section-id="{{ section.id }}" data-section-type="slideshow-section">
+{% if section.blocks.size > 0 %}
+    <div class="slideshow-wrapper{% if secSt.section_width %} page-width{% else %} fullwidth{% if secSt.npd %} npd{% endif %}{% endif %}{% if section.settings.snow_effect %} falling-snow{% endif %}{% if section.settings.snow_style == "style2" %} style2{% else %} style1{% endif %}">
+        {%- capture sliderCss -%}
+            {% unless secSt.arrow %}--arw:none{% endunless %};	
+            {% unless secSt.dot %}--dot:none{% endunless %};	
+            --arrow: {{secSt.arrowc}};
+            --arrowbg: {{ secSt.arrowbg }};
+            --dotsa: {{ secSt.dots }};
+            --dots: {{secSt.dots | color_modify:'alpha', 0.3 }};
+        {%- endcapture -%}
+            <div class="slideshow pr ctStyle" style="{{ sliderCss }}" id="ss{{ section.id }}" data-flickity='{ "cellAlign":"left","wrapAround":true,"fade":true,"selectedAttraction": "0.2","friction":"0.8"{%- if section.settings.autoplay -%},"autoPlay":{{section.settings.speed | times: 1000}}{% endif %}{%- if settings.rtl -%},"rightToLeft": true{%- endif -%} }'>
+
+            {% for block in section.blocks %}
+
+                {%- liquid
+                    assign blkSt = block.settings
+
+                    assign imgPos = 'center'
+                    if blkSt.image.presentation.focal_point != blank
+                        assign imgPos = blkSt.image.presentation.focal_point
+                    endif
+                    assign img2Pos = 'center'
+                    if blkSt.imagem != blank and blkSt.imagem.presentation.focal_point != blank
+                        assign img2Pos = blkSt.imagem.presentation.focal_point
+                    endif
+
+                    assign cl1 = 'order0'
+                    assign cl2 = 'order1'
+                    assign cl3 = 'order2'
+                    if blkSt.txtpos == '0'
+                        assign cl1 = 'order1'
+                        assign cl3 = 'order0'
+                    elsif blkSt.txtpos == '1'
+                        assign cl2 = 'order2'
+                        assign cl3 = 'order1'
+                    endif
+                %}
+                <div class="smlslide w_100 of_hidden sl{{ block.id }} fl f-wrap" data-type="{{block.type}}" {{ block.shopify_attributes }} style="border-radius:{{ secSt.brd }}px;">
+                    {% if blkSt.display_btn != true and blkSt.link != blank %}<a href="{{ blkSt.link }}" class="ss_link fl f-wrap w_100" {% if blkSt.btn1window %} target="_blank" {% endif %}>{% endif %}
+                    <div class="wd50 wd30-md {{ cl1 }}">
+                        {% if blkSt.image != blank %}
+                            <div class="pr" style="padding-bottom:{{ 1 | divided_by: blkSt.image.aspect_ratio | times: 100 }}%">
+                                <img class="imgFt ssimg lazyload{% if section.settings.imganim %} anim{% endif %}" src="{{ blkSt.image | img_url: "100x" }}" width="{{blkSt.image.width}}" height="{{blkSt.image.height}}"
+                                    data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '400,700,1000,1200,1600,2000' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" style="--ipos:{{imgPos}};">
+                            </div>
+                        {% else %}
+                            <div class="pr" style="padding-bottom:130%">
+                                {% capture current %}{% cycle 1, 2 %}{% endcapture %}{{ 'lifestyle-' | append: current | placeholder_svg_tag: 'imgFt placeholder-svg' }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="wd50 wd30-md pr {{ cl2 }}">
+                        {% if blkSt.imagem != blank %}
+                            <div class="pr" style="padding-bottom:{{ 1 | divided_by: blkSt.image.aspect_ratio | times: 100}}%">
+                                <img class="imgFt ssimg lazyload{% if forloop.first %} lazypreload{% endif %}" src="{% if forloop.first %}{{ blkSt.imagem | img_url: "700x" }}{% else %}{{ blkSt.imagem | img_url: "100x" }}{% endif %}" width="{{blkSt.imagem.width}}" height="{{blkSt.imagem.height}}"
+                                    data-srcset="{% render 'lazyload', image: blkSt.imagem, sizes: '400,700,900,1200' %}" data-sizes="auto" alt="{{ blkSt.imagem.alt | escape }}" style="--ipos:{{img2Pos}};">
+                            </div>
+                        {% else %}
+                            <div class="pr" style="padding-bottom:130%">
+                                {% capture current %}{% cycle 1, 2 %}{% endcapture %}{{ 'lifestyle-' | append: current | placeholder_svg_tag: 'imgFt placeholder-svg' }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {%- capture bxStyle -%}
+                        --bg:{{ blkSt.bg }};
+                        {% if blkSt.bgg != empty %}
+                            --bg:{{ blkSt.bgg }};
+                        {% endif %}
+                        --pd:60px;--pdm:25px;
+                        --brad:{{secSt.brad}}px;
+                    {%- endcapture -%}
+                    <div class="ss_txt smcTxt fl1 fl f-aic f-jcc {{ cl3 }}" style="{{bxStyle}}max-width:inherit;background:var(--bg);">
+                        <div class="tc{% if blkSt.text-left %} tl-md{% endif %}" style="max-width:{{  blkSt.text_width }}px;">
+                            {% if blkSt.hd1 != blank %}
+                                <div class="stxt hd1 {{secSt.pff}}" style="--cl:{{blkSt.pcl}};--phbg:{{blkSt.phbg}};--fs:{{secSt.pfs}}px;--fsm:{{secSt.pfsm}}px;--fw:{{secSt.pfw}};--lh:{{secSt.plh}};--mb:{{secSt.pmb}}px;--mbm:{{secSt.pmbm}}px"><p class="dib">{{ blkSt.hd1 }}</p></div>
+                            {% endif %}
+                            {% if blkSt.title != blank %}
+                                <h2 class="stxt hd2 {{secSt.bff}}" style="--cl:{{blkSt.tcl}};--fs:{{secSt.bfs}}px;--fsm:{{secSt.bfsm}}px;--fw:{{secSt.bfw}};--lh:{{secSt.blh}};--mb:{{secSt.bmb}}px;--mbm:{{secSt.bmbm}}px">{{blkSt.title}}</h2>
+                            {% endif %}
+                            {% if blkSt.hd3 != blank %}
+                                <div class="stxt hd3 {{secSt.dff}}{% if blkSt.hideh3 %} hide-sm{% endif %}" style="--cl:{{blkSt.cl}};--fs:{{secSt.dfs}}px;--fsm:{{secSt.dfsm}}px;--fw:{{secSt.dfw}};--lh:{{secSt.dlh}};--mb:{{secSt.dmb}}px;--mbm:{{secSt.dmbm}}px">{{ blkSt.hd3 }}</div>
+                            {% endif %}
+                            {% if blkSt.display_btn %}
+                                <div class="btnWrap">
+                                    <a class="btn {{secSt.btn-sizem}} {{secSt.btn-size}} {{blkSt.btn-style}}" href="{{ blkSt.link }}" {% if blkSt.btn1window %} target="_blank" {% endif %} >{{ blkSt.btn }}</a>
+                                    <a class="btn {{secSt.btn-sizem}} {{secSt.btn-size}} {{blkSt.btn-style1}}" href="{{ blkSt.link2 }}" {% if blkSt.btn2window %} target="_blank" {% endif %}>{{ blkSt.btn2 }}</a>
+                                </div>
+                            {% else %}
+                                {% if blkSt.btn != blank %}<div class="btnWrap"><span class="btn {{secSt.btn-sizem}} {{secSt.btn-size}} {{blkSt.btn-style}}" >{{blkSt.btn}}</span></div>{% endif %}
+                            {% endif %}            
+                        </div>
+                    </div>
+                    {% if blkSt.display_btn != true and blkSt.link != blank %}</a>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+{% if section.blocks.size == 0 %}<div class="placeholder-noblocks">{{ 'homepage.onboarding.no_content' | t }}</div>{% endif %}
+</div>
+{%- endcapture -%}
+{{slideShowSec | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+{
+    "name": "t:sections.slideshow.column",
+    "class": "slideshowOuter",
+    "max_blocks": 10,
+    "settings": [
+        {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "none",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "none",
+                    "label": "None"
+                }
+            ]
+        }, 
+        {
+            "type":"checkbox",
+            "id":"npd",
+            "label":"t:global.no_padding",
+            "info": "t:global.no_padding_info",
+            "default": true
+        }, 
+      {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+        {
+            "type":"checkbox",
+            "id":"section_width",
+            "label":"t:sections.slideshow.container",
+            "default": false
+        },
+        {
+            "type": "range",
+            "id": "brd",
+            "label": "t:global.background.radius",
+            "default": 0,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit":"px"		
+        },
+        {
+            "type":"header",
+            "content":"t:sections.all.heading.pre"
+        },
+        {
+            "type": "range",
+            "id": "pfs",
+            "label": "t:global.font.size",
+            "default": 12,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "pfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 12,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "pff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "pfw",
+            "label": "t:global.font.weight",
+            "default": "500",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "plh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        }, 			  
+        {
+            "type": "range",
+            "id": "pmb",
+            "label": "t:sections.all.margin.bottom",
+            "default": 5,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        }, 			              
+        {
+            "type": "range",
+            "id": "pmbm",
+            "label": "t:sections.all.margin.bottom_mobile",
+            "default": 5,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        },
+        {
+            "type":"header",
+            "content":"t:sections.all.heading.big"
+        },
+        {
+            "type": "range",
+            "id": "bfs",
+            "label": "t:global.font.size",
+            "default": 40,
+            "min": 10,
+            "max": 110,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "bfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 24,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "bff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "bfw",
+            "label": "t:global.font.weight",
+            "default": "700",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "blh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        }, 			  
+        {
+            "type": "range",
+            "id": "bmb",
+            "label": "t:sections.all.margin.bottom",
+            "default": 10,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        }, 			              
+        {
+            "type": "range",
+            "id": "bmbm",
+            "label": "t:sections.all.margin.bottom_mobile",
+            "default": 5,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        },
+        {
+            "type":"header",
+            "content":"t:sections.all.heading.details"
+        },
+        {
+            "type": "range",
+            "id": "dfs",
+            "label": "t:global.font.size",
+            "default": 16,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "dfsm",
+            "label": "t:global.font.size_mobile",
+            "default": 14,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "dff",
+            "label": "t:global.font.family",
+            "default": "ft1",
+            "options": [
+                {
+                    "value": "ft1",
+                    "label": "Font 1"
+                },
+                {
+                    "value": "ft2",
+                    "label": "Font 2"
+                },
+                {
+                    "value": "ft3",
+                    "label": "Font 3"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "dfw",
+            "label": "t:global.font.weight",
+            "default": "400",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        }, 	
+        {
+            "type": "range",
+            "id": "dlh",
+            "label": "t:global.font.height",
+            "default": 1.2,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        }, 			  
+        {
+            "type": "range",
+            "id": "dmb",
+            "label": "t:sections.all.margin.bottom",
+            "default": 25,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        }, 			              
+        {
+            "type": "range",
+            "id": "dmbm",
+            "label": "t:sections.all.margin.bottom_mobile",
+            "default": 15,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        },
+        {
+            "type":"header",
+            "content":"t:sections.all.heading.button"
+        }, 
+        {
+            "type": "select",
+            "id": "btn-size",
+            "label": "t:global.button.size",
+            "default": "btn-md",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "btn-lg"
+                }	
+            ]
+        }, 
+        {
+            "type": "select",
+            "id": "btn-sizem",
+            "label": "t:global.button.size_mobile",
+            "default": "mob-btn-sm",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "mob-btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "mob-btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "mob-btn-lg"
+                }	
+            ]
+        },
+        {
+            "type":"paragraph",
+            "content":"----------------------------------------"
+        },
+        {
+            "type": "range",
+            "id": "brad",
+            "label": "t:global.border_radius",
+            "default": 0,
+            "min": 0,
+            "max": 25,
+            "step": 1,
+            "unit":"px"		
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.carousel.name"
+        },
+        {
+            "type": "checkbox",
+            "id": "autoplay",
+            "label": "t:sections.all.carousel.autoplay",
+            "default": true
+        },
+        {
+            "type": "range",
+            "id": "speed",
+            "label":"t:sections.all.carousel.speed",
+            "default": 7,
+            "min": 0,
+            "max": 50,
+            "step": 1,
+            "unit": "Sec"
+        },
+        {
+            "type": "paragraph",
+            "content": "t:sections.all.carousel.arrows"
+        },
+        {
+            "type": "checkbox",
+            "id": "arrow",
+            "label": "t:global.display",
+            "default": true			
+        },
+        {
+            "type": "checkbox",
+            "id": "hidema",
+            "label": "t:global.devices.mobile_hide",
+            "default": false			
+        },
+        {
+            "type": "color",
+            "id": "arrowc",
+            "label": "t:global.color.name",
+            "default": "#111"
+        },
+        {
+            "type": "color",
+            "id": "arrowbg",
+            "label": "t:global.background.color",
+            "default": "#fff"
+        },	  	 
+        {
+            "type": "paragraph",
+            "content": "t:sections.all.carousel.dots"
+        },
+        {
+            "type": "checkbox",
+            "id": "dot",
+            "label": "t:global.display",
+            "default": false			
+        },
+        {
+            "type": "checkbox",
+            "id": "hidemd",
+            "label": "t:global.devices.mobile_hide",
+            "default": false			
+        },
+        {
+            "type": "color",
+            "id": "dots",
+            "label": "t:global.color.name",
+            "default": "#ddd"
+        },
+        {
+            "type": "header",
+            "content": "t:global.snow.title"
+        }, 	
+        {
+            "type":"checkbox",
+            "id":"snow_effect",
+            "label":"t:global.enable",
+            "default": false,
+            "info":"For Christmas"
+        },
+        {
+            "type": "select",
+            "id": "snow_style",
+            "label": "t:global.snow.style",
+            "default": "style1",         
+            "options": [
+                {
+                    "value": "style1",
+                    "label": "Falling Down"
+                },
+                {
+                    "value": "style2",
+                    "label": "Falling From Left"
+                }
+            ]
+        }
+    ],
+    "blocks": [
+        {
+            "type": "slide",
+            "name": "t:sections.slideshow.blocks.image",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "t:global.image.name",
+                    "info": "t:sections.slideshow.blocks.column_img_info"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "imagem",
+                    "label": "t:global.image.name",
+                    "info": "t:sections.slideshow.blocks.column_img_info"
+                },
+                {
+                    "type":"header",
+                    "content":"t:sections.all.heading.pre"
+                },
+                {
+                    "type": "text",
+                    "id": "hd1",
+                    "label": "t:global.text.text",
+                    "default": "I AM AVONE"			
+                },
+                {
+                    "type": "color",
+                    "id": "pcl",
+                    "label": "t:global.color.name",
+                    "default": "#000"
+                },
+                {
+                    "type": "color",
+                    "id": "phbg",
+                    "label": "t:global.background.color",
+                    "default": "#fff"
+                },
+                {
+                    "type":"header",
+                    "content":"t:sections.all.heading.big"
+                },
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "t:global.text.text",
+                    "default": "BEST SELLING <BR/>SHOPIFY THEME",
+                    "info":"t:sections.slideshow.blocks.big_text_info"
+                },	  
+                {
+                    "type": "color",
+                    "id": "tcl",
+                    "label": "t:global.color.name",
+                    "default": "#000"
+                },
+                {
+                    "type":"header",
+                    "content":"t:sections.all.heading.details"
+                },
+                {
+                    "type": "textarea",
+                    "id": "hd3",
+                    "label": "t:global.text.text",
+                    "default": "We at Adornthemes make beautiful,<br/> conversion-focused, high-quality Shopify themes."
+                },	  
+                {
+                    "type": "color",
+                    "id": "cl",
+                    "label": "t:global.color.name",
+                    "default": "#000"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "hideh3",
+                    "label": "t:global.devices.mobile_hide",
+                    "default": true			
+                },
+                {
+                    "type": "header",        
+                    "content": "t:sections.all.heading.button"
+                },		
+                {
+                    "type": "text",
+                    "id": "btn",
+                    "label": "t:global.button.text",
+                    "default":"Shop now"
+                },
+                {
+                    "type": "url",
+                    "id": "link",
+                    "label": "t:global.link"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "btn1window",
+                    "label": "t:global.open_new_tab",
+                    "default":false
+                },
+                {
+                    "type": "select",
+                    "id": "btn-style",
+                    "label": "t:global.button.select",
+                    "default": "btn1",
+                    "options": [
+                        {
+                            "label": "Button 1",
+                            "value": "btn1"
+                        },
+                        {
+                            "label": "Button 2",
+                            "value": "btn2"
+                        },
+                        {
+                            "label": "Button 3",
+                            "value": "btn3"
+                        },				
+                        {
+                            "label": "Border Button 1",
+                            "value": "bdr-btn1"
+                        },
+                        {
+                            "label": "Border Button 2",
+                            "value": "bdr-btn2"
+                        },
+                        {
+                            "label": "Link",
+                            "value": "btnLink"
+                        }  
+                    ]
+                },
+                {
+                    "type": "paragraph",        
+                    "content": "t:sections.slideshow.blocks.button2"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "display_btn",
+                    "label": "t:global.display",
+                    "default":false
+                },
+                {
+                    "type": "text",
+                    "id": "btn2",
+                    "label": "t:global.button.text",
+                    "default":"Shop now"			
+                },
+                {
+                    "type": "url",
+                    "id": "link2",
+                    "label": "t:global.link"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "btn2window",
+                    "label": "t:global.open_new_tab",
+                    "default":false
+                },
+                {
+                    "type": "select",
+                    "id": "btn-style1",
+                    "label": "t:global.button.select",
+                    "default": "btn1",
+                    "options": [
+                        {
+                            "label": "Button 1",
+                            "value": "btn1"
+                        },
+                        {
+                            "label": "Button 2",
+                            "value": "btn2"
+                        },
+                        {
+                            "label": "Button 3",
+                            "value": "btn3"
+                        },				
+                        {
+                            "label": "Border Button 1",
+                            "value": "bdr-btn1"
+                        },
+                        {
+                            "label": "Border Button 2",
+                            "value": "bdr-btn2"
+                        },
+                        {
+                            "label": "Link",
+                            "value": "btnLink"
+                        }  
+                    ]
+                },
+                {
+                    "type": "color",
+                    "id": "bg",
+                    "label": "t:global.background.color",
+                    "default": "#f4f4f4"
+                },
+                {
+                    "type": "color_background",
+                    "id": "bgg",
+                    "label": "t:global.background.gradient"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "text-left",
+                    "label": "t:sections.slideshow.blocks.align_left",
+                    "default":true
+                },
+              {
+                    "type": "range",
+                    "id": "text_width",
+                    "min": 500,
+                    "max": 1000,
+                    "step": 10,
+                    "label": "t:global.text.text_width",
+                    "unit": "px",
+                    "default": 550
+                },
+                {
+                    "type": "select",
+                    "id": "txtpos",
+                    "label": "t:sections.slideshow.blocks.position",
+                    "default": "0",			
+                    "options": [
+                        { "label": "Left",      "value": "0" },
+                        { "label": "Center",    "value": "1" },
+                        { "label": "Right",     "value": "2" }
+                    ]
+                }
+            ]
+        }
+    ],
+    "presets": [{
+        "name": "t:sections.slideshow.column",
+        "settings": {
+            "autoplay": true,
+            "speed": 7
+        },
+        "blocks": [
+            {
+                "type": "slide"
+            }
+        ]
+    }]
+}
+{% endschema %}

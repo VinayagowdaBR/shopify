@@ -1,0 +1,306 @@
+<div class="custom-search-wrapper">
+  <form action="/search" method="get" class="t4s-search-header__form" role="search">
+    <input type="hidden" name="type" value="product">
+    <input 
+      type="text" 
+      name="q" 
+      placeholder="{{ placeholder_1 | default: 'Search jewellery…' }}" 
+      data-input-search 
+      autocomplete="off" 
+      id="dynamic-placeholder-input"
+    >
+    <button type="submit" class="t4s-search-header__submit" aria-label="Search">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+  </form>
+
+  <div class="t4s-frm-search__results">
+    <div data-results-search></div>
+  </div>
+</div>
+
+<style>
+.custom-search-wrapper {
+  position: relative;
+  width: 100%;
+  /* UPDATED: Length kam kar di hai (pehle 900px tha) */
+  max-width: 550px; 
+  font-family: sans-serif;
+  margin: 0 auto;
+}
+
+/* SEARCH BAR CONTAINER */
+.t4s-search-header__form {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  
+  /* UPDATED: Background transparent aur Border White */
+  background-color: transparent;
+  border: 1px solid #ffffff;
+  
+  border-radius: 999px;
+  padding: 15px 10px 15px 20px;
+  height: 38px;
+  box-sizing: border-box;
+  box-shadow: none; /* Shadow hata diya taaki clean look aaye */
+}
+
+/* INPUT FIELD */
+.t4s-search-header__form input[type="text"] {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 13px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  
+  /* UPDATED: Text color White */
+  color: #ffffff;
+}
+
+/* Placeholder color thoda light white rakha hai */
+.t4s-search-header__form input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* SUBMIT ICON */
+.t4s-search-header__submit {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.t4s-search-header__submit svg {
+  /* UPDATED: Icon color White */
+  color: #ffffff;
+  stroke: #ffffff;
+  width: 18px;
+  height: 18px;
+}
+
+/* RESULTS DROPDOWN (Ye white hi rakha hai taaki results dikhein) */
+.t4s-frm-search__results {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  max-height: 420px;
+  overflow-y: auto;
+  background: #fff; /* Dropdown background white hi rahega */
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  z-index: 9999;
+  display: none;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.t4s-widget__pr {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  transition: background 0.2s ease;
+}
+
+.t4s-widget__pr:hover {
+  background: #f9f9f9;
+}
+
+.t4s-widget__pr img {
+  width: 65px;
+  height: 65px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.t4s-widget__pr-title a {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #222;
+  line-height: 1.4;
+  text-decoration: none;
+}
+
+.t4s-widget__pr-title a:hover {
+  color: #b6397a;
+}
+
+.t4s-widget__pr-price {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.t4s-widget__pr-price ins {
+  color: #b6397a;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.t4s-widget__pr-price del {
+  color: #999;
+  font-size: 13px;
+  margin-left: 6px;
+}
+
+.t4s-frm-search__results p {
+  padding: 16px;
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+.t4s-frm-search__results::-webkit-scrollbar {
+  width: 6px;
+}
+.t4s-frm-search__results::-webkit-scrollbar-track {
+  background: transparent;
+}
+.t4s-frm-search__results::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 990px) {
+  .custom-search-wrapper {
+    max-width: 90%; /* Mobile pe thoda wide rahega */
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.querySelector('[data-input-search]');
+  const resultsContainer = document.querySelector('[data-results-search]');
+  const searchWrapper = document.querySelector('.custom-search-wrapper');
+  const resultsWrapper = document.querySelector('.t4s-frm-search__results');
+  const dynamicInput = document.getElementById('dynamic-placeholder-input');
+
+  const placeholders = [
+    "{{ placeholder_1 | default: 'Search jewellery…' }}",
+    "{{ placeholder_2 | default: 'Search jewellery…' }}",
+    "{{ placeholder_3 | default: 'Search jewellery…' }}",
+    "{{ placeholder_4 | default: 'Search jewellery…' }}",
+    "{{ placeholder_5 | default: 'Search jewellery…' }}"
+  ];
+
+  let currentPlaceholderIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let typingSpeed = 350;
+  let deletingSpeed = 100;
+  let phrasePause = 1500;
+
+  function typeWriterEffect() {
+    const currentPhrase = placeholders[currentPlaceholderIndex];
+    if (!isDeleting) {
+      dynamicInput.placeholder = currentPhrase.substring(0, charIndex);
+      charIndex++;
+      if (charIndex > currentPhrase.length) {
+        isDeleting = true;
+        charIndex = currentPhrase.length;
+        setTimeout(typeWriterEffect, phrasePause);
+        return;
+      }
+    } else {
+      dynamicInput.placeholder = currentPhrase.substring(0, charIndex - 1);
+      charIndex--;
+      if (charIndex === 0) {
+        isDeleting = false;
+        currentPlaceholderIndex = (currentPlaceholderIndex + 1) % placeholders.length;
+        setTimeout(typeWriterEffect, deletingSpeed * 5);
+        return;
+      }
+    }
+    const speed = isDeleting ? deletingSpeed : typingSpeed;
+    setTimeout(typeWriterEffect, speed);
+  }
+
+  let typingTimeout;
+  function startTypingEffect() {
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(typeWriterEffect, typingSpeed);
+  }
+
+  startTypingEffect();
+
+  dynamicInput.addEventListener('focus', () => clearTimeout(typingTimeout));
+  dynamicInput.addEventListener('blur', () => {
+    if (dynamicInput.value === "") {
+      charIndex = 0;
+      isDeleting = false;
+      dynamicInput.placeholder = "";
+      startTypingEffect();
+    }
+  });
+
+  searchInput.addEventListener('input', async function() {
+    const query = searchInput.value.trim();
+    clearTimeout(typingTimeout);
+
+    if (query.length < 2) {
+      resultsWrapper.style.display = 'none';
+      if (dynamicInput.value === "") startTypingEffect();
+      return;
+    }
+
+    try {
+      const response = await fetch(`/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=5`);
+      const data = await response.json();
+      const products = data.resources.results.products;
+
+      if (!products || products.length === 0) {
+        resultsContainer.innerHTML = '<p>No products found.</p>';
+      } else {
+        resultsContainer.innerHTML = products.map(product => `
+          <div class="t4s-widget__pr">
+            <div class="t4s-widget_img_pr">
+              <a href="${product.url}"><img src="${product.featured_image.url}" alt="${product.title}"></a>
+            </div>
+            <div class="t4s-widget__pr-title">
+              <a href="${product.url}">${product.title}</a>
+            </div>
+            <div class="t4s-widget__pr-price">
+              ${product.price_price ? `<ins>₹${(product.price_price / 100).toFixed(2)}</ins>` : ''}
+              ${product.compare_at_price_max && product.compare_at_price_max > product.price_price ? `<del>₹${(product.compare_at_price_max / 100).toFixed(2)}</del>` : ''}
+            </div>
+          </div>
+        `).join('');
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+      resultsContainer.innerHTML = '<p>Error fetching results. Please try again.</p>';
+    }
+
+    resultsWrapper.style.display = 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!searchWrapper.contains(e.target)) {
+      resultsWrapper.style.display = 'none';
+      if (dynamicInput.value === "") startTypingEffect();
+    }
+  });
+});
+</script>

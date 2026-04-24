@@ -1,0 +1,43 @@
+<div class="page-width">
+  <div class="empty-page-content tc">
+    {% if section.settings.image != blank %}<p><img src="{{section.settings.image | img_url: 'master'}}" alt="" /></p>{% endif %}
+
+    {% if section.settings.title != blank %}<h1>{{ section.settings.title }}</h1>{% endif %}
+    {% if section.settings.title2 != blank %}<p>{{ section.settings.title2 }}</p>{% endif %}
+    {% if section.settings.btntext != blank %}<p><a href="{{ section.settings.btntlnk }}" class="btn btn--has-icon-after">{{ section.settings.btntext }}</a></p>{% endif %}
+  </div>
+</div>
+{% schema %}
+  {
+    "name": "t:sections.404.name",
+    "settings": [	
+ 		  {
+            "type": "image_picker",
+            "id": "image",
+            "label": "t:global.image.name"			
+          },
+		 {
+            "type": "textarea",
+            "id": "title",
+            "label": "t:sections.all.head"
+		},
+        {
+            "type": "textarea",
+            "id": "title2",
+            "label": "t:sections.all.sub_head"
+		},
+		{
+            "type": "text",
+            "id": "btntext",
+            "label": "t:global.button.text"
+		},
+		{
+            "type": "url",
+            "id": "btntlnk",
+            "label": "t:global.button.link",
+			"default":"/"
+			
+		}
+    ]   
+  }
+{% endschema %} 

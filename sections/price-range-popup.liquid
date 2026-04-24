@@ -1,0 +1,456 @@
+{% schema %}
+{
+  "name": "Premium Contact Popup",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "desktop_banner",
+      "label": "Desktop Banner (8000x1700px)"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_banner",
+      "label": "Mobile Banner (5000x2250px)"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "WhatsApp/Call Number",
+      "default": "+917631736278"
+    },
+    {
+      "type": "text",
+      "id": "email_address",
+      "label": "Email for Callback Requests",
+      "default": "Motigems@gmail.com"
+    },
+    {
+      "type": "text",
+      "id": "email_subject",
+      "label": "Email Subject",
+      "default": "New Callback Request from Website"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Premium Contact Popup",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}
+
+<style>
+  .premium-contact-banner {
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+
+  .premium-contact-banner:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.4s ease;
+    z-index: 1;
+  }
+
+  .premium-contact-banner:hover:after {
+    left: 100%;
+  }
+
+  .premium-contact-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;
+    transition: transform 0.4s ease-out, opacity 0.3s ease;
+    position: relative;
+    z-index: 0;
+  }
+
+  .premium-contact-banner:hover img {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+
+  .premium-contact-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 100000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .premium-popup-inner {
+    background: linear-gradient(145deg, #ffffff, #f7f9fc);
+    padding: 24px;
+    border-radius: 18px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+    animation: slideUp 0.4s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .premium-popup-inner:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, #25D366, #075E54);
+  }
+
+  .premium-popup-inner h3 {
+    margin: 20px 0 30px;
+    color: #1a1a1a;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+  }
+
+  .premium-contact-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 30px 0;
+  }
+
+  .premium-contact-btn {
+    padding: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    border: none;
+    width: 100%;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .premium-contact-btn:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.4s ease;
+    z-index: -1;
+  }
+
+  .premium-contact-btn:hover:after {
+    left: 100%;
+  }
+
+  .premium-contact-btn.whatsapp {
+    background: #25D366;
+    color: white;
+  }
+
+  .premium-contact-btn.call {
+    background: #075E54;
+    color: white;
+  }
+
+  .premium-contact-btn.callback {
+    background: #128C7E;
+    color: white;
+  }
+
+  .premium-contact-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  }
+
+  .premium-close-btn {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+  }
+
+  .premium-close-btn:hover {
+    background: #34495e;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+
+  .premium-callback-form {
+    display: none;
+    text-align: left;
+    margin-top: 30px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .premium-callback-form p {
+    margin-bottom: 20px;
+    color: #4a4a4a;
+    font-size: 15px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+
+  .premium-callback-input {
+    width: 100%;
+    padding: 12px 14px;
+    margin: 12px 0;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    background: #f9fafb;
+  }
+
+  .premium-callback-input:focus {
+    border-color: #128C7E;
+    box-shadow: 0 0 0 4px rgba(18, 140, 126, 0.15);
+    outline: none;
+    background: white;
+  }
+
+  .premium-submit-btn {
+    background: #128C7E;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 600;
+    width: 100%;
+    transition: all 0.3s ease;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+  }
+
+  .premium-submit-btn:hover {
+    background: #0f6b5f;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  }
+
+  .premium-loading {
+    display: none;
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  .premium-success-message {
+    display: none;
+    color: #25D366;
+    font-weight: 600;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 15px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  @media (max-width: 600px) {
+    .premium-popup-inner {
+      padding: 20px 14px;
+      width: 90%;
+      max-width: 300px;
+    }
+
+    .premium-popup-inner h3 {
+      font-size: 22px;
+      margin: 12px 0 18px;
+    }
+
+    .premium-contact-btn {
+      padding: 12px;
+      font-size: 14px;
+      gap: 10px;
+    }
+
+    .premium-callback-input {
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .premium-submit-btn {
+      padding: 12px 20px;
+      font-size: 14px;
+    }
+
+    .premium-close-btn {
+      padding: 10px 20px;
+      font-size: 13px;
+    }
+  }
+</style>
+
+<div class="premium-contact-banner" onclick="showPremiumContactPopup()">
+  <picture>
+    <source media="(min-width: 768px)" srcset="{{ section.settings.desktop_banner | img_url: 'master' }}">
+    <source media="(max-width: 767px)" srcset="{{ section.settings.mobile_banner | img_url: 'master' }}">
+    <img src="{{ section.settings.desktop_banner | img_url: 'master' }}" alt="Contact Us Banner" loading="lazy" style="width: 100%; height: auto;">
+  </picture>
+</div>
+
+<div id="premiumContactPopup" class="premium-contact-popup">
+  <div class="premium-popup-inner">
+    <h3>Contact Us</h3>
+    <div class="premium-contact-options" id="premiumContactOptions">
+      <button class="premium-contact-btn whatsapp" onclick="openPremiumWhatsApp('{{ section.settings.phone_number }}')">
+        <img src="https://cdn.shopify.com/s/files/1/0949/0268/1890/files/image_4.png?v=1750780372" alt="WhatsApp Icon" style="width: 24px; height: 24px;">
+        WhatsApp Chat
+      </button>
+      <button class="premium-contact-btn call" onclick="makePremiumCall('{{ section.settings.phone_number }}')">
+        📞 Call Now
+      </button>
+      <button class="premium-contact-btn callback" onclick="showPremiumCallbackForm()">
+        ✉️ Request Call Back
+      </button>
+    </div>
+
+    <div id="premiumCallbackForm" class="premium-callback-form">
+      <p>Enter your phone number, and we'll call you back shortly.</p>
+      <input type="tel" id="premiumCallbackNumber" class="premium-callback-input" placeholder="Enter your 10-digit phone number" required>
+      <button class="premium-submit-btn" onclick="submitPremiumCallback()">Submit Request</button>
+    </div>
+
+    <div id="premiumLoading" class="premium-loading">
+      <svg width="50" height="50" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="20" stroke="#128C7E" stroke-width="4" fill="none" stroke-dasharray="31.415, 31.415" stroke-linecap="round">
+          <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+
+    <div id="premiumSuccessMessage" class="premium-success-message">
+      Thank you! We'll call you back soon.
+    </div>
+
+    <button class="premium-close-btn" onclick="hidePremiumContactPopup()">Close</button>
+  </div>
+</div>
+
+<script>
+  function showPremiumContactPopup() {
+    document.getElementById('premiumContactPopup').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    document.getElementById('premiumCallbackForm').style.display = 'none';
+    document.getElementById('premiumLoading').style.display = 'none';
+    document.getElementById('premiumSuccessMessage').style.display = 'none';
+    document.getElementById('premiumContactOptions').style.display = 'flex';
+    document.getElementById('premiumCallbackNumber').value = '';
+  }
+
+  function hidePremiumContactPopup() {
+    document.getElementById('premiumContactPopup').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  function openPremiumWhatsApp(number) {
+    const cleanedNumber = number.replace(/[^\d+]/g, '');
+    window.open(`https://wa.me/${cleanedNumber}?text=Hello, I'm contacting you from the website`, '_blank');
+    hidePremiumContactPopup();
+  }
+
+  function makePremiumCall(number) {
+    const cleanedNumber = number.replace(/[^\d+]/g, '');
+    window.location.href = `tel:${cleanedNumber}`;
+    hidePremiumContactPopup();
+  }
+
+  function showPremiumCallbackForm() {
+    document.getElementById('premiumCallbackForm').style.display = 'block';
+    document.getElementById('premiumContactOptions').style.display = 'none';
+    document.getElementById('premiumCallbackNumber').focus();
+  }
+
+  async function submitPremiumCallback() {
+    const phoneNumber = document.getElementById('premiumCallbackNumber').value.trim();
+    const phoneRegex = /^[0-9]{10}$/;
+
+    if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
+      alert('Please enter a valid 10-digit phone number');
+      return;
+    }
+
+    document.getElementById('premiumCallbackForm').style.display = 'none';
+    document.getElementById('premiumLoading').style.display = 'block';
+
+    try {
+      const emailData = {
+        email: "{{ section.settings.email_address }}",
+        subject: "{{ section.settings.email_subject }}",
+        body: `New callback request from website:\n\nPhone Number: ${phoneNumber}\n\nTimestamp: ${new Date().toLocaleString()}`
+      };
+
+      const response = await fetch('/apps/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(emailData)
+      });
+
+      if (!response.ok) throw new Error('Email sending failed');
+
+      document.getElementById('premiumLoading').style.display = 'none';
+      document.getElementById('premiumSuccessMessage').style.display = 'block';
+      setTimeout(hidePremiumContactPopup, 2500);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error submitting request. Please try again later.');
+      document.getElementById('premiumLoading').style.display = 'none';
+      document.getElementById('premiumCallbackForm').style.display = 'block';
+      document.getElementById('premiumContactOptions').style.display = 'flex';
+    }
+  }
+
+  document.getElementById('premiumContactPopup').addEventListener('click', function(e) {
+    if (e.target === this) hidePremiumContactPopup();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') hidePremiumContactPopup();
+  });
+
+  document.getElementById('premiumCallbackNumber').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') submitPremiumCallback();
+  });
+</script>

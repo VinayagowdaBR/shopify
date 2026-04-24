@@ -1,0 +1,1121 @@
+{%- assign secSt = section.settings -%}
+<div class="content-indent {{ section.settings.top-offeset}} wow fadeIn{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}"
+    {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif%}>
+    <div class="custom-block{% if section.settings.snow_effect %} falling-snow{% endif %}{% if section.settings.snow_style == "style2" %} style2{% else %} style1{% endif %} {{section.settings.style}}{% unless section.settings.section_width %} page-width{% else %} fullwidth{% endunless %}">
+        {% render 'sec-title' %}
+        <div class="custom-content sidespace grid gspace f-ais"  style="--grsp:0 -{{ secSt.grid-spacing | divided_by: 2.0  }}px;--grspi:0 {{ secSt.grid-spacing | divided_by: 2.0  }}px {{secSt.grid-spacing}}px;--grspm:0 -{{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px;--grspim:0 {{ secSt.grid-spacing-mbl | divided_by: 2.0  }}px {{secSt.grid-spacing-mbl}}px;">
+            {% for block in section.blocks %}
+                {%- assign blkSt = block.settings -%}
+                {%- assign custom_box = forloop.index | minus:1 -%}	 
+                {%- assign delay_time = 100 | times : custom_box -%}
+                <div class="custom__item gitem ci-{{block.id}} block_type_{{block.type}} wd100 {{ blkSt.width }} {% if blkSt.alignment %}{{ blkSt.alignment }}{% endif %}" {{ block.shopify_attributes }}>
+                    <div class="ct-inner of_hidden ct-inner-{{ block.type }} wow fadeIn" data-wow-delay="{{delay_time}}ms" style="border-radius: {{blkSt.bg_rad}}px;">
+                        {% if block.type == 'image' %}
+                            {% if blkSt.imgurl != blank %}<a href="{{blkSt.imgurl}}">{% endif %}
+                            {% if blkSt.image != blank %}
+                                <div class="imgWrapper of_hidden" style="max-width:{{blkSt.image.width}}px;border-radius: {{blkSt.img_rad}}px;">
+                                    <img class="custom__image imgFl lazyload" src="{{ blkSt.image | img_url: "50x" }}" width="{{blkSt.image.width}}" height="{{blkSt.image.height}}"
+                                        data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '400,700,1000,1200,1600,2000' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" style="--ipos:{{imgPos}};">
+                                </div>
+                            {% else %}
+                                {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+                            {% endif %}
+                            {% if blkSt.imgurl != blank %} </a> {% endif %}
+                        {% elsif block.type == 'text' %}
+                            <div class="{{ blkSt.align_text }} {{ blkSt.alignment }}">
+                                {% if blkSt.image != blank %}
+                                    {% if blkSt.btnurl != blank %} <a href="{{blkSt.btnurl}}"> {% endif %}
+                                    <div class="imgWrapper" style="max-width:{{blkSt.image.width}}px;">
+                                        <img class="custom__image imgFl lazyload" src="{{ blkSt.image | img_url: "50x" }}" width="{{blkSt.image.width}}" height="{{blkSt.image.height}}"
+                                            data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '400,700,1000,1200,1600,2000' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}" style="--ipos:{{imgPos}};">
+                                    </div>
+                                    {% if blkSt.btnurl != blank %} </a> {% endif %}
+                                {% endif %}
+                                <div class="custom-text">
+                                    {% if blkSt.title != blank %}
+										<h3 class="ttlTxt mb10" style="--tcl:{{blkSt.block_txt}};--tfs:{{blkSt.fs}}px;--tfsm:{{blkSt.fsm}}px;--tlh:{{blkSt.lh}};--tfw:{{blkSt.fw}};">{{ blkSt.title }}</h3>
+									{% endif %}
+                                    {% if blkSt.text != blank %}<div class="ttlTxt rte" style="--tcl:{{blkSt.block_txt}};--tfs:{{blkSt.dfs}}px;--tfsm:{{blkSt.dfsm}}px;--tlh:{{blkSt.dlh}};">{{ blkSt.text }}</div>{% endif %}
+                                    {% if blkSt.btntxt != blank and blkSt.btnurl != blank %}                             
+                                        <a class="btn {{section.settings.btn-size-mob}} {{section.settings.btn-size-desk}} {{blkSt.btn-style}}" href="{{blkSt.btnurl}}">{{ blkSt.btntxt }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <style>
+                            {% if blkSt.eblock_bg %}
+								.ci-{{block.id}} { align-self:stretch; display:flex;}  
+                            .ci-{{block.id}} .ct-inner-text { padding:30px; display:flex; align-items: center; align-self:stretch;  background:{{blkSt.block_bg}};}
+                            .ci-{{block.id}} .ct-inner-text > div { width:100%;}
+                            .ci-{{block.id}} h3,  .ci-{{block.id}} p { color:{{blkSt.block_txt}};}
+                            {% endif %}              	
+                            </style>
+                        {% elsif block.type == 'video' %}
+                            <div class="video-sec of_hidden" style="border-radius:{{blkSt.bg_rad}}px"> 
+                                {% if blkSt.video_url == blank and blkSt.mp4video == blank	%}
+                                    <div class="video-wrapper">
+                                        <iframe src="//www.youtube.com/embed/_9VUPq3SxOc?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe>
+                                    </div>
+                                {% else %}         
+                                    {% if blkSt.video_url.type == "youtube" %}        
+                                        <div class="video-wrapper"><iframe src="//www.youtube.com/embed/{{ blkSt.video_url.id }}?rel=0&showinfo=0&vq=720" width="850" height="480" frameborder="0" allowfullscreen></iframe></div>
+                                    {% endif %}
+                                    {% if blkSt.video_url.type == "vimeo" %}
+                                        <div class="video-wrapper"><iframe src="//player.vimeo.com/video/{{ blkSt.video_url.id }}?byline=0&portrait=0&badge=0" width="850" height="480" frameborder="0" allowfullscreen></iframe></div>
+                                    {% endif %}   
+								
+                                    {% if blkSt.video_url == blank and blkSt.mp4video != blank %}   
+								    
+									 {%- liquid 											
+											 if blkSt.is_autoplay == true 
+												assign mutev = muted
+											 else
+												assign mutev = false
+											  endif 										
+									  -%}       
+									{{ blkSt.mp4video | video_tag :loop:true, autoplay:blkSt.is_autoplay, muted:mutev, controls:blkSt.enable_cntrl, class:'w_100', image_size: '600x' }} 						     
+								    {% endif %}
+								
+                                {% endif %} 
+                                {%- if blkSt.title != blank -%}
+                                     <div class="fl video-text{% if blkSt.is_autoplay %} pa l0 t0 w_100 h_100{% endif %}" style="--tfs:{{blkSt.tfs}}px;--tfsm:{{blkSt.tfsm}}px;--tlh:{{blkSt.blh}};--tfw:{{blkSt.bfw}};--tcl:{{blkSt.color_ttl}};">
+                                        <div class="fl f-jce f-aic {{ blkSt.text_align }} w_100">
+                                             <div class="ttlTxt">{{ blkSt.title }}</div> 
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>        
+                        {% elsif block.type == 'product' %}
+                            {%- assign product = all_products[blkSt.product] -%}
+                            {% if product.title.size > 0 %}
+                                {% render 'product-card-grid', product: product, secSt: secSt %}
+                            {% else %}         
+                                <div class="grid-view-item">
+                                    <a class="gimg-link" href="#">
+                                        <div class="gitem-img">
+                                            {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                                            {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                                        </div>
+                                        <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                                        <div class="priceWraper">{{ 1999 | money }}</div>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        {% elsif block.type == 'collection' %}
+                            {%- assign collection = collections[blkSt.collection] -%}
+                            <div class="of_hidden" style="--tfs:{{blkSt.tfs}}px;--tfsm:{{blkSt.tfsm}}px;--tlh:{{blkSt.blh}};--tfw:{{blkSt.bfw}};--tcl:{{blkSt.color_ttl}};border-radius: {{blkSt.bg_rad}}px;">{% render 'collection-grid-item', collection: collection, secSt: secSt, blkSt:blkSt %}</div>
+                        {% elsif block.type == 'liquid' %}
+                            {% if blkSt.code != blank %}{{ blkSt.code }}{% endif %}
+                        {% endif %}
+                    </div>
+                </div>    
+            {% endfor %}
+        </div>
+        {% if section.blocks.size == 0 %}{% include 'no-blocks' %}{% endif %}
+    </div>
+    {% if section.settings.section_cov %}</div> {% endif%}
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.custom_content.name",
+    "class": "index-section",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "t:sections.all.head",
+            "default": "Custom content"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "t:sections.all.sub_head",
+            "default": "Describe your products, collection, content etc..."
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.name"
+        },
+        {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+                {
+                    "value": "default",
+                    "label": "Default"
+                },
+                {
+                    "value": "small",
+                    "label": "Small"
+                },
+                {
+                    "value": "none",
+                    "label": "None"
+                }
+            ]
+        },
+        {
+            "type": "checkbox",
+            "id": "section_width",
+            "label": "t:global.fullwidth",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+        {
+            "type": "checkbox",
+            "id": "section_cov",
+            "label": "t:global.background.add",
+            "default": false
+        },
+        {
+            "type": "color",
+            "id": "sec_bg_clr",
+            "label": "t:global.background.color",
+            "default": "#fafafa",
+            "info": "select light color"
+        },
+        {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+        },
+       {
+            "type": "header",
+            "content": "t:global.grid.name"
+        },
+        {
+            "type": "range",
+            "id": "grid-spacing",
+            "label": "t:global.grid.space",
+            "default": 30,
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "grid-spacing-mbl",
+            "label": "t:global.grid.space_mobile",
+            "default": 10,
+            "min": 0,
+            "max": 30,
+            "step": 1,
+            "unit": "px",
+            "info": "t:global.grid.space_info"
+        },
+        {
+            "type": "select",
+            "id": "prbox_style",
+            "label": "t:sections.custom_content.product_grid_style",
+            "default": "style1",
+            "options": [
+                {
+                    "value": "style1",
+                    "label": "Style 1 - Default Info Center"
+                },
+                {
+                    "value": "style2",
+                    "label": "Style 2 - Info Hover Image"
+                },
+                {
+                    "value": "style3",
+                    "label": "Style 3 - Info Below Image"
+                },
+                {
+                    "value": "style4",
+                    "label": "Style 4 - Default Info Left"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "btn-size-desk",
+            "label": "t:global.button.size",
+            "default": "btn-sm",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "btn-lg"
+                }
+            ]
+        },
+        {
+            "type": "select",
+            "id": "btn-size-mob",
+            "label": "t:global.button.size_mobile",
+            "default": "mob-btn-sm",
+            "options": [
+                {
+                    "label": "Small",
+                    "value": "mob-btn-sm"
+                },
+                {
+                    "label": "Medium",
+                    "value": "mob-btn-md"
+                },
+                {
+                    "label": "Large",
+                    "value": "mob-btn-lg"
+                }
+            ]
+        }
+    ],
+    "blocks": [
+        {
+            "type": "text",
+            "name": "t:sections.custom_content.blocks.block_text",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "t:global.image.name"
+                },
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "t:sections.all.head",
+                    "default": "Best Selling Shopify Theme"
+                },
+                {
+                    "type": "range",
+                    "id": "fs",
+                    "label": "t:global.font.size",
+                    "default": 25,
+                    "min": 10,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "range",
+                    "id": "fsm",
+                    "label": "t:global.font.size_mobile",
+                    "default": 18,
+                    "min": 10,
+                    "max": 60,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "select",
+                    "id": "fw",
+                    "label": "t:global.font.weight",
+                    "default": "600",
+                    "options": [{
+                            "value": "300",
+                            "label": "Light"
+                        },
+                        {
+                            "value": "400",
+                            "label": "Regular"
+                        },
+                        {
+                            "value": "500",
+                            "label": "Medium"
+                        },
+                        {
+                            "value": "600",
+                            "label": "Semi Bold"
+                        },
+                        {
+                            "value": "700",
+                            "label": "Bold"
+                        }
+                    ]
+                },
+                {
+                    "type": "range",
+                    "id": "lh",
+                    "label": "t:global.font.height",
+                    "default": 1.2,
+                    "min": 1.0,
+                    "max": 2.0,
+                    "step": 0.1,
+                    "info": "t:global.font.height_info"
+                },
+                {
+                    "type": "richtext",
+                    "id": "text",
+                    "label": "t:global.text.text",
+                    "default": "<p>We are dedicated to providing high-quality shopify themes with a great design and extensive functionality</p>"
+                },
+                {
+                    "type": "range",
+                    "id": "dfs",
+                    "label": "t:global.font.size",
+                    "default": 14,
+                    "min": 10,
+                    "max": 100,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "range",
+                    "id": "dlh",
+                    "label": "t:global.font.height",
+                    "default": 1.6,
+                    "min": 1.0,
+                    "max": 2.0,
+                    "step": 0.1,
+                    "info": "t:global.font.height_info"
+                },
+                {
+                    "type": "range",
+                    "id": "dfsm",
+                    "label": "t:global.font.size_mobile",
+                    "default": 13,
+                    "min": 10,
+                    "max": 60,
+                    "step": 1,
+                    "unit": "px"
+                },
+                {
+                    "type": "text",
+                    "id": "btntxt",
+                    "label": "t:global.button.text",
+                    "default": "Read More"
+                },
+                {
+                    "type": "url",
+                    "id": "btnurl",
+                    "label": "t:sections.all.url"
+
+                },
+                {
+                    "type": "select",
+                    "id": "btn-style",
+                    "label": "t:global.button.select",
+                    "default": "btn",
+                    "options": [
+                        {
+                            "label": "Solid Button 1",
+                            "value": "btn"
+                        },
+                        {
+                            "label": "Solid Button 2",
+                            "value": "btn2"
+                        },
+                        {
+                            "label": "Solid Button 3",
+                            "value": "btn3"
+                        },
+                        {
+                            "label": "Border Button 1",
+                            "value": "bdr-btn1"
+                        },
+                        {
+                            "label": "Border Button 2",
+                            "value": "bdr-btn2"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "wd50-md",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "t:sections.custom_content.blocks.vertical_alignment",
+                    "default": "f-asc",
+                    "options": [
+                        {
+                            "value": "f-ass",
+                            "label": "Top"
+                        },
+                        {
+                            "value": "f-asc",
+                            "label": "Middle"
+                        },
+                        {
+                            "value": "f-ase",
+                            "label": "Bottom"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "align_text",
+                    "label": "t:sections.custom_content.blocks.horizontal_alignment",
+                    "default": "tc",
+                    "options": [
+                        {
+                            "value": "tl",
+                            "label": "Left"
+                        },
+                        {
+                            "value": "tc",
+                            "label": "Centered"
+                        },
+                        {
+                            "value": "tr",
+                            "label": "Right"
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox",
+                    "id": "eblock_bg",
+                    "label": "t:global.background.add",
+                    "default": false
+                },
+                {
+                    "type": "color",
+                    "id": "block_bg",
+                    "label": "t:global.background.color",
+                    "default": "#f5f5f5"
+                },
+                {
+                    "type": "range",
+                    "id": "bg_rad",
+                    "min": 0,
+                    "max": 30,
+                    "step": 1,
+                    "label": "t:global.background.radius",
+                    "unit": "px",
+                    "default": 0
+                },
+                {
+                    "type": "color",
+                    "id": "block_txt",
+                    "label": "t:global.color.text",
+                    "default": "#000"
+                }
+            ]
+        },
+        {
+            "type": "image",
+            "name": "t:sections.custom_content.blocks.block_image",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "t:global.image.name"
+                },
+                {
+                    "type": "url",
+                    "id": "imgurl",
+                    "label": "t:global.link"
+                },
+                {
+                    "type": "range",
+                    "id": "img_rad",
+                    "min": 0,
+                    "max": 30,
+                    "step": 1,
+                    "label": "t:global.image.radius",
+                    "unit": "px",
+                    "default": 0
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "wd50-md",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "t:sections.custom_content.blocks.vertical_alignment",
+                    "default": "f-asc",
+                    "options": [
+                        {
+                            "value": "f-ass",
+                            "label": "Top"
+                        },
+                        {
+                            "value": "f-asc",
+                            "label": "Middle"
+                        },
+                        {
+                            "value": "f-ase",
+                            "label": "Bottom"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "video",
+            "name": "t:sections.custom_content.blocks.block_video",
+            "settings": [
+                {
+                    "type": "header",
+                    "content": "t:sections.video_section.embed_video"
+                },
+                {
+                    "type": "video_url",
+                    "id": "video_url",
+                    "label": "t:sections.video_section.video_url",
+                    "accept": ["youtube", "vimeo"]
+                },
+                {
+                    "type": "header",
+                    "content": "t:sections.video_section.mp4_video"
+                },
+                {
+                    "type": "video",
+                    "id": "mp4video",
+                    "label": "t:sections.video_section.select_video"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "enable_cntrl",
+                    "label": "t:sections.video_section.enable_controls",
+                    "default": false,
+                    "info": "t:sections.video_section.controls_info"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "is_autoplay",
+                    "label": "t:sections.video_section.enable_autoplay",
+                    "default": false,
+                    "info": "t:sections.video_section.autoplay_info"
+                },               
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "t:global.text.text",
+                    "default": "AVONE - BEST SELLING<BR/>SHOPIFY THEME"
+                },
+                {
+				"type": "color",
+				"id": "color_ttl",
+				"label": "Color",
+				"default": "#000"
+			    },	
+			   {
+				  "type": "range",
+				  "id": "tfs",
+				  "label": "t:global.font.size",
+				  "default": 30,
+				  "min": 10,
+				  "max": 100,
+				  "step": 1,
+				  "unit": "px"
+			  },
+			  {
+				"type": "select",
+				"id": "bfw",
+				"label": "t:global.font.weight",
+				"default": "600",
+				"options": [
+					{
+						"value": "300",
+						"label": "Light"
+					},
+					{
+						"value": "400",
+						"label": "Regular"
+					},
+					{
+						"value": "500",
+						"label": "Medium"
+					},
+					{
+						"value": "600",
+						"label": "Semi Bold"
+					},
+					{
+						"value": "700",
+						"label": "Bold"
+					}
+				]
+			  }, 	
+		     {
+						"type": "range",
+						"id": "blh",
+						"label": "t:global.font.height",
+						"default": 1.2,
+						"min": 1.0,
+						"max": 2.0,
+						"step": 0.1,
+						"info": "t:global.font.height_info"
+			   }, 		
+			  {
+				  "type": "range",
+				  "id": "tfsm",
+				  "label": "t:global.font.size_mobile",
+				  "default": 20,
+				  "min": 10,
+				  "max": 60,
+				  "step": 1,
+				  "unit": "px"
+			  },
+			{
+				"type": "select",
+				"id": "text_align",
+				"label": "t:global.text.position",
+				"default": "f-jcc-md f-aie-md tc",
+				"info":"t:sections.video_section.text_position_info",
+				"options": [
+					{ "label": "Top Left",      "value": "f-ais-md f-jcs-md" },
+					{ "label": "Top Center",    "value": "f-jcc-md f-ais-md tc" },
+					{ "label": "Top Right",     "value": "f-jce-md f-ais-md" },             
+					{ "label": "Left",  		  "value": "f-aic-md f-jcs-md" },
+					{ "label": "Center", 		  "value": "f-jcc-md f-aic-md tc" },
+					{ "label": "Right",  		  "value": "f-jce-md f-aic-md" },
+					{ "label": "Bottom Left",   "value": "f-aie-md f-jcs-md" },						 
+					{ "label": "Bottom Center", "value": "f-jcc-md f-aie-md tc" }, 						 
+					{ "label": "Bottom Right",  "value": "f-jce-md f-aie-md" }
+				]
+            },	
+			  {
+					"type": "range",
+					"id": "bg_rad",
+					"min": 0,
+					"max": 30,
+					"step": 1,
+					"label": "t:global.background.radius",
+					"unit": "px",
+					"default": 0
+				},
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "wd50-md",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "t:sections.custom_content.blocks.vertical_alignment",
+                    "default": "f-asc",
+                    "options": [
+                        {
+                            "value": "f-ass",
+                            "label": "Top"
+                        },
+                        {
+                            "value": "f-asc",
+                            "label": "Middle"
+                        },
+                        {
+                            "value": "f-ase",
+                            "label": "Bottom"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "product",
+            "name": "t:sections.custom_content.blocks.block_product",
+            "settings": [
+                {
+                    "type": "product",
+                    "id": "product",
+                    "label": "t:sections.all.select_product"
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "wd50-md",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "t:sections.custom_content.blocks.vertical_alignment",
+                    "default": "f-asc",
+                    "options": [
+                        {
+                            "value": "f-ass",
+                            "label": "Top"
+                        },
+                        {
+                            "value": "f-asc",
+                            "label": "Middle"
+                        },
+                        {
+                            "value": "f-ase",
+                            "label": "Bottom"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "collection",
+            "name": "t:sections.custom_content.blocks.block_collection",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "collection_image",
+                    "label": "t:global.image.name"
+                },
+                {
+                    "type": "collection",
+                    "id": "collection",
+                    "label": "t:sections.all.select_collection"
+                },
+                {
+                    "type": "textarea",
+                    "id": "collection_name",
+                    "label": "t:sections.collections.block.custom_name"
+                },
+				 {
+				"type": "color",
+				"id": "color_ttl",
+				"label": "Color",
+				"default": "#000"
+			    },	
+			   {
+				"type": "color",
+				"id": "color_bg",
+				"label": "t:global.background.color",
+				"default": "#f5f5f5"
+			    },	
+			   {
+				  "type": "range",
+				  "id": "tfs",
+				  "label": "t:global.font.size",
+				  "default": 16,
+				  "min": 10,
+				  "max": 50,
+				  "step": 1,
+				  "unit": "px"
+			  },
+			  {
+				"type": "select",
+				"id": "bfw",
+				"label": "t:global.font.weight",
+				"default": "500",
+				"options": [
+					{
+						"value": "300",
+						"label": "Light"
+					},
+					{
+						"value": "400",
+						"label": "Regular"
+					},
+					{
+						"value": "500",
+						"label": "Medium"
+					},
+					{
+						"value": "600",
+						"label": "Semi Bold"
+					},
+					{
+						"value": "700",
+						"label": "Bold"
+					}
+				]
+			  }, 	
+		     {
+						"type": "range",
+						"id": "blh",
+						"label": "t:global.font.height",
+						"default": 1.2,
+						"min": 1.0,
+						"max": 2.0,
+						"step": 0.1,
+						"info": "t:global.font.height_info"
+			   }, 		
+			  {
+				  "type": "range",
+				  "id": "tfsm",
+				  "label": "t:global.font.size_mobile",
+				  "default": 14,
+				  "min": 10,
+				  "max": 60,
+				  "step": 1,
+				  "unit": "px"
+			  },
+				 {
+					"type": "range",
+					"id": "bg_rad",
+					"min": 0,
+					"max": 30,
+					"step": 1,
+					"label": "t:global.background.radius",
+					"unit": "px",
+					"default": 0
+				},
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "wd50-md",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "t:sections.custom_content.blocks.vertical_alignment",
+                    "default": "f-asc",
+                    "options": [
+                        {
+                            "value": "f-ass",
+                            "label": "Top"
+                        },
+                        {
+                            "value": "f-asc",
+                            "label": "Middle"
+                        },
+                        {
+                            "value": "f-ase",
+                            "label": "Bottom"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "liquid",
+            "name": "t:sections.custom_liquid.name",
+            "settings": [
+                {
+                    "type": "liquid",
+                    "id": "code",
+                    "label": "t:sections.custom_liquid.code"
+                },
+                {
+                    "type": "select",
+                    "id": "width",
+                    "label": "t:sections.all.column_width",
+                    "default": "wd50-md",
+                    "options": [
+                        {
+                            "value": "wd20-md",
+                            "label": "20%"
+                        },
+                        {
+                            "value": "wd25-md",
+                            "label": "25%"
+                        },
+                        {
+                            "value": "wd33-md",
+                            "label": "33%"
+                        },
+                        {
+                            "value": "wd50-md",
+                            "label": "50%"
+                        },
+                        {
+                            "value": "wd66-md",
+                            "label": "66%"
+                        },
+                        {
+                            "value": "wd75-md",
+                            "label": "75%"
+                        },
+                        {
+                            "value": "wd100",
+                            "label": "100%"
+                        }
+                    ]
+                },
+                {
+                    "type": "select",
+                    "id": "alignment",
+                    "label": "t:sections.custom_content.blocks.vertical_alignment",
+                    "default": "f-asc",
+                    "options": [
+                        {
+                            "value": "f-ass",
+                            "label": "Top"
+                        },
+                        {
+                            "value": "f-asc",
+                            "label": "Middle"
+                        },
+                        {
+                            "value": "f-ase",
+                            "label": "Bottom"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "t:sections.custom_content.name",
+            "blocks": [
+                {
+                    "type": "text"
+                },
+                {
+                    "type": "image"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

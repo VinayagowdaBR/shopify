@@ -1,0 +1,188 @@
+{%- capture breadcrumbSec -%}
+{% unless template == 'index' %}
+<div class="bredcrumbWrap">
+    <nav class="{% if section.settings.section_width %}fullwidth{% else %}page-width{% endif %} breadcrumbs" role="navigation" aria-label="breadcrumbs">
+        <a href="{{routes.root_url}}" title="{{ 'general.breadcrumbs.home_link_title' | t }}">{{ 'general.breadcrumbs.home' | t }}</a>
+        {% if template contains 'product' %}
+            {% if collection %}
+                <span aria-hidden="true">|</span>
+                {% if collection.handle %}
+                    {% capture url %}{{ routes.collections_url }}/{{ collection.handle }}{% endcapture %}
+                    {{ collection.title | link_to: url }}
+                {% endif %}
+            {% endif %}
+            <span aria-hidden="true" class="symbol">|</span>
+            <span class="fw-500">{{ product.title }}</span>
+        {% elsif template contains 'collection' and collection.handle %}
+            <span aria-hidden="true" class="symbol">|</span>
+            {% if current_tags %}
+                {% capture url %}{{ routes.collections_url }}/{{ collection.handle }}{% endcapture %}
+                {{ collection.title | link_to: url }}
+                <span aria-hidden="true" class="symbol">|</span>
+                <span>{{ current_tags | join: " + " }}</span>
+            {% else %}
+                <span class="fw-500">{{ collection.title }}</span>
+            {% endif %}
+        {% elsif template == 'blog' %}
+            <span aria-hidden="true">|</span>
+            {% if current_tags %}
+                {{ blog.title | link_to: blog.url }}
+                <span aria-hidden="true">|</span>
+                <span>{{ current_tags | join: " + " }}</span>
+            {% else %}
+                <span class="fw-500">{{ blog.title }}</span>
+            {% endif %}
+        {% elsif template == 'article' %}
+            <span aria-hidden="true">|</span>
+            {{ blog.title | link_to: blog.url }}
+            <span aria-hidden="true">|</span>
+            <span class="fw-500">{{ article.title }}</span>
+        {% elsif template contains 'page' %}
+            <span aria-hidden="true" class="symbol">|</span>
+            <span class="fw-500">{{ page.title }}</span>
+        {% elsif template contains 'cart' %}
+            <span aria-hidden="true" class="symbol">|</span>
+            <span class="fw-500"> {{ 'cart.general.title' | t }}</span>
+        {% else %}
+            <span aria-hidden="true">|</span> <span>{{ page_title }}</span>
+        {% endif %}
+    </nav>
+</div>
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "{{routes.root_url}}",
+          "name": "{{'general.breadcrumbs.home' | t}}"
+        }
+      }
+      {% if request.page_type == 'product' %}
+      	{% if collection and collection.handle %}
+        	,{
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ routes.collections_url }}/{{ collection.handle }}",
+                  "name": "{{collection.title}}"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@id": "{{product.url | within: collection}}",
+                  "name": "{{ product.title }}"
+                }
+            }
+        {% else %}
+            ,{
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{product.url | within: collection}}",
+                  "name": "{{ product.title }}"
+                }
+            }
+      	{% endif %}
+      {% elsif request.page_type == 'list-collections' %}
+        ,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ routes.collections_url }}",
+                  "name": "{{ 'collections.general.all' | t }}"
+                }
+            }
+      {% elsif request.page_type == 'collection' %}
+      	,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ routes.collections_url }}/{{ collection.handle }}",
+                  "name": "{{collection.title}}"
+                }
+            }
+      {% elsif request.page_type == 'blog' %}
+		,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ blog.url }}",
+                  "name": "{{blog.title}}"
+                }
+            }
+            {% if current_tags %}
+            ,
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@id": "{{blog.url}}",
+                  "name": "{{ current_tags | join: " + " }}"
+                }
+            }
+      		{% endif %}
+
+      {% elsif request.page_type == 'article' %}
+		,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{blog.url}}",
+                  "name": "{{blog.title}}"
+                }
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@id": "{{article.url}}",
+                  "name": "{{ article.title }}"
+                }
+            }
+      {% elsif request.page_type == 'page' %}
+		,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ page.url }}",
+                  "name": "{{page.title}}"
+                }
+            }
+      {% elsif request.page_type == 'cart' %}
+		,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ routes.cart_url }}",
+                  "name": "{{ 'cart.general.title' | t }}"
+                }
+            }
+      {% else %}
+		,
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": "{{ page.url }}",
+                  "name": "{{page.title}}"
+                }
+            }
+      {% endif %}
+    ]
+  }
+</script>
+{% endunless %}
+{%- endcapture -%}
+{{ breadcrumbSec | strip_newlines | remove: "  " | remove: "	" }}

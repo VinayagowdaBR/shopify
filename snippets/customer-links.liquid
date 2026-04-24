@@ -1,0 +1,77 @@
+<div id="settingsBox" style="">
+  {% if shop.customer_accounts_enabled %}
+  <div class="customer-links">
+    {% if customer %}
+    	<p><a href="{{ routes.account_url }}" class="btn test1">{{ 'customer.account.title' | t }}</a> </p>
+    	<p class="tc"><a href="{{ routes.account_logout_url }}" class="logout ctLink"><b>{{ 'customer.account.logout' | t }}</b></a> </p>
+    {% else %}
+    	<p><a href="{{ routes.account_login_url }}" class="btn test2">{{ 'customer.login.form_title' | t }}</a></p>
+    	<p class="tc">{{ 'customer.register.new' | t }} <a href="{{routes.account_register_url}}" class="register ctLink">{{ 'customer.register.link' | t }}</a></p>
+    {% endif %}
+    {% if settings.enable_wishlist %}<p class="tc hide-lg"><a href="{{pages[settings.wishlist_page].url}}" class="wishlist" title="{{ 'products.wishlist.title' | t }}"><i class="at at-heart-l fs14"></i> <span class="ctLink">{{ 'products.wishlist.title' | t }}</span></a></p>{% endif %}
+  </div>
+  {% endif %}
+
+  {% if settings.show_multiple_currencies %}
+  	{% if settings.currency_opt == 'shopify' %}
+        {%- form 'localization', class: 'selectors-form' -%}
+              {%- if shop.enabled_currencies.size > 1 -%}
+              <div class="currency-picker">
+                <span class="ttl">{{ settings.currency_title }}</span>
+                <span class="selected-currency">{{ shop.currency }}</span>
+                <ul id="currencies" class="cnrLangList fl f-wrap" data-disclosure-list>
+                    {% for currency in form.available_currencies %}
+                        <li class="disclosure-list__item currencyOpt{% if currency.iso_code == form.current_currency.iso_code %} selected{% endif %}" {% if currency.iso_code == form.current_currency.iso_code %}aria-current="true"{% endif %} data-value="{{ currency.iso_code }}">
+                            {{ currency.iso_code }} {%- if currency.symbol -%}{{ currency.symbol }}{%- endif -%}
+                        </li>
+                    {%- endfor -%}
+                </ul>
+                <input type="hidden" name="currency_code" id="CurrencySelector" value="{{ form.current_currency.iso_code }}" data-disclosure-input/>
+                <button type="button" class="currencyBtn hide" aria-expanded="false" aria-controls="currency-list" aria-describedby="currency-heading" data-disclosure-toggle>{{ form.current_currency.iso_code }} {%- if form.current_currency.symbol -%}{{ form.current_currency.symbol }}{%- endif -%}</button>    
+              </div>
+          {% endif %}
+        {%- endform -%}
+    {% else %}
+      <div class="currency-picker">
+        {% assign codes = 'USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,ILS,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK' | split: ',' %}
+        {% assign supported_codes = settings.supported_currencies | split: ' ' %}
+        <span class="ttl">{{ settings.currency_title }}</span>
+        <span class="selected-currency">{{ shop.currency }}</span>
+        <ul id="currencies" class="cnrLangList fl f-wrap">
+          {% for code in supported_codes %}
+          {% if codes contains code %}
+            <li data-currency="{{ code }}" class="{% if shop.currency == '{{ code }}' %}selected {% endif %}">{{ code }}</li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+  	{% endif %}
+  {% endif %}
+  {% if settings.show_language %}
+    <div class="language-picker">
+        <span class="ttl">{{ settings.language_title }}</span>
+        {% if settings.langOpt == "1" %}
+            {%- form 'localization', id: 'LanguageForm', class: 'language-picker pr' -%}
+                <ul id="language" role="list" class="cnrLangList fl f-wrap">
+                  {%- for language in localization.available_languages -%}
+                    <li class="clOtp fl f-aic{% if language.iso_code == localization.language.iso_code %} selected{% endif %}" data-value="{{ language.iso_code }}" hreflang="{{ language.iso_code }}" lang="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} aria-current="true"{% endif %} tabindex="-1">
+                        {%- assign lflagSvg = language.iso_code | append:'.svg' | file_url -%}
+                        {% if settings.mlLangfl and lflagSvg contains '?v=' %}
+                            <img src="{{lflagSvg}}" class="mr5" width="18" height="14" alt="{{ language.endonym_name | capitalize }}">
+                        {% endif %}
+                        {{ language.endonym_name | capitalize }}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                <input type="hidden" class="slcrlg" name="locale_code" value="{{ localization.language.iso_code }}">
+            {%- endform -%}
+        {% else %}
+            <ul id="language" class="cnrLangList fl f-wrap">
+              {% for link in linklists[settings.languages].links %}
+              <li><a href="{{ link.url }}">{{ link.title | split: '[' | first }}</a></li>
+              {% endfor %}
+            </ul>
+        {% endif %}
+     </div>
+  {% endif %}
+</div>

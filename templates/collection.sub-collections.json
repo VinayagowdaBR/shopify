@@ -1,0 +1,131 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "collection": {
+      "type": "sub-collections",
+      "settings": {
+        "section_width": false,
+        "bnr": true,
+        "bht": 200,
+        "bhtt": 200,
+        "bhtm": 100,
+        "clbanner": "{{ collection.image }}",
+        "bbg": "#f5f5f5",
+        "show_collection_name": true,
+        "tcl": "#111111",
+        "tfs": 20,
+        "tfsm": 16,
+        "tff": "ft2",
+        "tfw": "700",
+        "tlh": 1.2,
+        "tcase": true,
+        "tmb": 0,
+        "tmbm": 0,
+        "bnr_desc": "",
+        "dcl": "#666666",
+        "dfs": 14,
+        "dfsm": 13,
+        "dlh": 1.2,
+        "dmb": 0,
+        "dmbm": 0,
+        "bnr_count": "",
+        "ccl": "#333333",
+        "cbg": "#f5f5f5",
+        "bnr-wd": 600,
+        "tac": true,
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 10,
+        "style": "st6",
+        "textalign": "tc",
+        "grid": 4,
+        "tablet-grid": 4,
+        "mobile-grid": 2,
+        "product_count": false,
+        "cl_ttl": "#111111",
+        "ttlfs": 15,
+        "ttlfsm": 14,
+        "ttlfw": "500",
+        "cl_bg": "#ffffff",
+        "bg_op": 1
+      }
+    },
+    "164327853945698945": {
+      "type": "collection-list",
+      "blocks": {
+        "16432785387097847b-1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "women",
+            "collection_name": "<b>WOMEN</b>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        },
+        "16432785387097847b-0": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "",
+            "collection_name": "<b>MEN<b></b></b>",
+            "collection_btn": "Shop Now",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "16432785387097847b-1",
+        "16432785387097847b-0"
+      ],
+      "settings": {
+        "title": "SHOP BEST SELLER",
+        "subtitle": "Shop from last month best seller",
+        "top-offeset": "default",
+        "section_width": false,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "grid-spacing": 15,
+        "grid-spacing-mbl": 5,
+        "grid": 2,
+        "tablet-grid": 2,
+        "mobile-grid": 1,
+        "style": "st6",
+        "enable_carousel": true,
+        "autoplay": false,
+        "speed": 5,
+        "textalign": "tl",
+        "leftpadzero": false,
+        "product_count": false,
+        "img_rad": 0,
+        "disable_zoom": false,
+        "tfs": 15,
+        "tfsm": 16,
+        "tff": "ft1",
+        "tfw": "400",
+        "tlh": 1.2,
+        "cl": "#444444",
+        "bg": "#ffffff",
+        "opt": 0.9,
+        "bdr": 0,
+        "show_buttons": false,
+        "btn-style": "btn",
+        "btn-size-desk": "btn-md",
+        "btn-size-mob": "mob-btn-sm"
+      }
+    }
+  },
+  "order": [
+    "collection",
+    "164327853945698945"
+  ]
+}

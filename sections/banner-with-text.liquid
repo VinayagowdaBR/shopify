@@ -1,0 +1,526 @@
+{%- assign secSt = section.settings -%}
+{%- capture featureRow -%}
+<div class="content-indent {{ secSt.top-offeset}}{% if secSt.section_cov %} section-cover{% endif %}{% if secSt.hide_mobile %} hide-sm{% endif %}{% if secSt.hided %} hide-md hide-lg{% endif %}" {% if secSt.section_cov %}style="background:{% if secSt.bgg != blank %}{{ secSt.bgg }}{% else %}{{secSt.sec_bg_clr}}{% endif %};"{% endif %}>
+  <div class="{% unless secSt.section_width %}page-width {% else %}fullwidth{% if secSt.npd %} npd{% endif %}{% endunless %}">
+
+    {% for block in section.blocks limit: section.blocks.size %}
+      {%- assign blkSt = block.settings -%}
+      {%- assign box-delay = forloop.index | minus:1 -%}
+      {%- assign delay_time = 50 | times : box-delay -%}
+
+      {%- capture image_layout -%}
+      <div class="fl1 imgCol wow{% if blkSt.layout == 'right' %} fadeInRight{% else %} fadeInLeft{% endif %}" data-wow-delay="{{delay_time}}ms">
+        {% if blkSt.image != blank %}
+          <span class="imgWrapper" style="max-width:{{ blkSt.image.width }}px;">
+              <img class="imgFl feature-row__image lazyload" width="{{ blkSt.image.width }}" height="{{ blkSt.image.height }}"
+                  data-srcset="{% render 'lazyload', image: blkSt.image, sizes: '180,360,540,720,900' %}" data-sizes="auto" alt="{{ blkSt.image.alt | escape }}">
+          </span>
+        {% else %}
+        	{{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+        {% endif %}
+      </div>
+      {%- endcapture -%}
+
+     <div class="feature-row fl f-aic f-col f-row-md{% if secSt.snow_effect %} falling-snow{% if secSt.snow_style == "style2" %} style2 {% else %} style1{% endif %}{% endif %}" style="background-color:{{blkSt.bg}};--img_rad:{{ secSt.img_rad  }}px;--bx_rad:{{ secSt.bg_rad }}px;--twid:{{ blkSt.t_width }}%;">
+        {{ image_layout }}
+        <div class="fl1 feature-row__text {{ blkSt.layout }} wow{% if blkSt.layout == 'right' %} fadeInLeft{% else %} fadeInRight{% endif %}" data-wow-delay="{{delay_time}}ms">
+          <div class="row-text {{blkSt.text_align}}">
+            {% if blkSt.title != blank %}
+              <h3 class="ttlTxt mb{{secSt.tmbm}} mb{{secSt.tmb}}-md" style="--tcl:{{blkSt.tcl}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tff:var(--{{secSt.tff}});--tfw:{{secSt.tfw}};--tlh:{{secSt.tlh}};">{{ blkSt.title }}</h3>
+            {% endif %}
+            {% if blkSt.text != blank %}
+              <div class="rgTxt featured-row__subtext mb{{secSt.mbm}} mb{{secSt.mb}}-md" style="--cl:{{blkSt.cl}};--fs:{{secSt.fs}}px;--fsm:{{secSt.fsm}}px;--fw:{{secSt.fw}};--lh:{{secSt.lh}};">
+                  <div class="rte">{{ blkSt.text }}</div>
+              </div>
+            {% endif %}
+            {% if blkSt.button_label != blank and blkSt.button_link != blank %}
+              <a href="{{ blkSt.button_link }}" class="btn {{secSt.btn-size-mob}} {{secSt.btn-size-desk}}" style="--cl:{{blkSt.btncl}};--bg:{{blkSt.btnbg}};--bd:{{blkSt.btnbd}};">{{ blkSt.button_label }}</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}  
+  </div>
+</div>
+{%- endcapture -%}
+{{featureRow | strip_newlines | remove: "  " | remove: "	" }}
+{% schema %}
+  {
+    "name": "t:sections.banner_with_text.name",
+    "class": "image-with-text",
+    "settings": [	  	 
+	  {
+            "type": "select",
+            "id": "top-offeset",
+            "label": "t:sections.all.top_offSet",
+            "default": "default",
+            "options": [
+              {
+                "value": "default",
+                "label": "Default"
+              },
+              {
+                "value": "small",
+                "label": "Small"
+              },
+			  {
+                "value": "none",
+                "label": "None"
+              }
+			]
+        },
+		 {
+		"type":"checkbox",
+		"id":"section_width",
+		"label":"t:global.fullwidth",
+		"default": true
+	  },
+	  {
+		"type":"checkbox",
+		"id":"npd",
+		"label":"t:global.no_padding",
+        "info": "t:global.no_padding_info",
+		"default": true
+	  },
+       {
+            "type": "checkbox",
+            "id": "hide_mobile",
+            "label": "t:global.devices.mobile_hide",
+            "default": false
+        },
+       {
+            "type": "checkbox",
+            "id": "hided",
+            "label":"t:global.devices.desktop_hide",
+            "default": false
+        },
+	 {
+        "type": "checkbox",
+        "id": "section_cov",
+        "label": "t:global.background.add",
+        "default": false
+      },	
+	  {
+        "type": "color",
+        "id": "sec_bg_clr",
+        "label": "t:global.background.color",
+		"default":"#fafafa"	
+	  },
+      {
+            "type": "color_background",
+            "id": "bgg",
+            "label": "t:global.background.gradient"
+      }, 
+	  {
+        "type": "range",
+        "id": "bg_rad",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "label": "t:global.background.radius",
+        "unit": "px",
+        "default": 0
+       },
+	  {
+        "type": "header",
+        "content": "t:global.appearance"
+      },
+      {
+		"type":"paragraph",
+		"content":"t:sections.all.heading.title"
+	  },
+      {
+        "type": "range",
+        "id": "tfs",
+        "label": "t:global.font.size",
+        "default": 30,
+        "min": 10,
+        "max": 100,
+        "step": 1,
+        "unit": "px"
+    },
+    {
+        "type": "range",
+        "id": "tfsm",
+        "label": "t:global.font.size_mobile",
+        "default": 22,
+        "min": 10,
+        "max": 60,
+        "step": 1,
+        "unit": "px"
+    },
+    {
+        "type": "select",
+        "id": "tff",
+        "label": "t:global.font.family",
+        "default": "ft1",
+        "options": [
+            {
+                "value": "ft1",
+                "label": "Font 1"
+            },
+            {
+                "value": "ft2",
+                "label": "Font 2"
+            },
+            {
+                "value": "ft3",
+                "label": "Font 3"
+            }
+        ]
+    },
+    {
+        "type": "select",
+        "id": "tfw",
+        "label": "t:global.font.weight",
+        "default": "700",
+        "options": [
+            {
+                "value": "300",
+                "label": "Light"
+            },
+            {
+                "value": "400",
+                "label": "Regular"
+            },
+            {
+                "value": "500",
+                "label": "Medium"
+            },
+            {
+                "value": "600",
+                "label": "Semi Bold"
+            },
+            {
+                "value": "700",
+                "label": "Bold"
+            }
+        ]
+    }, 	
+    {
+        "type": "range",
+        "id": "tlh",
+        "label": "t:global.font.height",
+        "default": 1.3,
+        "min": 1.0,
+        "max": 2.0,
+        "step": 0.1,
+        "info": "t:global.font.height_info"
+    }, 			  
+    {
+        "type": "range",
+        "id": "tmb",
+        "label": "t:sections.all.margin.bottom",
+        "default": 15,
+        "min":0,
+        "max":50,
+        "step":5,
+        "unit": "px"
+    }, 			              
+    {
+        "type": "range",
+        "id": "tmbm",
+        "label": "t:sections.all.margin.bottom_mobile",
+        "default": 10,
+        "min":0,
+        "max":50,
+        "step":5,
+        "unit": "px"
+     },
+      {
+		"type":"paragraph",
+		"content":"t:sections.all.heading.details"
+	  },
+      {
+            "type": "range",
+            "id": "fs",
+            "label": "t:global.font.size",
+            "default": 14,
+            "min": 10,
+            "max": 100,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "range",
+            "id": "fsm",
+            "label": "t:global.font.size_mobile",
+            "default": 12,
+            "min": 10,
+            "max": 60,
+            "step": 1,
+            "unit": "px"
+        },
+        {
+            "type": "select",
+            "id": "fw",
+            "label": "t:global.font.weight",
+            "default": "400",
+            "options": [
+                {
+                    "value": "300",
+                    "label": "Light"
+                },
+                {
+                    "value": "400",
+                    "label": "Regular"
+                },
+                {
+                    "value": "500",
+                    "label": "Medium"
+                },
+                {
+                    "value": "600",
+                    "label": "Semi Bold"
+                },
+                {
+                    "value": "700",
+                    "label": "Bold"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "lh",
+            "label": "t:global.font.height",
+            "default": 1.6,
+            "min": 1.0,
+            "max": 2.0,
+            "step": 0.1,
+            "info": "t:global.font.height_info"
+        }, 			  
+        {
+            "type": "range",
+            "id": "mb",
+            "label": "t:sections.all.margin.bottom",
+            "default": 15,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        }, 			              
+        {
+            "type": "range",
+            "id": "mbm",
+            "label": "t:sections.all.margin.bottom_mobile",
+            "default": 10,
+            "min":0,
+            "max":50,
+            "step":5,
+            "unit": "px"
+        },
+      {
+		"type":"paragraph",
+		"content":"----------------------------------------"
+	  },
+        {
+            "type": "range",
+            "id": "img_rad",
+            "min": 0,
+            "max": 30,
+            "step": 1,
+           "label": "t:global.image.radius",
+            "unit": "px",
+            "default": 0
+       },      
+       {
+          "type": "select",
+          "id": "btn-size-desk",
+          "label": "t:global.button.size",
+          "default": "btn-md",
+          "options": [
+              {
+              "label": "Small",
+              "value": "btn-sm"
+              },
+              {
+              "label": "Medium",
+              "value": "btn-md"
+              },
+              {
+              "label": "Large",
+              "value": "btn-lg"
+              }	
+          ]
+        }, 
+        {
+          "type": "select",
+          "id": "btn-size-mob",
+          "label": "t:global.button.size_mobile",
+          "default": "mob-btn-sm",
+          "options": [
+              {
+              "label": "Small",
+              "value": "mob-btn-sm"
+              },
+              {
+              "label": "Medium",
+              "value": "mob-btn-md"
+              },
+              {
+              "label": "Large",
+              "value": "mob-btn-lg"
+              }	
+          ]
+        }, 	  	             
+	  {
+        "type": "header",
+        "content": "t:global.snow.title"
+      },
+	  {
+		"type":"checkbox",
+		"id":"snow_effect",
+		"label":"t:global.enable",
+		"default": false,
+		"info":"For Christmas"
+	   },
+        {
+          "type": "select",
+          "id": "snow_style",
+          "label": "t:global.snow.style",
+          "default": "style1",         
+          "options": [
+            {
+            "value": "style1",
+            "label": "Falling Down"
+            },
+            {
+            "value": "style2",
+            "label": "Falling From Left"
+            }
+            ]
+          }
+    ],
+	 "blocks": [
+      {
+        "type": "row",
+        "name": "t:sections.banner_with_text.block.name",
+        "settings": [
+           {
+        "type": "image_picker",
+        "id": "image",
+        "label": "t:global.image.name"
+      },  
+       {
+            "type": "select",
+            "id": "layout",
+			"label":"t:global.image.alignment",
+ 			"default": "left",
+			"options": [
+        		{ "value": "left","label":"Left"},
+				{ "value": "right","label":"Right"}
+			]
+      },	  
+      {
+        "type": "textarea",
+        "id": "title",
+        "label": "t:global.text.title",
+        "default": "Rohan - The Best Selling <br/>Shopify Theme"	
+      },
+      {
+        "type": "color",
+        "id": "tcl",
+        "label": "t:global.color.title",
+        "default": "#000"
+      },
+      {
+        "type": "richtext",
+        "id": "text",
+        "label": "t:global.text.text",
+        "default": "<p>Your conversion rate, client happiness, and overall success are all dependent on the UI/UX of your online store. Visitors to your online store are positively affected by a well-designed and responsive UI/UX.</p>"
+      },
+      {
+        "type": "color",
+        "id": "cl",
+        "label": "t:global.color.text",
+        "default": "#000"
+      },
+      {
+        "type": "paragraph",
+        "content": "t:sections.all.heading.button"
+      },
+      {
+        "type": "text",
+        "id": "button_label",
+        "label": "t:global.button.text",
+        "default": "Shop Now"
+      },
+      {
+        "type": "url",
+        "id": "button_link",
+        "label": "t:global.button.link",
+        "default": "/"
+      },
+ 	  {
+        "type": "color",
+        "id": "btncl",
+        "label": "t:global.color.text",
+		"default":"#fff"
+      },
+	  {
+        "type": "color",
+        "id": "btnbg",
+        "label": "t:global.background.color",
+		"default":"#000"
+      },
+	  {
+        "type": "color",
+        "id": "btnbd",
+        "label": "t:global.color.border", 
+		"default":"#000"
+      },
+      {
+		"type":"paragraph",
+		"content":"----------------------------------------"
+	  },      
+ 	  {
+            "type": "select",
+            "id": "text_align",
+            "label": "t:global.text.align",
+            "default": "text-left",
+            "options": [
+              {
+                "value": "text-left",
+                "label": "Left"
+              },
+              {
+                "value": "tc",
+                "label": "Center"
+              },
+              {
+                "value": "tr",
+                "label": "Right"
+              }
+            ]
+      },
+     {
+        "type": "range",
+        "id": "t_width",
+        "label": "t:global.text.text_width",
+        "default": 80,
+        "min": 60,
+        "max": 90,
+        "step": 10,
+        "unit": "%"
+      },
+	  {
+        "type": "color",
+        "id": "bg",
+        "label": "t:global.background.color",
+        "default": "#f5f5f5"
+      }
+      ]
+     }
+   ],
+    "presets": [
+      {
+        "name": "t:sections.banner_with_text.name",       
+		"blocks": [
+          {
+            "type": "row"
+          }          
+        ]
+      }
+    ]
+  }
+{% endschema %}

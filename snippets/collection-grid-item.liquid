@@ -1,0 +1,45 @@
+{%  assign collection_image = blkSt.collection_image | default: collection.featured_image %}
+<div class="cl-item">
+  <a href="{{ blkSt.url | default:collection.url }}" class="cl-item__link">
+    <div class="imgWrap of_hidden" style="border-radius:{{secSt.ibdr}}px;">
+      {%- if collection_image != blank -%}
+        	<img class="imgFl img lazyload w_100 db wow zoomIn" loading="lazy" src="{{ collection_image | img_url: '100x' }}" width="{{ collection_image.width }}" height="{{ collection_image.height }}" 
+                 data-srcset="{% render 'lazyload', image: collection_image, sizes: '400,600,800,1000,1200,1500' %}" data-sizes="auto" alt="{{ collection_image.alt | escape }}" />
+         {% else %} 
+        	{% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}{{ 'collection-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+         {% endif %}
+    </div>
+    {% if masonary %}<div class="fl cldtl_wrap {{ blkSt.text_pos}}">{% endif %}
+     <div class="details{% if secSt.textalign %} {{ secSt.textalign}}{% endif %}{% if secSt.leftpadzero %} pad-0{% endif %} wd90 wd{{ secSt.box-width}}-md {{ blkSt.talign}}{% if secSt.isbox %} bx{% endif %}">
+        <h3 class="ttlTxt {{secSt.text_size}} {{ secSt.font_weight}} m0" style="background: {{blkSt.color_bg}};">
+          {% if collection.empty? %}
+            {% if blkSt.collection_name != blank %}
+               {{ blkSt.collection_name }}
+            {% else %}
+           	   {{ 'homepage.onboarding.collection_title' | t }}
+            {% endif %}                  	
+          {% else %}
+            {% if blkSt.collection_name != blank %}
+           	   {{ blkSt.collection_name }}
+            {% else %}
+              {{ collection.title }}
+            {% endif %}                  		
+          {% endif %}
+        </h3>
+        {% if blkSt.collection_name2 != blank %}
+        	<p>{{ blkSt.collection_name2 }}</p>
+        {% endif %}   
+
+        {% if secSt.product_count %}
+        	<span class="counts">{{ 'collections.general.items_with_count' | t: count: collection.all_products_count }}</span>
+        {% endif %}                          
+
+        {% if secSt.show_buttons %}
+          {% if  blkSt.collection_btn != blank %} 
+         	 <button class="btn {{secSt.btn-size-mob}} {{secSt.btn-size-desk}} {{secSt.btn-style}}" type="button">{{blkSt.collection_btn}}</button>
+          {% endif %}
+        {% endif %}                              
+    </div>
+    {% if masonary %}</div>{% endif %}
+  </a>
+</div>

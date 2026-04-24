@@ -1,0 +1,556 @@
+{% assign current_product = product %}
+
+<section class="hov-product-conversion" id="hov-product-conversion-{{ section.id }}">
+
+  <div class="hov-page-width">
+
+    <div class="hov-grid">
+
+      
+      <div class="hov-media">
+        {% if current_product.featured_media %}
+          <div class="hov-main-image">
+            {{
+              current_product.featured_media
+              | image_url: width: 1200
+              | image_tag: loading: 'lazy', class: 'hov-product-image', alt: current_product.title
+            }}
+          </div>
+        {% endif %}
+        {% if current_product.images.size > 1 %}
+          <div class="hov-thumbnails">
+            {% for image in current_product.images limit: 4 %}
+              <div class="hov-thumb">
+                {{
+                  image
+                  | image_url: width: 300
+                  | image_tag: loading: 'lazy', class: 'hov-thumb-image', alt: image.alt | escape
+                }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="hov-content">
+        <h1 class="hov-title">{{ current_product.title }}</h1>
+
+        {% if section.settings.show_reviews %}
+          <div class="hov-reviews">
+            <span class="hov-stars">★★★★★</span>
+            <span class="hov-review-text">{{ section.settings.review_text }}</span>
+          </div>
+        {% endif %}
+
+
+
+        {% if section.settings.show_urgency %}
+          <div class="hov-urgency">
+            {{ section.settings.urgency_text }}
+          </div>
+        {% endif %}
+
+        <div class="hov-trust-badges">
+          {% if section.settings.badge_1 != blank %}<span>{{ section.settings.badge_1 }}</span>{% endif %}
+          {% if section.settings.badge_2 != blank %}<span>{{ section.settings.badge_2 }}</span>{% endif %}
+          {% if section.settings.badge_3 != blank %}<span>{{ section.settings.badge_3 }}</span>{% endif %}
+          {% if section.settings.badge_4 != blank %}<span>{{ section.settings.badge_4 }}</span>{% endif %}
+        </div>
+
+        {% form 'product', current_product, class: 'hov-product-form' %}
+          <input type="hidden" name="id" value="{{ current_product.selected_or_first_available_variant.id }}">
+
+          {% if current_product.variants.size > 1 %}
+            <div class="hov-variant-wrap">
+              <label for="hov-variant-{{ section.id }}" class="hov-label">Select Option</label>
+              <select
+                id="hov-variant-{{ section.id }}"
+                name="id"
+                class="hov-variant-select"
+              >
+                {% for variant in current_product.variants %}
+                  <option
+                    value="{{ variant.id }}"
+                    {% if variant == current_product.selected_or_first_available_variant %}selected{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                    {{ variant.title }} - {{ variant.price | money_without_trailing_zeros }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+
+          <div class="hov-qty-wrap">
+            <label for="hov-quantity-{{ section.id }}" class="hov-label">Quantity</label>
+            <input
+              id="hov-quantity-{{ section.id }}"
+              type="number"
+              name="quantity"
+              min="1"
+              value="1"
+              class="hov-quantity-input"
+            >
+          </div>
+
+          <div class="hov-buttons">
+            <button type="submit" name="add" class="hov-btn hov-btn-primary" {% unless current_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+              {% if current_product.selected_or_first_available_variant.available %}
+                Add to Cart
+              {% else %}
+                Sold Out
+              {% endif %}
+            </button>
+            <button type="submit" name="checkout" class="hov-btn hov-btn-secondary" {% unless current_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+              Buy It Now
+            </button>
+          </div>
+        {% endform %}
+
+        <div class="hov-reassurance">
+          {% if section.settings.reassurance_1 != blank %}<p>{{ section.settings.reassurance_1 }}</p>{% endif %}
+          {% if section.settings.reassurance_2 != blank %}<p>{{ section.settings.reassurance_2 }}</p>{% endif %}
+        </div>
+
+        {% if current_product.description != blank %}
+          <div class="hov-description">
+            <h3>Description</h3>
+            <div class="hov-description-content">
+              {{ current_product.description }}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="hov-sticky-bar">
+    <div class="hov-sticky-inner">
+      <div class="hov-sticky-price">
+        <span class="hov-sticky-current">{{ current_product.price | money_without_trailing_zeros }}</span>
+        {% if current_product.compare_at_price > current_product.price %}
+          <span class="hov-sticky-compare">{{ current_product.compare_at_price | money_without_trailing_zeros }}</span>
+        {% endif %}
+      </div>
+      <form method="post" action="/cart/add" class="hov-sticky-form">
+        <input type="hidden" name="id" value="{{ current_product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="quantity" value="1">
+        <button type="submit" class="hov-sticky-btn">Add to Cart</button>
+      </form>
+    </div>
+  </div>
+
+</section>
+<style>
+  #hov-product-conversion-{{ section.id }} {
+    --hov-ivory: #F4F1EC;
+    --hov-emerald: #0F3B2E;
+    --hov-gold: #C8B28A;
+    --hov-charcoal: #2E2E2E;
+    --hov-muted: #7A7A7A;
+    --hov-border: #E8E1D8;
+    --hov-bg: #FCFAF7;
+    background: var(--hov-bg);
+    padding: 40px 0 80px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-page-width {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 48px;
+    align-items: start;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-main-image {
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.05);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-product-image,
+  #hov-product-conversion-{{ section.id }} .hov-thumb-image {
+    width: 100%;
+    display: block;
+    height: auto;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-thumb {
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid var(--hov-border);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(15, 59, 46, 0.08);
+    color: var(--hov-emerald);
+    border: 1px solid rgba(15, 59, 46, 0.12);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-title {
+    font-size: 34px;
+    line-height: 1.2;
+    color: var(--hov-charcoal);
+    margin: 0 0 10px;
+    font-weight: 600;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-subtitle {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--hov-muted);
+    margin: 0 0 14px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-reviews {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-stars {
+    color: var(--hov-gold);
+    letter-spacing: 1px;
+    font-size: 16px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-review-text {
+    color: var(--hov-muted);
+    font-size: 14px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-price-wrap {
+    padding: 20px 0 14px;
+    border-top: 1px solid var(--hov-border);
+    border-bottom: 1px solid var(--hov-border);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-price-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-price-current {
+    font-size: 36px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--hov-emerald);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-price-compare {
+    font-size: 20px;
+    color: var(--hov-muted);
+    text-decoration: line-through;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-discount-badge {
+    display: inline-flex;
+    align-items: center;
+    background: var(--hov-emerald);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.2px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-tax-text {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--hov-muted);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-urgency {
+    margin-top: 18px;
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    color: var(--hov-charcoal);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 18px 0 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-trust-badges span {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 999px;
+    color: var(--hov-charcoal);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-product-form {
+    margin-top: 8px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--hov-charcoal);
+    margin-bottom: 8px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-variant-wrap,
+  #hov-product-conversion-{{ section.id }} .hov-qty-wrap {
+    margin-bottom: 16px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-variant-select,
+  #hov-product-conversion-{{ section.id }} .hov-quantity-input {
+    width: 100%;
+    min-height: 52px;
+    border: 1px solid var(--hov-border);
+    border-radius: 14px;
+    background: #fff;
+    padding: 0 16px;
+    font-size: 15px;
+    color: var(--hov-charcoal);
+    outline: none;
+    box-shadow: none;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-btn {
+    min-height: 56px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: none;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-btn-primary {
+    background: var(--hov-emerald);
+    color: #fff;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-btn-primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-btn-secondary {
+    background: transparent;
+    color: var(--hov-emerald);
+    border: 1px solid var(--hov-emerald);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-btn-secondary:hover {
+    background: rgba(15, 59, 46, 0.05);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-reassurance {
+    margin-top: 18px;
+    color: var(--hov-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-reassurance p {
+    margin: 4px 0;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-description {
+    margin-top: 30px;
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 20px;
+    padding: 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-description h3 {
+    margin: 0 0 14px;
+    font-size: 20px;
+    color: var(--hov-charcoal);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-description-content {
+    color: var(--hov-muted);
+    font-size: 15px;
+    line-height: 1.8;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-description-content p:first-child {
+    margin-top: 0;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-bar {
+    position: fixed;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    z-index: 30;
+    display: none;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255,255,255,0.96);
+    border: 1px solid var(--hov-border);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    padding: 12px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-price {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-current {
+    color: var(--hov-emerald);
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 1;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-compare {
+    color: var(--hov-muted);
+    text-decoration: line-through;
+    font-size: 13px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-form {
+    margin: 0;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-sticky-btn {
+    min-height: 46px;
+    border: none;
+    background: var(--hov-emerald);
+    color: #fff;
+    border-radius: 14px;
+    padding: 0 18px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  @media screen and (max-width: 989px) {
+    #hov-product-conversion-{{ section.id }} .hov-grid {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-title {
+      font-size: 28px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-price-current {
+      font-size: 30px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-buttons {
+      grid-template-columns: 1fr;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-sticky-bar {
+      display: block;
+    }
+  }
+</style>
+
+{% render 'hov-product-makeover' %}
+
+{% schema %}
+{
+  "name": "HOV Product Conversion",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Show badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "✨ Bestseller"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "A delicate statement for everyday elegance."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show review text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "review_text",
+      "label": "Review text",
+      "default": "Loved by women for everyday wear"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tax_text",
+      "label": "Show tax text",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "tax_text",
+      "label": "Tax text",
+      "default": "Inclusive of taxes. Free shipping on prepaid orders."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_urgency",
+      "label": "Show urgency",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "urgency_text",
+      "label": "Urgency text",
+      "default": "⚡ Selling fast. Limited pieces available at this price."
+    },
+    {
+      "type": "text",
+      "id": "badge_1",
+      "label": "Trust badge 1",
+      "default": "Anti Tarnish"
+    },
+    {
+      "type": "text",
+      "id": "badge_2",
+      "label": "Trust badge 2",
+      "default": "Waterproof"
+    },
+    {
+      "type": "text",
+      "id": "badge_3",
+      "label": "Trust badge 3",
+      "default": "Hypoallergenic"
+    },
+    {
+      "type": "text",
+      "id": "badge_4",
+      "label": "Trust badge 4",
+      "default": "Adjustable Fit"
+    },
+    {
+      "type": "text",
+      "id": "reassurance_1",
+      "label": "Reassurance line 1",
+      "default": "Easy returns • Secure checkout"
+    },
+    {
+      "type": "text",
+      "id": "reassurance_2",
+      "label": "Reassurance line 2",
+      "default": "Premium design with a pocket-friendly price"
+    }
+  ],
+  "presets": [
+    {
+      "name": "HOV Product Conversion"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,264 @@
+<style>
+  #PageContainer .page-width { max-width:{{section.settings.width}}px }
+</style>
+{% unless section.settings.breadcrumb %}{%- if settings.breadcrumb_pg -%}{%- render 'breadcrumb' -%}{%- else -%}<div class="topSpace"></div>{%- endif -%}{% endunless %}
+<div class="page-width con_{{section.settings.layout}}" style="--bg:{{section.settings.form_bg}};--cl:{{section.settings.form_text}};">
+  {% unless section.settings.hide_ttl %}<h1 class="page-title">{{page.title}}</h1>{% endunless %}
+  {% unless page.content == blank %}<div class="rte">{{ page.content }}</div>{% endunless %}
+
+  {% comment %} contact form {% endcomment %}
+  {% capture contactForm %}
+  	<div class="contact-frm form-vertical">
+        {% if section.settings.contact_title != blank %}<h2 class="h3 tc mb10">{{ section.settings.contact_title }}</h2>{% endif %}
+        {% if section.settings.contact_text_desc %}<div class="rte tc">{{ section.settings.contact_text_desc }}</div>{% endif %}
+        {% form 'contact' %}
+        	{% if form.posted_successfully? %}<p class="note form-success">{{ 'contact.form.post_success' | t }}</p>{% endif %}
+
+        	{{ form.errors | default_errors }}
+
+        <div class="grid{% if section.settings.layout == "style1" %} rwcols-md-2{% endif %}">
+          <div class="gitem">
+           	<input type="text" id="ContactFormName" name="contact[name]" placeholder="{{ 'contact.form.name' | t }}"  value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}">
+          </div>       
+          <div class="gitem">
+            <input type="email" id="ContactFormEmail" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}"  autocorrect="off" autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" class="{% if form.errors contains 'email' %}input--error{% endif %}">
+          </div>              
+        </div>
+        {% unless section.settings.show_phone %}
+        <input type="tel" id="ContactFormPhone" name="contact[phone]" pattern="[0-9\-]*" placeholder="{{ 'contact.form.phone' | t }}"  value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+        {% endunless %} 
+        {% unless section.settings.show_subject %}
+        <input type="text" id="ContactFormSubject" name="contact[form subject]" placeholder="{{ 'contact.form.subject' | t }}"  value="{% if form[subject] %}{{ form[subject] }}{% endif %}">
+        {% endunless %}
+        <textarea rows="10" id="ContactFormMessage" name="contact[body]" placeholder="{{ 'contact.form.message' | t }}" >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+        <input type="submit" class="btn" value="{{ 'contact.form.submit' | t }}">
+        {% endform %}
+      </div>
+  {% endcapture %}
+  
+	{% capture address %}
+		{% if section.settings.logo %}
+    		<p class="contact-logo mb20"><img src="{{ section.settings.logo | img_url: '300x' }}" srcset="{{ section.settings.logo | img_url: '300x' }} 1x, {{ section.settings.logo | img_url: '300x', scale: 2 }} 2x" alt="{{ section.settings.logo.alt | default: shop.name }}"></p>
+     	{% endif %}
+        {% if section.settings.cnt_title != blank %}<h4>{{ section.settings.cnt_title }}</h4>{% endif %}
+        {% if section.settings.store_address != blank or section.settings.store_phone != blank or section.settings.store_email != blank %}
+          <ul class="contact-address mb20">
+            {% if section.settings.store_address != blank %}<li>{{section.settings.store_address }}</li>{% endif %}
+            {% if section.settings.store_phone != blank %}<li class="phone">{{section.settings.store_phone }}</li>{% endif %}
+            {% if section.settings.store_email != blank %}<li class="email">{{section.settings.store_email }}</li>{% endif %}
+          </ul>
+  		{% endif %}
+	{% endcapture %}
+  
+  {% comment %} map {% endcomment %}
+  {% capture googlemap %}
+  	{% if section.settings.map_address != blank %}     
+      <div class="map-section map"> {{section.settings.map_address}}</div>
+  {% endif %}
+  {% endcapture %}
+  
+  {% if section.settings.layout == "style1" %}
+      <div class="grid">
+        <div class="gitem wd66-md">{{contactForm}}</div>
+        <div class="gitem wd33-md">
+          <div class="contact-details">
+            {{address}}
+            {% if section.settings.store_address != blank or section.settings.store_phone != blank or section.settings.store_email != blank %}<hr/>{% endif %}
+            {% if section.settings.store_opening_time != blank %}<div class="open-hours mb20">{{ section.settings.store_opening_time }}</div><hr/>{% endif %}
+            {% if section.settings.show_socials %}
+            <div class="follow-us mb20">
+              {% if section.settings.socials_ttl != blank %}<label>{{ section.settings.socials_ttl }}</label>{% endif %}
+              {%- render 'social-media' -%}
+            </div>
+			{% if section.settings.custom_txt != blank %}
+				<hr/> {{section.settings.custom_txt}}
+			{% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+     {{googlemap}}
+  {% else %}
+  	<div class="grid">
+      <div class="gitem wd40-md">{{contactForm}}</div>
+      <div class="gitem wd60-md">
+		<div class="grid">
+        	<div class="gitem wd60-md">
+          		<div class="contact-details">{{address}}</div>
+              	 {% if section.settings.show_socials %}
+                    <div class="follow-us">
+                      {% if section.settings.socials_ttl != blank %}<label class="mb10"> {{ section.settings.socials_ttl }}</label>{% endif %}
+                      {% render 'social-media' %}
+                    </div>
+                 {% endif %}
+        	</div>
+          	
+            <div class="gitem wd40-md">
+              {% if section.settings.store_opening_time != blank %}<div class="open-hours mb20">{{ section.settings.store_opening_time }}</div>	{% endif %}	
+			  {% if section.settings.custom_txt != blank %} {{section.settings.custom_txt}}{% endif %}
+            </div>            		
+        </div>
+        {{googlemap}}
+      </div>
+  	</div>
+  {% endif %}
+</div>
+
+{% schema %}
+  {
+    "name": "t:sections.contact.page_name",
+	"class":"contact-template",
+    "settings": [
+        {
+          "type": "range",
+          "id": "width",
+          "label": "t:sections.all.container_width",
+          "default":1200,
+          "min": 800,
+          "max": 1800,
+          "step": 10,
+          "unit": "px"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_ttl",
+          "label": "t:sections.contact.hide_page_title",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "breadcrumb",
+          "label": "t:sections.contact.hide_breadcrumb",
+          "default": false
+        },
+    	{
+          "type": "select",
+          "id": "layout",
+          "label": "t:sections.contact.style",
+          "default": "style1",
+          "options": [
+            {
+              "value": "style1",
+              "label": "Style 1"
+            },
+            {
+              "value": "style2",
+              "label": "Style 2"
+            }
+          ]
+        },		  
+        {
+          "id": "map_address",
+          "type": "textarea",
+          "label": "t:sections.contact.google_map",
+         "info": "t:sections.contact.google_map_info"         
+        },              
+        {
+          "type": "header",
+          "content": "t:sections.contact.form_name"
+        },
+        {
+          "type": "text",
+          "id": "contact_title",
+          "label": "t:global.text.title",
+          "default": "Drop Us A Line"
+        },
+        {
+          "type": "textarea",
+          "id": "contact_text_desc",
+          "label": "t:global.text.text"
+        },
+		{
+          "type": "checkbox",
+          "id": "show_phone",
+          "label": "t:sections.contact.hide_phone",
+		  "default":false
+        },
+		 {
+          "type": "checkbox",
+          "id": "show_subject",
+           "label": "t:sections.contact.hide_subject",
+		  	"default":false
+        },
+       {
+          "type": "header",
+          "content": "t:sections.contact.opening_hours"
+       }, 
+       {
+          "type": "textarea",
+          "id": "store_opening_time",
+          "label": "t:sections.contact.store_time",		 
+ 		 "default":"<b>ADDRESS:</b><br><br>55 Gallaxy Enque, 2568 steet, 23568 NY"
+       },
+       {
+          "type": "header",
+          "content": "t:sections.contact.contact_details"
+       },
+       {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "t:sections.contact.logo"
+       }, 
+       {
+          "type": "text",
+          "id": "cnt_title",
+          "label": "t:global.text.title"
+       },
+       {
+          "type": "textarea",
+          "id": "store_address",
+          "label": "t:sections.contact.address",		
+ 		 "default":"<b>ADDRESS:</b><br><br>55 Gallaxy Enque, 2568 steet, 23568 NY"
+       }, 
+       {
+          "type": "text",
+          "id": "store_phone",
+          "label": "t:sections.contact.phone",
+		  "default":"PHONE: +1 (440) 568 4568"
+       }, 
+       {
+          "type": "text",
+          "id": "store_email",
+          "label": "t:sections.contact.email",
+		 "default":"EMAIL: sales@yousite.com"
+       },
+       {
+          "type": "header",
+          "content": "t:sections.contact.socials"
+       },
+       {
+		  "type":"checkbox",
+		  "id":"show_socials",
+		  "label":"t:global.display",
+		  "default":true
+	   },
+       {
+		  "type":"textarea",
+		  "id":"socials_ttl",
+		  "label":"t:global.text.title",
+		  "default":"<b>STAY CONNECTED</b><br/>"
+	   },
+		{
+		  "type":"textarea",
+		  "id":"custom_txt",
+		  "label":"t:sections.contact.custom_txt"		 
+	  },
+       {
+		  "type":"header",
+		  "content":"t:global.appearance"
+	   },
+	    {
+          "type": "color",
+          "id": "form_text",
+          "label": "t:global.color.text",
+          "default": "#111"
+        },
+		{
+          "type": "color",
+          "id": "form_bg",
+          "label": "t:global.background.color",
+          "default": "#f8f8f8"
+        }
+	]
+  }
+{% endschema %}

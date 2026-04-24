@@ -1,0 +1,407 @@
+{%- liquid
+    assign isRtl = false
+    assign lisRtl = 'ar,dv,ha,he,ku,fa,ur,ug' | split: ','
+    if lisRtl contains request.locale.iso_code or settings.rtl
+        assign isRtl = true
+    endif
+
+    assign secSt = section.settings
+    assign current_variant = product.selected_or_first_available_variant
+    assign product_form_id = 'product-form-' | append: section.id
+	assign featured_img = current_variant.featured_media | default: product.featured_image
+-%}
+<style>
+  #content_quickview {padding: 20px;   max-width: 900px;}
+  @media only screen and (min-width:767px) {
+  #content_quickview .wrap-product-info{ padding-right:15px;}
+  }   
+    #content_quickview .sizelink { display:none; }
+    #content_quickview .psinglePriceWr { font-size:22px; }
+    #content_quickview s.pr_price { font-size:18px; }
+    #content_quickview .mfp-close{ top:10px; right:10px;}
+    #content_quickview .pr_lg_img { margin-bottom:2px;} 
+    #content_quickview .swatchLbl.color {width:50px; height:50px; }
+</style>
+<div id="{{ section.id }}" data-url="{{ product.url }}" data-section-id="{{ section.id }}" data-section-type="quickView" data-enable-history-state="true">
+{%- capture productImages -%}
+        <quickview-media id="MediaGallery-{{ section.id }}{{ id_append }}" data-section="{{ section.id }}" data-target="media{{ featured_img.id }}" class="{% if isColorGroup %} hide{% endif %}">
+            <div class="pr_lg_img">
+                <div id="pis{{ section.id }}" class="primgSlider p1 pisquickView" data-flickity='{"cellAlign":"left","wrapAround":true,"adaptiveHeight":false,"pageDots":false{%- if settings.rtl -%},"rightToLeft": true{%- endif -%} }'>
+                {% for media in product.media %}
+                    {%- assign imgNo = forloop.index0 -%}
+                    {% case media.media_type %}
+                        {%- when 'image' %}
+                            <div data-id="media{{ media.id }}"class="pr_photo" data-slide="{{imgNo}}">
+                                <span class="imgWrapper" style="max-width:{% if settings.pimg_maxHt != blank %}{{ settings.pimg_maxHt | times: media.aspect_ratio }}{% else %}{{media.width}}{% endif %}px;">
+                                    <img class="imgFl lazyload featImg{{ section.id }} product-featured-img{% if enable_zoom %} js-zoom-enabled{% endif %}{% if forloop.first %} lazypreload{% endif %}" {% unless forloop.first %}lazyload="lazy"{% endunless %} src="{{ media | img_url: '600x' }}" width="{{ media.width }}" height="{{ media.height }}"
+                                        data-srcset="{% render 'lazyload', image: media, sizes: '400,600,800' %}" data-sizes="auto" alt="{{ media.alt | escape }}">
+                                </span>
+                            </div>
+                        {%- when 'external_video' %}
+                            <div class="pr_photo p{{secSt.prstyle}} videoSlide" data-media-id="{{ media.id }}" data-slide="{{imgNo}}">
+                                <div class="vd-wrap">{{ media | external_video_tag }}</div>
+                            </div>
+                        {%- when 'video' %}
+                            <div class="pr_photo p{{secSt.prstyle}} videoSlide" data-media-id="{{ media.id }}" data-slide="{{imgNo}}">
+                                {%- assign videoThumb = media | img_url: '700x' -%}
+                                {{ media | video_tag: poster: videoThumb, controls: true, muted: true, loop: true, playsinline: true, webkit-playsinline: true }}
+                            </div>
+                        {%- when 'model' %}
+                            <product-model class="pr_photo p{{secSt.prstyle}} pmd" data-id="media{{ media.id }}" data-media-id="{{ media.id }}">
+                                <div class="pr" style="padding-bottom:100%;">
+                                    <button id="Deferred-Poster-Modal-{{ media.id }}" class="deferred-media__poster" type="button">
+                                      <span class="deferred-media__poster-button fl f-aic f-jcc">
+                                          <span class="v-hidden">{{ 'products.media.play_model' | t }}</span>
+                                          <svg class="at-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M239.1 7.5l-208 78c-18.7 7-31.1 25-31.1 45v225.1c0 18.2 10.3 34.8 26.5 42.9l208 104c13.5 6.8 29.4 6.8 42.9 0l208-104c16.3-8.1 26.5-24.8 26.5-42.9V130.5c0-20-12.4-37.9-31.1-44.9l-208-78C262 3.4 250 3.4 239.1 7.5zm16.9 45l208 78v.3l-208 84.5-208-84.5v-.3l208-78zM48 182.6l184 74.8v190.2l-184-92v-173zm232 264.9V257.4l184-74.8v172.9l-184 92z"/></svg>
+                                      </span>
+                                      {{ media.preview_image | image_url: width: 1200 | image_tag: loading: lazy, sizes: sizes, widths: '350, 600, 900, 1200', class: 'imgFl' }}
+                                    </button>
+                                    <template>{{ media | media_tag: image_size: pimgsize, toggleable: true }}</template>
+                                </div>
+    						</product-model>
+                        {% else %}
+                            <div class="pr_photo p{{secSt.prstyle}} " style="padding-top: 100%;" data-media-id="{{ media.id }}">{{ media | media_tag }}</div>
+                        {% endcase %}
+                    {% endfor %}                                       
+                </div>
+                {%- capture prmediabtn -%}
+                    {% assign first_3d_model = product.media | where: "media_type", "model" | first %}
+                    {%- if first_3d_model -%}
+                        <link id="ModelViewerStyle" rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'">
+                        <link id="ModelViewerOverride" rel="stylesheet" href="{{ 'model-viewer-ui.css' | asset_url }}" media="print" onload="this.media='all'">
+                        <button aria-label="{{ 'products.product.view_in_space_label' | t }}" class="btn w_100 hide product-single__view-in-space" data-shopify-xr data-shopify-model3d-id="{{ first_3d_model.id }}" data-shopify-title="{{ product.title | escape }}" data-shopify-xr-hidden>
+                            <span class='product-single__view-in-space-text'>{{ 'products.product.view_in_space' | t }}</span>
+                        </button>
+                    {%- endif -%}
+                    {% if settings.pr_lbl %}
+                    <span class="product-labels {{ settings.select_label_style }}">
+                        {%- if settings.sale_lbl and product.compare_at_price > product.price -%}
+                            {% if settings.sale_label_style == "salelabel" %}
+                              <label class="lbl on-sale">{{ 'products.product.on_sale' | t}}</label>
+                            {% else %}
+                              <label class="lbl on-sale">-{{ product.compare_at_price_min | minus: product.price | times: 100 | divided_by: product.compare_at_price_min }}%</label>
+                            {% endif %}
+                        {%- endif -%}
+                        {%- if product.tags contains settings.pr_label1 -%}<label class="lbl pr-label1">{{settings.pr_label1}}</label>{%- endif -%}
+                        {%- if product.tags contains settings.pr_label2 -%}<label class="lbl pr-label2">{{settings.pr_label2}}</label>{%- endif -%}
+                        {%- if product.tags contains settings.pr_label3 -%}<label class="lbl pr-label3">{{settings.pr_label3}}</label>{%- endif -%}
+                    </span>
+                    {% endif %}
+                {%- endcapture -%}
+                {{ prmediabtn }}
+            </div>
+        </quickview-media>      
+{%- endcapture -%}
+
+<div class="grid f-ais product-single">
+	<div class="gitem wd50-md mb20 mb0-md">{{productImages | strip_newlines | remove: "  " | remove: "	"}}</div>
+	<div class="gitem wd50-md pr">
+		<div class="wrap-product-info">
+            {%- if settings.qvvendor -%}
+                <p class="vendor mb0">
+                {%- liquid
+                    assign vlink = routes.collections_url | append: '/vendors?q=' | append: product.vendor
+                    for coll in product.collections
+                        if coll.title == product.vendor
+                            assign vlink = coll.url
+                            break
+                        endif
+                    endfor
+                -%}
+                <a class="product-vendor" href="{{vlink}}" style="color:{{blkSt.cl}};font-size:{{blkSt.fs}}px">{{product.vendor}}</a>
+            </p>
+            {%- endif -%}
+			
+            <h2 class="product-single__title ttlTxt tt-c mb10" style="--tfs:20px;--tfsm:16px;--tff:var(--ft2);--tfw:600;--tlh:1.2;">{{ product.title }}</h2>
+            <div class="product-info mb10">
+                {%- if settings.qvstock -%}
+                    <div class="product-stock">{{ 'products.product.availability' | t }}
+                        {%- liquid
+                            assign classNm = 'instock'
+                            assign stickLbl = 'products.product.available' | t
+                            if current_variant.inventory_management == "shopify"
+                                if current_variant.available and current_variant.inventory_quantity < 1
+                                    assign classNm = 'preorder'
+                                    assign stickLbl = 'products.product.pre_order' | t
+                                elsif current_variant.available
+                                    assign classNm = 'instock'
+                                    assign stickLbl = 'products.product.available' | t
+                                else
+                                    assign classNm = 'outstock'
+                                    assign stickLbl = 'products.product.unavailable' | t
+                                endif
+                            endif
+                        -%}
+                        <span class="stockLbl {{classNm}}" data-in="{{ 'products.product.available' | t }}" data-out="{{ 'products.product.unavailable' | t }}" data-pre="{{ 'products.product.pre_order' | t }}">{{stickLbl}}</span>
+                    </div>
+                {%- endif -%}
+                {%- if settings.qvsku and current_variant.sku != blank -%}<div class="product-sku">{{ 'products.product.sku' | t }} <span class="variant-sku">{{ current_variant.sku }}</span></div>{%- endif -%}
+            </div>
+            {%- if settings.show_product_review -%}
+                <div class="review mb10"><a class="reviewLink" href="#tab{{reviewtabId}}">{% render 'ratings': product:product %}</a></div>
+            {%- endif -%}
+
+        
+            {%- unless settings.hide-price or product.metafields.custom.product_group != blank -%}
+                {%- liquid
+                    assign compareprice = current_variant.compare_at_price
+                    assign price = current_variant.price
+                    assign money_price = price | money
+                    if settings.curCode
+                        assign money_price = price | money_with_currency
+                    endif
+                -%}
+              <div id="price-{{ section.id }}" role="status" class="fl f-wrap psinglePriceWr mb10" style="--pcl:{{ settings.color_price_text }};--pcls:{{ settings.color_sale_text }};--fs:24px;--fsm:18px;--pfw:600;">
+                  {%- if current_variant.compare_at_price > current_variant.price -%}
+                      <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+                      <span class="psinglePrice sale"><span id="ProductPrice-{{ section.id }}">{{ money_price }}</span></span>
+                      <s class="psinglePrice">{{ current_variant.compare_at_price | money }}</s>
+                  {%- else -%}
+                      <span class="v-hidden">{{ 'products.product.regular_price' | t }}</span>
+                      <span class="psinglePrice"><span id="ProductPrice-{{ section.id }}">{{ money_price }}</span></span>
+                      <s class="psinglePrice hide">{{ current_variant.compare_at_price | money }}</s>
+                  {% endif %}
+                  {%- if blkSt.saved -%}
+                      <span class="discount-badge{% unless current_variant.compare_at_price > current_variant.price %} hide{% endunless %}">
+                          <span class="hide-sm hide-md"> | </span>
+                          <span itemprop="name">{{ 'products.product.you_save' | t}}</span>
+                          <span id="SaveAmount-{{ section.id }}" class="product-single__save-amount">{{ current_variant.compare_at_price | minus: current_variant.price | money }}</span>
+                          <span class="off">(<span>{{ current_variant.compare_at_price | minus: current_variant.price | times: 100 | divided_by: current_variant.compare_at_price }}</span>%{{ 'products.product.off' | t}})</span>
+                      </span>
+                  {%- endif -%}
+                  <div class="price__unit w_100{% unless current_variant.unit_price_measurement %} hide{% endunless %}">
+                    <span data-unit-price>{{ current_variant.unit_price | money }}</span> /
+                    <span data-unit-base>
+                          {%- if current_variant.unit_price_measurement -%}
+                            {%- if current_variant.unit_price_measurement.reference_value != 1 -%}{{- current_variant.unit_price_measurement.reference_value -}}{%- endif -%}
+                            {{ current_variant.unit_price_measurement.reference_unit }}
+                          {%- endif -%}
+                    </span>
+                 </div>
+              </div>
+          {%- endunless -%}
+        
+            {%- if settings.qvdesc -%}
+                <div class="pr_desc rte mb15">
+                    {% if product.metafields.my_fields.short_des != blank %}
+                        {{ product.metafields.my_fields.short_des }}
+                  {% else %}
+                      {{ product.description | strip_html | truncatewords: 30 }}
+                  {% endif %}
+                </div>
+            {%- endif -%}
+        
+            {%- render 'variant-picker', product:product, block:block, sectionId:section.id, product_form_id:product_form_id, update_url:false -%}
+        
+            {%- liquid
+                assign isgiftcard = false
+                assign novalidate = true 
+                if block.settings.giftcard_recipient and product.gift_card?
+                  assign isgiftcard = true
+                  assign novalidate = false 
+                endif
+                assign show_dynamic_checkout = false
+                if blkst.dynamic_btn and gift_card_recipient_feature_active == false
+                    assign show_dynamic_checkout = true
+                endif
+              -%}
+                <div id="Quantity-Form-{{ section.id }}" class="product-form__input product-form__quantity">
+                    <div class="price-per-item__container">
+                        {%- liquid
+                            assign volume_pricing_array = current_variant.quantity_price_breaks | sort: 'quantity' | reverse
+                            assign current_qty_for_volume_pricing = cart_qty | plus: current_variant.quantity_rule.min
+                            if cart_qty > 0
+                                assign current_qty_for_volume_pricing = cart_qty | plus: current_variant.quantity_rule.increment
+                            endif
+                        -%}
+                        {%- if product.quantity_price_breaks_configured? -%}
+                            <price-per-item class="no-js-hidden" id="Price-Per-Item-{{ section.id }}" data-section-id="{{ section.id }}" data-variant-id="{{ current_variant.id }}">
+                                {%- if current_variant.quantity_price_breaks.size > 0 -%}
+                                    {%- assign variant_price_compare = current_variant.compare_at_price -%}
+                                    <div class="price-per-item">
+                                        {%- if variant_price_compare -%}
+                                            <dl class="price-per-item--current">
+                                                <dt class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</dt>
+                                                <dd><s class="variant-item__old-price">{{ variant_price_compare | money_with_currency }}</s></dd>
+                                            </dl>
+                                        {%- endif -%}
+                                        {%- if current_qty_for_volume_pricing < volume_pricing_array.last.minimum_quantity -%}
+                                            {%- assign variant_price = current_variant.price | money_with_currency -%}
+                                            <span class="price-per-item--current">{{- 'products.product.volume_pricing.price_at_each' | t: price: variant_price -}}</span>
+                                        {%- else -%}
+                                            {%- for price_break in volume_pricing_array -%}
+                                                {%- if current_qty_for_volume_pricing >= price_break.minimum_quantity -%}
+                                                    {%- assign price_break_price = price_break.price | money_with_currency -%}
+                                                    <span class="price-per-item--current">{{- 'products.product.volume_pricing.price_at_each' | t: price: price_break_price -}}</span>
+                                                    {%- break -%}
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                        {%- endif -%}
+                                    </div>
+                                {%- else -%}
+                                    {%- assign variant_price = current_variant.price | money_with_currency -%}
+                                    {%- assign variant_price_compare = current_variant.compare_at_price -%}
+                                    <div class="price-per-item">
+                                        {%- if variant_price_compare -%}
+                                            <dl class="price-per-item--current">
+                                                <dt class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</dt>
+                                                <dd><s class="variant-item__old-price">{{ variant_price_compare | money_with_currency }}</s></dd>
+                                                <dt class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</dt>
+                                                <dd><span class="price-per-item--current">{{- 'products.product.volume_pricing.price_at_each' | t: price: variant_price -}}</span></dd>
+                                            </dl>
+                                        {%- else -%}
+                                            <span class="price-per-item--current">{{- 'products.product.volume_pricing.price_at_each' | t: price: variant_price -}}</span>
+                                        {%- endif -%}
+                                    </div>
+                                {%- endif -%}
+                            </price-per-item>
+                        {%- endif -%}
+                    </div>
+                    <div class="quantity__rules caption no-js-hidden" id="Quantity-Rules-{{ section.id }}">
+                        {%- if current_variant.quantity_rule.increment > 1 -%}
+                            <span class="divider">{{- 'products.product.quantity.multiples_of' | t: quantity: current_variant.quantity_rule.increment -}}</span>
+                        {%- endif -%}
+                        {%- if current_variant.quantity_rule.min > 1 -%}
+                            <span class="divider">{{- 'products.product.quantity.minimum_of' | t: quantity: current_variant.quantity_rule.min -}}</span>
+                        {%- endif -%}
+                        {%- if current_variant.quantity_rule.max != null -%}
+                            <span class="divider">{{- 'products.product.quantity.maximum_of' | t: quantity: current_variant.quantity_rule.max -}}</span>
+                        {%- endif -%}
+                    </div>
+                    {%- if product.quantity_price_breaks_configured? -%}
+                        <volume-pricing class="parent-display no-js-hidden" id="Volume-{{ section.id }}">
+                            {%- if current_variant.quantity_price_breaks.size > 0 -%}
+                                <span class="caption-large">{{ 'products.product.volume_pricing.title' | t }}</span>
+                                <ul class="list-unstyled no-js-hidden">
+                                    <li>
+                                        <span>{{ current_variant.quantity_rule.min }}+</span>
+                                        {%- assign price = current_variant.price | money_with_currency -%}
+                                        <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: variant_price }}">{{- 'sections.quick_order_list.each' | t: money: price -}}</span>
+                                    </li>
+                                    {%- for price_break in current_variant.quantity_price_breaks -%}
+                                        {%- assign price_break_price = price_break.price | money_with_currency -%}
+                                        <li class="{%- if forloop.index >= 3 -%}show-more-item hidden{%- endif -%}">
+                                            <span>{{- price_break.minimum_quantity -}}<span aria-hidden="true">+</span></span>
+                                            <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}">{{- 'sections.quick_order_list.each' | t: money: price_break_price -}}</span>
+                                        </li>
+                                    {%- endfor -%}
+                                </ul>
+                                {%- if current_variant.quantity_price_breaks.size >= 3 -%}
+                                    <show-more-button>
+                                        <button class="button-show-more link underlined-link" id="Show-More-{{ section.id }}" type="button"><span class="label-show-more label-text"><span aria-hidden="true">+ </span>{{ 'products.facets.show_more' | t }}</span></button>
+                                    </show-more-button>
+                                {%- endif -%}
+                            {%- endif -%}
+                        </volume-pricing>
+                    {%- endif -%}
+                </div>
+                <product-form class="db product-form" data-hide-errors="{{ isgiftcard }}" data-section-id="{{ section.id }}">
+                    <div class="product-form__error-message-wrapper errors" role="alert" hidden><span class="product-form__error-message ml5"></span></div>
+                    {%- form 'product', product, id: product_form_id, class: 'form', novalidate: validate, data-type: 'add-to-cart-form' -%}
+                        <input type="hidden" name="id" value="{{ current_variant.id }}" {% if current_variant.available == false or quantity_rule_soldout %}disabled{% endif %} class="product-variant-id">
+
+                         <div class="fl product-action">
+                                <div class="fl f-wrap f-aic f-jcsb">
+                                    {%- if settings.qvqty -%}
+                                        {%- assign cart_qty = cart | item_count_for_variant: current_variant.id -%}
+                                        <label class="quantity__label lblqty v-hidden" for="Quantity-{{ section.id }}">
+                                            {{ 'products.product.quantity' | t }}
+                                            <span class="quantity__rules-cart no-js-hidden{% if cart_qty == 0 %} hidden{% endif %}"><span class="loading__spinner hidden">{% render 'icon-loading' %}</span><span> ({{- 'products.product.quantity.in_cart_html' | t: quantity: cart_qty -}})</span></span>
+                                        </label>
+                                        <quantity-input class="qtyField quantity mb15" data-url="{{ product.url }}" data-section="{{ section.id }}">
+                                            <button type="button" class="quantity__button qtyBtn minus" name="minus"><i class="at at-minus-r" aria-hidden="true"></i><span class="v-hidden">{{- 'products.quantity.decrease' | t: product: product.title | escape -}}</span></button>
+                                            <input class="quantity__input pr_input qty mianQty" type="number" name="quantity" id="Quantity-{{ section.id }}" data-cart-quantity="{{ cart_qty }}"
+                                                data-min="{{ current_variant.quantity_rule.min }}" min="{{ current_variant.quantity_rule.min }}"
+                                                {% if current_variant.quantity_rule.max != null %}data-max="{{ current_variant.quantity_rule.max }}" max="{{ current_variant.quantity_rule.max }}"{% endif %}
+                                                step="{{ current_variant.quantity_rule.increment }}" value="{{ current_variant.quantity_rule.min }}" form="{{ product_form_id }}">
+                                            <button type="button" class="quantity__button qtyBtn plus" name="plus"><i class="at at-plus-r" aria-hidden="true"></i><span class="v-hidden">{{- 'products.quantity.increase' | t: product: product.title | escape -}}</span></button>
+                                        </quantity-input>
+                                    {%- else -%}
+                                        <input type="text" id="quantity" name="quantity" value="{{ product.selected_or_first_available_variant.quantity_rule.min }}" class="hide pr_input qty" />
+                                    {%- endif -%}                                    
+                                </div>
+
+                            {%- liquid
+                                assign check_against_inventory = true
+                                if current_variant.inventory_management != 'shopify' or current_variant.inventory_policy == 'continue'
+                                    assign check_against_inventory = false
+                                endif
+                                if current_variant.quantity_rule.min > current_variant.inventory_quantity and check_against_inventory
+                                    assign quantity_rule_soldout = true
+                                endif
+                            -%}
+                            <button id="ProductSubmitButton-{{ section.id }}" type="submit" name="add" class="btn pr_btn product-form__submit{% if settings.addto_btn_an %} btnzoom{% endif %}" {% if current_variant.available == false or quantity_rule_soldout %}disabled{% endif %}>
+                                <span class="txt">
+                                    {%- if current_variant.available == false or quantity_rule_soldout -%}
+                                        {{'products.product.sold_out' | t }}
+                                    {%- elsif current_variant.available and current_variant.inventory_quantity < 1 and current_variant.inventory_management == "shopify" -%}
+                                        {{'products.product.pre_order' | t }}
+                                    {%- else -%}
+                                        {{ 'products.product.add_to_cart' | t }}
+                                    {%- endif -%}
+                                </span>
+                                <div class="btn_spinner hidden"><i class="at at-circle-notch-r at-spin"></i></div>
+                            </button>
+                        </div>
+                    {%- endform -%}
+                </product-form>
+            {%- if settings.qvfullbtn -%}           
+            <a href="{{product.url}}" class="btn-link fw-500">{{ 'products.quickview.Show_view_full_details_button' | t }} <i class="at at-long-arrow-alt-right"></i></a>         
+        {%- endif -%}
+		</div>
+	</div>
+</div>
+</div>
+{%- unless product.empty? -%}
+    {% if first_3d_model %}
+        <script type="application/json" id="ProductJSON-{{ product.id }}">{{ product.media | where: 'media_type', 'model' | json }}</script>
+        <script src="{{ 'product-model.js' | asset_url }}" defer></script>
+    {% endif %}
+{%- endunless -%}
+<div class="hide">{% for variant in product.variants %}<span id="pvr-{{ variant.id }}">{{variant.inventory_quantity}}</span>{% endfor %}</div>
+<script>
+    if(!customElements.get('quickview-media')){
+        customElements.define('quickview-media', class MediaGallery extends HTMLElement {
+            constructor(){
+                super();
+                this.setActiveMedia(this.dataset.target);
+            }
+            setActiveMedia(mediaId){
+                 var secId = this.dataset.section;
+                 var option = $('#pis'+secId).attr("data-flickity") || '{}';
+                 var $primgsl = $('#pis'+secId);
+
+                 $primgsl.flickity(JSON.parse(option));
+                 var video = $('#pis'+secId+' .videoSlide.is-selected video').get(0);
+                 if($(video).length){ video.play(); }
+
+                $primgsl.on('change.flickity', function(event, index){
+                   if($(this).find('.videoSlide video').length){ $(this).find('.videoSlide video').get(0).pause(); }
+                   var video = $(this).find('.videoSlide.is-selected video').get(0);
+                   if($(video).length){ video.play(); }
+                   var flkty = $(this).data('flickity');
+                   if($(this).find('.is-selected model-viewer').length){
+                      flkty.options.draggable = false;
+                      flkty.updateDraggable();
+                      $('.is-selected .shopify-model-viewer-ui__button--poster').trigger('click')
+                   } else {
+                      flkty.options.draggable = true;
+                      flkty.updateDraggable();
+                   }
+                 });
+                
+                var activeMedia = $('.pr_photo[data-id="'+mediaId+'"]').index();
+                if(activeMedia != undefined){
+                  $($primgsl).flickity('select', activeMedia);
+                }
+            }
+            
+        });
+    }
+</script>
+{% schema %}
+  {
+    "name": "quick-view",
+    "settings": []
+  }
+{% endschema %}

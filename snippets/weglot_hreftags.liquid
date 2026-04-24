@@ -1,0 +1,9 @@
+{%- comment -%} Variables set by Weglot's preferences panel {%- endcomment -%}
+
+
+<link rel="alternate" hreflang="en" href="{{ canonical_url }}">
+{%- assign main_domain = canonical_url | split: '://' | last | split: '/' | first | split: 'www.' | last -%}
+{% assign canonical_path = canonical_url | split: main_domain | last -%}
+<link rel="alternate" hreflang="{{ "fr" }}" href="https://{{ request.host }}/a/l/fr{{ canonical_path }}">
+<link rel="alternate" hreflang="{{ "de" }}" href="https://{{ request.host }}/a/l/de{{ canonical_path }}">
+
