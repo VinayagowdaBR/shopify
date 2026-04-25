@@ -12,10 +12,12 @@
           <div class="hov-thumbnails">
             {% for image in current_product.images limit: 4 %}
               {%- assign hov_full = image | image_url: width: 1200 -%}
+              {%- assign hov_zoom = image | image_url: width: 2000 -%}
               <button
                 type="button"
                 class="hov-thumb{% if forloop.first %} is-active{% endif %}"
                 data-full-image="{{ hov_full }}"
+                data-zoom-image="{{ hov_zoom }}"
                 aria-label="Show product image {{ forloop.index }}"
               >
                 {{
@@ -28,13 +30,16 @@
           </div>
         {% endif %}
         {% if current_product.featured_media %}
-          <div class="hov-main-image">
+          {%- assign hov_initial_zoom = current_product.featured_media | image_url: width: 2000 -%}
+          <div class="hov-main-image" data-zoom-image="{{ hov_initial_zoom }}">
             {{
               current_product.featured_media
               | image_url: width: 1200
               | image_tag: loading: 'lazy', class: 'hov-product-image', alt: current_product.title
             }}
+            <div class="hov-zoom-lens" aria-hidden="true"></div>
           </div>
+          <div class="hov-zoom-window" aria-hidden="true"></div>
         {% endif %}
       </div>
 
@@ -184,14 +189,49 @@
     display: block;
     height: auto;
   }
-  #hov-product-conversion-{{ section.id }} .hov-product-image {
-    transition: transform 120ms ease-out;
-    transform-origin: center center;
-    will-change: transform;
+  #hov-product-conversion-{{ section.id }} .hov-zoom-lens {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 40%;
+    background: rgba(255, 255, 255, 0.35);
+    border: 1px solid rgba(15, 59, 46, 0.45);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 120ms ease;
+    z-index: 5;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-zoom-window {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 20px);
+    width: 500px;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-size: 250% 250%;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 150ms ease;
+    z-index: 10;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media.is-zooming .hov-zoom-lens,
+  #hov-product-conversion-{{ section.id }} .hov-media.is-zooming .hov-zoom-window {
+    opacity: 1;
+    visibility: visible;
   }
   @media (hover: none) {
     #hov-product-conversion-{{ section.id }} .hov-main-image {
       cursor: default;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-zoom-lens,
+    #hov-product-conversion-{{ section.id }} .hov-zoom-window {
+      display: none;
     }
   }
   #hov-product-conversion-{{ section.id }} .hov-media {
@@ -199,6 +239,7 @@
     flex-direction: row;
     gap: 14px;
     align-items: flex-start;
+    position: relative;
   }
   #hov-product-conversion-{{ section.id }} .hov-thumbnails {
     display: flex;
@@ -492,6 +533,10 @@
     #hov-product-conversion-{{ section.id }} .hov-main-image {
       width: 100%;
     }
+    #hov-product-conversion-{{ section.id }} .hov-zoom-lens,
+    #hov-product-conversion-{{ section.id }} .hov-zoom-window {
+      display: none;
+    }
     #hov-product-conversion-{{ section.id }} .hov-title {
       font-size: 28px;
     }
@@ -513,15 +558,35 @@
   (function () {
     var root = document.getElementById('hov-product-conversion-{{ section.id }}');
     if (!root) return;
+    var media = root.querySelector('.hov-media');
     var mainWrap = root.querySelector('.hov-main-image');
     var main = root.querySelector('.hov-product-image');
     var thumbs = root.querySelector('.hov-thumbnails');
+    var lens = root.querySelector('.hov-zoom-lens');
+    var zoomWindow = root.querySelector('.hov-zoom-window');
     if (!main) return;
 
-    function swapMain(url) {
-      if (!url || main.getAttribute('src') === url) return;
+    function setZoomImage(url) {
+      if (!zoomWindow || !url) return;
+      zoomWindow.style.backgroundImage = 'url("' + url + '")';
+    }
+
+    function zoomUrlFor(el) {
+      return (el && el.getAttribute('data-zoom-image')) || (el && el.getAttribute('data-full-image')) || '';
+    }
+
+    function swapMain(fullUrl, zoomUrl) {
+      var resolvedZoom = zoomUrl || fullUrl || (main && main.src);
+      if (resolvedZoom) setZoomImage(resolvedZoom);
+      if (!fullUrl || main.getAttribute('src') === fullUrl) return;
       main.removeAttribute('srcset');
-      main.src = url;
+      main.src = fullUrl;
+      if (mainWrap && resolvedZoom) mainWrap.setAttribute('data-zoom-image', resolvedZoom);
+    }
+
+    if (mainWrap) {
+      var initialZoom = mainWrap.getAttribute('data-zoom-image') || (main && main.currentSrc) || (main && main.src);
+      if (initialZoom) setZoomImage(initialZoom);
     }
 
     if (thumbs) {
@@ -530,11 +595,11 @@
       thumbs.addEventListener('mouseover', function (e) {
         var thumb = e.target.closest('.hov-thumb');
         if (!thumb || !thumbs.contains(thumb)) return;
-        swapMain(thumb.getAttribute('data-full-image'));
+        swapMain(thumb.getAttribute('data-full-image'), zoomUrlFor(thumb));
       });
 
       thumbs.addEventListener('mouseleave', function () {
-        if (activeThumb) swapMain(activeThumb.getAttribute('data-full-image'));
+        if (activeThumb) swapMain(activeThumb.getAttribute('data-full-image'), zoomUrlFor(activeThumb));
       });
 
       thumbs.addEventListener('click', function (e) {
@@ -545,27 +610,44 @@
         });
         thumb.classList.add('is-active');
         activeThumb = thumb;
-        swapMain(thumb.getAttribute('data-full-image'));
+        swapMain(thumb.getAttribute('data-full-image'), zoomUrlFor(thumb));
       });
     }
 
-    if (mainWrap && window.matchMedia('(hover: hover)').matches) {
-      var ZOOM = 2.2;
+    if (mainWrap && lens && zoomWindow && media && window.matchMedia('(hover: hover)').matches) {
       var rafId = null;
       var pendingX = 0;
       var pendingY = 0;
+      var rect = null;
 
       function applyZoom() {
         rafId = null;
-        main.style.transformOrigin = pendingX + '% ' + pendingY + '%';
-        main.style.transform = 'scale(' + ZOOM + ')';
+        if (!rect) return;
+        var lensW = lens.offsetWidth;
+        var lensH = lens.offsetHeight;
+        if (!lensW || !lensH) return;
+
+        var lensX = Math.max(0, Math.min(rect.width - lensW, pendingX - lensW / 2));
+        var lensY = Math.max(0, Math.min(rect.height - lensH, pendingY - lensH / 2));
+        lens.style.left = lensX + 'px';
+        lens.style.top = lensY + 'px';
+
+        var xRange = rect.width - lensW;
+        var yRange = rect.height - lensH;
+        var bgX = xRange > 0 ? (lensX / xRange) * 100 : 0;
+        var bgY = yRange > 0 ? (lensY / yRange) * 100 : 0;
+        zoomWindow.style.backgroundPosition = bgX + '% ' + bgY + '%';
       }
 
+      mainWrap.addEventListener('mouseenter', function () {
+        rect = mainWrap.getBoundingClientRect();
+        media.classList.add('is-zooming');
+      });
+
       mainWrap.addEventListener('mousemove', function (e) {
-        var rect = mainWrap.getBoundingClientRect();
-        if (!rect.width || !rect.height) return;
-        pendingX = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
-        pendingY = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+        if (!rect) rect = mainWrap.getBoundingClientRect();
+        pendingX = e.clientX - rect.left;
+        pendingY = e.clientY - rect.top;
         if (rafId === null) rafId = requestAnimationFrame(applyZoom);
       });
 
@@ -574,9 +656,24 @@
           cancelAnimationFrame(rafId);
           rafId = null;
         }
-        main.style.transform = 'scale(1)';
-        main.style.transformOrigin = 'center center';
+        media.classList.remove('is-zooming');
+        rect = null;
       });
+
+      window.addEventListener('resize', function () {
+        rect = null;
+      });
+
+      var scrollHideTimer = null;
+      window.addEventListener('scroll', function () {
+        if (!media.classList.contains('is-zooming')) return;
+        media.classList.remove('is-zooming');
+        rect = null;
+        if (scrollHideTimer) clearTimeout(scrollHideTimer);
+        scrollHideTimer = setTimeout(function () {
+          scrollHideTimer = null;
+        }, 150);
+      }, { passive: true });
     }
   })();
 </script>
