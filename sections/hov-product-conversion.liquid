@@ -616,19 +616,24 @@
 
     if (mainWrap && lens && zoomWindow && media && window.matchMedia('(hover: hover)').matches) {
       var rafId = null;
-      var pendingX = 0;
-      var pendingY = 0;
-      var rect = null;
+      var lastClientX = 0;
+      var lastClientY = 0;
 
       function applyZoom() {
         rafId = null;
-        if (!rect) return;
+        var rect = mainWrap.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        var x = lastClientX - rect.left;
+        var y = lastClientY - rect.top;
+        if (x < 0 || y < 0 || x > rect.width || y > rect.height) return;
+
         var lensW = lens.offsetWidth;
         var lensH = lens.offsetHeight;
         if (!lensW || !lensH) return;
 
-        var lensX = Math.max(0, Math.min(rect.width - lensW, pendingX - lensW / 2));
-        var lensY = Math.max(0, Math.min(rect.height - lensH, pendingY - lensH / 2));
+        var lensX = Math.max(0, Math.min(rect.width - lensW, x - lensW / 2));
+        var lensY = Math.max(0, Math.min(rect.height - lensH, y - lensH / 2));
         lens.style.left = lensX + 'px';
         lens.style.top = lensY + 'px';
 
@@ -639,16 +644,21 @@
         zoomWindow.style.backgroundPosition = bgX + '% ' + bgY + '%';
       }
 
-      mainWrap.addEventListener('mouseenter', function () {
-        rect = mainWrap.getBoundingClientRect();
+      function scheduleApply() {
+        if (rafId === null) rafId = requestAnimationFrame(applyZoom);
+      }
+
+      mainWrap.addEventListener('mouseenter', function (e) {
+        lastClientX = e.clientX;
+        lastClientY = e.clientY;
         media.classList.add('is-zooming');
+        scheduleApply();
       });
 
       mainWrap.addEventListener('mousemove', function (e) {
-        if (!rect) rect = mainWrap.getBoundingClientRect();
-        pendingX = e.clientX - rect.left;
-        pendingY = e.clientY - rect.top;
-        if (rafId === null) rafId = requestAnimationFrame(applyZoom);
+        lastClientX = e.clientX;
+        lastClientY = e.clientY;
+        scheduleApply();
       });
 
       mainWrap.addEventListener('mouseleave', function () {
@@ -657,23 +667,13 @@
           rafId = null;
         }
         media.classList.remove('is-zooming');
-        rect = null;
       });
 
-      window.addEventListener('resize', function () {
-        rect = null;
-      });
-
-      var scrollHideTimer = null;
-      window.addEventListener('scroll', function () {
-        if (!media.classList.contains('is-zooming')) return;
-        media.classList.remove('is-zooming');
-        rect = null;
-        if (scrollHideTimer) clearTimeout(scrollHideTimer);
-        scrollHideTimer = setTimeout(function () {
-          scrollHideTimer = null;
-        }, 150);
-      }, { passive: true });
+      var onLayoutShift = function () {
+        if (media.classList.contains('is-zooming')) scheduleApply();
+      };
+      window.addEventListener('scroll', onLayoutShift, { passive: true });
+      window.addEventListener('resize', onLayoutShift);
     }
   })();
 </script>
