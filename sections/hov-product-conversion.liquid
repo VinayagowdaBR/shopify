@@ -20,13 +20,19 @@
         {% if current_product.images.size > 1 %}
           <div class="hov-thumbnails">
             {% for image in current_product.images limit: 4 %}
-              <div class="hov-thumb">
+              {%- assign hov_full = image | image_url: width: 1200 -%}
+              <button
+                type="button"
+                class="hov-thumb{% if forloop.first %} is-active{% endif %}"
+                data-full-image="{{ hov_full }}"
+                aria-label="Show product image {{ forloop.index }}"
+              >
                 {{
                   image
                   | image_url: width: 300
                   | image_tag: loading: 'lazy', class: 'hov-thumb-image', alt: image.alt | escape
                 }}
-              </div>
+              </button>
             {% endfor %}
           </div>
         {% endif %}
@@ -176,6 +182,9 @@
     display: block;
     height: auto;
   }
+  #hov-product-conversion-{{ section.id }} .hov-product-image {
+    transition: opacity 220ms ease;
+  }
   #hov-product-conversion-{{ section.id }} .hov-thumbnails {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -183,10 +192,25 @@
     margin-top: 14px;
   }
   #hov-product-conversion-{{ section.id }} .hov-thumb {
+    padding: 0;
     border-radius: 16px;
     overflow: hidden;
     background: #fff;
     border: 1px solid var(--hov-border);
+    cursor: pointer;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-thumb:hover {
+    border-color: var(--hov-emerald);
+    transform: translateY(-1px);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-thumb.is-active {
+    border-color: var(--hov-emerald);
+    box-shadow: 0 0 0 2px var(--hov-emerald);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-thumb:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--hov-emerald);
   }
   #hov-product-conversion-{{ section.id }} .hov-badge {
     display: inline-flex;
@@ -451,6 +475,35 @@
 </style>
 
 {% render 'hov-product-makeover' %}
+
+<script>
+  (function () {
+    var root = document.getElementById('hov-product-conversion-{{ section.id }}');
+    if (!root) return;
+    var main = root.querySelector('.hov-product-image');
+    var thumbs = root.querySelector('.hov-thumbnails');
+    if (!main || !thumbs) return;
+
+    thumbs.addEventListener('click', function (e) {
+      var thumb = e.target.closest('.hov-thumb');
+      if (!thumb || !thumbs.contains(thumb)) return;
+      var newUrl = thumb.getAttribute('data-full-image');
+      if (!newUrl || main.getAttribute('src') === newUrl) return;
+
+      thumbs.querySelectorAll('.hov-thumb.is-active').forEach(function (el) {
+        el.classList.remove('is-active');
+      });
+      thumb.classList.add('is-active');
+
+      main.style.opacity = '0';
+      main.addEventListener('load', function () {
+        main.style.opacity = '1';
+      }, { once: true });
+      main.removeAttribute('srcset');
+      main.src = newUrl;
+    });
+  })();
+</script>
 
 {% schema %}
 {

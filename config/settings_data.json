@@ -127,10 +127,10 @@
     "sidebar_title": 15,
     "h_weight": "600",
     "sidebar_links_hv": "#1b352c",
-    "footer_img": "shopify://shop_images/parallax_4.png",
+    "footer_img": "",
     "footerbg_size": "cover",
     "footer_top_bdr": "#1b352c",
-    "footer_top_bg": "#1b352c",
+    "footer_top_bg": "#103e31",
     "footer_top_bgg": "",
     "footer_title": "#ffffff",
     "foot_ttl_size": 13,
@@ -140,10 +140,10 @@
     "icon_colors": "#fff",
     "foot_social_size": 15,
     "newsletter_input": "#ffffff",
-    "newsletter_input_txt": "#ffffff",
+    "newsletter_input_txt": "#000000",
     "newsletter_btn_txt": "#000000",
     "newsletter_btn": "#ffffff",
-    "footer_bottom_bg": "#1b352c",
+    "footer_bottom_bg": "#103e31",
     "footer_bottom_text": "#ffffff",
     "footer_border": "#ffffff",
     "ttl-font": 24,
@@ -742,7 +742,7 @@
   "presets": {},
   "platform_customizations": {
     "custom_css": [
-      "#EmailfootNewslt::placeholder {color: #ffffff; opacity: 1; /* Ensure full visibility in some browsers */}",
+      "#EmailfootNewslt::placeholder {color: #666666; opacity: 1; /* Ensure full visibility in some browsers */}",
       "#nav_menu-1561010286273 {margin-bottom: 0 !important; padding-bottom: 0 !important;}"
     ]
   }

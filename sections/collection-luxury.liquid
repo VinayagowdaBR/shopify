@@ -1,0 +1,335 @@
+{% comment %}
+  Section: Luxury Collection List
+  Features: Circular/Rounded images, optional carousel, custom borders.
+{% endcomment %}
+
+<link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+
+<style>
+  #lux-coll-{{ section.id }} {
+    padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px 0;
+    background: {{ section.settings.bg_color }};
+  }
+  
+  #lux-coll-{{ section.id }} .section-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  #lux-coll-{{ section.id }} .section-header h2 {
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 600;
+    margin: 0;
+    color: {{ section.settings.title_color }};
+  }
+
+  #lux-coll-{{ section.id }} .lux-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: {{ section.settings.gap }}px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  #lux-coll-{{ section.id }} .lux-item {
+    text-align: center;
+    width: calc({{ 100 | divided_by: section.settings.grid_desktop }}% - {{ section.settings.gap }}px);
+    text-decoration: none;
+    transition: transform 0.3s ease;
+  }
+
+  #lux-coll-{{ section.id }} .lux-item:hover {
+    transform: translateY(-5px);
+  }
+
+  #lux-coll-{{ section.id }} .img-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: {{ section.settings.border_width }}px solid {{ section.settings.border_color }};
+    transition: all 0.3s ease;
+    {% if section.settings.shape == 'circle' %}
+      border-radius: 50%;
+    {% else %}
+      border-radius: {{ section.settings.corner_radius }}px;
+    {% endif %}
+    background: #f9f9f9;
+  }
+
+  #lux-coll-{{ section.id }} .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  #lux-coll-{{ section.id }} .lux-item:hover .img-wrapper img {
+    transform: scale(1.1);
+  }
+
+  #lux-coll-{{ section.id }} .lux-item span {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: {{ section.settings.text_color }};
+    margin-top: 10px;
+  }
+
+  /* Carousel overrides */
+  #lux-coll-{{ section.id }} .main-carousel {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  #lux-coll-{{ section.id }} .carousel-cell {
+    width: 180px;
+    margin-right: {{ section.settings.gap }}px;
+  }
+
+  #lux-coll-{{ section.id }} .flickity-prev-next-button {
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    opacity: 0.8;
+  }
+  
+  #lux-coll-{{ section.id }} .flickity-prev-next-button:hover {
+    opacity: 1;
+  }
+
+  @media (max-width: 768px) {
+    #lux-coll-{{ section.id }} .lux-item {
+      width: calc({{ 100 | divided_by: section.settings.grid_mobile }}% - {{ section.settings.gap }}px);
+    }
+    #lux-coll-{{ section.id }} .carousel-cell {
+      width: 140px;
+    }
+    #lux-coll-{{ section.id }} .section-header h2 {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<div id="lux-coll-{{ section.id }}">
+  {% if section.settings.title != blank %}
+    <div class="section-header">
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+  {% endif %}
+
+  {% if section.settings.enable_carousel %}
+    <div class="main-carousel" data-flickity='{ "cellAlign": "left", "contain": true, "prevNextButtons": true, "pageDots": false, "freeScroll": true, "wrapAround": false }'>
+      {% for block in section.blocks %}
+        {%- assign collection = collections[block.settings.collection] -%}
+        <a href="{{ collection.url | default: '#' }}" class="lux-item carousel-cell" {{ block.shopify_attributes }}>
+          <div class="img-wrapper">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.label | default: collection.title }}">
+            {% elsif collection.featured_image != blank %}
+              <img src="{{ collection.featured_image | image_url: width: 400 }}" alt="{{ block.settings.label | default: collection.title }}">
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </div>
+          <span>{{ block.settings.label | default: collection.title | default: 'Collection Name' }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="lux-grid">
+      {% for block in section.blocks %}
+        {%- assign collection = collections[block.settings.collection] -%}
+        <a href="{{ collection.url | default: '#' }}" class="lux-item" {{ block.shopify_attributes }}>
+          <div class="img-wrapper">
+            {% if block.settings.image != blank %}
+              <img src="{{ block.settings.image | image_url: width: 400 }}" alt="{{ block.settings.label | default: collection.title }}">
+            {% elsif collection.featured_image != blank %}
+              <img src="{{ collection.featured_image | image_url: width: 400 }}" alt="{{ block.settings.label | default: collection.title }}">
+            {% else %}
+              {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {% endif %}
+          </div>
+          <span>{{ block.settings.label | default: collection.title | default: 'Collection Name' }}</span>
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+
+{% schema %}
+{
+  "name": "Luxury Collection List",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Curated for You"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 18,
+      "max": 60,
+      "step": 1,
+      "label": "Title Font Size",
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Item Label Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "Image Shape",
+      "options": [
+        { "value": "circle", "label": "Circle" },
+        { "value": "rounded", "label": "Rounded Rectangle" }
+      ],
+      "default": "circle"
+    },
+    {
+      "type": "range",
+      "id": "corner_radius",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "label": "Corner Radius (for Rounded Rectangle)",
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border Color",
+      "default": "#d4af37"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "label": "Border Width",
+      "default": 1,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable Carousel (Slider)",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "grid_desktop",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "label": "Items per row (Grid - Desktop)",
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "grid_mobile",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "label": "Items per row (Grid - Mobile)",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 50,
+      "step": 5,
+      "label": "Gap between items",
+      "default": 20,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Padding Top",
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "label": "Padding Bottom",
+      "default": 40,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Select Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image (Optional)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Custom Label (Optional)",
+          "info": "Defaults to Collection Title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Luxury Collection List",
+      "blocks": [
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" },
+        { "type": "collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}
