@@ -1,0 +1,13 @@
+# Editor atomic-save temp files (the "illegal characters" upload error)
+*.tmp
+*.tmp.*
+*~
+*.swp
+*.swo
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.idea/
