@@ -1,0 +1,417 @@
+{% comment %}
+  Spin-the-Wheel popup. Renders once per browser (localStorage gated).
+  Replaces the legacy newsletter modal.
+  Animation: only the bare .spin-wheel-disc rotates. The .spin-wheel-frame holds
+  border + shadow so the spinning element stays a clean GPU layer.
+{% endcomment %}
+
+<div id="spinWheelPopup" class="spin-wheel-popup" aria-hidden="true" role="dialog" aria-labelledby="spinWheelTitle">
+  <div class="spin-wheel-overlay" data-spin-close></div>
+
+  <div class="spin-wheel-box" role="document">
+    <button type="button" class="spin-wheel-close" aria-label="Close" data-spin-close>&times;</button>
+
+    <div class="spin-wheel-header">
+      <p class="spin-wheel-eyebrow">Exclusive Offer</p>
+      <h2 id="spinWheelTitle" class="spin-wheel-title">Spin &amp; Win</h2>
+      <p class="spin-wheel-subtitle">Try your luck — one spin per visitor.</p>
+    </div>
+
+    <div class="spin-wheel-stage">
+      <div class="spin-wheel-pointer" aria-hidden="true"></div>
+
+      <div class="spin-wheel-frame" aria-hidden="true">
+        <div class="spin-wheel-disc" id="spinWheelDisc">
+          <ul class="spin-wheel-labels">
+            <li style="--seg:0;"><span>10% OFF</span></li>
+            <li style="--seg:1;"><span>15% OFF</span></li>
+            <li style="--seg:2;"><span>FREE SHIPPING</span></li>
+            <li style="--seg:3;"><span>TRY AGAIN</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <button type="button" class="spin-wheel-btn" id="spinWheelBtn">SPIN</button>
+    </div>
+
+    <div class="spin-wheel-result" id="spinWheelResult" hidden>
+      <p class="spin-wheel-result-text" id="spinWheelResultText"></p>
+
+      <form class="spin-wheel-claim" id="spinWheelClaim" novalidate>
+        <input type="email" name="email" id="spinWheelEmail" placeholder="Enter your email to claim" required autocomplete="email" />
+        <button type="submit">Claim Reward</button>
+        <p class="spin-wheel-claim-msg" id="spinWheelClaimMsg" hidden></p>
+      </form>
+    </div>
+
+    <label class="spin-wheel-dont-show">
+      <input type="checkbox" id="spinWheelDontShow" />
+      <span>Don&rsquo;t show this again</span>
+    </label>
+  </div>
+</div>
+
+<style>
+  .spin-wheel-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  }
+  .spin-wheel-popup.is-open { display: flex; }
+
+  .spin-wheel-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.78);
+  }
+
+  .spin-wheel-box {
+    position: relative;
+    width: min(420px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid rgba(201, 169, 110, 0.35);
+    border-radius: 16px;
+    padding: 28px 24px 22px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+    text-align: center;
+    animation: spinPopIn 0.45s cubic-bezier(.21,1.02,.42,1.01);
+  }
+  @keyframes spinPopIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .spin-wheel-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    color: #c9a96e;
+    border: 1px solid rgba(201, 169, 110, 0.35);
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .spin-wheel-close:hover {
+    background: #c9a96e;
+    color: #1a1a1a;
+  }
+
+  .spin-wheel-header { margin-bottom: 18px; }
+  .spin-wheel-eyebrow {
+    margin: 0 0 6px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #c9a96e;
+  }
+  .spin-wheel-title {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #fff;
+  }
+  .spin-wheel-subtitle {
+    margin: 0;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  .spin-wheel-stage {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin: 8px auto 18px;
+  }
+
+  .spin-wheel-pointer {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 22px solid #c9a96e;
+    transform: translateX(-50%);
+    z-index: 4;
+  }
+
+  /* Static ring/frame — carries border + shadows so the spinning disc stays clean. */
+  .spin-wheel-frame {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 6px solid #c9a96e;
+    box-shadow:
+      0 0 0 2px #1a1a1a,
+      0 0 0 3px rgba(201, 169, 110, 0.6),
+      0 14px 36px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    background: #1a1a1a;
+    z-index: 1;
+  }
+
+  /* The ONLY animated element. GPU-promoted, contained, no shadow/border. */
+  .spin-wheel-disc {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+      conic-gradient(
+        #c9a96e 0deg 90deg,
+        #1a1a1a 90deg 180deg,
+        #c9a96e 180deg 270deg,
+        #1a1a1a 270deg 360deg
+      );
+    transform: translateZ(0) rotate(0deg);
+    transform-origin: 50% 50%;
+    transition: transform 4s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    contain: layout paint size;
+  }
+
+  .spin-wheel-labels {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+  }
+  .spin-wheel-labels li {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 50%;
+    transform-origin: 0% 100%;
+    transform: rotate(calc(45deg + var(--seg) * 90deg));
+  }
+  .spin-wheel-labels li span {
+    display: block;
+    width: 100%;
+    padding-top: 18px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    line-height: 1.1;
+    transform: translateX(-50%);
+    -webkit-font-smoothing: antialiased;
+  }
+  .spin-wheel-labels li:nth-child(odd) span  { color: #1a1a1a; }
+  .spin-wheel-labels li:nth-child(even) span { color: #c9a96e; }
+
+  .spin-wheel-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f0d9a8, #c9a96e 60%, #8a7242);
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    border: 4px solid #1a1a1a;
+    box-shadow: 0 0 0 2px #c9a96e, 0 6px 14px rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+    z-index: 3;
+    transition: background 0.2s;
+  }
+  .spin-wheel-btn:hover:not(:disabled) { background: radial-gradient(circle at 35% 30%, #f7e3b6, #d8b87f 60%, #9a7f4b); }
+  .spin-wheel-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+  .spin-wheel-result {
+    margin: 4px 0 14px;
+    padding: 14px;
+    border: 1px dashed rgba(201, 169, 110, 0.5);
+    border-radius: 10px;
+    background: rgba(201, 169, 110, 0.06);
+  }
+  .spin-wheel-result-text {
+    margin: 0 0 12px;
+    font-size: 16px;
+    color: #c9a96e;
+    letter-spacing: 1px;
+    font-weight: 500;
+  }
+
+  .spin-wheel-claim { display: flex; flex-direction: column; gap: 8px; }
+  .spin-wheel-claim input[type="email"] {
+    width: 100%;
+    padding: 11px 14px;
+    background: #0f0f0f;
+    color: #fff;
+    border: 1px solid rgba(201, 169, 110, 0.4);
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .spin-wheel-claim input[type="email"]:focus {
+    border-color: #c9a96e;
+    box-shadow: 0 0 0 2px rgba(201, 169, 110, 0.18);
+  }
+  .spin-wheel-claim button {
+    padding: 11px 14px;
+    background: #c9a96e;
+    color: #1a1a1a;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .spin-wheel-claim button:hover { background: #d8b87f; }
+  .spin-wheel-claim-msg {
+    margin: 4px 0 0;
+    font-size: 12px;
+    color: #c9a96e;
+    letter-spacing: 0.5px;
+  }
+
+  .spin-wheel-dont-show {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .spin-wheel-dont-show input { accent-color: #c9a96e; cursor: pointer; }
+
+  @media (max-width: 480px) {
+    .spin-wheel-box { width: calc(100vw - 24px); padding: 22px 18px 18px; border-radius: 14px; }
+    .spin-wheel-title { font-size: 24px; }
+    .spin-wheel-stage { width: 240px; height: 240px; }
+    .spin-wheel-btn { width: 66px; height: 66px; font-size: 12px; }
+    .spin-wheel-labels li span { font-size: 10.5px; padding-top: 14px; }
+  }
+</style>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'viya_spin_wheel_state';
+    var DELAY_MS    = 2000;
+    var SPIN_MS     = 4000;
+
+    function getState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+      catch (e) { return {}; }
+    }
+    function setState(patch) {
+      try {
+        var next = Object.assign(getState(), patch);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      } catch (e) {}
+    }
+
+    var state = getState();
+    if (state.dismissed || state.claimed) return;
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var popup       = document.getElementById('spinWheelPopup');
+      if (!popup) return;
+
+      var disc        = document.getElementById('spinWheelDisc');
+      var spinBtn     = document.getElementById('spinWheelBtn');
+      var resultBox   = document.getElementById('spinWheelResult');
+      var resultText  = document.getElementById('spinWheelResultText');
+      var claimForm   = document.getElementById('spinWheelClaim');
+      var claimMsg    = document.getElementById('spinWheelClaimMsg');
+      var dontShow    = document.getElementById('spinWheelDontShow');
+
+      var rewards = [
+        { label: '10% OFF',       message: 'You won 10% OFF your next order!' },
+        { label: '15% OFF',       message: 'You won 15% OFF your next order!' },
+        { label: 'Free Shipping', message: 'You won FREE SHIPPING on your next order!' },
+        { label: 'Try Again',     message: 'So close! Better luck next time.' }
+      ];
+
+      function open()  { popup.classList.add('is-open');    popup.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+      function close() { popup.classList.remove('is-open'); popup.setAttribute('aria-hidden', 'true');  document.body.style.overflow = ''; }
+
+      setTimeout(open, DELAY_MS);
+
+      Array.prototype.forEach.call(popup.querySelectorAll('[data-spin-close]'), function (el) {
+        el.addEventListener('click', function () {
+          if (dontShow.checked) setState({ dismissed: true });
+          close();
+        });
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && popup.classList.contains('is-open')) {
+          if (dontShow.checked) setState({ dismissed: true });
+          close();
+        }
+      });
+
+      var hasSpun = false;
+      spinBtn.addEventListener('click', function () {
+        if (hasSpun) return;
+        hasSpun = true;
+        spinBtn.disabled = true;
+
+        var winningIndex   = Math.floor(Math.random() * rewards.length);
+        var segmentCenter  = 45 + winningIndex * 90;          // deg from top, clockwise
+        var fullRotations  = 10;                              // 10 * 360 = 3600deg
+        var finalDeg       = fullRotations * 360 + (360 - segmentCenter);
+
+        // Single, atomic transform write. No layout-affecting properties touched.
+        disc.style.transform = 'translateZ(0) rotate(' + finalDeg + 'deg)';
+
+        // Reveal result AFTER the transition completes — no DOM updates during spin.
+        setTimeout(function () {
+          var reward = rewards[winningIndex];
+          resultText.textContent = reward.message;
+          if (reward.label === 'Try Again') claimForm.style.display = 'none';
+          resultBox.hidden = false;
+          setState({ won: reward.label });
+        }, SPIN_MS + 50);
+      });
+
+      claimForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var email = document.getElementById('spinWheelEmail').value.trim();
+        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          claimMsg.textContent = 'Please enter a valid email.';
+          claimMsg.style.color = '#e57373';
+          claimMsg.hidden = false;
+          return;
+        }
+        setState({ claimed: true, email: email });
+        claimMsg.style.color = '#c9a96e';
+        claimMsg.textContent = 'Reward sent to your inbox. Happy shopping!';
+        claimMsg.hidden = false;
+        claimForm.querySelector('button').disabled = true;
+        setTimeout(close, 2200);
+      });
+    });
+  })();
+</script>

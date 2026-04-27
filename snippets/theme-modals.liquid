@@ -32,8 +32,8 @@
 </div>
 </div>
 
-{% comment %} newsletter popup {% endcomment %}
-{% if settings.newsletter_popup %}
+{% comment %} newsletter popup — disabled in favor of spin-wheel-popup snippet {% endcomment %}
+{% if false %}
 <div id="newsletter-modal" class="{{settings.newsltr-style}} mfp-hide mfp-with-anim" {% if settings.newsltr-style == "style3" and settings.newsletter_img != blank %} style="background-image: url('{{ settings.newsletter_img | img_url: 'master' }}');"{% endif %}>		
   {% if settings.newsltr-style == "style2" %} <div class="fl newsltr-tbl"> {% endif %}
     {% if settings.newsletter_img != blank %}
@@ -137,7 +137,7 @@ window.addEventListener('DOMContentLoaded',function(){
             $('.closeNotify').click(function(){ $('#prodNotify').remove(); });
 		{%- endif -%}
         
-		{%- if settings.newsletter_popup -%}
+		{%- if false -%}{%- comment -%} newsletter popup JS disabled — replaced by spin-wheel-popup {%- endcomment -%}
         var cookieSignup = "cookieSignup",
             date = new Date();
          if(getCookie('cookieSignup') != 'true' && window.location.href.indexOf("challenge#newsletterPopup") <= -1){
