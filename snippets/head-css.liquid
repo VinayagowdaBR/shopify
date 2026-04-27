@@ -397,24 +397,33 @@ em, .em{font-style:italic}
 
 {{fontsCss}}
 
-.page-width { margin:0 auto; padding-left:15px; padding-right:15px; max-width:{{settings.box_width}}px; }
-	
-.fullwidth { max-width:100%; padding-left:{{settings.padm}}px; padding-right:{{settings.padm}}px; }
+.page-width { margin:0 auto; padding-left:15px; padding-right:15px; max-width:{{ settings.box_width | default: 1280 }}px; width:100%; box-sizing:border-box; }
+
+.fullwidth { max-width:100%; padding-left:{{ settings.padm | default: 15 }}px; padding-right:{{ settings.padm | default: 15 }}px; width:100%; box-sizing:border-box; }
 .template-product .fullwidth.npd .product-single__meta{ padding: 0 20px;}
-	
-@media only screen and (min-width:766px) { 
+
+@media only screen and (min-width:766px) {
     .page-width { padding-left:20px; padding-right:20px; }
-    .fullwidth { padding-left:{{settings.padt}}px; padding-right:{{settings.padt}}px; }		
-	
+    .fullwidth { padding-left:{{ settings.padt | default: 30 }}px; padding-right:{{ settings.padt | default: 30 }}px; }
+
 	.template-product .fullwidth.npd:not(.style6) .product-single__meta{ padding-right:30px}
 }
 @media only screen and (min-width:1280px){
     {% if settings.layout_style == "fullwidth" %}
-      .page-width { max-width:100%;padding-left:{{settings.padd}}px; padding-right:{{settings.padd}}px; }
+      .page-width { max-width:100%;padding-left:{{ settings.padd | default: 50 }}px; padding-right:{{ settings.padd | default: 50 }}px; }
     {% endif %}
-    .fullwidth { padding-left:{{settings.padd}}px; padding-right:{{settings.padd}}px; }
-	
-	.template-product .fullwidth.npd:not(.style6) .product-single__meta{ padding-right:{{settings.padd}}px;}
+    .fullwidth { padding-left:{{ settings.padd | default: 50 }}px; padding-right:{{ settings.padd | default: 50 }}px; }
+
+	.template-product .fullwidth.npd:not(.style6) .product-single__meta{ padding-right:{{ settings.padd | default: 50 }}px;}
+}
+.site-header, .site-header *, .top-header, .top-header * { box-sizing:border-box; }
+.site-header { flex-wrap:wrap; row-gap:8px; }
+.site-header > * { min-width:0; }
+.site-header .header-logo { flex-shrink:0; }
+.site-header .icons-col { flex-shrink:0; min-width:auto; }
+@media only screen and (max-width:766px) {
+  .site-header { gap:8px; }
+  .site-header .icons-col { gap:2px; }
 }
 .fullwidth.npd { padding-left:0; padding-right:0; }
 	

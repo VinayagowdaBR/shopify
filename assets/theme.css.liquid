@@ -38,7 +38,7 @@ div.lazyload:before, a.lazyload:before { content:""; display:block; width:50px; 
     .gspace .gitem { padding:var(--grspi); }
 }
 
-html { overflow-x:hidden; }
+html, body { overflow-x:hidden; }
 
 {% comment %} /* flickity Common */ {% endcomment %}
 .flickity-enabled{position:relative;display:block; }
@@ -687,7 +687,7 @@ s.pr_price { opacity:0.6; font-weight:400; }
   #header { border-bottom:0; }
 }
 
-.site-header { width:100%; min-height:{{settings.header_height}}px; position:relative;}
+.site-header { width:98%; margin:0 auto; min-height:{{settings.header_height}}px; position:relative;}
 .site-header > .header-logo, .site-header > div, .site-header > nav { flex:1; }
 {% if settings.align_logo == "left" %}
     .site-header .icons-col { width:20%; max-width:170px; }
