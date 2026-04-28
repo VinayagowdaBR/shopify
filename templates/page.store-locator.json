@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main": {
+      "type": "store-locator",
+      "settings": {
+        "heading": "Find a Store",
+        "subtext": "Visit us at any of our boutiques across India.",
+        "placeholder": "Search by city or pincode"
+      }
+    }
+  },
+  "order": ["main"]
+}

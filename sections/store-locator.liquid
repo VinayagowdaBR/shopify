@@ -1,0 +1,389 @@
+{%- liquid
+  assign heading     = section.settings.heading     | default: 'Find a Store'
+  assign subtext     = section.settings.subtext
+  assign placeholder = section.settings.placeholder | default: 'Search by city or pincode'
+-%}
+
+<section class="store-locator" data-section-id="{{ section.id }}">
+  <div class="store-locator__inner">
+    <header class="store-locator__head">
+      <h1 class="store-locator__title">{{ heading }}</h1>
+      {% if subtext != blank %}
+        <p class="store-locator__subtext">{{ subtext }}</p>
+      {% endif %}
+    </header>
+
+    <div class="store-locator__search">
+      <span class="store-locator__icon" aria-hidden="true">&#9906;</span>
+      <input
+        type="search"
+        id="storeLocatorSearch"
+        class="store-locator__input"
+        placeholder="{{ placeholder | escape }}"
+        autocomplete="off"
+        aria-label="Search stores by city or pincode"
+      />
+      <button type="button" class="store-locator__clear" id="storeLocatorClear" aria-label="Clear search" hidden>&times;</button>
+    </div>
+
+    <p class="store-locator__count" id="storeLocatorCount" aria-live="polite"></p>
+
+    <ul class="store-locator__list" id="storeLocatorList" role="list"></ul>
+
+    <p class="store-locator__empty" id="storeLocatorEmpty" hidden>
+      No stores match your search. Try another city or pincode.
+    </p>
+  </div>
+</section>
+
+<style>
+  .store-locator {
+    background: #fafaf8;
+    padding: 56px 20px;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+    color: #1a1a1a;
+  }
+  .store-locator__inner { max-width: 960px; margin: 0 auto; }
+
+  .store-locator__head { text-align: center; margin-bottom: 28px; }
+  .store-locator__title {
+    margin: 0 0 8px;
+    font-size: 32px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+  }
+  .store-locator__subtext {
+    margin: 0 auto;
+    max-width: 540px;
+    font-size: 13px;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+    color: #666;
+  }
+
+  .store-locator__search {
+    position: relative;
+    max-width: 520px;
+    margin: 0 auto 8px;
+  }
+  .store-locator__icon {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    color: #c9a96e;
+    font-size: 18px;
+    pointer-events: none;
+  }
+  .store-locator__input {
+    width: 100%;
+    padding: 14px 44px 14px 44px;
+    background: #fff;
+    border: 1px solid #e0dccf;
+    border-radius: 30px;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+    color: #1a1a1a;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+  .store-locator__input::placeholder { color: #999; letter-spacing: 0.6px; }
+  .store-locator__input:focus {
+    border-color: #c9a96e;
+    box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.18);
+  }
+  .store-locator__input::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+  .store-locator__clear {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 26px;
+    height: 26px;
+    background: #1a1a1a;
+    color: #c9a96e;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .store-locator__clear:hover { background: #333; }
+
+  .store-locator__count {
+    margin: 14px 0 24px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-align: center;
+    color: #888;
+    text-transform: uppercase;
+    min-height: 18px;
+  }
+
+  .store-locator__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .store-card {
+    background: #fff;
+    border: 1px solid #ece8df;
+    border-left: 3px solid #c9a96e;
+    border-radius: 8px;
+    padding: 20px 20px 18px;
+    transition: box-shadow 0.25s, transform 0.25s;
+  }
+  .store-card:hover {
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+  }
+
+  .store-card__name {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #1a1a1a;
+  }
+  .store-card__city {
+    margin: 0 0 10px;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #c9a96e;
+  }
+  .store-card__address,
+  .store-card__meta {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #555;
+    letter-spacing: 0.2px;
+  }
+  .store-card__meta { margin-top: 8px; }
+  .store-card__meta strong {
+    display: inline-block;
+    width: 64px;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+  .store-card__directions {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 9px 18px;
+    background: #1a1a1a;
+    color: #c9a96e;
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    border-radius: 30px;
+    transition: background 0.2s, color 0.2s;
+  }
+  .store-card__directions:hover { background: #c9a96e; color: #1a1a1a; }
+
+  .store-locator__empty {
+    margin: 32px 0 0;
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+  }
+
+  @media (max-width: 600px) {
+    .store-locator { padding: 36px 14px; }
+    .store-locator__title { font-size: 24px; letter-spacing: 1.5px; }
+    .store-locator__list { grid-template-columns: 1fr; gap: 14px; }
+  }
+</style>
+
+<script>
+  (function () {
+    var stores = [
+      {
+        name: 'House of Viya — Bengaluru',
+        city: 'Bengaluru',
+        pincode: '560098',
+        address: '108 Sri Devi Krupe, 21st Cross, LIC Layout, Pattanagere, Rajarajeshwari Nagar',
+        phone: '+91 82967 06504',
+        hours: 'Mon–Sat 10AM–8PM · Sun 11AM–5PM'
+      },
+      {
+        name: 'House of Viya — Mumbai',
+        city: 'Mumbai',
+        pincode: '400050',
+        address: 'Shop 14, Linking Road, Bandra West',
+        phone: '+91 98200 11223',
+        hours: 'Mon–Sun 11AM–9PM'
+      },
+      {
+        name: 'House of Viya — Delhi',
+        city: 'New Delhi',
+        pincode: '110048',
+        address: 'M-22 Greater Kailash Part 1',
+        phone: '+91 99100 44556',
+        hours: 'Mon–Sat 11AM–8:30PM'
+      },
+      {
+        name: 'House of Viya — Hyderabad',
+        city: 'Hyderabad',
+        pincode: '500034',
+        address: 'Road No. 12, Jubilee Hills',
+        phone: '+91 90000 77882',
+        hours: 'Mon–Sun 10:30AM–9PM'
+      },
+      {
+        name: 'House of Viya — Chennai',
+        city: 'Chennai',
+        pincode: '600028',
+        address: 'TTK Road, Alwarpet',
+        phone: '+91 96770 33212',
+        hours: 'Mon–Sat 10AM–8PM'
+      },
+      {
+        name: 'House of Viya — Pune',
+        city: 'Pune',
+        pincode: '411001',
+        address: 'East Street, Camp',
+        phone: '+91 92250 88445',
+        hours: 'Mon–Sun 11AM–9PM'
+      },
+      {
+        name: 'House of Viya — Kolkata',
+        city: 'Kolkata',
+        pincode: '700017',
+        address: 'Park Street, Near Park Hotel',
+        phone: '+91 90730 22119',
+        hours: 'Mon–Sat 10:30AM–8:30PM'
+      },
+      {
+        name: 'House of Viya — Ahmedabad',
+        city: 'Ahmedabad',
+        pincode: '380009',
+        address: 'CG Road, Navrangpura',
+        phone: '+91 99090 12345',
+        hours: 'Mon–Sun 11AM–9PM'
+      }
+    ];
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function directionsUrl(store) {
+      var q = store.name + ', ' + store.address + ', ' + store.city + ' ' + store.pincode;
+      return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q);
+    }
+
+    function cardHtml(store) {
+      return (
+        '<li class="store-card">' +
+          '<h3 class="store-card__name">' + escapeHtml(store.name) + '</h3>' +
+          '<p class="store-card__city">' + escapeHtml(store.city) + ' &middot; ' + escapeHtml(store.pincode) + '</p>' +
+          '<p class="store-card__address">' + escapeHtml(store.address) + '</p>' +
+          '<p class="store-card__meta"><strong>Phone</strong>' + escapeHtml(store.phone) + '</p>' +
+          '<p class="store-card__meta"><strong>Hours</strong>' + escapeHtml(store.hours) + '</p>' +
+          '<a class="store-card__directions" target="_blank" rel="noopener" href="' + directionsUrl(store) + '">Get Directions</a>' +
+        '</li>'
+      );
+    }
+
+    function init() {
+      var listEl   = document.getElementById('storeLocatorList');
+      var inputEl  = document.getElementById('storeLocatorSearch');
+      var clearEl  = document.getElementById('storeLocatorClear');
+      var countEl  = document.getElementById('storeLocatorCount');
+      var emptyEl  = document.getElementById('storeLocatorEmpty');
+      if (!listEl || !inputEl) return;
+
+      function render(list) {
+        listEl.innerHTML = list.map(cardHtml).join('');
+        countEl.textContent = list.length
+          ? (list.length === stores.length
+              ? 'Showing all ' + list.length + ' stores'
+              : 'Showing ' + list.length + ' of ' + stores.length + ' stores')
+          : '';
+        emptyEl.hidden = list.length !== 0;
+      }
+
+      function filter(term) {
+        var t = (term || '').trim().toLowerCase();
+        if (!t) return stores.slice();
+        return stores.filter(function (s) {
+          return (
+            s.city.toLowerCase().indexOf(t)    !== -1 ||
+            s.pincode.indexOf(t)               !== -1 ||
+            s.name.toLowerCase().indexOf(t)    !== -1 ||
+            s.address.toLowerCase().indexOf(t) !== -1
+          );
+        });
+      }
+
+      inputEl.addEventListener('input', function () {
+        clearEl.hidden = !inputEl.value;
+        render(filter(inputEl.value));
+      });
+
+      clearEl.addEventListener('click', function () {
+        inputEl.value = '';
+        clearEl.hidden = true;
+        render(stores);
+        inputEl.focus();
+      });
+
+      render(stores);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Store Locator",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find a Store"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Visit us at any of our boutiques across India."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Search Placeholder",
+      "default": "Search by city or pincode"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store Locator"
+    }
+  ]
+}
+{% endschema %}

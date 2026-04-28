@@ -35,9 +35,45 @@
 				{%- endif -%}
 			</div>
 		{%- endif -%}
-		{%- if settings.centerTxt != blank -%}
-			<div class="header-txt fl1 middle-hdr tc{% if settings.centerTxt-mobile %} hide-sm hide-md{% endif %}">{{ settings.centerTxt }}</div>
-		{%- endif -%}
+		<div class="header-txt fl1 middle-hdr tc{% if settings.centerTxt-mobile %} hide-sm hide-md{% endif %}">
+			<span class="announcement-bar-text" id="announcementBarText">{{ settings.centerTxt }}</span>
+		</div>
+		<style>
+			.announcement-bar-text { display:inline-block; opacity:1; transition: opacity 0.6s ease; will-change: opacity; }
+			.announcement-bar-text.is-fading { opacity: 0; }
+		</style>
+		<script>
+			(function(){
+				/* Tune these two values to control speed. */
+				var HOLD_MS = 5000;   /* how long each message stays visible (ms) */
+				var FADE_MS = 600;    /* fade-in/out duration; must match CSS transition */
+
+				function start(){
+					var el = document.getElementById("announcementBarText");
+					if (!el) return;
+					var messages = [
+						"FREE STUDS GIFT – 1% off entire order",
+						"FREE POUCH ON ₹1,499+ – 1% off (min ₹1,499)",
+						"VIYAVIP10 – 10% off (code)",
+						"REPEAT5 – 5% off (min ₹999)",
+						"WELCOME10 – 10% off (min ₹1,499, code)"
+					];
+					var i = 0;
+					el.textContent = messages[i];
+					setInterval(function(){
+						el.classList.add("is-fading");
+						setTimeout(function(){
+							i = (i + 1) % messages.length;
+							el.textContent = messages[i];
+							el.classList.remove("is-fading");
+						}, FADE_MS);
+					}, HOLD_MS);
+				}
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", start);
+				} else { start(); }
+			})();
+		</script>
 		{%- if settings.rightTxt != blank -%}
 			<div class="header-social fl1 right-hdr tr{% if settings.rightTxt-mobile %} hide-sm hide-md{% else %} small--tc{% endif %}">
 				{%- if settings.rightTxt contains "[social-icons]"-%}
