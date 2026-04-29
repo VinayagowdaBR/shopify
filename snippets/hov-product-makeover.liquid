@@ -297,8 +297,6 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
       injectHTML += '<div class="hov2-slash"><span class="hov2-slash-sale">{{ price | money }}</span><span class="hov2-slash-cmp">{{ compare | money }}</span><span class="hov2-slash-off">{{ pct_off }}% OFF</span><span class="hov2-slash-saved">You save {{ saved | money }}</span></div>';
     {% endif %}
 
- 
-
     // Material Badges
     {% if material_raw != blank %}
       injectHTML += '<div class="hov2-materials">';

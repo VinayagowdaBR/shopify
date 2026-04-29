@@ -1,0 +1,760 @@
+{%- liquid
+  assign s = section.settings
+-%}
+{%- if s.enabled -%}
+{%- capture seg_labels -%}{{ s.seg1 }}|{{ s.seg2 }}|{{ s.seg3 }}|{{ s.seg4 }}|{{ s.seg5 }}|{{ s.seg6 }}|{{ s.seg7 }}|{{ s.seg8 }}{%- endcapture -%}
+{%- capture seg_codes -%}{{ s.code1 }}|{{ s.code2 }}|{{ s.code3 }}|{{ s.code4 }}|{{ s.code5 }}|{{ s.code6 }}|{{ s.code7 }}|{{ s.code8 }}{%- endcapture -%}
+
+<div id="spinToWin" class="stw-popup" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="stwTitle"
+     data-delay="{{ s.delay | times: 1000 }}"
+     data-exit-intent="{{ s.exit_intent }}"
+     data-bg="{{ s.bg_color }}"
+     data-wheel-a="{{ s.wheel_color_a }}"
+     data-wheel-b="{{ s.wheel_color_b }}"
+     data-wheel-text="{{ s.wheel_text_color }}"
+     data-segments="{{ seg_labels | escape }}"
+     data-codes="{{ seg_codes | escape }}"
+     data-webhook="{{ s.webhook_url }}">
+
+  <div class="stw-overlay" data-stw-close></div>
+
+  <div class="stw-modal" role="document">
+    <button type="button" class="stw-close" aria-label="Close" data-stw-close>&times;</button>
+
+    <div class="stw-inner">
+      <div class="stw-wheel-side">
+        <div class="stw-pointer" aria-hidden="true"></div>
+        <canvas id="stwCanvas" width="440" height="440" aria-label="Spin to win wheel"></canvas>
+      </div>
+
+      <div class="stw-form-side">
+        <h2 id="stwTitle" class="stw-title">{{ s.title | default: 'Spin to Win' }}</h2>
+        <p class="stw-subtitle">{{ s.subtitle | default: 'Enter your details and spin the wheel for an exclusive reward!' }}</p>
+
+        <form id="stwForm" class="stw-form" novalidate>
+          <input type="email" name="email" id="stwEmail" placeholder="Email address" required autocomplete="email" />
+          <input type="tel" name="phone" id="stwPhone" placeholder="Phone number" required autocomplete="tel" inputmode="tel" />
+          <button type="submit" class="stw-spin-btn" id="stwSpinBtn">{{ s.button_label | default: 'SPIN MY WHEEL' }}</button>
+          <p class="stw-msg" id="stwMsg" hidden></p>
+        </form>
+
+        <div class="stw-result" id="stwResult" hidden>
+          <p class="stw-result-headline" id="stwResultHeadline"></p>
+          <p class="stw-result-text" id="stwResultText"></p>
+          <div class="stw-code-box" id="stwCodeBox" hidden>
+            <span class="stw-code-label">Your code:</span>
+            <strong class="stw-code" id="stwCode"></strong>
+            <button type="button" class="stw-copy" id="stwCopy">Copy</button>
+          </div>
+          <p class="stw-fineprint">{{ s.fineprint | default: 'Code valid for 7 days. One per customer.' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stw-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  }
+  .stw-popup.is-open { display: flex; }
+
+  .stw-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .stw-modal {
+    position: relative;
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: {{ s.bg_color | default: '#fafaf8' }};
+    border: 1px solid #f0ece4;
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+    box-sizing: border-box;
+    animation: stwPopIn 0.4s cubic-bezier(.21,1.02,.42,1.01);
+  }
+  @keyframes stwPopIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .stw-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    background: rgba(255,255,255,0.9);
+    color: #333;
+    border: none;
+    border-radius: 50%;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 5;
+    transition: background 0.2s, transform 0.2s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  }
+  .stw-close:hover { background: #fff; transform: rotate(90deg); }
+
+  .stw-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    width: 100%;
+    padding: 40px 36px;
+    box-sizing: border-box;
+  }
+
+  .stw-wheel-side {
+    position: relative;
+    flex: 0 1 440px;
+    width: 100%;
+    max-width: 440px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .stw-pointer {
+    position: absolute;
+    top: -2px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-right: 18px solid transparent;
+    border-top: 32px solid {{ s.pointer_color | default: '#1a1a1a' }};
+    transform: translateX(-50%);
+    z-index: 4;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.22));
+  }
+
+  #stwCanvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 50%;
+    box-shadow: 0 16px 40px rgba(26, 26, 26, 0.18), 0 0 0 6px #fff, 0 0 0 9px {{ s.pointer_color | default: '#C8B28A' }};
+    background: #fff;
+  }
+
+  .stw-form-side {
+    flex: 1 1 340px;
+    max-width: 420px;
+    min-width: 0;
+  }
+  .stw-title {
+    margin: 0 0 12px;
+    font-size: 40px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: {{ s.title_color | default: '#1a1a1a' }};
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+  .stw-subtitle {
+    margin: 0 0 24px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+    color: #666;
+  }
+
+  .stw-form { display: flex; flex-direction: column; gap: 12px; }
+  .stw-form input {
+    width: 100%;
+    padding: 14px 16px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #d4d4d4;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+  }
+  .stw-form input:focus {
+    border-color: {{ s.pointer_color | default: '#C8B28A' }};
+    box-shadow: 0 0 0 2px rgba(200, 178, 138, 0.18);
+  }
+  .stw-spin-btn {
+    margin-top: 8px;
+    padding: 15px 18px;
+    background: #1a1a1a;
+    color: {{ s.pointer_color | default: '#C8B28A' }};
+    border: 1px solid #1a1a1a;
+    border-radius: 4px;
+    font-size: 12px;
+    letter-spacing: 2.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+  }
+  .stw-spin-btn:hover:not(:disabled) {
+    background: {{ s.pointer_color | default: '#C8B28A' }};
+    color: #1a1a1a;
+    border-color: {{ s.pointer_color | default: '#C8B28A' }};
+  }
+  .stw-spin-btn:active:not(:disabled) { transform: translateY(1px); }
+  .stw-spin-btn:disabled { cursor: not-allowed; opacity: 0.6; }
+
+  .stw-msg { margin: 8px 0 0; font-size: 12px; letter-spacing: 0.3px; color: #b30000; }
+  .stw-msg.is-ok { color: #2e7d32; }
+
+  .stw-result {
+    margin-top: 18px;
+    padding: 20px;
+    background: #fff;
+    border: 1px dashed {{ s.pointer_color | default: '#C8B28A' }};
+    border-radius: 6px;
+  }
+  .stw-result-headline {
+    margin: 0 0 6px;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: {{ s.title_color | default: '#1a1a1a' }};
+  }
+  .stw-result-text {
+    margin: 0 0 14px;
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.3px;
+  }
+  .stw-code-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fafaf8;
+    border: 1px solid #f0ece4;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .stw-code-label { font-size: 11px; color: #666; letter-spacing: 1.5px; text-transform: uppercase; }
+  .stw-code {
+    flex: 1 1 auto;
+    font-size: 16px;
+    color: {{ s.title_color | default: '#1a1a1a' }};
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
+  .stw-copy {
+    padding: 6px 12px;
+    background: #1a1a1a;
+    color: {{ s.pointer_color | default: '#C8B28A' }};
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+  }
+  .stw-copy:hover { background: {{ s.pointer_color | default: '#C8B28A' }}; color: #1a1a1a; }
+  .stw-fineprint { margin: 0; font-size: 11px; color: #888; letter-spacing: 0.3px; }
+
+  @media (max-width: 860px) {
+    .stw-popup { padding: 12px; }
+    .stw-modal { width: 95%; max-height: 92vh; border-radius: 14px; }
+    .stw-inner {
+      flex-direction: column;
+      gap: 24px;
+      padding: 56px 20px 28px;
+    }
+    .stw-wheel-side { max-width: min(340px, 80vw); margin: 0 auto; }
+    .stw-form-side { width: 100%; max-width: 420px; text-align: center; margin: 0 auto; }
+    .stw-title { font-size: 30px; }
+    .stw-form { align-items: stretch; }
+  }
+  @media (max-width: 480px) {
+    .stw-popup { padding: 8px; }
+    .stw-modal { width: 100%; max-height: 95vh; border-radius: 12px; }
+    .stw-inner { padding: 52px 16px 24px; gap: 20px; }
+    .stw-title { font-size: 24px; }
+    .stw-subtitle { font-size: 13px; margin-bottom: 18px; }
+    .stw-close { top: 10px; right: 10px; width: 34px; height: 34px; font-size: 22px; }
+    .stw-spin-btn { padding: 13px 16px; font-size: 13px; }
+  }
+</style>
+
+<script>
+(function () {
+  var STORAGE_KEY = 'stw_state_v1';
+  var COOKIE_KEY  = 'stw_played';
+  var FORCE = /[?&](stw|spin)=1\b/.test(window.location.search) || window.location.hash === '#stw';
+
+  function readState() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function writeState(patch) {
+    try {
+      var next = Object.assign(readState(), patch);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    } catch (e) {}
+  }
+  function getCookie(name) {
+    var m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+    return m ? decodeURIComponent(m[1]) : '';
+  }
+  function setCookie(name, val, days) {
+    var d = new Date(); d.setTime(d.getTime() + days * 864e5);
+    document.cookie = name + '=' + encodeURIComponent(val) + ';expires=' + d.toUTCString() + ';path=/';
+  }
+  function alreadyPlayed() {
+    if (FORCE) return false;
+    return readState().played === true || getCookie(COOKIE_KEY) === '1';
+  }
+  function markPlayed() {
+    if (FORCE) return;
+    writeState({ played: true, ts: Date.now() });
+    setCookie(COOKIE_KEY, '1', 30);
+  }
+  window.STW_RESET = function () {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    document.cookie = COOKIE_KEY + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    location.reload();
+  };
+
+  function ready(fn) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', fn);
+    } else {
+      fn();
+    }
+  }
+
+  ready(function () {
+    var popup = document.getElementById('spinToWin');
+    if (!popup) return;
+    if (alreadyPlayed()) return;
+
+    var canvas      = document.getElementById('stwCanvas');
+    var form        = document.getElementById('stwForm');
+    var spinBtn     = document.getElementById('stwSpinBtn');
+    var emailInput  = document.getElementById('stwEmail');
+    var phoneInput  = document.getElementById('stwPhone');
+    var msg         = document.getElementById('stwMsg');
+    var resultBox   = document.getElementById('stwResult');
+    var resultHead  = document.getElementById('stwResultHeadline');
+    var resultText  = document.getElementById('stwResultText');
+    var codeBox     = document.getElementById('stwCodeBox');
+    var codeEl      = document.getElementById('stwCode');
+    var copyBtn     = document.getElementById('stwCopy');
+
+    var rawSegments = (popup.dataset.segments || '').split('|');
+    var rawCodes    = (popup.dataset.codes || '').split('|');
+    var segments = [];
+    for (var i = 0; i < rawSegments.length; i++) {
+      var label = (rawSegments[i] || '').trim();
+      if (!label) continue;
+      segments.push({
+        label: label,
+        codePrefix: (rawCodes[i] || '').trim(),
+        win: !/try again|didn.?t win|no win|better luck/i.test(label)
+      });
+    }
+    if (segments.length < 2) {
+      segments = [
+        { label: 'Flat Rs. 200 off',  codePrefix: 'WIN200',  win: true  },
+        { label: 'Flat Rs. 400 off',  codePrefix: 'WIN400',  win: true  },
+        { label: 'Buy 2 at 45% off',  codePrefix: 'B2-45',   win: true  },
+        { label: 'Buy 3 at 55% off',  codePrefix: 'B3-55',   win: true  },
+        { label: 'Try again',         codePrefix: '',        win: false },
+        { label: 'Better luck next time', codePrefix: '',    win: false }
+      ];
+    }
+
+    var colorA = popup.dataset.wheelA || '#C8B28A';
+    var colorB = popup.dataset.wheelB || '#1a1a1a';
+    var textColor = popup.dataset.wheelText || '#fafaf8';
+
+    function segTextColor(i) {
+      return i % 2 === 0 ? '#1a1a1a' : '#fafaf8';
+    }
+
+    function drawWheel(rotationRad) {
+      var ctx = canvas.getContext('2d');
+      var w = canvas.width, h = canvas.height;
+      var cx = w / 2, cy = h / 2;
+      var radius = Math.min(cx, cy) - 6;
+      var n = segments.length;
+      var arc = (Math.PI * 2) / n;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(rotationRad);
+
+      for (var i = 0; i < n; i++) {
+        var start = i * arc - Math.PI / 2;
+        var end = start + arc;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius, start, end);
+        ctx.closePath();
+        ctx.fillStyle = i % 2 === 0 ? colorA : colorB;
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.rotate(start + arc / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = segTextColor(i);
+        ctx.font = '600 15px Poppins, system-ui, sans-serif';
+        var label = segments[i].label;
+        var maxWidth = radius - 30;
+        var words = label.split(' ');
+        var lines = [];
+        var line = '';
+        for (var j = 0; j < words.length; j++) {
+          var test = line ? line + ' ' + words[j] : words[j];
+          if (ctx.measureText(test).width > maxWidth && line) {
+            lines.push(line);
+            line = words[j];
+          } else {
+            line = test;
+          }
+        }
+        if (line) lines.push(line);
+        var lh = 18;
+        var startY = -((lines.length - 1) * lh) / 2;
+        for (var k = 0; k < lines.length; k++) {
+          ctx.fillText(lines[k], radius - 18, startY + k * lh + 5);
+        }
+        ctx.restore();
+      }
+
+      ctx.beginPath();
+      ctx.arc(0, 0, 28, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.strokeStyle = colorA;
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0, 0, 22, 0, Math.PI * 2);
+      ctx.fillStyle = colorA;
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    drawWheel(0);
+
+    function open() {
+      if (alreadyPlayed()) return;
+      popup.classList.add('is-open');
+      popup.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      popup.classList.remove('is-open');
+      popup.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    var delay = parseInt(popup.dataset.delay, 10) || 0;
+    var openTimer = setTimeout(open, delay);
+
+    if (popup.dataset.exitIntent === 'true') {
+      var exitFired = false;
+      document.addEventListener('mouseout', function (e) {
+        if (exitFired || alreadyPlayed()) return;
+        if (e.clientY <= 0 && (!e.relatedTarget && !e.toElement)) {
+          exitFired = true;
+          clearTimeout(openTimer);
+          open();
+        }
+      });
+    }
+
+    Array.prototype.forEach.call(popup.querySelectorAll('[data-stw-close]'), function (el) {
+      el.addEventListener('click', close);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && popup.classList.contains('is-open')) close();
+    });
+
+    function emailValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function phoneValid(v) { return /^[+\d][\d\s\-()]{7,}$/.test(v); }
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    var spinning = false;
+    function runSpin(winningIndex) {
+      var n = segments.length;
+      var arc = 360 / n;
+      var targetCenter = winningIndex * arc + arc / 2;
+      var fullTurns = 6;
+      var finalDeg = fullTurns * 360 + (360 - targetCenter);
+      var startTs = null;
+      var duration = 5000;
+
+      function frame(ts) {
+        if (!startTs) startTs = ts;
+        var t = Math.min((ts - startTs) / duration, 1);
+        var eased = easeOutCubic(t);
+        var current = eased * finalDeg;
+        drawWheel(current * Math.PI / 180);
+        if (t < 1) requestAnimationFrame(frame);
+        else onSpinComplete(winningIndex);
+      }
+      requestAnimationFrame(frame);
+    }
+
+    function generateCode(prefix) {
+      if (!prefix) return '';
+      var rand = Math.random().toString(36).slice(2, 7).toUpperCase();
+      return prefix + '-' + rand;
+    }
+
+    function onSpinComplete(idx) {
+      var seg = segments[idx];
+      markPlayed();
+      form.style.display = 'none';
+      resultBox.hidden = false;
+      if (seg.win) {
+        resultHead.textContent = 'You won ' + seg.label + '!';
+        resultText.textContent = 'Use the code below at checkout to claim your reward.';
+        var code = generateCode(seg.codePrefix || 'SPIN');
+        codeEl.textContent = code;
+        codeBox.hidden = false;
+        writeState({ wonLabel: seg.label, code: code });
+      } else {
+        resultHead.textContent = seg.label;
+        resultText.textContent = 'Better luck next time! Keep an eye on your inbox for future offers.';
+        codeBox.hidden = true;
+      }
+    }
+
+    copyBtn.addEventListener('click', function () {
+      var code = codeEl.textContent;
+      if (!code) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(function () {
+          copyBtn.textContent = 'Copied!';
+          setTimeout(function () { copyBtn.textContent = 'Copy'; }, 1800);
+        });
+      }
+    });
+
+    function saveLead(email, phone, callback) {
+      var formData = new FormData();
+      formData.append('form_type', 'customer');
+      formData.append('utf8', '✓');
+      formData.append('contact[tags]', 'spin-to-win,newsletter');
+      formData.append('contact[email]', email);
+      formData.append('contact[phone]', phone);
+      formData.append('contact[accepts_marketing]', 'true');
+
+      fetch('/contact', { method: 'POST', body: formData, credentials: 'same-origin' })
+        .catch(function () {})
+        .finally(function () {
+          var hook = popup.dataset.webhook;
+          if (hook) {
+            try {
+              fetch(hook, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email, phone: phone, source: 'spin-to-win', shop: window.location.hostname })
+              }).catch(function () {});
+            } catch (e) {}
+          }
+          if (callback) callback();
+        });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (spinning) return;
+
+      var email = emailInput.value.trim();
+      var phone = phoneInput.value.trim();
+      msg.hidden = true;
+      msg.classList.remove('is-ok');
+
+      if (!emailValid(email)) {
+        msg.textContent = 'Please enter a valid email address.';
+        msg.hidden = false;
+        emailInput.focus();
+        return;
+      }
+      if (!phoneValid(phone)) {
+        msg.textContent = 'Please enter a valid phone number.';
+        msg.hidden = false;
+        phoneInput.focus();
+        return;
+      }
+
+      spinning = true;
+      spinBtn.disabled = true;
+      spinBtn.textContent = 'Spinning…';
+      writeState({ email: email, phone: phone });
+
+      saveLead(email, phone, function () {});
+
+      var winningIndex = Math.floor(Math.random() * segments.length);
+      runSpin(winningIndex);
+    });
+  });
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Spin to Win",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "Enable popup",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Open delay (seconds)",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "exit_intent",
+      "label": "Trigger on exit intent (desktop)",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Spin to Win"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Enter your details and spin the wheel for an exclusive reward!"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "SPIN MY WHEEL"
+    },
+    {
+      "type": "text",
+      "id": "fineprint",
+      "label": "Fine print under reward",
+      "default": "Code valid for 7 days. One per customer."
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Modal background",
+      "default": "#fafaf8"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title / dark accent",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "pointer_color",
+      "label": "Pointer / gold accent",
+      "default": "#C8B28A"
+    },
+    {
+      "type": "color",
+      "id": "wheel_color_a",
+      "label": "Wheel segment color A",
+      "default": "#C8B28A"
+    },
+    {
+      "type": "color",
+      "id": "wheel_color_b",
+      "label": "Wheel segment color B",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "wheel_text_color",
+      "label": "Wheel label color",
+      "default": "#fafaf8"
+    },
+    {
+      "type": "header",
+      "content": "Wheel segments",
+      "info": "Leave a segment empty to skip it. Use 'Try again' or 'Better luck next time' for losing segments — codes are ignored for those."
+    },
+    { "type": "text", "id": "seg1", "label": "Segment 1 label", "default": "Flat Rs. 200 off" },
+    { "type": "text", "id": "code1", "label": "Segment 1 discount code prefix", "default": "WIN200" },
+    { "type": "text", "id": "seg2", "label": "Segment 2 label", "default": "Flat Rs. 400 off" },
+    { "type": "text", "id": "code2", "label": "Segment 2 discount code prefix", "default": "WIN400" },
+    { "type": "text", "id": "seg3", "label": "Segment 3 label", "default": "Buy 2 at 45% off" },
+    { "type": "text", "id": "code3", "label": "Segment 3 discount code prefix", "default": "BUY2-45" },
+    { "type": "text", "id": "seg4", "label": "Segment 4 label", "default": "Buy 3 at 55% off" },
+    { "type": "text", "id": "code4", "label": "Segment 4 discount code prefix", "default": "BUY3-55" },
+    { "type": "text", "id": "seg5", "label": "Segment 5 label", "default": "Try again" },
+    { "type": "text", "id": "code5", "label": "Segment 5 discount code prefix", "info": "Leave blank for losing segments" },
+    { "type": "text", "id": "seg6", "label": "Segment 6 label", "default": "Better luck next time" },
+    { "type": "text", "id": "code6", "label": "Segment 6 discount code prefix", "info": "Leave blank for losing segments" },
+    { "type": "text", "id": "seg7", "label": "Segment 7 label (optional)" },
+    { "type": "text", "id": "code7", "label": "Segment 7 discount code prefix" },
+    { "type": "text", "id": "seg8", "label": "Segment 8 label (optional)" },
+    { "type": "text", "id": "code8", "label": "Segment 8 discount code prefix" },
+    {
+      "type": "header",
+      "content": "Lead capture"
+    },
+    {
+      "type": "url",
+      "id": "webhook_url",
+      "label": "Webhook URL (optional)",
+      "info": "Leads are saved to Shopify customers via /contact. Optionally also POST JSON {email, phone} to this URL."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Spin to Win",
+      "category": "Promotional"
+    }
+  ]
+}
+{% endschema %}

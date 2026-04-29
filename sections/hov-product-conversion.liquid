@@ -53,8 +53,6 @@
           </div>
         {% endif %}
 
-
-
         {% if section.settings.show_urgency %}
           <div class="hov-urgency">
             {{ section.settings.urgency_text }}
@@ -338,12 +336,25 @@
   }
   #hov-product-conversion-{{ section.id }} .hov-price-row {
     display: flex;
-    align-items: center;
-    gap: 14px;
+    align-items: flex-end;
+    gap: 18px;
     flex-wrap: wrap;
   }
+  #hov-product-conversion-{{ section.id }} .hov-price-block {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-price-block[hidden] { display: none; }
+  #hov-product-conversion-{{ section.id }} .hov-price-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--hov-muted);
+    margin-bottom: 6px;
+  }
   #hov-product-conversion-{{ section.id }} .hov-price-current {
-    font-size: 36px;
+    font-size: 32px;
     line-height: 1;
     font-weight: 700;
     color: var(--hov-emerald);
@@ -352,6 +363,7 @@
     font-size: 20px;
     color: var(--hov-muted);
     text-decoration: line-through;
+    font-weight: 500;
   }
   #hov-product-conversion-{{ section.id }} .hov-discount-badge {
     display: inline-flex;
@@ -577,10 +589,42 @@
 
 {% render 'hov-product-makeover' %}
 
+<script type="application/json" id="hov-variants-{{ section.id }}">
+[
+  {%- for v in current_product.variants -%}
+    {%- assign cap = v.compare_at_price | default: 0 -%}
+    {%- assign saved = cap | minus: v.price -%}
+    {%- assign pct = 0 -%}
+    {%- if cap > v.price -%}{%- assign pct = saved | times: 100 | divided_by: cap -%}{%- endif -%}
+    {"id":{{ v.id }},"price":{{ v.price | money_without_trailing_zeros | json }},"compare":{% if cap > v.price %}{{ cap | money_without_trailing_zeros | json }}{% else %}null{% endif %},"pct":{{ pct }},"available":{{ v.available }}}{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+]
+</script>
+
 <script>
   (function () {
     var root = document.getElementById('hov-product-conversion-{{ section.id }}');
     if (!root) return;
+
+    try {
+      var variantData = JSON.parse(document.getElementById('hov-variants-{{ section.id }}').textContent);
+      var select = root.querySelector('.hov-variant-select');
+      var stickyCur = root.querySelector('.hov-sticky-current');
+      var stickyCmp = root.querySelector('.hov-sticky-compare');
+
+      function applyVariant(id) {
+        var v = variantData.find(function (x) { return String(x.id) === String(id); });
+        if (!v) return;
+        var hasSale = !!v.compare && v.pct > 0;
+        if (stickyCur) stickyCur.textContent = v.price;
+        if (stickyCmp) {
+          stickyCmp.textContent = hasSale ? v.compare : '';
+          stickyCmp.hidden = !hasSale;
+        }
+      }
+      if (select) select.addEventListener('change', function () { applyVariant(select.value); });
+    } catch (e) {}
+
     var media = root.querySelector('.hov-media');
     var mainWrap = root.querySelector('.hov-main-image');
     var main = root.querySelector('.hov-product-image');
