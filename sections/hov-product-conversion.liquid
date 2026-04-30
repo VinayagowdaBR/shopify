@@ -46,6 +46,11 @@
       <div class="hov-content">
         <h1 class="hov-title">{{ current_product.title }}</h1>
 
+        {%- if section.settings.show_guarantee_badge -%}
+          {%- assign guarantee_label = product.metafields.custom.guarantee_text | default: section.settings.guarantee_badge_text -%}
+          {% render 'badge-anti-tarnish', label: guarantee_label %}
+        {%- endif -%}
+
         {% if section.settings.show_reviews %}
           <div class="hov-reviews">
             <span class="hov-stars">★★★★★</span>
@@ -760,6 +765,23 @@
       "id": "badge_text",
       "label": "Badge text",
       "default": "✨ Bestseller"
+    },
+    {
+      "type": "header",
+      "content": "Anti-tarnish guarantee badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee_badge",
+      "label": "Show guarantee badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_badge_text",
+      "label": "Guarantee badge text",
+      "info": "Per-product override: set product.metafields.custom.guarantee_text",
+      "default": "6-Month Anti-Tarnish Guarantee"
     },
     {
       "type": "text",
