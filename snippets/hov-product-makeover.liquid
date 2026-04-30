@@ -41,7 +41,6 @@ FEATURES:
 {% assign custom_subtitle = product.metafields.custom.subtitle | default: '' %}
 {% assign material_raw = product.metafields.custom.material_info | default: '' %}
 {% assign why_buy_raw = product.metafields.custom.why_buy | default: '' %}
-{% assign guarantee = product.metafields.custom.guarantee_text | default: '6 Months Anti-Tarnish Guarantee' %}
 
 {% comment %} ■■ Parse into arrays ■■ {% endcomment %}
 {% assign custom_tags = custom_tags_raw | split: ',' %}
@@ -123,7 +122,6 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
 .hov2-mat--gold { border-color: #FFD54F; background: #FFFDE7; color: #8D6E00; }
 .hov2-mat--copper { border-color: #FFAB91; background: #FBE9E7; color: #BF360C; }
 .hov2-mat--ss { border-color: #B0BEC5; background: #ECEFF1; color: #37474F; }
-.hov2-guarantee { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 5px 12px; border-radius: 8px; background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
 
 /* 5. QUANTITY SELECTOR */
 .hov2-qty-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; width: 100%; }
@@ -311,9 +309,7 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
           injectHTML += '<span class="hov2-mat hov2-mat--ss"><svg class="hov2-mat-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> {{ mDisplay }}</span>';
         {% endif %}
       {% endfor %}
-      injectHTML += '<span class="hov2-guarantee"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> {{ guarantee | escape }}</span></div>';
-    {% else %}
-      injectHTML += '<div class="hov2-materials"><span class="hov2-guarantee"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> {{ guarantee | escape }}</span></div>';
+      injectHTML += '</div>';
     {% endif %}
 
     // Quantity
