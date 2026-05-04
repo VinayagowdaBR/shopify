@@ -1,0 +1,82 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cart": {
+      "type": "cart-template",
+      "blocks": {
+        "83d05d2a-a7c3-4aca-bb9a-cfa429378525": {
+          "type": "sub",
+          "settings": {
+            "save": true,
+            "cl": "#4eaf13"
+          }
+        },
+        "5bd04ffa-93c2-49a3-8eff-31430b95cd8b": {
+          "type": "ship",
+          "settings": {
+            "freeship": true,
+            "shippingTax": true
+          }
+        },
+        "68c3f0ad-5eba-45a0-957d-dff547bef6ba": {
+          "type": "btn",
+          "settings": {
+            "btnst": "btn",
+            "continue": true,
+            "btn-style2": "btn2",
+            "additionalCheckout": false
+          }
+        },
+        "3a55eece-e153-4e04-8a4a-42fcb485cc4f": {
+          "type": "img",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "83d05d2a-a7c3-4aca-bb9a-cfa429378525",
+        "5bd04ffa-93c2-49a3-8eff-31430b95cd8b",
+        "68c3f0ad-5eba-45a0-957d-dff547bef6ba",
+        "3a55eece-e153-4e04-8a4a-42fcb485cc4f"
+      ],
+      "settings": {
+        "layout": "style1",
+        "cart-header": "#f5f5f5",
+        "cart-summery": "#fafafa",
+        "currency_notes": "We processes all orders in [shop.currency]. While the content of your cart is currently displayed in [selected.currency], the checkout will use [shop.currency] at the most current exchange rate.",
+        "shipping_calculator": true,
+        "shipping_calculator_heading": "Get shipping estimates",
+        "shipping_calculator_default_country": "United States",
+        "shipping_calculator_submit_button_label": "Calculate shipping",
+        "shipping_calculator_submit_button_label_disabled": "Calculating...",
+        "btn-style3": "btn"
+      }
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "title": "Recommended Products",
+        "subtitle": "",
+        "section_width": false,
+        "grid": 5,
+        "tablet-grid": 3,
+        "mobile-grid": 2,
+        "limit": "100",
+        "enable_carousel": true,
+        "autoplay": true,
+        "speed": 5
+      }
+    }
+  },
+  "order": [
+    "cart",
+    "recommendations"
+  ]
+}
