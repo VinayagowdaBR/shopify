@@ -64,12 +64,19 @@
 	    </div>
 	  {% endif %}
 	{% else %}
-	  {%- comment -%} Fallback: existing single banner from theme settings {%- endcomment -%}
-	  {% if secSt.clbanner != blank %}
-	    <div class="bgImg pa w_100 h_100 lazyload{% if secSt.clbannerm != blank %} hide-sm{%endif%}" data-bgset="{% render 'bgset', image: secSt.clbanner %}" data-sizes="auto" data-parent-fit="contain"></div>
-	  {% endif %}
-	  {% if secSt.clbannerm != blank %}
-	    <div class="bgImg pa w_100 h_100 lazyload hide-md hide-lg" data-bgset="{% render 'bgset', image: secSt.clbannerm %}" data-sizes="auto" data-parent-fit="contain"></div>
+	  {% if collection.image %}
+	    <img
+	      src="{{ collection.image | image_url: width: 2000 }}"
+	      srcset="{{ collection.image | image_url: width: 800 }} 800w, {{ collection.image | image_url: width: 1200 }} 1200w, {{ collection.image | image_url: width: 2000 }} 2000w"
+	      sizes="100vw"
+	      loading="eager"
+	      alt="{{ collection.title | escape }} banner"
+	      style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;" />
+	  {% elsif secSt.clbanner != blank %}
+	    <div class="bgImg pa w_100 h_100 lazyload{% if secSt.clbannerm != blank %} hide-sm{%endif%}" data-bgset="{% render 'bgset', image: secSt.clbanner %}" data-sizes="auto" data-parent-fit="cover"></div>
+	    {% if secSt.clbannerm != blank %}
+	      <div class="bgImg pa w_100 h_100 lazyload hide-md hide-lg" data-bgset="{% render 'bgset', image: secSt.clbannerm %}" data-sizes="auto" data-parent-fit="cover"></div>
+	    {% endif %}
 	  {% endif %}
 	{% endif %}
 
@@ -80,6 +87,11 @@
 		{% if secSt.bnr_desc != blank %}<div class="clbnDes ttlTxt mb{{secSt.dmbm}} mb{{secSt.dmb}}-md" style="--tcl:{{secSt.dcl}};--tfs:{{secSt.dfs}}px;--tfsm:{{secSt.dfsm}}px;--tlh:{{secSt.dlh}};">{{ secSt.bnr_desc }}</div>{% endif %}
 		{% if secSt.bnr_count != blank %}<div class="heroSaleTime atCounter mb0" style="--cl:{{ secSt.ccl }};--bg:{{ secSt.cbg }};" data-date="{{secSt.bnr_count| date: '%FT%T'}}"><span><span class="tm days">00</span>{{'date_formats.days' | t}}</span><span><span class="tm hours">00</span>{{ 'date_formats.hours' | t }}</span><span><span class="tm minutes">00</span>{{'date_formats.minuts' | t}}</span><span><span class="tm seconds">00</span>{{'date_formats.seconds' | t}}</span></div>{% endif %}
 	</div>
+  <nav class="clBnrBreadcrumb" aria-label="breadcrumbs">
+    <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a>
+    <span class="clBnrBcrSep">›</span>
+    {% if current_tags %}<a href="{{ collection.url }}">{{ collection.title }}</a><span class="clBnrBcrSep">›</span><span>{{ current_tags | join: " + " }}</span>{% else %}<span>{{ collection.title }}</span>{% endif %}
+  </nav>
   </div>
 {% endcapture %}
 
@@ -87,11 +99,13 @@
 {% if secSt.bnr and secSt.banner_position == "top" %}{{collectionBanner}}{% endif %}
 {% if section.settings.hrmenu_pos == "bbn" %}{{ hrmenu }}{% endif %}
   
-{%- if settings.breadcrumb_cl -%}
-  {%- render 'breadcrumb' -%}
-{% else %}
+{%- unless secSt.bnr and secSt.banner_position == "top" -%}
+  {%- if settings.breadcrumb_cl -%}
+    {%- render 'breadcrumb' -%}
+  {%- else -%}
     <div class="topSpace"></div>
-{%- endif -%}
+  {%- endif -%}
+{%- endunless -%}
 
 {%- liquid
 	assign sort_by = collection.sort_by | default: collection.default_sort_by
@@ -414,6 +428,39 @@
   });
 })();
 </script>
+{%- endif -%}
+
+{%- if secSt.bnr -%}
+<style>
+  .clBnrBreadcrumb {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #fff;
+    background: rgba(0,0,0,0.28);
+    padding: 5px 14px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    line-height: 1.5;
+  }
+  .clBnrBreadcrumb a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+  .clBnrBreadcrumb a:hover { color: #fff; }
+  .clBnrBcrSep {
+    color: rgba(255,255,255,0.48);
+    font-size: 11px;
+  }
+</style>
 {%- endif -%}
 
 {% schema %}
