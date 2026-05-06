@@ -1,202 +1,162 @@
 {%- comment -%}
-  HOV Trust Badges Card
-  ---------------------
-  Reusable dark trust-signal card. Mobile-first (2x2 grid),
-  600px+ collapses to a single row of 4. No JS, inline SVGs.
+  HOV Trust Strip
+  ---------------
+  Compact, near-CTA trust signals. Sits directly below
+  Add to Cart / Buy It Now to neutralize the four common
+  jewelry-purchase objections at the moment of decision.
+
+  Visual: ivory bg, brand emerald icons, hairline gold dividers.
+  Mobile-first 4-column row, inline SVGs, no JS.
 
   Usage:  {% render 'hov-trust-badges-card' %}
 {%- endcomment -%}
 
-<aside class="hov-trust-card" aria-label="Why shop with House of Viya">
-  <ul class="hov-trust-card__list" role="list">
-    <li class="hov-trust-card__item">
-      <span class="hov-trust-card__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-          <rect x="2" y="6" width="13" height="11" rx="1"/>
-          <path d="M15 9h4l3 3v5h-7"/>
-          <circle cx="6.5" cy="18" r="1.8"/>
-          <circle cx="17.5" cy="18" r="1.8"/>
+<aside class="hov-trust-strip" aria-label="Why shop with House of Viya">
+  <ul class="hov-trust-strip__list" role="list">
+    <li class="hov-trust-strip__item">
+      <span class="hov-trust-strip__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <path d="M12 3l8 3v6c0 5-3.4 8-8 9-4.6-1-8-4-8-9V6l8-3z"/>
+          <path d="M9 12l2 2 4-4"/>
         </svg>
       </span>
-      <span class="hov-trust-card__title">Free Shipping</span>
-      <span class="hov-trust-card__sub">On orders above &#8377;999</span>
+      <span class="hov-trust-strip__label">Anti-Tarnish</span>
+      <span class="hov-trust-strip__sub">Guarantee</span>
     </li>
 
-    <li class="hov-trust-card__item">
-      <span class="hov-trust-card__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-          <path d="M5 21V4"/>
-          <path d="M5 4h12.5l-2.5 4 2.5 4H5"/>
+    <li class="hov-trust-strip__item">
+      <span class="hov-trust-strip__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <path d="M20 4c-7 1-12 6-13 13 0 1 .5 1.4 1.4 1.4 7-1 11.6-6 11.6-14.4z"/>
+          <path d="M9 16c1.4-3 3.6-5.2 6.6-6.6"/>
         </svg>
       </span>
-      <span class="hov-trust-card__title">Made in India</span>
-      <span class="hov-trust-card__sub">Proudly made in India</span>
+      <span class="hov-trust-strip__label">Skin-Safe</span>
+      <span class="hov-trust-strip__sub">Nickel-Free</span>
     </li>
 
-    <li class="hov-trust-card__item">
-      <span class="hov-trust-card__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-          <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
-          <polyline points="3 21 3 16 8 16"/>
+    <li class="hov-trust-strip__item">
+      <span class="hov-trust-strip__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
           <path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
           <polyline points="21 3 21 8 16 8"/>
+          <path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+          <polyline points="3 21 3 16 8 16"/>
         </svg>
       </span>
-      <span class="hov-trust-card__title">Easy Exchange</span>
-      <span class="hov-trust-card__sub">Hassle-free size exchange</span>
+      <span class="hov-trust-strip__label">7-Day Returns</span>
+      <span class="hov-trust-strip__sub">Hassle-free</span>
     </li>
 
-    <li class="hov-trust-card__item">
-      <span class="hov-trust-card__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" focusable="false">
-          <path d="M12 2.5l2.7 5.9 6.5.6-4.9 4.4 1.5 6.4L12 16.5 6.2 19.8l1.5-6.4L2.8 9l6.5-.6L12 2.5z"/>
+    <li class="hov-trust-strip__item">
+      <span class="hov-trust-strip__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+          <rect x="4" y="11" width="16" height="10" rx="2"/>
+          <path d="M8 11V8a4 4 0 0 1 8 0v3"/>
+          <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/>
         </svg>
       </span>
-      <span class="hov-trust-card__title">4.9 Google Reviews</span>
-      <span class="hov-trust-card__sub">Customer satisfaction</span>
+      <span class="hov-trust-strip__label">Secure Payment</span>
+      <span class="hov-trust-strip__sub">UPI / Razorpay</span>
     </li>
   </ul>
 </aside>
 
 <style>
-  .hov-trust-card-wrap {
-    padding: 28px 16px 8px;
-  }
-  @media (min-width: 750px) {
-    .hov-trust-card-wrap {
-      padding: 36px 20px 14px;
-    }
-  }
-  .hov-trust-card {
-    --htc-bg-1: #08110D;
-    --htc-bg-2: #142A22;
-    --htc-text: #FFFFFF;
-    --htc-sub: rgba(255, 255, 255, 0.62);
-    --htc-gold: #C8B28A;
-    --htc-divider: rgba(200, 178, 138, 0.22);
+  .hov-trust-strip {
+    --hts-bg: #FFFFFF;
+    --hts-border: #E8E1D8;
+    --hts-icon: #0F3B2E;
+    --hts-label: #2E2E2E;
+    --hts-sub: #7A7A7A;
+    --hts-divider: rgba(200, 178, 138, 0.35);
+    --hts-radius: 14px;
     display: block;
-    margin: 0 auto;
-    padding: 18px 14px;
-    background: linear-gradient(135deg, var(--htc-bg-1) 0%, var(--htc-bg-2) 100%);
-    border: 1px solid rgba(200, 178, 138, 0.22);
-    border-radius: 18px;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.30);
-    color: var(--htc-text);
-    position: relative;
-    overflow: hidden;
+    margin: 14px 0 18px;
+    padding: 12px 6px;
+    background: var(--hts-bg);
+    border: 1px solid var(--hts-border);
+    border-radius: var(--hts-radius);
+    box-shadow: 0 4px 14px rgba(15, 59, 46, 0.04);
   }
-  .hov-trust-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(120% 80% at 50% 0%, rgba(200, 178, 138, 0.08), transparent 60%);
-    pointer-events: none;
-  }
-  .hov-trust-card__list {
-    position: relative;
+  .hov-trust-strip__list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
   }
-  .hov-trust-card__item {
+  .hov-trust-strip__item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 12px 8px;
+    gap: 4px;
+    padding: 6px 4px;
     text-align: center;
     position: relative;
-    transition: transform 0.3s ease;
+    transition: transform 0.25s ease;
   }
-  .hov-trust-card__item:nth-child(odd)::after {
+  .hov-trust-strip__item:not(:last-child)::after {
     content: '';
     position: absolute;
-    top: 18%;
-    bottom: 18%;
     right: 0;
+    top: 22%;
+    bottom: 22%;
     width: 1px;
-    background: var(--htc-divider);
+    background: var(--hts-divider);
   }
-  .hov-trust-card__item:nth-child(-n+2)::before {
-    content: '';
-    position: absolute;
-    left: 12%;
-    right: 12%;
-    bottom: 0;
-    height: 1px;
-    background: var(--htc-divider);
-  }
-  .hov-trust-card__icon {
+  .hov-trust-strip__icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    color: var(--htc-text);
-    transition: color 0.25s ease, transform 0.25s ease;
+    width: 28px;
+    height: 28px;
+    color: var(--hts-icon);
+    transition: transform 0.25s ease;
   }
-  .hov-trust-card__title {
-    font-size: 12px;
+  .hov-trust-strip__label {
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.4px;
-    color: var(--htc-text);
-    line-height: 1.3;
-  }
-  .hov-trust-card__sub {
-    font-size: 10.5px;
-    font-weight: 400;
-    color: var(--htc-sub);
-    line-height: 1.4;
+    color: var(--hts-label);
+    line-height: 1.25;
     letter-spacing: 0.2px;
   }
-  .hov-trust-card__item:hover {
-    transform: translateY(-2px);
+  .hov-trust-strip__sub {
+    font-size: 9.5px;
+    font-weight: 400;
+    color: var(--hts-sub);
+    line-height: 1.3;
+    letter-spacing: 0.2px;
   }
-  .hov-trust-card__item:hover .hov-trust-card__icon {
-    color: var(--htc-gold);
-    transform: scale(1.06);
+  .hov-trust-strip__item:hover .hov-trust-strip__icon {
+    transform: scale(1.08);
   }
 
   @media (min-width: 600px) {
-    .hov-trust-card {
-      padding: 22px 18px;
+    .hov-trust-strip {
+      padding: 14px 8px;
     }
-    .hov-trust-card__list {
-      grid-template-columns: repeat(4, 1fr);
+    .hov-trust-strip__item {
+      padding: 8px 6px;
     }
-    .hov-trust-card__item:nth-child(odd)::after,
-    .hov-trust-card__item:nth-child(-n+2)::before {
-      content: none;
+    .hov-trust-strip__icon {
+      width: 30px;
+      height: 30px;
     }
-    .hov-trust-card__item:not(:last-child)::after {
-      content: '';
-      position: absolute;
-      top: 18%;
-      bottom: 18%;
-      right: 0;
-      width: 1px;
-      background: var(--htc-divider);
+    .hov-trust-strip__label {
+      font-size: 12px;
     }
-    .hov-trust-card__item {
-      padding: 10px 12px;
-    }
-    .hov-trust-card__title {
-      font-size: 13px;
-    }
-    .hov-trust-card__sub {
-      font-size: 11.5px;
+    .hov-trust-strip__sub {
+      font-size: 10.5px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hov-trust-card__item,
-    .hov-trust-card__icon {
+    .hov-trust-strip__item,
+    .hov-trust-strip__icon {
       transition: none;
     }
-    .hov-trust-card__item:hover,
-    .hov-trust-card__item:hover .hov-trust-card__icon {
+    .hov-trust-strip__item:hover .hov-trust-strip__icon {
       transform: none;
     }
   }
