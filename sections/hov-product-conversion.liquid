@@ -1,6 +1,9 @@
 {% assign current_product = product %}
 
-<section class="hov-product-conversion" id="hov-product-conversion-{{ section.id }}">
+{%- assign aiui_models = current_product.media | where: 'media_type', 'model' -%}
+{%- assign aiui_has_3d = false -%}
+{%- if aiui_models.size > 0 -%}{%- assign aiui_has_3d = true -%}{%- endif -%}
+<section class="hov-product-conversion aiui-pdp" id="hov-product-conversion-{{ section.id }}" data-aiui-has-3d="{{ aiui_has_3d }}">
 
   <div class="hov-page-width">
 
@@ -38,6 +41,25 @@
               | image_tag: loading: 'lazy', class: 'hov-product-image', alt: current_product.title
             }}
             <div class="hov-zoom-lens" aria-hidden="true"></div>
+
+            {%- if aiui_has_3d -%}
+              {%- assign aiui_first_model = aiui_models | first -%}
+              <div class="aiui-3d-stage" hidden aria-hidden="true">
+                <div class="aiui-3d-mount"
+                     data-model-src="{{ aiui_first_model | model_url }}"
+                     data-poster="{{ current_product.featured_media | image_url: width: 1200 }}"
+                     data-alt="{{ current_product.title | escape }}">
+                </div>
+                <div class="aiui-3d-hint">Drag to rotate · Pinch to zoom</div>
+              </div>
+              <button type="button" class="aiui-3d-toggle" data-aiui-3d-toggle aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/>
+                  <path d="M4 7.5L12 12m0 0l8-4.5M12 12v9"/>
+                </svg>
+                <span class="aiui-3d-toggle-label">View in 3D</span>
+              </button>
+            {%- endif -%}
           </div>
           <div class="hov-zoom-window" aria-hidden="true"></div>
         {% endif %}
@@ -120,6 +142,8 @@
             </button>
           </div>
         {% endform %}
+
+        {% render 'hov-trust-badges-card' %}
 
         <div class="hov-reassurance">
           {% if section.settings.reassurance_1 != blank %}<p>{{ section.settings.reassurance_1 }}</p>{% endif %}

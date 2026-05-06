@@ -5,7 +5,8 @@
    
     {% if secSt.button_link != blank and secSt.link_image %}<a href="{{secSt.button_link}}" class="hero-outer"> {% endif %} 
     
-    <div class="hero fl f-wrap hero-{{ section.id }} wow fadeIn{% if secSt.snow_effect %} falling-snow {{ secSt.snow_style }}{% endif %}" style="--ht:{{secSt.ds_height}}px;--htt:{{secSt.tb_height}}px;--htm:{{secSt.mb_height}}px;">
+    <div class="hero aiui-hero fl f-wrap hero-{{ section.id }} wow fadeIn{% if secSt.snow_effect %} falling-snow {{ secSt.snow_style }}{% endif %}" style="--ht:{{secSt.ds_height}}px;--htt:{{secSt.tb_height}}px;--htm:{{secSt.mb_height}}px;" data-aiui-shader>
+      <div class="aiui-hero__shader" aria-hidden="true"></div>
       {% if secSt.image != blank %}
       <div class="heroImg bgImg pa h_100 w_100 lazyload{% if secSt.parallax_scroll %} parallax{% endif %}{% if secSt.mb_image != blank %} hide-sm{% endif %}"
            data-bgset="{% render 'bgset', image: secSt.image %}" data-sizes="auto" data-parent-fit="contain"
