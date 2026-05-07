@@ -2,6 +2,10 @@
 {% capture siteFooter %}
 <footer class="site-footer{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" role="contentinfo">
 
+  <div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %} hov-trust-card-wrap">
+    {% render 'hov-trust-badges-card' %}
+  </div>
+
   {% if section.blocks.size != 0 %}
   	<div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %}">
   	<div class="footer-top footer-block">
