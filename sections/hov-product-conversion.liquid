@@ -186,6 +186,7 @@
     --hov-muted: #7A7A7A;
     --hov-border: #E8E1D8;
     --hov-bg: #FCFAF7;
+    --hov-sticky-top: 100px;
     background: var(--hov-bg);
     padding: 40px 0 80px;
     box-sizing: border-box;
@@ -571,6 +572,27 @@
     font-weight: 700;
     cursor: pointer;
   }
+  /* Amazon-style sticky gallery — desktop only.
+     Image column sticks while content column scrolls naturally.
+     No height constraints — content controls total section height. */
+  @media (min-width: 990px) {
+    #hov-product-conversion-{{ section.id }} .hov-grid {
+      align-items: start;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-media {
+      position: sticky;
+      top: var(--hov-sticky-top);
+      align-self: start;
+      height: -moz-fit-content;
+      height: fit-content;
+      z-index: 1;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-content {
+      height: auto;
+      overflow: visible;
+    }
+  }
+
   @media screen and (max-width: 989px) {
     #hov-product-conversion-{{ section.id }} {
       padding: 24px 0 60px;

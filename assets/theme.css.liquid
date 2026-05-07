@@ -38,7 +38,7 @@ div.lazyload:before, a.lazyload:before { content:""; display:block; width:50px; 
     .gspace .gitem { padding:var(--grspi); }
 }
 
-html, body { overflow-x:hidden; }
+html, body { overflow-x: hidden; overflow-x: clip; }
 
 {% comment %} /* flickity Common */ {% endcomment %}
 .flickity-enabled{position:relative;display:block; }
@@ -1986,7 +1986,7 @@ body:not(.template-index) .site-footer { margin-top:20px; }
 .footer-bottom a { color:{{settings.footer_bottom_text}}; }
 @media only screen and (max-width:766px){
   .footer-bottom .paymentCall { margin-bottom:15px; order:-1; }
-  body { overflow-x:hidden;}
+  body { overflow-x: hidden; overflow-x: clip; }
 }
 
 #dynamic-checkout-cart ul { display:block !important;}
