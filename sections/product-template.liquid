@@ -11,6 +11,11 @@
     assign product_form_id = 'product-form-' | append: section.id
 	assign featured_img = current_variant.featured_media | default: product.featured_media
 
+    assign has_product_group = false
+    if product.metafields.custom.product_group != blank and product.metafields.custom.product_group.value.size > 0
+        assign has_product_group = true
+    endif
+
     assign zoomImg = '1800x1800'
     assign enable_zoom = settings.enable_zoom
     assign shippingpopup = false
@@ -200,8 +205,8 @@
         {%- when 'title' -%}
             <h1 class="product-single__title ttlTxt {{blkSt.transform}} mb{{blkSt.bm}}" style="--tcl:{{blkSt.cl}};--tfs:{{blkSt.fs}}px;--tfsm:{{blkSt.fsm}}px;--tff:var(--{{blkSt.ff}});--tfw:{{blkSt.fw}};--tlh:1.4;" {{ block.shopify_attributes }}>{{ product.title }}</h1>
         {%- when 'price' -%}
-            {%- if product.metafields.custom.product_group != blank -%}<style>.priceSingle{--pcl:{{blkSt.pcl}};--pcls:{{blkSt.pcls}};--fs:{{blkSt.fs}}px; --fsm:{{blkSt.fsm}}px;--pfw:{{ blkSt.pfw}};}</style>{%- endif -%}
-            {%- unless settings.hide-price or product.metafields.custom.product_group != blank -%}
+            {%- if has_product_group -%}<style>.priceSingle{--pcl:{{blkSt.pcl}};--pcls:{{blkSt.pcls}};--fs:{{blkSt.fs}}px; --fsm:{{blkSt.fsm}}px;--pfw:{{ blkSt.pfw}};}</style>{%- endif -%}
+            {%- unless settings.hide-price or has_product_group -%}
                 {%- liquid
                     assign compareprice = current_variant.compare_at_price
                     assign price = current_variant.price
@@ -368,9 +373,9 @@
                  {%- endif -%}            
               </div>
             {%- endcapture -%}
-          {%- if product.metafields.custom.product_group == blank -%}
+          {%- unless has_product_group -%}
               {{ infoLinks }}
-          {%- endif -%}  
+          {%- endunless -%}
           
         {%- when 'cta' -%}
             {%- liquid
@@ -385,7 +390,7 @@
                         assign show_dynamic_checkout = true
                     endif
                   -%}
-            {%- if product.metafields.custom.product_group != blank -%}
+            {%- if has_product_group -%}
                 {%- render 'products-group', blkSt: blkSt, infoLinks:infoLinks  -%}
             {%- else -%}
                 <div class="db mb{{blkSt.bm}}" {{ block.shopify_attributes }}>

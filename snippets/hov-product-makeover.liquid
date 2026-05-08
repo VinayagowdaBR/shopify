@@ -537,9 +537,11 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
     {% endif %}
 
     // Slash Pricing
+    injectHTML += '<div class="hov2-slash"><span class="hov2-slash-sale">{{ price | money }}</span>';
     {% if on_sale %}
-      injectHTML += '<div class="hov2-slash"><span class="hov2-slash-sale">{{ price | money }}</span><span class="hov2-slash-cmp">{{ compare | money }}</span><span class="hov2-slash-off">{{ pct_off }}% OFF</span><span class="hov2-slash-saved">You save {{ saved | money }}</span></div>';
+      injectHTML += '<span class="hov2-slash-cmp">{{ compare | money }}</span><span class="hov2-slash-off">{{ pct_off }}% OFF</span><span class="hov2-slash-saved">You save {{ saved | money }}</span>';
     {% endif %}
+    injectHTML += '</div>';
 
     // Material Badges
     {% if material_raw != blank %}
