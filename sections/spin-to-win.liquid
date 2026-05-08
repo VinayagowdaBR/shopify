@@ -652,25 +652,7 @@
   // ============================================================
 
   var STORAGE_KEY = 'hov_spin_v1';
-  var COOKIE_KEY  = 'hov_spin_seen';
-  var COOKIE_DAYS = 365;
   var FORCE = /[?&](spin|stw)=1\b/.test(window.location.search) || window.location.hash === '#spin';
-
-  // Cookie helpers — survive when localStorage is blocked / sandboxed
-  // (Safari private, strict tracking protection, theme-editor preview iframe).
-  function readCookie(name) {
-    var safe = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + safe + '=([^;]*)'));
-    return m ? decodeURIComponent(m[1]) : null;
-  }
-  function writeCookie(name, value, days) {
-    try {
-      var d = new Date();
-      d.setTime(d.getTime() + days * 86400000);
-      document.cookie = name + '=' + encodeURIComponent(value) +
-        ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
-    } catch (e) {}
-  }
 
   // Prize table — order MUST match the visual segment order (clockwise from 12 o'clock)
   var PRIZES = [
@@ -691,32 +673,16 @@
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(Object.assign(readState(), patch))); }
     catch (e) {}
   }
-  // Single source of truth: has this visitor already seen / played the wheel?
-  // Either the cookie OR any localStorage flag (`seen` from open, `played` from
-  // a completed spin) is enough to suppress the popup on the next page load.
   function alreadyPlayed() {
     if (FORCE) return false;
-    if (readCookie(COOKIE_KEY) === '1') return true;
-    var s = readState();
-    return s.played === true || s.seen === true;
-  }
-  // Persist the "seen" flag the instant we decide to show the popup —
-  // BEFORE the open delay fires — so a rapid refresh, theme-editor reload,
-  // or back-button navigation in the next few seconds never re-triggers it.
-  function markSeen() {
-    if (FORCE) return;
-    writeCookie(COOKIE_KEY, '1', COOKIE_DAYS);
-    writeState({ seen: true, seenAt: Date.now() });
+    return readState().played === true;
   }
   function markPlayed(idx) {
     if (FORCE) return;
-    writeCookie(COOKIE_KEY, '1', COOKIE_DAYS);
     writeState({ played: true, idx: idx, ts: Date.now() });
   }
   window.HOV_SPIN_RESET = function () {
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
-    // Expire the cookie too so QA can re-test from a clean slate.
-    document.cookie = COOKIE_KEY + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
     location.reload();
   };
 
@@ -766,12 +732,6 @@
     var root = document.getElementById('hovSpin');
     if (!root) return;
     if (alreadyPlayed()) return;
-
-    // Commit "seen" SYNCHRONOUSLY — before the delay fires, before the modal
-    // visually opens. From this point on, no matter how the visitor dismisses
-    // the popup (X, overlay, Escape, refresh, tab close), it will not re-open
-    // on the next page load.
-    markSeen();
 
     var card        = root.querySelector('.hov-spin__card');
     var wheelSvg    = root.querySelector('.hov-spin__wheel');

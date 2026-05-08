@@ -711,6 +711,14 @@
           "bg": "#ffffff",
           "bgg": ""
         }
+      },
+      "spin-to-win": {
+        "type": "spin-to-win",
+        "settings": {
+          "enabled": false,
+          "delay": 5,
+          "exit_intent": true
+        }
       }
     },
     "content_for_index": [],

@@ -28,25 +28,32 @@
       <h2 class="cc-head">{{ section.settings.heading }}</h2>
     {% endif %}
 
-    <div class="cc-row{% if section.settings.desktop_align == 'left' %} align-left{% endif %}">
-      {% for block in section.blocks %}
-        {% assign link = block.settings.link %}
-        <div class="cc-item" {{ block.shopify_attributes }}>
-          {% if link %}<a href="{{ link }}">{% endif %}
-            {% if block.settings.image %}
-              <img
-                src="{{ block.settings.image | image_url: width: 360 }}"
-                width="{{ block.settings.image.width }}"
-                height="{{ block.settings.image.height }}"
-                alt="{{ block.settings.title | escape | default: 'Category' }}"
-                loading="lazy">
-            {% endif %}
-            {% if block.settings.title != blank %}
-              <span class="cc-title">{{ block.settings.title }}</span>
-            {% endif %}
-          {% if link %}</a>{% endif %}
-        </div>
-      {% endfor %}
+    {% assign cc_passes = 1 %}
+    {% if section.settings.auto_scroll %}{% assign cc_passes = 2 %}{% endif %}
+
+    <div class="cc-marquee{% if section.settings.auto_scroll %} cc-marquee--on{% endif %}">
+      <div class="cc-row{% if section.settings.desktop_align == 'left' %} align-left{% endif %}{% if section.settings.auto_scroll %} cc-autoscroll{% endif %}">
+        {% for pass in (1..cc_passes) %}
+          {% for block in section.blocks %}
+            {% assign link = block.settings.link %}
+            <div class="cc-item" {% if forloop.parentloop.first %}{{ block.shopify_attributes }}{% else %}aria-hidden="true"{% endif %}>
+              {% if link %}<a href="{{ link }}"{% unless forloop.parentloop.first %} tabindex="-1"{% endunless %}>{% endif %}
+                {% if block.settings.image %}
+                  <img
+                    src="{{ block.settings.image | image_url: width: 480 }}"
+                    width="{{ block.settings.image.width }}"
+                    height="{{ block.settings.image.height }}"
+                    alt="{{ block.settings.title | escape | default: 'Category' }}"
+                    loading="lazy">
+                {% endif %}
+                {% if block.settings.title != blank %}
+                  <span class="cc-title">{{ block.settings.title }}</span>
+                {% endif %}
+              {% if link %}</a>{% endif %}
+            </div>
+          {% endfor %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </section>
@@ -70,6 +77,33 @@
   #cat-circles-{{ section.id }} .cc-row {
     display: flex;
     gap: var(--cc-gap-desktop);
+  }
+
+  /* Auto-scroll marquee */
+  #cat-circles-{{ section.id }} .cc-marquee { width: 100%; }
+  #cat-circles-{{ section.id }} .cc-marquee--on {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
+  }
+  #cat-circles-{{ section.id }} .cc-autoscroll {
+    flex-wrap: nowrap !important;
+    width: max-content !important;
+    justify-content: flex-start !important;
+    overflow: visible !important;
+    animation: cc-scroll-{{ section.id }} {{ section.settings.scroll_duration | default: 35 }}s linear infinite;
+    will-change: transform;
+  }
+  #cat-circles-{{ section.id }} .cc-marquee--on:hover .cc-autoscroll {
+    animation-play-state: paused;
+  }
+  @keyframes cc-scroll-{{ section.id }} {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #cat-circles-{{ section.id }} .cc-autoscroll { animation: none; }
+    #cat-circles-{{ section.id }} .cc-marquee--on { overflow-x: auto; }
   }
 
   /* Items */
@@ -117,6 +151,13 @@
     }
     #cat-circles-{{ section.id }} .cc-row::-webkit-scrollbar { display: none; }
 
+    /* Auto-scroll on mobile: disable native horizontal scroll, let marquee handle motion */
+    #cat-circles-{{ section.id }} .cc-autoscroll {
+      overflow: visible !important;
+      scroll-snap-type: none !important;
+      padding: 0 !important;
+    }
+
     /* Cell width from items-per-view */
     #cat-circles-{{ section.id }} .cc-item {
       flex-basis: calc(100% / var(--cc-items-mobile));
@@ -126,6 +167,12 @@
       flex-direction: column;
       align-items: center;
     }
+    /* Auto-scroll cells size to image, not viewport fraction */
+    #cat-circles-{{ section.id }} .cc-autoscroll .cc-item {
+      flex-basis: auto;
+      max-width: none;
+      width: var(--cc-mobile-size);
+    }
     /* Image capped by cell width to prevent overflow */
     #cat-circles-{{ section.id }} .cc-item img {
       width: min(100%, var(--cc-mobile-size));
@@ -133,6 +180,9 @@
       aspect-ratio: 1 / 1;
       margin-left: auto;
       margin-right: auto;
+    }
+    #cat-circles-{{ section.id }} .cc-autoscroll .cc-item img {
+      width: var(--cc-mobile-size);
     }
   }
 
@@ -194,8 +244,12 @@
       ]
     },
 
-    { "type": "range", "id": "desktop_size", "label": "Desktop image size (px)", "min": 90, "max": 180, "step": 2, "default": 120 },
-    { "type": "range", "id": "mobile_size",  "label": "Mobile image size (px)",  "min": 60, "max": 160, "step": 2, "default": 90 },
+    { "type": "range", "id": "desktop_size", "label": "Desktop image size (px)", "min": 90, "max": 260, "step": 2, "default": 160 },
+    { "type": "range", "id": "mobile_size",  "label": "Mobile image size (px)",  "min": 60, "max": 200, "step": 2, "default": 110 },
+
+    { "type": "header", "content": "Auto-scroll" },
+    { "type": "checkbox", "id": "auto_scroll", "label": "Auto-scroll (continuous marquee)", "default": true },
+    { "type": "range", "id": "scroll_duration", "label": "Scroll duration (lower = faster)", "min": 15, "max": 90, "step": 5, "default": 35, "unit": "s" },
 
     /* separate gaps */
     { "type": "range", "id": "gap_desktop", "label": "Gap between items (desktop px)", "min": 0, "max": 60, "step": 1, "default": 24 },

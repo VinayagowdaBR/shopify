@@ -152,6 +152,10 @@
   </div>
   {% endif %}
   
+  {% render 'hov-footer-features' %}
+  {% render 'hov-footer-stats' %}
+  {% render 'hov-footer-services' %}
+
   {% if secSt.copyright_text != blank or secSt.show_payment %}
   <div class="footer-bottom">
     <div class="fl f-aic f-jcsb f-col f-row-md{% unless secSt.section_width %} page-width{% else %} fullwidth{% endunless %}">

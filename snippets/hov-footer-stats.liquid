@@ -1,0 +1,228 @@
+{%- comment -%}
+  HOV Footer Stats & Reviews
+  --------------------------
+  Dark green band split into two columns:
+   - Left: 3 KPI tiles (Happy Customers / Customer Rated / Trusted Across India)
+   - Right: "Loved By Our Beautiful Customers" testimonial strip with thumbnails.
+{%- endcomment -%}
+
+<section class="hov-foot-stats" aria-label="House of Viya stats and reviews">
+  <div class="hov-foot-stats__inner">
+
+    <div class="hov-foot-stats__kpis" role="list">
+      <div class="hov-foot-stats__kpi" role="listitem">
+        <span class="hov-foot-stats__kpi-ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#F5EFE0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="11" r="4"/>
+            <path d="M4 26c1-4 4-7 8-7s7 3 8 7"/>
+            <circle cx="22" cy="13" r="3"/>
+            <path d="M19 26c0.6-3 2.4-5 5-5s4.4 2 5 5"/>
+          </svg>
+        </span>
+        <span class="hov-foot-stats__kpi-num">10,000+</span>
+        <span class="hov-foot-stats__kpi-lbl">Happy Customers</span>
+      </div>
+
+      <div class="hov-foot-stats__kpi" role="listitem">
+        <span class="hov-foot-stats__kpi-ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#F5EFE0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="16 5 19.2 12 26.5 12.6 21 17.5 22.7 24.5 16 20.7 9.3 24.5 11 17.5 5.5 12.6 12.8 12"/>
+          </svg>
+        </span>
+        <span class="hov-foot-stats__kpi-num">4.7+</span>
+        <span class="hov-foot-stats__kpi-lbl">Customer Rated</span>
+      </div>
+
+      <div class="hov-foot-stats__kpi" role="listitem">
+        <span class="hov-foot-stats__kpi-ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#F5EFE0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4l10 4v8c0 6-4 10.5-10 12-6-1.5-10-6-10-12V8z"/>
+            <path d="M11 16l3.5 3.5L21 13"/>
+          </svg>
+        </span>
+        <span class="hov-foot-stats__kpi-num">5,000+</span>
+        <span class="hov-foot-stats__kpi-lbl">Trusted<br/>Across India</span>
+      </div>
+    </div>
+
+    <div class="hov-foot-stats__reviews">
+      <div class="hov-foot-stats__rv-head">
+        <p class="hov-foot-stats__rv-stars" aria-label="5 star rating">
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="#E7B96A"><polygon points="8,1 10,6 15,6.4 11.2,9.7 12.4,14.6 8,12 3.6,14.6 4.8,9.7 1,6.4 6,6"/></svg>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="#E7B96A"><polygon points="8,1 10,6 15,6.4 11.2,9.7 12.4,14.6 8,12 3.6,14.6 4.8,9.7 1,6.4 6,6"/></svg>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="#E7B96A"><polygon points="8,1 10,6 15,6.4 11.2,9.7 12.4,14.6 8,12 3.6,14.6 4.8,9.7 1,6.4 6,6"/></svg>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="#E7B96A"><polygon points="8,1 10,6 15,6.4 11.2,9.7 12.4,14.6 8,12 3.6,14.6 4.8,9.7 1,6.4 6,6"/></svg>
+          <svg viewBox="0 0 16 16" width="14" height="14" fill="#E7B96A"><polygon points="8,1 10,6 15,6.4 11.2,9.7 12.4,14.6 8,12 3.6,14.6 4.8,9.7 1,6.4 6,6"/></svg>
+        </p>
+        <p class="hov-foot-stats__rv-quote">
+          &ldquo;Absolutely in love with the quality! It&rsquo;s elegant, and tarnish-free, and perfect for daily wear.&rdquo;
+        </p>
+        <p class="hov-foot-stats__rv-meta">Tap to @houseofviya to get featured</p>
+      </div>
+
+      <p class="hov-foot-stats__rv-title">Loved By Our Beautiful Customers</p>
+
+      <ul class="hov-foot-stats__rv-grid" role="list">
+        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
+        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
+        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
+        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .hov-foot-stats {
+    background: #0B2219;
+    color: #F5EFE0;
+    padding: 28px 16px;
+    border-top: 1px solid rgba(200, 178, 138, 0.18);
+  }
+  .hov-foot-stats__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    gap: 24px;
+    grid-template-columns: 1fr;
+  }
+  .hov-foot-stats__kpis {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    text-align: center;
+    align-content: center;
+  }
+  .hov-foot-stats__kpi {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 6px;
+    position: relative;
+  }
+  .hov-foot-stats__kpi + .hov-foot-stats__kpi::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 22%;
+    bottom: 22%;
+    width: 1px;
+    background: rgba(200, 178, 138, 0.28);
+  }
+  .hov-foot-stats__kpi-ico {
+    color: #F5EFE0;
+    margin-bottom: 4px;
+  }
+  .hov-foot-stats__kpi-num {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #F5EFE0;
+  }
+  .hov-foot-stats__kpi-lbl {
+    font-size: 11px;
+    font-weight: 400;
+    color: rgba(245, 239, 224, 0.72);
+    line-height: 1.3;
+  }
+
+  .hov-foot-stats__reviews {
+    border-top: 1px solid rgba(200, 178, 138, 0.18);
+    padding-top: 18px;
+  }
+  .hov-foot-stats__rv-head {
+    text-align: center;
+  }
+  .hov-foot-stats__rv-stars {
+    margin: 0 0 6px;
+    display: inline-flex;
+    gap: 2px;
+  }
+  .hov-foot-stats__rv-quote {
+    margin: 0 auto 4px;
+    max-width: 360px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: rgba(245, 239, 224, 0.85);
+    font-style: italic;
+  }
+  .hov-foot-stats__rv-meta {
+    margin: 0 0 14px;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    color: rgba(245, 239, 224, 0.5);
+    text-transform: uppercase;
+  }
+  .hov-foot-stats__rv-title {
+    text-align: center;
+    margin: 6px 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: #E7B96A;
+  }
+  .hov-foot-stats__rv-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+  .hov-foot-stats__rv-card {
+    margin: 0;
+  }
+  .hov-foot-stats__rv-thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    background:
+      linear-gradient(135deg, #6b4a37 0%, #8a6346 50%, #c9a884 100%);
+    border: 1px solid rgba(200, 178, 138, 0.25);
+  }
+
+  @media (min-width: 768px) {
+    .hov-foot-stats {
+      padding: 36px 24px;
+    }
+    .hov-foot-stats__inner {
+      grid-template-columns: 1fr 1.4fr;
+      gap: 36px;
+      align-items: center;
+    }
+    .hov-foot-stats__reviews {
+      border-top: 0;
+      border-left: 1px solid rgba(200, 178, 138, 0.18);
+      padding-top: 0;
+      padding-left: 28px;
+    }
+    .hov-foot-stats__kpi-num {
+      font-size: 22px;
+    }
+    .hov-foot-stats__kpi-lbl {
+      font-size: 12px;
+    }
+    .hov-foot-stats__rv-grid {
+      gap: 10px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hov-foot-stats {
+      padding: 44px 32px;
+    }
+    .hov-foot-stats__kpi-num {
+      font-size: 26px;
+    }
+    .hov-foot-stats__rv-title {
+      font-size: 14px;
+    }
+    .hov-foot-stats__rv-quote {
+      font-size: 13px;
+    }
+  }
+</style>
