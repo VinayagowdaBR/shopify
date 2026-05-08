@@ -384,32 +384,55 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
 .hov2-pay--mc { color: #1F1F1F; gap: 4px; }
 .hov2-pay--cod { background: #F1F7F2; color: #0F3B2E; border-color: rgba(15,59,46,0.22); }
 
-/* 10. WHY BUY SECTION — refined typography & spacing */
-.hov2-whybuy {
-  margin-top: 18px;
+/* 10. ABOUT THIS PIECE — unified description + why-you'll-love-it card */
+.hov2-about {
+  margin-top: 20px;
   background: #FAF7F2;
   border: 1px solid #E8E1D8;
-  border-radius: 14px;
-  padding: 16px 18px;
+  border-radius: 16px;
+  padding: 22px 24px;
   width: 100%;
   box-sizing: border-box;
 }
-.hov2-whybuy-title {
+.hov2-about-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8d8579;
+  margin: 0 0 14px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+.hov2-about-desc {
+  font-size: 14px;
+  color: #4a4a4a;
+  line-height: 1.75;
+  margin: 0;
+}
+.hov2-about-desc p { margin: 0 0 10px; }
+.hov2-about-desc p:last-child { margin-bottom: 0; }
+.hov2-about-desc a { color: #0F3B2E; text-decoration: underline; }
+.hov2-about-divider {
+  height: 1px;
+  background: rgba(15,59,46,0.12);
+  margin: 18px 0;
+  border: 0;
+}
+.hov2-about-sub {
   font-size: 14px;
   font-weight: 700;
   color: #0F3B2E;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   display: flex;
   align-items: center;
   gap: 7px;
   letter-spacing: 0.3px;
 }
-.hov2-whybuy-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.hov2-whybuy-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
 .hov2-whybuy-item {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 13px;
+  font-size: 13.5px;
   color: #2E2E2E;
   line-height: 1.55;
   padding: 0;
@@ -419,7 +442,7 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
   height: 16px;
   color: #0F3B2E;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 /* 11. FLOATING BAR */
@@ -628,15 +651,29 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
       '<span class="hov2-pay-icon hov2-pay--mc" title="Mastercard"><svg viewBox="0 0 32 20" width="22" height="14" aria-hidden="true"><circle cx="12" cy="10" r="7.5" fill="#EB001B"/><circle cx="20" cy="10" r="7.5" fill="#F79E1B" fill-opacity="0.92"/></svg></span>' +
       '<span class="hov2-pay-icon hov2-pay--cod" title="Cash on Delivery"><svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="1.5" y="3.5" width="13" height="9" rx="1.5"/><circle cx="8" cy="8" r="2"/></svg>COD</span>' +
     '</div>';
-    {% if why_buy_raw != blank %}
-      afterHTML += '<div class="hov2-whybuy"><div class="hov2-whybuy-title">★ Why you\'ll love it</div><ul class="hov2-whybuy-list">';
-      {% for line in why_buy_lines %}
-        {% assign trimmed = line | strip %}
-        {% if trimmed != blank %}
-          afterHTML += '<li class="hov2-whybuy-item"><svg class="hov2-whybuy-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> {{ trimmed | escape }}</li>';
+    // Unified "About this piece" card — description + why-you'll-love-it bullets
+    {% assign has_desc = false %}
+    {% if product.description != blank %}{% assign has_desc = true %}{% endif %}
+    {% if has_desc or why_buy_raw != blank %}
+      afterHTML += '<div class="hov2-about">';
+      afterHTML += '<div class="hov2-about-title">About this piece</div>';
+      {% if has_desc %}
+        afterHTML += '<div class="hov2-about-desc">' + {{ product.description | json }} + '</div>';
+      {% endif %}
+      {% if why_buy_raw != blank %}
+        {% if has_desc %}
+          afterHTML += '<hr class="hov2-about-divider">';
         {% endif %}
-      {% endfor %}
-      afterHTML += '</ul></div>';
+        afterHTML += '<div class="hov2-about-sub">★ Why you\'ll love it</div><ul class="hov2-whybuy-list">';
+        {% for line in why_buy_lines %}
+          {% assign trimmed = line | strip | replace: '•', '' | replace: '·', '' | replace: '▪', '' | replace: '●', '' | replace: '*', '' | strip %}
+          {% if trimmed != blank %}
+            afterHTML += '<li class="hov2-whybuy-item"><svg class="hov2-whybuy-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg><span>{{ trimmed | escape }}</span></li>';
+          {% endif %}
+        {% endfor %}
+        afterHTML += '</ul>';
+      {% endif %}
+      afterHTML += '</div>';
     {% endif %}
     btnsWrap.insertAdjacentHTML('afterend', afterHTML);
 

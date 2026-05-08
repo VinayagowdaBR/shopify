@@ -148,14 +148,7 @@
           {% if section.settings.reassurance_2 != blank %}<p>{{ section.settings.reassurance_2 }}</p>{% endif %}
         </div>
 
-        {% if current_product.description != blank %}
-          <div class="hov-description">
-            <h3>Description</h3>
-            <div class="hov-description-content">
-              {{ current_product.description }}
-            </div>
-          </div>
-        {% endif %}
+        {%- comment -%} Description is merged into the unified "About this piece" card rendered by hov-product-makeover.liquid {%- endcomment -%}
       </div>
     </div>
   </div>
