@@ -2,9 +2,15 @@
 {% capture siteFooter %}
 <footer class="site-footer{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" role="contentinfo">
 
+  {% render 'hov-footer-features' %}
+    {% render 'hov-footer-stats' %}
+  {% render 'hov-footer-services' %}
+
+  {% comment %}
   <div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %} hov-trust-card-wrap">
     {% render 'hov-trust-badges-card' %}
   </div>
+  {% endcomment %}
 
   {% if section.blocks.size != 0 %}
   	<div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %}">
@@ -151,10 +157,9 @@
       </div>        
   </div>
   {% endif %}
-  
-  {% render 'hov-footer-features' %}
-  {% render 'hov-footer-stats' %}
+  {% comment %}
   {% render 'hov-footer-services' %}
+  {% endcomment %}
 
   {% if secSt.copyright_text != blank or secSt.show_payment %}
   <div class="footer-bottom">
