@@ -209,6 +209,10 @@
   .hov-foot-stats__rv-card {
     margin: 0;
     position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(200, 178, 138, 0.25);
   }
   .hov-foot-stats__rv-link {
     display: block;
@@ -225,23 +229,20 @@
   .hov-foot-stats__rv-img {
     display: block;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 100%;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(200, 178, 138, 0.25);
   }
   .hov-foot-stats__rv-thumb {
     display: block;
     width: 100%;
-    aspect-ratio: 1 / 1;
+    height: 100%;
     border-radius: 8px;
     background:
       linear-gradient(135deg, #6b4a37 0%, #8a6346 50%, #c9a884 100%);
-    border: 1px solid rgba(200, 178, 138, 0.25);
   }
   .hov-foot-stats__rv-thumb--empty {
     background: rgba(245, 239, 224, 0.04);
-    border: 1px dashed rgba(231, 185, 106, 0.35);
     display: flex;
     flex-direction: column;
     align-items: center;
