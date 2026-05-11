@@ -602,6 +602,10 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
     }
 
     // Inject remaining sections after buttons — order: trust, micro-trust, pincode, payments, why buy
+    // Insertion anchor is the reward-points hook when present (so trust lands BELOW it),
+    // otherwise it falls back to the buttons wrapper.
+    var rewardHook = document.getElementById('reward-page-points');
+    var insertAnchor = rewardHook || btnsWrap;
     var afterHTML = '';
 
     // Premium 4-badge trust row directly below CTAs
@@ -675,7 +679,7 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
       {% endif %}
       afterHTML += '</div>';
     {% endif %}
-    btnsWrap.insertAdjacentHTML('afterend', afterHTML);
+    insertAnchor.insertAdjacentHTML('afterend', afterHTML);
 
     // Quantity buttons logic
     var qtyInput = document.getElementById('hov2QtyInput');

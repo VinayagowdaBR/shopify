@@ -141,6 +141,21 @@
               Buy It Now
             </button>
           </div>
+
+          <div
+            id="reward-page-points"
+            class="reward-page-points-container"
+            data-shop-name="{{ shop.domain }}"
+            data-is-logged-in="{% if customer %}true{% else %}false{% endif %}"
+            data-customer-id="{% if customer %}{{ customer.id }}{% else %}null{% endif %}"
+            data-currency-symbol="{{ shop.currency }}"
+            data-theme="{{ settings.theme_style }}"
+            data-product-id="{{ current_product.id }}"
+            data-product-price="{{ current_product.price }}"
+            data-store-name="{{ shop.name }}"
+            data-store-logo="{{ settings.logo }}"
+            data-locale="{{ localization.language.iso_code }}"
+          ></div>
         {% endform %}
 
         <div class="hov-reassurance">

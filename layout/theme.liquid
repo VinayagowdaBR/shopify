@@ -108,6 +108,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     })();
   </script>
   <link rel="stylesheet" href="{{ 'aiui-immersive.css' | asset_url }}" type="text/css" media="all">
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.retenzy.com/assets/extensions/rewardPagePoint.css"
+    type="text/css"
+    media="all"
+  />
+  <script
+    src="https://cdn.retenzy.com/assets/extensions/rewardPagePoint.js"
+    defer></script>
 </head>
 <body id="{{ page_title | handle }}" class="template-{{ template | split: '.' | first }}{% if settings.bodybg_img %} lazyload{% endif %}{%- if isRtl -%} rtl{%- endif -%}"
 	{%- if settings.bodybg_img %} data-bgset="{% render 'bgset', image: settings.bodybg_img %}" data-sizes="auto" data-parent-fit="cover" style="background-image:url('{{ settings.bodybg_img | img_url: '50x50' }});"{%- endif -%}>
