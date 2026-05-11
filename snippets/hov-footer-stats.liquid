@@ -62,11 +62,45 @@
 
       <p class="hov-foot-stats__rv-title">Loved By Our Beautiful Customers</p>
 
+      {%- assign hov_handle = settings.customer_photos_handle | default: '@houseofviya' -%}
+      {%- assign hov_handle_url = settings.customer_photos_handle_url -%}
+
       <ul class="hov-foot-stats__rv-grid" role="list">
-        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
-        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
-        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
-        <li class="hov-foot-stats__rv-card"><span class="hov-foot-stats__rv-thumb" aria-hidden="true"></span></li>
+        {%- for i in (1..4) -%}
+          {%- assign photo_key = 'customer_photo_' | append: i -%}
+          {%- assign url_key = photo_key | append: '_url' -%}
+          {%- assign photo = settings[photo_key] -%}
+          {%- assign photo_url = settings[url_key] | default: hov_handle_url -%}
+
+          <li class="hov-foot-stats__rv-card">
+            {%- if photo != blank -%}
+              {%- if photo_url != blank -%}
+                <a class="hov-foot-stats__rv-link" href="{{ photo_url }}" target="_blank" rel="noopener" aria-label="Customer photo {{ i }}">
+              {%- endif -%}
+              {{ photo | image_url: width: 600 | image_tag:
+                  loading: 'lazy',
+                  class: 'hov-foot-stats__rv-img',
+                  widths: '300,600',
+                  sizes: '(min-width: 768px) 200px, 50vw',
+                  alt: 'House of Viya customer photo'
+              }}
+              {%- if photo_url != blank -%}</a>{%- endif -%}
+            {%- else -%}
+              {%- if hov_handle_url != blank -%}
+                <a class="hov-foot-stats__rv-link hov-foot-stats__rv-thumb hov-foot-stats__rv-thumb--empty" href="{{ hov_handle_url }}" target="_blank" rel="noopener" aria-label="Tag us on Instagram">
+              {%- else -%}
+                <span class="hov-foot-stats__rv-thumb hov-foot-stats__rv-thumb--empty" aria-hidden="true">
+              {%- endif -%}
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 7h3l2-2.5h8L18 7h3v12H3z"/>
+                  <circle cx="12" cy="13" r="4"/>
+                </svg>
+                <span class="hov-foot-stats__rv-thumb-handle">{{ hov_handle }}</span>
+                <span class="hov-foot-stats__rv-thumb-cta">Tag us to be featured</span>
+              {%- if hov_handle_url != blank -%}</a>{%- else -%}</span>{%- endif -%}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
       </ul>
     </div>
 
@@ -174,6 +208,27 @@
   }
   .hov-foot-stats__rv-card {
     margin: 0;
+    position: relative;
+  }
+  .hov-foot-stats__rv-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .hov-foot-stats__rv-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+  .hov-foot-stats__rv-img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(200, 178, 138, 0.25);
   }
   .hov-foot-stats__rv-thumb {
     display: block;
@@ -183,6 +238,39 @@
     background:
       linear-gradient(135deg, #6b4a37 0%, #8a6346 50%, #c9a884 100%);
     border: 1px solid rgba(200, 178, 138, 0.25);
+  }
+  .hov-foot-stats__rv-thumb--empty {
+    background: rgba(245, 239, 224, 0.04);
+    border: 1px dashed rgba(231, 185, 106, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: rgba(245, 239, 224, 0.55);
+    text-align: center;
+    padding: 6px;
+    text-decoration: none;
+    transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+  }
+  a.hov-foot-stats__rv-thumb--empty:hover {
+    border-color: rgba(231, 185, 106, 0.7);
+    color: #E7B96A;
+    background: rgba(231, 185, 106, 0.06);
+  }
+  .hov-foot-stats__rv-thumb-handle {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: #E7B96A;
+    margin-top: 2px;
+  }
+  .hov-foot-stats__rv-thumb-cta {
+    font-size: 9.5px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    opacity: 0.75;
+    line-height: 1.25;
   }
 
   @media (min-width: 768px) {

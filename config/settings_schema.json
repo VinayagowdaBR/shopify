@@ -5260,5 +5260,81 @@
         "default": "#ffffff"
       }
     ]
+  },
+  {
+    "name": "Customer Photos (Footer Strip)",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Upload up to 4 customer photos for the \"Loved By Our Beautiful Customers\" strip in the footer. Empty slots gracefully show a \"Tag us\" placeholder."
+      },
+      {
+        "type": "text",
+        "id": "customer_photos_handle",
+        "label": "Instagram handle (shown in placeholder)",
+        "default": "@houseofviya"
+      },
+      {
+        "type": "url",
+        "id": "customer_photos_handle_url",
+        "label": "Instagram profile URL (placeholder link)"
+      },
+      {
+        "type": "header",
+        "content": "Photo 1"
+      },
+      {
+        "type": "image_picker",
+        "id": "customer_photo_1",
+        "label": "Image"
+      },
+      {
+        "type": "url",
+        "id": "customer_photo_1_url",
+        "label": "Link (optional)"
+      },
+      {
+        "type": "header",
+        "content": "Photo 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "customer_photo_2",
+        "label": "Image"
+      },
+      {
+        "type": "url",
+        "id": "customer_photo_2_url",
+        "label": "Link (optional)"
+      },
+      {
+        "type": "header",
+        "content": "Photo 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "customer_photo_3",
+        "label": "Image"
+      },
+      {
+        "type": "url",
+        "id": "customer_photo_3_url",
+        "label": "Link (optional)"
+      },
+      {
+        "type": "header",
+        "content": "Photo 4"
+      },
+      {
+        "type": "image_picker",
+        "id": "customer_photo_4",
+        "label": "Image"
+      },
+      {
+        "type": "url",
+        "id": "customer_photo_4_url",
+        "label": "Link (optional)"
+      }
+    ]
   }
 ]
