@@ -560,10 +560,7 @@ html.aiui-on .tc.mt10 .btn {
 
 /* ---------- Section background — softer than the cream base ---------- */
 html.aiui-on .aiui-pdp.aiui-pdp {
-  background:
-    radial-gradient(900px 500px at 8% 0%, rgba(184,138,74,.06), transparent 70%),
-    radial-gradient(700px 400px at 92% 30%, rgba(244,216,168,.08), transparent 70%),
-    #FCFAF7 !important;
+  background: #ffffff !important;
 }
 
 /* ---------- Gallery: glass thumbs + smoother main image transition ---------- */
