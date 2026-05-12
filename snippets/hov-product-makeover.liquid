@@ -777,11 +777,11 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
       floatBuy.innerHTML = '★ Loading...';
       fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: parseInt(vid), quantity: qty }) })
         .then(function(r) { return r.json(); })
-        .then(function() { window.location.href = '/checkout'; })
+        .then(function() { window.location.href = 'https://houseofviya.in/cart'; })
         .catch(function() {
           floatBuy.innerHTML = origBuyHTML;
           floatBuy.disabled = false;
-          window.location.href = '/checkout';
+          window.location.href = 'https://houseofviya.in/cart';
         });
     });
   }
