@@ -479,9 +479,10 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
   .hov2-trust-sub { font-size: 9px; }
   .hov2-microtrust { font-size: 11px; gap: 5px; }
   .hov2-slash-sale { font-size: 20px; }
-  .hov2-float-inner { padding: 8px 12px; gap: 8px; }
+  .hov2-float-inner { padding: 8px 10px; gap: 8px; }
   .hov2-float-thumb { width: 36px; height: 36px; }
-  .hov2-float-atc, .hov2-float-buy { padding: 10px 12px; font-size: 12px; }
+  .hov2-float-btns { gap: 6px; }
+  .hov2-float-atc, .hov2-float-buy { padding: 10px 10px; font-size: 12px; max-width: none; flex: 1 1 0; min-width: 0; }
   .hov2-pincode { margin-top: 12px; }
   .hov2-pin-row { max-width: 100%; }
   .hov2-pin-input { padding: 10px 12px; }
@@ -490,6 +491,17 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
   .hov2-pay-icon { padding: 0 9px; min-width: 40px; height: 28px; font-size: 10.5px; }
   .hov2-whybuy { padding: 14px 14px; }
   .hov2-whybuy-item { font-size: 12.5px; }
+}
+@media (max-width: 540px) {
+  .hov2-float-thumb { display: none; }
+  .hov2-float-tag { display: none; }
+  .hov2-float-info { gap: 0; flex: 0 0 auto; min-width: 0; max-width: 38%; }
+  .hov2-float-meta { min-width: 0; }
+  .hov2-float-sale { font-size: 14px; }
+  .hov2-float-cmp, .hov2-float-off { display: none; }
+  .hov2-float-btns { flex: 1 1 auto; gap: 6px; }
+  .hov2-float-atc, .hov2-float-buy { padding: 10px 8px !important; font-size: 12px !important; gap: 4px; }
+  .hov2-float-atc svg, .hov2-float-buy svg { width: 13px !important; height: 13px !important; }
 }
 @media (max-width: 400px) {
   .hov2-float-info { display: none; }
@@ -681,6 +693,14 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
     {% endif %}
     insertAnchor.insertAdjacentHTML('afterend', afterHTML);
 
+    // Relocate "About this piece" card into .hov-media so it renders
+    // below the product image in the left column.
+    var aboutCard = document.querySelector('.hov2-about');
+    var mediaCol = document.querySelector('.hov-media');
+    if (aboutCard && mediaCol && aboutCard.parentElement !== mediaCol) {
+      mediaCol.appendChild(aboutCard);
+    }
+
     // Quantity buttons logic
     var qtyInput = document.getElementById('hov2QtyInput');
     var qtyMinus = document.getElementById('hov2QtyMinus');
@@ -748,7 +768,22 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
         })
         .catch(function() { floatATC.innerHTML = 'Retry'; setTimeout(function() { floatATC.innerHTML = origHTML; floatATC.disabled = false; }, 2000); });
     });
-    floatBuy.addEventListener('click', function() { window.location.href = '/cart/' + ((form && form.querySelector('input[name="id"]')) ? form.querySelector('input[name="id"]').value : VARIANT_ID) + ':1?channel=buy_button'; });
+    floatBuy.addEventListener('click', function(e) {
+      e.preventDefault();
+      var vid = (form && form.querySelector('input[name="id"]')) ? form.querySelector('input[name="id"]').value : VARIANT_ID;
+      var qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
+      floatBuy.disabled = true;
+      var origBuyHTML = floatBuy.innerHTML;
+      floatBuy.innerHTML = '★ Loading...';
+      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: parseInt(vid), quantity: qty }) })
+        .then(function(r) { return r.json(); })
+        .then(function() { window.location.href = '/checkout'; })
+        .catch(function() {
+          floatBuy.innerHTML = origBuyHTML;
+          floatBuy.disabled = false;
+          window.location.href = '/checkout';
+        });
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

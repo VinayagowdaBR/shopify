@@ -285,23 +285,38 @@
     }
   }
   #hov-product-conversion-{{ section.id }} .hov-media {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-rows: auto auto;
     gap: 14px;
-    align-items: flex-start;
     position: relative;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media:not(:has(.hov-thumbnails)) {
+    grid-template-columns: minmax(0, 1fr);
   }
   #hov-product-conversion-{{ section.id }} .hov-thumbnails {
     display: flex;
     flex-direction: column;
-    width: 84px;
-    flex-shrink: 0;
+    width: 100%;
     gap: 12px;
     margin-top: 0;
+    grid-column: 1;
+    grid-row: 1;
   }
   #hov-product-conversion-{{ section.id }} .hov-main-image {
-    flex: 1 1 auto;
+    grid-column: 2;
+    grid-row: 1;
     min-width: 0;
+    width: 100%;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media:not(:has(.hov-thumbnails)) > .hov-main-image {
+    grid-column: 1;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media > .hov2-about {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    margin-top: 6px;
   }
   #hov-product-conversion-{{ section.id }} .hov-thumb {
     padding: 0;
@@ -588,11 +603,9 @@
       align-items: start;
     }
     #hov-product-conversion-{{ section.id }} .hov-media {
-      position: sticky;
-      top: var(--hov-sticky-top);
+      position: relative;
       align-self: start;
-      height: -moz-fit-content;
-      height: fit-content;
+      height: auto;
       z-index: 1;
     }
     #hov-product-conversion-{{ section.id }} .hov-content {
@@ -614,13 +627,26 @@
       gap: 28px;
     }
     #hov-product-conversion-{{ section.id }} .hov-media {
+      display: flex;
       flex-direction: column;
+      grid-template-columns: none;
+      grid-template-rows: none;
     }
     #hov-product-conversion-{{ section.id }} .hov-thumbnails {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       width: 100%;
       margin-top: 14px;
+      grid-column: auto;
+      grid-row: auto;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-main-image {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-media > .hov2-about {
+      grid-column: auto;
+      grid-row: auto;
     }
     #hov-product-conversion-{{ section.id }} .hov-main-image {
       width: 100%;
