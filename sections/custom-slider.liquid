@@ -9,7 +9,14 @@
             <div class="glossy-image-wrapper">
               <picture>
                 <source media="(min-width: 768px)" srcset="{{ block.settings.desktop_banner_image | image_url: width: 1920, format: 'webp', quality: 90 }}">
-                <img src="{{ block.settings.desktop_banner_image | image_url: width: 1920, quality: 90 }}" alt="Desktop Banner" loading="lazy" onerror="this.src='{{ 'fallback-image.jpg' | asset_url }}';">
+                <img
+                  src="{{ block.settings.desktop_banner_image | image_url: width: 1920, format: 'webp', quality: 90 }}"
+                  alt="Desktop Banner"
+                  width="{{ block.settings.desktop_banner_image.width }}"
+                  height="{{ block.settings.desktop_banner_image.height }}"
+                  {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                  decoding="async"
+                  onerror="this.onerror=null; this.style.display='none';">
               </picture>
             </div>
           </a>
@@ -25,7 +32,14 @@
               <div class="glossy-image-wrapper">
                 <picture>
                   <source media="(max-width: 767px)" srcset="{{ mobile_img | image_url: width: 768, format: 'webp', quality: 90 }}">
-                  <img src="{{ mobile_img | image_url: width: 768, quality: 90 }}" alt="Mobile Banner {{ i }}" loading="lazy" onerror="this.src='{{ 'fallback-image.jpg' | asset_url }}';">
+                  <img
+                    src="{{ mobile_img | image_url: width: 768, format: 'webp', quality: 90 }}"
+                    alt="Mobile Banner {{ i }}"
+                    width="{{ mobile_img.width }}"
+                    height="{{ mobile_img.height }}"
+                    {% if forloop.parentloop.first and forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                    decoding="async"
+                    onerror="this.onerror=null; this.style.display='none';">
                 </picture>
               </div>
             </a>

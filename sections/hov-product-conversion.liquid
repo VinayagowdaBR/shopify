@@ -38,7 +38,7 @@
             {{
               current_product.featured_media
               | image_url: width: 1200
-              | image_tag: loading: 'lazy', class: 'hov-product-image', alt: current_product.title
+              | image_tag: loading: 'eager', fetchpriority: 'high', class: 'hov-product-image', alt: current_product.title
             }}
             <div class="hov-zoom-lens" aria-hidden="true"></div>
 
@@ -137,7 +137,15 @@
                 Sold Out
               {% endif %}
             </button>
-            <button type="submit" name="checkout" class="hov-btn hov-btn-secondary" {% unless current_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
+            {%- comment -%}
+              Buy It Now — mirrors the cart page's "Proceed to Checkout" flow.
+              Why: that flow (cart-template.liquid:329) calls `handleFloCheckoutBtn()` and
+              successfully opens Shopflo's checkout. We do the same here, just with an
+              add-to-cart step in front so the product lands in the cart first.
+              `handleFloBuyNowBtn` proved unreliable; `handleFloCheckoutBtn` is the one
+              the cart page already uses in production.
+            {%- endcomment -%}
+            <button type="button" id="hov-buy-it-now-btn" class="hov-btn hov-btn-secondary" {% unless current_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
               Buy It Now
             </button>
           </div>
@@ -688,6 +696,44 @@
   (function () {
     var root = document.getElementById('hov-product-conversion-{{ section.id }}');
     if (!root) return;
+
+    // Buy It Now: add the variant, then trigger Shopflo via the same function
+    // the cart page's "Proceed to Checkout" button uses (handleFloCheckoutBtn).
+    var hovBuyBtn = root.querySelector('#hov-buy-it-now-btn');
+    var hovForm = root.querySelector('.hov-product-form');
+    if (hovBuyBtn && hovForm) {
+      hovBuyBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var sel = hovForm.querySelector('select[name="id"]');
+        var hidden = hovForm.querySelector('input[name="id"]');
+        var vid = (sel && sel.value) || (hidden && hidden.value);
+        var qtyInput = hovForm.querySelector('input[name="quantity"]');
+        var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+        if (!vid) return;
+        hovBuyBtn.disabled = true;
+        var origText = hovBuyBtn.textContent;
+        hovBuyBtn.textContent = 'Loading...';
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: parseInt(vid, 10), quantity: qty })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function () {
+            if (typeof window.handleFloCheckoutBtn === 'function') {
+              window.handleFloCheckoutBtn();
+            } else {
+              console.error('[hov] handleFloCheckoutBtn not available — Shopflo bundle did not load.');
+              hovBuyBtn.textContent = origText;
+              hovBuyBtn.disabled = false;
+            }
+          })
+          .catch(function () {
+            hovBuyBtn.textContent = origText;
+            hovBuyBtn.disabled = false;
+          });
+      });
+    }
 
     try {
       var variantData = JSON.parse(document.getElementById('hov-variants-{{ section.id }}').textContent);

@@ -750,10 +750,23 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
       }
     }, { passive: true });
 
+    // Resolve the currently-selected variant id.
+    // Why: the form has a <select name="id"> (user pick) AND a hidden <input name="id"> (default).
+    // querySelector('input[name="id"]') would return the hidden input and ignore the dropdown choice.
+    function getSelectedVariantId() {
+      if (form) {
+        var sel = form.querySelector('select[name="id"]');
+        if (sel && sel.value) return sel.value;
+        var hidden = form.querySelector('input[name="id"]');
+        if (hidden && hidden.value) return hidden.value;
+      }
+      return VARIANT_ID;
+    }
+
     // Floating add to cart
     floatATC.addEventListener('click', function(e) {
       e.preventDefault();
-      var vid = (form && form.querySelector('input[name="id"]')) ? form.querySelector('input[name="id"]').value : VARIANT_ID;
+      var vid = getSelectedVariantId();
       var qty = qtyInput ? qtyInput.value : 1;
       floatATC.disabled = true;
       var origHTML = floatATC.innerHTML;
@@ -768,20 +781,35 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
         })
         .catch(function() { floatATC.innerHTML = 'Retry'; setTimeout(function() { floatATC.innerHTML = origHTML; floatATC.disabled = false; }, 2000); });
     });
+    // Floating Buy Now: add the variant, then trigger Shopflo via the same
+    // function the cart page's "Proceed to Checkout" button uses
+    // (handleFloCheckoutBtn — see sections/cart-template.liquid:329).
     floatBuy.addEventListener('click', function(e) {
       e.preventDefault();
-      var vid = (form && form.querySelector('input[name="id"]')) ? form.querySelector('input[name="id"]').value : VARIANT_ID;
+      var vid = getSelectedVariantId();
       var qty = qtyInput ? (parseInt(qtyInput.value) || 1) : 1;
+      if (!vid) return;
       floatBuy.disabled = true;
       var origBuyHTML = floatBuy.innerHTML;
       floatBuy.innerHTML = '★ Loading...';
-      fetch('/cart/add.js', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: parseInt(vid), quantity: qty }) })
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(vid), quantity: qty })
+      })
         .then(function(r) { return r.json(); })
-        .then(function() { window.location.href = 'https://houseofviya.in/cart'; })
+        .then(function() {
+          if (typeof window.handleFloCheckoutBtn === 'function') {
+            window.handleFloCheckoutBtn();
+          } else {
+            console.error('[hov] handleFloCheckoutBtn not available — Shopflo bundle did not load.');
+            floatBuy.innerHTML = origBuyHTML;
+            floatBuy.disabled = false;
+          }
+        })
         .catch(function() {
           floatBuy.innerHTML = origBuyHTML;
           floatBuy.disabled = false;
-          window.location.href = 'https://houseofviya.in/cart';
         });
     });
   }
