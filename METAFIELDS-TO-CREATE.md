@@ -44,15 +44,38 @@ If they don't exist and you're not using legacy sections, ignore them.
 
 ---
 
+## New "Extras" sections metafields (below product info)
+
+These five drive the full-width sections rendered **below the product image + buy buttons** in `sections/hov-product-conversion.liquid`. Each section appears only when its metafield has a value — leave any blank to hide that section.
+
+| # | Namespace | Key | Type | Sample value | What it renders |
+|---|-----------|-----|------|--------------|-----------------|
+| 6 | `custom` | `product_highlights` | Multi-line text | `Versatile Style \| Pairs with both ethnic and western outfits`<br>`Lightweight Feel \| Comfortable for all-day wear`<br>`Adjustable Fit \| Fits all body types comfortably` | Card grid below the product. **One highlight per line**, format: `Title \| Description`. The pipe `\|` separates title from description; description is optional. Each card is auto-numbered (01, 02, …). |
+| 7 | `custom` | `styling_tips` | Multi-line text | `Pair with a saree for traditional events.`<br>`Layer over a kurta for festive looks.`<br>`Wear over a plain top + jeans for everyday glam.` | Free-form prose. Each newline becomes a paragraph break. |
+| 8 | `custom` | `material_care` | Multi-line text | `Material: 18K Gold Plated on 304 Stainless Steel.`<br>`Care: Wipe with a soft dry cloth after wear.`<br>`Avoid contact with water, perfume, and chemicals.` | Free-form prose. Newlines = paragraph breaks. |
+| 9 | `custom` | `box_contents` | Multi-line text | `1 × Karnatbelt`<br>`Premium gift box`<br>`Care card`<br>`Authenticity certificate` | Two-column checklist. **One item per line.** Each item gets a green tick icon. |
+| 10 | `custom` | `pro_tip` | Single line text | `Store in the gift box when not worn to maintain shine.` | Cream-coloured banner with a "PRO TIP" pill. |
+
+### Settings to use for the extras definitions
+
+- **Name:** human-readable (e.g. "Product highlights", "Styling tips", "Material & care", "Box contents", "Pro tip")
+- **Namespace and key:** `custom.<key>` as listed above
+- **Type:** as listed in the table
+- **Storefronts:** ✅ enabled
+- **One value / List of values:** **One value** (newline parsing happens in Liquid)
+
+---
+
 ## After creating
 
 1. Open any product → scroll to the **Metafields** card at the bottom of the product editor.
-2. Fill in values for the five active metafields above (per product — they're not bulk-defaultable).
+2. Fill in values for the metafields you want to use (per product — they're not bulk-defaultable).
 3. Reload the PDP on the storefront. Each metafield with a value will appear; blank ones stay hidden (except `guarantee_text`, which falls back to the section default).
 
 ## Sanity check before going live
 
-- [ ] All five metafield definitions show "Storefront access: enabled"
+- [ ] All metafield definitions show "Storefront access: enabled"
 - [ ] At least one product has each metafield filled in
 - [ ] PDP renders the tags row, subtitle, material badges, why-buy box, and top guarantee badge
+- [ ] PDP renders the new extras sections (highlights cards, styling, material/care, box list, pro tip)
 - [ ] No duplicate guarantee pill below the price (see Q2 deletion task)

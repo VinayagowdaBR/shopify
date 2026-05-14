@@ -3,6 +3,34 @@
 {%- assign aiui_models = current_product.media | where: 'media_type', 'model' -%}
 {%- assign aiui_has_3d = false -%}
 {%- if aiui_models.size > 0 -%}{%- assign aiui_has_3d = true -%}{%- endif -%}
+
+{%- comment -%}
+  === Extras sections data resolution ===
+  Priority: per-product metafield → section default → hidden.
+  Each section is gated by its own show_extras_* checkbox in section settings.
+{%- endcomment -%}
+{%- assign hov_highlights_mf = current_product.metafields.custom.product_highlights | default: '' -%}
+{%- assign hov_styling_mf    = current_product.metafields.custom.styling_tips      | default: '' -%}
+{%- assign hov_material_mf   = current_product.metafields.custom.material_care     | default: '' -%}
+{%- assign hov_box_mf        = current_product.metafields.custom.box_contents      | default: '' -%}
+{%- assign hov_protip_mf     = current_product.metafields.custom.pro_tip           | default: '' -%}
+
+{%- if hov_highlights_mf != blank -%}{%- assign hov_highlights_raw = hov_highlights_mf -%}{%- else -%}{%- assign hov_highlights_raw = section.settings.default_highlights | default: '' -%}{%- endif -%}
+{%- if hov_styling_mf    != blank -%}{%- assign hov_styling_raw    = hov_styling_mf    -%}{%- else -%}{%- assign hov_styling_raw    = section.settings.default_styling_tips  | default: '' -%}{%- endif -%}
+{%- if hov_material_mf   != blank -%}{%- assign hov_material_raw   = hov_material_mf   -%}{%- else -%}{%- assign hov_material_raw   = section.settings.default_material_care | default: '' -%}{%- endif -%}
+{%- if hov_box_mf        != blank -%}{%- assign hov_box_raw        = hov_box_mf        -%}{%- else -%}{%- assign hov_box_raw        = section.settings.default_box_contents  | default: '' -%}{%- endif -%}
+{%- if hov_protip_mf     != blank -%}{%- assign hov_protip_raw     = hov_protip_mf     -%}{%- else -%}{%- assign hov_protip_raw     = section.settings.default_pro_tip       | default: '' -%}{%- endif -%}
+
+{%- unless section.settings.show_extras_highlights -%}{%- assign hov_highlights_raw = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_styling    -%}{%- assign hov_styling_raw    = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_material   -%}{%- assign hov_material_raw   = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_box        -%}{%- assign hov_box_raw        = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_protip     -%}{%- assign hov_protip_raw     = '' -%}{%- endunless -%}
+
+{%- assign hov_has_extras = false -%}
+{%- if hov_highlights_raw != blank or hov_styling_raw != blank or hov_material_raw != blank or hov_box_raw != blank or hov_protip_raw != blank -%}
+  {%- assign hov_has_extras = true -%}
+{%- endif -%}
 <section class="hov-product-conversion aiui-pdp" id="hov-product-conversion-{{ section.id }}" data-aiui-has-3d="{{ aiui_has_3d }}">
 
   <div class="hov-page-width">
@@ -42,6 +70,18 @@
             }}
             <div class="hov-zoom-lens" aria-hidden="true"></div>
 
+            {%- if settings.enable_wishlist -%}
+              <a
+                class="btn wishlist addto-wishlist hov-pdp-wishlist"
+                href="{{ pages[settings.wishlist_page].url }}"
+                rel="{{ current_product.handle | handleize }}"
+                aria-label="{{ 'products.wishlist.add_to' | t }}"
+              >
+                <i class="at at-heart-l" aria-hidden="true"></i>
+                <span class="tooltip-label">{{ 'products.wishlist.add_to' | t }}</span>
+              </a>
+            {%- endif -%}
+
             {%- if aiui_has_3d -%}
               {%- assign aiui_first_model = aiui_models | first -%}
               <div class="aiui-3d-stage" hidden aria-hidden="true">
@@ -67,6 +107,18 @@
 
       <div class="hov-content">
         <h1 class="hov-title">{{ current_product.title }}</h1>
+
+        <link rel="stylesheet" href="https://cdn.retenzy.com/assets/extensions/rating.css" type="text/css" media="all" />
+        <script src="https://cdn.retenzy.com/assets/extensions/rating.js" defer></script>
+        <div
+          class="retenzy-rating"
+          data-product-id="{{ current_product.id }}"
+          data-shop-name="{{ shop.domain }}"
+          data-total-rating="{{ current_product.metafields.thevital.cf_total_review.value }}"
+          data-avg-rating="{{ current_product.metafields.thevital.cf_average_rating.value }}"
+          data-locale="{{ request.locale.iso_code }}"
+          data-size="large">
+        </div>
 
         {%- if section.settings.show_guarantee_badge -%}
           {%- assign guarantee_label = product.metafields.custom.guarantee_text | default: section.settings.guarantee_badge_text -%}
@@ -174,6 +226,83 @@
         {%- comment -%} Description is merged into the unified "About this piece" card rendered by hov-product-makeover.liquid {%- endcomment -%}
       </div>
     </div>
+
+    {%- if hov_has_extras -%}
+      <div class="hov-extras">
+
+        {%- if hov_highlights_raw != blank -%}
+          {%- assign hov_highlight_lines = hov_highlights_raw | newline_to_br | split: '<br />' -%}
+          <section class="hov-extras-section hov-extras-highlights">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> Product Highlights</h2>
+            <div class="hov-extras-highlights-grid">
+              {%- for line in hov_highlight_lines -%}
+                {%- assign clean = line | strip | replace: '<br>', '' | replace: '<br/>', '' | strip -%}
+                {%- if clean != blank -%}
+                  {%- assign parts = clean | split: '|' -%}
+                  {%- assign h_title = parts[0] | strip -%}
+                  {%- assign h_desc  = parts[1] | strip -%}
+                  <div class="hov-extras-card">
+                    <div class="hov-extras-card-num">0{{ forloop.index }}</div>
+                    <h3 class="hov-extras-card-title">{{ h_title }}</h3>
+                    {%- if h_desc != blank -%}
+                      <p class="hov-extras-card-desc">{{ h_desc }}</p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_styling_raw != blank -%}
+          <section class="hov-extras-section hov-extras-styling">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> Style It Your Way</h2>
+            <div class="hov-extras-prose">{{ hov_styling_raw | newline_to_br }}</div>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_material_raw != blank -%}
+          <section class="hov-extras-section hov-extras-material">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> Material &amp; Care</h2>
+            <div class="hov-extras-prose">{{ hov_material_raw | newline_to_br }}</div>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_box_raw != blank -%}
+          {%- assign hov_box_lines = hov_box_raw | newline_to_br | split: '<br />' -%}
+          <section class="hov-extras-section hov-extras-box">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> What's In The Box</h2>
+            <ul class="hov-extras-box-list">
+              {%- for line in hov_box_lines -%}
+                {%- assign item = line | strip | replace: '<br>', '' | replace: '<br/>', '' | replace: '•', '' | replace: '·', '' | strip -%}
+                {%- if item != blank -%}
+                  <li class="hov-extras-box-item">
+                    <svg class="hov-extras-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span>{{ item }}</span>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_protip_raw != blank -%}
+          <aside class="hov-extras-protip" role="note">
+            <div class="hov-extras-protip-tag">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M9 18h6m-3-2v2M8 14a5 5 0 1 1 8 0c-.7.8-1 1.5-1 2.5V18H9v-1.5c0-1-.3-1.7-1-2.5z"/>
+              </svg>
+              Pro Tip
+            </div>
+            <p class="hov-extras-protip-text">{{ hov_protip_raw }}</p>
+          </aside>
+        {%- endif -%}
+
+      </div>
+    {%- endif -%}
+
   </div>
 
   <div class="hov-sticky-bar">
@@ -260,6 +389,36 @@
     visibility: hidden;
     transition: opacity 120ms ease;
     z-index: 5;
+  }
+
+  /* PDP wishlist heart — overlay on top-right of the main image */
+  #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    z-index: 6;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    box-shadow: 0 4px 14px rgba(15, 59, 46, 0.12) !important;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist .at {
+    font-size: 18px !important;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist:hover {
+    transform: scale(1.06);
+  }
+  @media (max-width: 749px) {
+    #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist {
+      top: 12px !important;
+      right: 12px !important;
+      width: 42px !important;
+      height: 42px !important;
+      min-width: 42px !important;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist .at {
+      font-size: 16px !important;
+    }
   }
   #hov-product-conversion-{{ section.id }} .hov-zoom-window {
     position: absolute;
@@ -676,6 +835,312 @@
       display: block;
     }
   }
+
+  /* ============================================================
+     EXTRAS — Product Highlights · Styling · Material & Care
+              · What's in the Box · Pro Tip
+     ============================================================ */
+  #hov-product-conversion-{{ section.id }} .hov-extras {
+    margin-top: 56px;
+    display: grid;
+    gap: 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-section {
+    background: #FAF7F2;
+    border: 1px solid var(--hov-border);
+    border-radius: 20px;
+    padding: 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--hov-gold), transparent);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--hov-emerald);
+    letter-spacing: 0.4px;
+    margin: 0 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-mark {
+    color: var(--hov-gold);
+    font-size: 22px;
+    line-height: 1;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-prose {
+    font-size: 15px;
+    color: #3a3a3a;
+    line-height: 1.8;
+    letter-spacing: 0.1px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-prose p {
+    margin: 0 0 12px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Product Highlights — card grid */
+  #hov-product-conversion-{{ section.id }} .hov-extras-highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card {
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 14px;
+    padding: 22px 20px 20px;
+    position: relative;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(15, 59, 46, 0.08);
+    border-color: rgba(200, 178, 138, 0.6);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--hov-gold);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--hov-charcoal);
+    margin: 0 0 6px;
+    letter-spacing: 0.2px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card-desc {
+    font-size: 13.5px;
+    color: var(--hov-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* What's In The Box — checklist */
+  #hov-product-conversion-{{ section.id }} .hov-extras-box-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-box-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14.5px;
+    color: var(--hov-charcoal);
+    line-height: 1.5;
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-box-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--hov-emerald);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Pro Tip — accent banner */
+  #hov-product-conversion-{{ section.id }} .hov-extras-protip {
+    background: linear-gradient(135deg, #FFF8E8 0%, #FAF1DC 100%);
+    border: 1px solid rgba(200, 178, 138, 0.5);
+    border-radius: 18px;
+    padding: 22px 28px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    box-shadow: 0 4px 18px rgba(200, 178, 138, 0.18);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-protip-tag {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--hov-emerald);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-protip-tag svg {
+    width: 14px;
+    height: 14px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-protip-text {
+    font-size: 14.5px;
+    color: #4a4332;
+    line-height: 1.65;
+    margin: 0;
+    align-self: center;
+  }
+
+  /* Extras — Mobile */
+  @media (max-width: 749px) {
+    #hov-product-conversion-{{ section.id }} .hov-extras {
+      margin-top: 32px;
+      gap: 16px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-section {
+      padding: 22px 18px;
+      border-radius: 16px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-title {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-highlights-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-box-list {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-protip {
+      flex-direction: column;
+      gap: 12px;
+      padding: 18px 20px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-prose {
+      font-size: 14px;
+    }
+  }
+
+  /* ============================================================
+     PREMIUM FAQ OVERRIDE — applies to the plain hov-faq-wrapper
+     accordion rendered from templates/product.json (custom_liquid).
+     Selectors use `body` prefix to win specificity over the
+     embedded inline styles in the custom_liquid block.
+     ============================================================ */
+  body .hov-faq-wrapper {
+    max-width: 1280px;
+    margin: 56px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  body .hov-faq-wrapper::before {
+    content: "✦  Frequently Asked Questions";
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #C8B28A;
+    letter-spacing: 2.8px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  body .hov-faq-wrapper .hov-accordion {
+    background: #FAF7F2;
+    border: 1px solid #E8E1D8;
+    border-radius: 20px;
+    padding: 8px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  body .hov-faq-wrapper .hov-accordion::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #C8B28A, transparent);
+  }
+  body .hov-faq-wrapper .hov-accordion-item {
+    border-bottom: 1px solid rgba(15, 59, 46, 0.08);
+  }
+  body .hov-faq-wrapper .hov-accordion-item:last-child {
+    border-bottom: none;
+  }
+  body .hov-faq-wrapper .hov-accordion-header {
+    padding: 22px 4px;
+    font-family: inherit;
+    font-size: 15px;
+    color: #0F3B2E;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    transition: color 0.25s ease;
+    cursor: pointer;
+  }
+  body .hov-faq-wrapper .hov-accordion-header:hover {
+    color: #8a7548;
+  }
+  body .hov-faq-wrapper .hov-accordion-item.active .hov-accordion-header {
+    color: #8a7548;
+  }
+  body .hov-faq-wrapper .hov-chevron {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #E8E1D8;
+    color: #0F3B2E;
+    font-size: 13px;
+    transition: transform 0.4s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  body .hov-faq-wrapper .hov-accordion-item.active .hov-chevron {
+    background: #0F3B2E;
+    color: #fff;
+    border-color: #0F3B2E;
+  }
+  body .hov-faq-wrapper .hov-accordion-content p {
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.85;
+    color: #4a4a4a;
+    margin: 0 0 22px;
+    padding-right: 40px;
+  }
+  @media (max-width: 749px) {
+    body .hov-faq-wrapper {
+      margin: 32px auto;
+    }
+    body .hov-faq-wrapper::before {
+      font-size: 10px;
+      letter-spacing: 2.2px;
+      margin-bottom: 12px;
+    }
+    body .hov-faq-wrapper .hov-accordion {
+      padding: 4px 20px;
+      border-radius: 16px;
+    }
+    body .hov-faq-wrapper .hov-accordion-header {
+      font-size: 15px;
+      padding: 18px 4px;
+    }
+    body .hov-faq-wrapper .hov-accordion-content p {
+      font-size: 13.5px;
+      padding-right: 8px;
+      margin-bottom: 18px;
+    }
+  }
 </style>
 
 {% render 'hov-product-makeover' %}
@@ -984,6 +1449,77 @@
       "id": "reassurance_2",
       "label": "Reassurance line 2",
       "default": "Premium design with a pocket-friendly price"
+    },
+
+    {
+      "type": "header",
+      "content": "Extras — full-width sections below the product"
+    },
+    {
+      "type": "paragraph",
+      "content": "Per-product overrides live in product metafields (custom.product_highlights, custom.styling_tips, custom.material_care, custom.box_contents, custom.pro_tip). The defaults below show whenever a product has no metafield value."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_highlights",
+      "label": "Show Product Highlights",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_highlights",
+      "label": "Default highlights",
+      "info": "One per line, format: Title | Description",
+      "default": "Versatile Style | Pairs with both ethnic and western outfits\nLightweight Feel | Comfortable for all-day wear\nAdjustable Fit | Fits all body types comfortably"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_styling",
+      "label": "Show Style It Your Way",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_styling_tips",
+      "label": "Default styling tips",
+      "default": "Pair with a saree for traditional events.\nLayer over a kurta for festive looks.\nWear over a plain top + jeans for everyday glam."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_material",
+      "label": "Show Material & Care",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_material_care",
+      "label": "Default material & care",
+      "default": "Material: 18K Gold Plated on 304 Stainless Steel.\nCare: Wipe with a soft dry cloth after wear.\nAvoid contact with water, perfume, and chemicals."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_box",
+      "label": "Show What's In The Box",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_box_contents",
+      "label": "Default box contents",
+      "info": "One item per line",
+      "default": "1 × Jewellery piece\nPremium gift box\nCare instructions card\nAuthenticity certificate"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_protip",
+      "label": "Show Pro Tip",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "default_pro_tip",
+      "label": "Default pro tip",
+      "default": "Store in the gift box when not worn to maintain shine."
     }
   ],
   "presets": [

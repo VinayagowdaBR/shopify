@@ -51,6 +51,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   {%- capture mainjs -%}
   	{%- render 'head-css', isRtl:isRtl -%}
   	<link rel="stylesheet" href="{% if isRtl %}{{ 'themeRtl.css' | asset_url }}{% else %}{{ 'theme.css' | asset_url }}{% endif %}" type="text/css" media="all">
+  	{%- render 'hov-wishlist-heart' -%}
+  	{%- render 'hov-nav-premium' -%}
+  	{%- render 'hov-cart-premium' -%}
     <script src="{{ 'lazysizes.js' | asset_url }}" async></script>
   	<script src="{{ 'jquery.min.js' | asset_url }}"defer="defer"></script>
 	<script>
