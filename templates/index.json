@@ -12,20 +12,12 @@
     "custom_slider_Je3QqT": {
       "type": "custom-slider",
       "blocks": {
-        "banner_EzNt8N": {
+        "banner_J3wLk7": {
           "type": "banner",
           "settings": {
-            "desktop_banner_image": "shopify://shop_images/Add_a_heading_78.png",
-            "mobile_banner_image_1": "shopify://shop_images/Untitled_design_81.png",
-            "banner_link": "shopify://collections/all"
-          }
-        },
-        "banner_cMyHNx": {
-          "type": "banner",
-          "settings": {
-            "desktop_banner_image": "shopify://shop_images/Add_a_heading_79.png",
-            "mobile_banner_image_1": "shopify://shop_images/Untitled_design_80_234c54ba-7b16-43b0-a747-d9de7e74ee45.png",
-            "banner_link": "shopify://collections/all"
+            "desktop_banner_image": "shopify://shop_images/ChatGPT_Image_Apr_30_2026_11_34_12_PM.png",
+            "mobile_banner_image_1": "shopify://shop_images/Bracelet.png",
+            "banner_link": ""
           }
         },
         "banner_Qgxa8D": {
@@ -37,8 +29,7 @@
         }
       },
       "block_order": [
-        "banner_EzNt8N",
-        "banner_cMyHNx",
+        "banner_J3wLk7",
         "banner_Qgxa8D"
       ],
       "name": "Custom Slider",
@@ -47,14 +38,6 @@
     "collection_list2_WmEYG6": {
       "type": "collection-list2",
       "blocks": {
-        "item_Tqg8EF": {
-          "type": "item",
-          "settings": {
-            "image": "shopify://shop_images/ChatGPT_Image_May_7_2026_01_01_18_PM.png",
-            "title": "Anklets",
-            "link": "shopify://collections/anklets"
-          }
-        },
         "item_YnYXFc": {
           "type": "item",
           "settings": {
@@ -97,6 +80,7 @@
         },
         "item_zHtaMk": {
           "type": "item",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_11.23.58_PM.jpg",
             "title": "Chains",
@@ -122,7 +106,6 @@
         }
       },
       "block_order": [
-        "item_Tqg8EF",
         "item_YnYXFc",
         "item_PAzzm4",
         "item_8wrcVT",
@@ -147,15 +130,13 @@
         "ring_width": 2,
         "rim_size": 2,
         "title_case": "capitalize",
-        "title_font_size": 15,
+        "title_font_size": 14,
         "desktop_align": "center",
-        "desktop_size": 180,
-        "mobile_size": 120,
-        "gap_desktop": 28,
-        "gap_mobile": 16,
+        "desktop_size": 130,
+        "mobile_size": 90,
+        "gap_desktop": 16,
+        "gap_mobile": 10,
         "items_mobile": "4",
-        "auto_scroll": true,
-        "scroll_duration": 35,
         "padding_desktop": "16px 24px 16px",
         "margin_desktop": "0",
         "padding_mobile": "0px 8px 8px",

@@ -1,0 +1,195 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "page": {
+      "type": "page-template",
+      "disabled": true,
+      "settings": {
+        "section_width": false,
+        "hide_hdft": false,
+        "breadcrumb": false,
+        "bnr": false,
+        "bheight": 300,
+        "bheightipad": 200,
+        "bheightmob": 100,
+        "bnr-wd": 600,
+        "show_collection_name": false,
+        "ftTtl": 42,
+        "ftTtlm": 20,
+        "ttlft": "font2",
+        "ttlwt": "fw-700",
+        "ttlcase": "tt-u",
+        "ftTxt": 15,
+        "ttlclr": "#000000",
+        "clr_bg": "#f5f5f5",
+        "width": 1200,
+        "hide_ttl": false
+      }
+    },
+    "banner_with_text_xQUatr": {
+      "type": "banner-with-text",
+      "blocks": {
+        "row_eAik8G": {
+          "type": "row",
+          "disabled": true,
+          "settings": {
+            "layout": "left",
+            "title": "GIA Lab Certificate",
+            "tcl": "#000000",
+            "text": "<p>By establishing and upholding the standards used to gauge gemstone quality, the Gemological Institute of America safeguards both buyers and sellers of all gemstones. We are proud to be associated with the GIA (Gemological Institute of America), one of the best laboratories for examining and grading gemstones and jewellery.</p><p>GIA operates independently of business and private affairs, governmental lobbies, and advocacy organisations as a non-profit organisation.</p><p>To ensure unbiased evaluation, all gemstones are analysed in complete customer confidentiality. As a result, buyers and sellers of gemstones all over the world regard <a href=\"https://brahmagems.com/gia-certified-gemstones.html\" target=\"_blank\"><strong>GIA-certified gemstones</strong></a> as the most authentic.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "tc",
+            "t_width": 90,
+            "bg": "#f5f5f5"
+          }
+        },
+        "row_4kBxjr": {
+          "type": "row",
+          "settings": {
+            "layout": "right",
+            "title": "IIGJ Lab Certificate",
+            "tcl": "#000000",
+            "text": "<p>Following the merger of two reputable gemstone and jewellery laboratories run by GJEPC, the new brand name is IIGJ-RLC (IIGJ-Research & Laboratories Centre). The Indian Gemmological Institute - Gem Testing Laboratory and Gem Testing Laboratory, respectively, were their previous names (IGI-GTL, Delhi).</p><p>IIGJ-RLC has established itself as the top institution in the nation for the <a href=\"https://brahmagems.com/iigj-certified-gemstones.html\" target=\"_blank\"><strong>IIGJ certification of coloured gemstones</strong></a>, diamonds, and jewellery over the years. Gemmological services are provided by a laboratory with infrastructure that was built to international standards for both domestic and foreign customers.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "tc",
+            "t_width": 90,
+            "bg": "#f5f5f5"
+          }
+        },
+        "row_JkpWDT": {
+          "type": "row",
+          "settings": {
+            "layout": "left",
+            "title": "IGI - GTL Lab Certificate",
+            "tcl": "#000000",
+            "text": "<p>The IGI-GTL Lab Certificate is a mark of trust and authenticity, issued after thorough scientific testing and expert gemological analysis. It confirms the gemstone's natural origin, detailing its species, weight, color, clarity, and any treatments or enhancements. Recognized for its high standards, the IGI-GTL certification ensures that each stone meets international benchmarks for quality, providing buyers with complete confidence in the gemstone’s legitimacy and value.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "shopify://collections/all",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "tc",
+            "t_width": 90,
+            "bg": "#f5f5f5"
+          }
+        },
+        "row_einN7M": {
+          "type": "row",
+          "settings": {
+            "layout": "right",
+            "title": "IGI Lab Certificate",
+            "tcl": "#000000",
+            "text": "<p>The largest international laboratory for certification of coloured gemstones and diamonds is IGI. It is governed by a solitary central authority that follows a single, widely accepted grading scheme. IGI certifies the widest range of jewellery and gemstones in more regions of the world than any other body.</p><p>IGI is the industry leader for jewellery certification because of their unmatched experience and global reach. Although IGI is best known for grading diamonds and colourful gemstones, it is also trusted with assessing pearls, rare carvings, expensive jewellery, and all contemporary synthetics and simulants.</p><p><a href=\"https://brahmagems.com/igi-certified-gemstones.html\" target=\"_blank\"><strong>IGI certified gemstone</strong></a> rings and other jewels are easily trusted by the public. Due to their commitment to the task at hand, this enormous trust has been developed through time.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "tc",
+            "t_width": 90,
+            "bg": "#f5f5f5"
+          }
+        },
+        "row_j4PqAC": {
+          "type": "row",
+          "settings": {
+            "layout": "left",
+            "title": "GRS Lab Certificate",
+            "tcl": "#000000",
+            "text": "<p>When Gem Research SwissLab first opened, its goal was to provide <a href=\"https://brahmagems.com/grs-certified-gemstones.html\" target=\"_blank\"><strong>GRS certification</strong> </a>services for diamonds, gemstones, and jewellery to its clients in the gem and jewellery industry.</p><p>An independent gemological research lab, GRS GemResearch Swisslab focuses on the determination of source and authenticity reports for gemstones including rubies, sapphires, and emeralds as well as other well-known coloured stones like spinel, tourmaline, garnet, and jade.</p><p>Their research laboratories, which are strategically located in key global locations, are outfitted with the most cutting-edge and contemporary technology to recognise and categorise current precious gemstone treatments. Contributions to Gemology, a film documentary and book series produced by GRS, documents ongoing study that has been conducted through travels to the most renowned mines in the world.</p>",
+            "cl": "#000000",
+            "button_label": "",
+            "button_link": "shopify://collections/all",
+            "btncl": "#ffffff",
+            "btnbg": "#000000",
+            "btnbd": "#000000",
+            "text_align": "tc",
+            "t_width": 90,
+            "bg": "#f5f5f5"
+          }
+        }
+      },
+      "block_order": [
+        "row_eAik8G",
+        "row_4kBxjr",
+        "row_JkpWDT",
+        "row_einN7M",
+        "row_j4PqAC"
+      ],
+      "disabled": true,
+      "settings": {
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "hide_mobile": false,
+        "hided": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa",
+        "bgg": "",
+        "bg_rad": 0,
+        "tfs": 20,
+        "tfsm": 20,
+        "tff": "ft1",
+        "tfw": "600",
+        "tlh": 1.3,
+        "tmb": 15,
+        "tmbm": 10,
+        "fs": 12,
+        "fsm": 12,
+        "fw": "500",
+        "lh": 1.6,
+        "mb": 15,
+        "mbm": 10,
+        "img_rad": 0,
+        "btn-size-desk": "btn-md",
+        "btn-size-mob": "mob-btn-sm",
+        "snow_effect": false,
+        "snow_style": "style1"
+      }
+    },
+    "17785001943d1a620f": {
+      "type": "apps",
+      "blocks": {
+        "retenzy_review_page_extension_U6dXXb": {
+          "type": "shopify://apps/retenzy/blocks/ReviewPageExtension/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "retenzy_review_page_extension_U6dXXb"
+      ],
+      "settings": {
+        "top-offeset": "default",
+        "section_width": true,
+        "npd": false,
+        "section_cov": false,
+        "sec_bg_clr": "#fafafa"
+      }
+    }
+  },
+  "order": [
+    "page",
+    "banner_with_text_xQUatr",
+    "17785001943d1a620f"
+  ]
+}
