@@ -1,16 +1,16 @@
 {%- comment -%}*** Site Fonts ***{%- endcomment -%}
 {%- capture headCss -%}
-    
-{%- if isRtl -%}
-  {%- assign cssFile = 'themeRtl.css' -%}
-  {%- assign pmLeft = 'right' -%}
-  {%- assign pmRight = 'left' -%}
-{%- else -%}
-  {%- assign cssFile = 'theme.css' -%}
-  {%- assign pmLeft = 'left' -%}
-  {%- assign pmRight = 'right' -%}
-{%- endif -%}
-
+{%- liquid
+    if isRtl
+        assign cssFile = 'themeRtl.css'
+        assign pmLeft = 'right'
+        assign pmRight = 'left'
+    else
+        assign cssFile = 'theme.css'
+        assign pmLeft = 'left'
+        assign pmRight = 'right'
+    endif 
+-%}
 {% if settings.fonts == '1' %}
 	{% liquid
     	assign font1 = settings.body_font

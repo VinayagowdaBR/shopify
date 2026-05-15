@@ -15,14 +15,71 @@
   {% endif %}
 {%- endcapture hrmenu -%}
   
+{%- liquid
+  assign cl_banner_imgs    = collection.metafields.custom.banner_images.value
+  assign cl_banner_imgs_m  = collection.metafields.custom.banner_images_mobile.value
+  assign cl_banner_links   = collection.metafields.custom.banner_links.value
+  assign cl_has_meta_slider = false
+  if cl_banner_imgs != blank and cl_banner_imgs.size > 0
+    assign cl_has_meta_slider = true
+  endif
+-%}
+
 {% capture collectionBanner %}
-	<div class="clPageBnr fl f-wrap f-aic f-jcc" style="--bg:{{secSt.bbg}};--ht:{{secSt.bht}}px;--htt:{{secSt.bhtt}}px;--htm:{{secSt.bhtm}}px;">
-	{% if secSt.clbanner != blank %}
-	  <div class="bgImg pa w_100 h_100 lazyload{% if secSt.clbannerm != blank %} hide-sm{%endif%}" data-bgset="{% render 'bgset', image: secSt.clbanner %}" data-sizes="auto" data-parent-fit="contain"></div>
+	<div class="clPageBnr fl f-wrap f-aic f-jcc{% if cl_has_meta_slider %} clPageBnr--slider{% endif %}"
+	     style="--bg:{{secSt.bbg}};--ht:{{secSt.bht}}px;--htt:{{secSt.bhtt}}px;--htm:{{secSt.bhtm}}px;"
+	     {% if cl_has_meta_slider %}data-cl-slider data-autoplay="5000"{% endif %}>
+
+	{% if cl_has_meta_slider %}
+	  {%- comment -%} Per-collection slider driven by metafields {%- endcomment -%}
+	  <div class="clBnrTrack" data-cl-slider-track>
+	    {%- for img in cl_banner_imgs -%}
+	      {%- assign mob_img = cl_banner_imgs_m[forloop.index0] -%}
+	      {%- assign slide_link = cl_banner_links[forloop.index0] -%}
+	      <div class="clBnrSlide" data-cl-slide>
+	        {%- if slide_link != blank -%}<a href="{{ slide_link }}" class="clBnrSlideLink" aria-label="Slide {{ forloop.index }}">{%- endif -%}
+	        <img class="clBnrImg{% if mob_img != blank %} hide-sm{% endif %}"
+	             src="{{ img | image_url: width: 2000 }}"
+	             srcset="{{ img | image_url: width: 800 }} 800w, {{ img | image_url: width: 1200 }} 1200w, {{ img | image_url: width: 1600 }} 1600w, {{ img | image_url: width: 2000 }} 2000w"
+	             sizes="100vw"
+	             loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+	             alt="{{ collection.title | escape }} banner {{ forloop.index }}" />
+	        {%- if mob_img != blank -%}
+	          <img class="clBnrImg hide-md hide-lg"
+	               src="{{ mob_img | image_url: width: 1000 }}"
+	               srcset="{{ mob_img | image_url: width: 600 }} 600w, {{ mob_img | image_url: width: 1000 }} 1000w"
+	               sizes="100vw"
+	               loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+	               alt="{{ collection.title | escape }} banner {{ forloop.index }}" />
+	        {%- endif -%}
+	        {%- if slide_link != blank -%}</a>{%- endif -%}
+	      </div>
+	    {%- endfor -%}
+	  </div>
+	  {% if cl_banner_imgs.size > 1 %}
+	    <div class="clBnrDots" data-cl-slider-dots role="tablist" aria-label="Banner pagination">
+	      {%- for img in cl_banner_imgs -%}
+	        <button type="button" class="clBnrDot{% if forloop.first %} is-active{% endif %}" data-cl-slider-dot="{{ forloop.index0 }}" aria-label="Go to slide {{ forloop.index }}"></button>
+	      {%- endfor -%}
+	    </div>
+	  {% endif %}
+	{% else %}
+	  {% if collection.image %}
+	    <img
+	      src="{{ collection.image | image_url: width: 2000 }}"
+	      srcset="{{ collection.image | image_url: width: 800 }} 800w, {{ collection.image | image_url: width: 1200 }} 1200w, {{ collection.image | image_url: width: 2000 }} 2000w"
+	      sizes="100vw"
+	      loading="eager"
+	      alt="{{ collection.title | escape }} banner"
+	      style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;object-position:center;" />
+	  {% elsif secSt.clbanner != blank %}
+	    <div class="bgImg pa w_100 h_100 lazyload{% if secSt.clbannerm != blank %} hide-sm{%endif%}" data-bgset="{% render 'bgset', image: secSt.clbanner %}" data-sizes="auto" data-parent-fit="cover"></div>
+	    {% if secSt.clbannerm != blank %}
+	      <div class="bgImg pa w_100 h_100 lazyload hide-md hide-lg" data-bgset="{% render 'bgset', image: secSt.clbannerm %}" data-sizes="auto" data-parent-fit="cover"></div>
+	    {% endif %}
+	  {% endif %}
 	{% endif %}
-	{% if secSt.clbannerm != blank %}
-	  <div class="bgImg pa w_100 h_100 lazyload hide-md hide-lg" data-bgset="{% render 'bgset', image: secSt.clbannerm %}" data-sizes="auto" data-parent-fit="contain"></div>
-	{% endif %}
+
 	<div class="pr w_100{% if secSt.tac %} tc{% endif %}" style="max-width:{{secSt.bnr-wd}}px;padding:0 15px;">
 		{% if secSt.show_collection_name %}
             <h1 class="bnrTtl ttlTxt mb{{secSt.tmbm}} mb{{secSt.tmb}}-md{%  if secSt.tcase %} tt-u{% endif %}" style="--tcl:{{secSt.tcl}};--tfs:{{secSt.tfs}}px;--tfsm:{{secSt.tfsm}}px;--tff:var(--{{secSt.tff}});--tfw:{{secSt.tfw}};--tlh:{{secSt.tlh}};">{{ collection.title }}</h1>
@@ -30,6 +87,11 @@
 		{% if secSt.bnr_desc != blank %}<div class="clbnDes ttlTxt mb{{secSt.dmbm}} mb{{secSt.dmb}}-md" style="--tcl:{{secSt.dcl}};--tfs:{{secSt.dfs}}px;--tfsm:{{secSt.dfsm}}px;--tlh:{{secSt.dlh}};">{{ secSt.bnr_desc }}</div>{% endif %}
 		{% if secSt.bnr_count != blank %}<div class="heroSaleTime atCounter mb0" style="--cl:{{ secSt.ccl }};--bg:{{ secSt.cbg }};" data-date="{{secSt.bnr_count| date: '%FT%T'}}"><span><span class="tm days">00</span>{{'date_formats.days' | t}}</span><span><span class="tm hours">00</span>{{ 'date_formats.hours' | t }}</span><span><span class="tm minutes">00</span>{{'date_formats.minuts' | t}}</span><span><span class="tm seconds">00</span>{{'date_formats.seconds' | t}}</span></div>{% endif %}
 	</div>
+  <nav class="clBnrBreadcrumb" aria-label="breadcrumbs">
+    <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a>
+    <span class="clBnrBcrSep">›</span>
+    {% if current_tags %}<a href="{{ collection.url }}">{{ collection.title }}</a><span class="clBnrBcrSep">›</span><span>{{ current_tags | join: " + " }}</span>{% else %}<span>{{ collection.title }}</span>{% endif %}
+  </nav>
   </div>
 {% endcapture %}
 
@@ -37,11 +99,13 @@
 {% if secSt.bnr and secSt.banner_position == "top" %}{{collectionBanner}}{% endif %}
 {% if section.settings.hrmenu_pos == "bbn" %}{{ hrmenu }}{% endif %}
   
-{%- if settings.breadcrumb_cl -%}
-  {%- render 'breadcrumb' -%}
-{% else %}
+{%- unless secSt.bnr and secSt.banner_position == "top" -%}
+  {%- if settings.breadcrumb_cl -%}
+    {%- render 'breadcrumb' -%}
+  {%- else -%}
     <div class="topSpace"></div>
-{%- endif -%}
+  {%- endif -%}
+{%- endunless -%}
 
 {%- liquid
 	assign sort_by = collection.sort_by | default: collection.default_sort_by
@@ -231,6 +295,176 @@
 <script src="{{ 'jquery.range-min.js' | asset_url }}" defer="defer"></script>
 {%- endcapture -%}
 {{collectionPage | strip_newlines | remove: "  " | remove: "	" }}
+
+{%- if cl_has_meta_slider -%}
+<style>
+  .clPageBnr--slider { position: relative; overflow: hidden; padding: 0; }
+  .clPageBnr--slider .clBnrTrack {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .clPageBnr--slider .clBnrTrack::-webkit-scrollbar { display: none; }
+  .clPageBnr--slider .clBnrSlide {
+    position: relative;
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  .clPageBnr--slider .clBnrSlideLink { display: block; width: 100%; height: 100%; }
+  .clPageBnr--slider .clBnrImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .clPageBnr--slider .hide-sm { display: block; }
+  .clPageBnr--slider .hide-md, .clPageBnr--slider .hide-lg { display: none; }
+  @media (max-width: 767px) {
+    .clPageBnr--slider .hide-sm { display: none; }
+    .clPageBnr--slider .hide-md, .clPageBnr--slider .hide-lg { display: block; }
+  }
+  .clPageBnr--slider .clBnrDots {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    padding: 6px 10px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 999px;
+    z-index: 3;
+  }
+  .clPageBnr--slider .clBnrDot {
+    width: 8px; height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    cursor: pointer;
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+  .clPageBnr--slider .clBnrDot.is-active {
+    background: #ffffff;
+    width: 22px;
+    border-radius: 4px;
+  }
+  .clPageBnr--slider .pr.w_100 { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; pointer-events: none; }
+  .clPageBnr--slider .pr.w_100 .heroSaleTime,
+  .clPageBnr--slider .pr.w_100 a { pointer-events: auto; }
+</style>
+
+<script>
+(function () {
+  var sliders = document.querySelectorAll('[data-cl-slider]');
+  if (!sliders.length) return;
+
+  sliders.forEach(function (slider) {
+    var track = slider.querySelector('[data-cl-slider-track]');
+    var slides = slider.querySelectorAll('[data-cl-slide]');
+    var dots = slider.querySelectorAll('[data-cl-slider-dot]');
+    if (!track || slides.length < 2) return;
+
+    var current = 0;
+    var autoplayMs = parseInt(slider.dataset.autoplay, 10) || 0;
+    var timer = null;
+    var paused = false;
+
+    function goTo(idx) {
+      current = (idx + slides.length) % slides.length;
+      var target = slides[current];
+      if (target) track.scrollTo({ left: target.offsetLeft, behavior: 'smooth' });
+      dots.forEach(function (d, i) { d.classList.toggle('is-active', i === current); });
+    }
+
+    function next() { goTo(current + 1); }
+
+    function start() {
+      if (!autoplayMs || paused) return;
+      stop();
+      timer = setInterval(next, autoplayMs);
+    }
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    dots.forEach(function (d, i) {
+      d.addEventListener('click', function () { goTo(i); start(); });
+    });
+
+    slider.addEventListener('mouseenter', function () { paused = true; stop(); });
+    slider.addEventListener('mouseleave', function () { paused = false; start(); });
+
+    /* Sync dots when user swipes/scrolls manually */
+    var scrollDebounce = null;
+    track.addEventListener('scroll', function () {
+      if (scrollDebounce) clearTimeout(scrollDebounce);
+      scrollDebounce = setTimeout(function () {
+        var w = track.clientWidth;
+        var idx = Math.round(track.scrollLeft / w);
+        if (idx !== current) {
+          current = idx;
+          dots.forEach(function (d, i) { d.classList.toggle('is-active', i === current); });
+        }
+      }, 80);
+    });
+
+    /* Pause autoplay when tab is hidden — saves cycles, prevents jump on resume */
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) stop(); else start();
+    });
+
+    start();
+  });
+})();
+</script>
+{%- endif -%}
+
+{%- if secSt.bnr -%}
+<style>
+  .clBnrBreadcrumb {
+    position: absolute;
+    bottom: 16px;
+    left: 20px;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: #fff;
+    background: rgba(0,0,0,0.28);
+    padding: 5px 14px;
+    border-radius: 999px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    line-height: 1.5;
+  }
+  .clBnrBreadcrumb a {
+    color: rgba(255,255,255,0.82);
+    text-decoration: none;
+    transition: color 0.18s ease;
+  }
+  .clBnrBreadcrumb a:hover { color: #fff; }
+  .clBnrBcrSep {
+    color: rgba(255,255,255,0.48);
+    font-size: 11px;
+  }
+  #Collection { padding-top: 20px; }
+  @media only screen and (max-width: 767px) { #Collection { padding-top: 14px; } }
+</style>
+{%- endif -%}
+
 {% schema %}
   {
     "name": "t:sections.collections.page.name",

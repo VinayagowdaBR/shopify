@@ -38,7 +38,7 @@ div.lazyload:before, a.lazyload:before { content:""; display:block; width:50px; 
     .gspace .gitem { padding:var(--grspi); }
 }
 
-html, body { overflow-x:hidden; }
+html, body { overflow-x: hidden; overflow-x: clip; }
 
 {% comment %} /* flickity Common */ {% endcomment %}
 .flickity-enabled{position:relative;display:block; }
@@ -703,7 +703,8 @@ s.pr_price { opacity:0.6; font-weight:400; }
 
 @media only screen and (max-width:1024px) {
 	.site-header { min-height:{{settings.mobile_header_height}}px;}
-	.site-header .mobile-nav, .site-header .icons-col { max-width:75px; }
+	.site-header .mobile-nav { max-width:75px; }
+	.site-header .icons-col { max-width:120px; width:auto; padding-right:12px; }
 }
 
 {% if settings.home_classic %}
@@ -1985,7 +1986,7 @@ body:not(.template-index) .site-footer { margin-top:20px; }
 .footer-bottom a { color:{{settings.footer_bottom_text}}; }
 @media only screen and (max-width:766px){
   .footer-bottom .paymentCall { margin-bottom:15px; order:-1; }
-  body { overflow-x:hidden;}
+  body { overflow-x: hidden; overflow-x: clip; }
 }
 
 #dynamic-checkout-cart ul { display:block !important;}

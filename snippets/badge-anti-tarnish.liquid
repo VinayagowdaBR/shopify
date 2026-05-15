@@ -1,0 +1,50 @@
+{%- comment -%}
+  Anti-tarnish / no-fade guarantee badge.
+
+  Usage:
+    {% render 'badge-anti-tarnish', label: 'Your text here' %}
+
+  Params:
+    label (string, required) - Text shown next to the icon. Renders nothing if blank.
+{%- endcomment -%}
+{%- if label != blank -%}
+<div class="bat-badge">
+  <svg class="bat-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+    <path d="M12 2 4 5v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V5l-8-3z"/>
+    <path d="m9 12 2 2 4-4"/>
+  </svg>
+  <span class="bat-badge__text">{{ label }}</span>
+</div>
+<style>
+  .bat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    max-width: 100%;
+    margin: 0.25em 0 0.875em;
+    padding: 0.5em 0.875em;
+    border-radius: 999px;
+    background: rgba(15, 59, 46, 0.08);
+    color: #0F3B2E;
+    border: 1px solid rgba(15, 59, 46, 0.16);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+  .bat-badge__icon {
+    width: 1.125em;
+    height: 1.125em;
+    flex-shrink: 0;
+  }
+  .bat-badge__text {
+    overflow-wrap: anywhere;
+  }
+  @media (min-width: 990px) {
+    .bat-badge {
+      font-size: 0.875rem;
+      padding: 0.5em 1em;
+    }
+  }
+</style>
+{%- endif -%}

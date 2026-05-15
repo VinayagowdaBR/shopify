@@ -24,6 +24,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   {% if template.name == 'index' %}<meta name="keywords" content="House of Viya, demi fine jewellery, anti tarnish jewellery, gold plated jewellery online, 18k gold plated jewellery, waterproof jewellery India, tarnish free jewellery, affordable gold jewellery, everyday jewellery for women, demi fine jewellery online India">{% endif %} 
 	<link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="preconnect" href="https://bridge.shopflo.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.retenzy.com" crossorigin>
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 	<link rel="dns-prefetch" href="https://{{shop.domain}}" crossorigin>
 	<link rel="dns-prefetch" href="https://{{shop.permanent_domain}}" crossorigin>
 	{%- unless settings.header_font.system? and settings.body_font.system? and settings.fonts == '2' -%}
@@ -47,6 +51,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   {%- capture mainjs -%}
   	{%- render 'head-css', isRtl:isRtl -%}
   	<link rel="stylesheet" href="{% if isRtl %}{{ 'themeRtl.css' | asset_url }}{% else %}{{ 'theme.css' | asset_url }}{% endif %}" type="text/css" media="all">
+  	{%- render 'hov-wishlist-heart' -%}
+  	{%- render 'hov-nav-premium' -%}
+  	{%- render 'hov-cart-premium' -%}
     <script src="{{ 'lazysizes.js' | asset_url }}" async></script>
   	<script src="{{ 'jquery.min.js' | asset_url }}"defer="defer"></script>
 	<script>
@@ -87,15 +94,37 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
   <script src='https://bridge.shopflo.com/js/shopflo.bundle.js' async></script>
-  <link
-  rel="stylesheet"
-  href="https://cdn.retenzy.com/assets/extensions/rewardPagePoint.css"
-/>
 
-<script
-  src="https://cdn.retenzy.com/assets/extensions/rewardPagePoint.js"
-  defer>
-</script>
+  {%- comment -%} AIUI Immersive flag detector — must run before paint to avoid FOUC {%- endcomment -%}
+  <script>
+    (function(){
+      try {
+        var qs = window.location.search;
+        var on = /[?&]preview=immersive(?:&|$)/.test(qs) ||
+                 /(?:^|;\s*)aiui=on(?:;|$)/.test(document.cookie);
+        var off = /[?&]preview=classic(?:&|$)/.test(qs);
+        if (on && !off) {
+          document.documentElement.classList.add("aiui-on");
+          // Persist for the session so internal links keep the preview
+          document.cookie = "aiui=on; path=/; max-age=" + (60*60*24*7) + "; SameSite=Lax";
+        }
+        if (off) {
+          document.cookie = "aiui=; path=/; max-age=0; SameSite=Lax";
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <link rel="stylesheet" href="{{ 'aiui-immersive.css' | asset_url }}" type="text/css" media="all">
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.retenzy.com/assets/extensions/rewardPagePoint.css"
+    type="text/css"
+    media="all"
+  />
+  <script
+    src="https://cdn.retenzy.com/assets/extensions/rewardPagePoint.js"
+    defer></script>
 </head>
 <body id="{{ page_title | handle }}" class="template-{{ template | split: '.' | first }}{% if settings.bodybg_img %} lazyload{% endif %}{%- if isRtl -%} rtl{%- endif -%}"
 	{%- if settings.bodybg_img %} data-bgset="{% render 'bgset', image: settings.bodybg_img %}" data-sizes="auto" data-parent-fit="cover" style="background-image:url('{{ settings.bodybg_img | img_url: '50x50' }});"{%- endif -%}>
@@ -133,7 +162,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 {%- render 'theme-modals' -%}
 {% section 'spin-to-win' %}
 {%- if settings.show_sticky_arrow -%}<span id="site-scroll"><i class="at at-arw-up" aria-hidden="true"></i></span>{%- endif -%}
-<script src="{{ 'custom.js' | asset_url }}"></script>
+<script src="{{ 'custom.js' | asset_url }}" defer></script>
+<script src="{{ 'aiui-immersive.js' | asset_url }}" defer></script>
 
 
 <script>
@@ -197,25 +227,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   });
 </script>
-<style>
 
-.hov-reward-wrap {
-  margin-top: 12px;
-  margin-bottom: 12px;
-  width: 100%;
-}
 
-/* Optional: tighten spacing below */
-.hov-reassurance {
-  margin-top: 10px !important;
-}
-
-</style>
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<!-- Swiper JS (CSS already loaded in head) -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -324,420 +339,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
- {% if request.host == '' or request.host == '' %}
-  <div id="customize-lock-overlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #f8f9fa; z-index: 10000000; display: none; flex-direction: column; justify-content: center; align-items: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-    
-    <img src="https://cdn.shopify.com/s/files/1/0949/0268/1890/files/lets_advertise_1_1.png?v=1751297259" alt="Logo" style="width: 150px; margin-bottom: 30px;" />
-
-    <div style="background: #fff; padding: 40px 30px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; min-width: 320px;">
-      <h2 style="font-size: 24px; margin-bottom: 15px; color: #333;">🔒 Coming Soon</h2>
-      <input type="password" id="customize-unlock-code" placeholder="Enter Your Code" style="padding: 12px 15px; width: 100%; max-width: 280px; text-align: center; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 15px;" autocomplete="off" />
-      <button onclick="unlockCustomize()" style="background-color: #007BFF; color: white; padding: 10px 24px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">Unlock</button>
-      <p id="error-msg" style="margin-top: 10px; color: red; display: none;">❌ Incorrect Code</p>
-    </div>
-
-    <p style="margin-top: 25px; color: #b30000; font-size: 15px; font-weight: bold; text-align: center; max-width: 600px; padding: 0 20px;">
-      ⚠Your website is under construction, when your website will be ready, then we will close this project from our side and this password will be removed automatically, thank you so much!
-    </p>
-
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const overlay = document.getElementById("customize-lock-overlay");
-      const input = document.getElementById("customize-unlock-code");
-
-      function maintainFocus() {
-        if (overlay.style.display === "flex" && document.activeElement !== input) {
-          input.focus();
-        }
-      }
-
-      if ((window.location.host === 'house-of-viya.myshopify.com' || window.location.host === 'houseofviya.in') && !window.location.search.includes('customize')) {
-        if (sessionStorage.getItem("theme_customizer_unlocked") !== "yes") {
-          overlay.style.display = "flex";
-          setTimeout(() => input.focus(), 100);
-          document.addEventListener("focusin", maintainFocus);
-
-          input.addEventListener("keydown", function (e) {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              unlockCustomize();
-            }
-          });
-        } else {
-          overlay.style.display = "none";
-        }
-      } else {
-        overlay.style.display = "none";
-      }
-    });
-
-    function unlockCustomize() {
-      const inputVal = document.getElementById("customize-unlock-code").value.trim();
-
-      if (inputVal === "123") {
-        sessionStorage.setItem("theme_customizer_unlocked", "yes");
-        document.getElementById("customize-lock-overlay").style.display = "none";
-        document.removeEventListener("focusin", maintainFocus);
-      } else {
-        document.getElementById("error-msg").style.display = "block";
-        document.getElementById("customize-unlock-code").value = "";
-        setTimeout(() => {
-          document.getElementById("error-msg").style.display = "none";
-        }, 2000);
-      }
-    }
-  </script>
-{% endif %}
 
 
 
 
-<!-- ============ HOUSE OF VIYA - PREMIUM UX UPGRADE ============ -->
-<style id="viya-ux-upgrade">viya-category-strip {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 32px;
-    padding: 10px 0;
-    background: #fafaf8;
-      border-bottom: 1px solid #f0ece4;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    .viya-category-strip a {
-      color: #666;
-      text-decoration: none;
-      font-weight: 400;
-      transition: color 0.3s ease;
-      position: relative;
-      }
-    .viya-category-strip a:hover {
-      color: #C8B28A;
-    }
-    .viya-category-strip a::after {
-      content: '';
-      position: absolute;
-      bottom: -3px;
-      left: 0;
-      width: 0;
-        height: 1px;
-        background: #C8B28A;
-        transition: width 0.3s ease;
-        }
-        .viya-category-strip a:hover::after {
-          width: 100%;
-        }
-        
-        /* ===== 6. SHOP DROPDOWN ===== */
-        .viya-shop-dropdown {
-          position: absolute;
-          top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #fff;
-            border: 1px solid #f0ece4;
-              border-radius: 4px;
-              padding: 12px 0;
-                min-width: 180px;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-                  opacity: 0;
-                  visibility: hidden;
-                  transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
-                  transform: translateX(-50%) translateY(8px);
-                  z-index: 999;
-                }
-                .viya-shop-parent {
-                  position: relative !important;
-                }
-                .viya-shop-parent:hover .viya-shop-dropdown {
-                  opacity: 1;
-                  visibility: visible;
-                    transform: translateX(-50%) translateY(0);
-                  }
-                  .viya-shop-dropdown a {
-                    display: block;
-                    padding: 8px 24px;
-                    color: #555;
-                    font-size: 12px;
-                    letter-spacing: 1.5px;
-                    text-decoration: none;
-                    transition: color 0.2s ease, background 0.2s ease;
-                  }
-                  .viya-shop-dropdown a:hover {
-                    color: #C8B28A;
-                    background: #fafaf8;
-                  }
-                  
-                  /* ===== 7. MOBILE OPTIMIZATIONS ===== */
-                @media (max-width: 768px) {
-                  /* Sticky header on mobile */
-                  #header-section,
-                  [data-section-id="header"],
-                  .header-section {
-                      position: sticky !important;
-                        top: 0 !important;
-                          z-index: 999 !important;
-                          }
-                          /* Hide full search bar on mobile, show icon only */
-                          .custom-search-wrapper {
-                              max-width: 40px !important;
-                                width: 40px !important;
-                                  overflow: hidden !important;
-                                    transition: max-width 0.3s ease, width 0.3s ease !important;
-                                      border-radius: 25px !important;
-                                      }
-                                      .custom-search-wrapper.expanded {
-                                          max-width: 100% !important;
-                                            width: 100% !important;
-                                            }
-                                            .custom-search-wrapper input[type="text"] {
-                                                opacity: 0;
-                                                  transition: opacity 0.3s ease !important;
-                                                  }
-                                                  .custom-search-wrapper.expanded input[type="text"] {
-                                                      opacity: 1;
-                                                      }
-                                                      /* Category strip scrollable on mobile */
-                                                      .viya-category-strip {
-                                                          overflow-x: auto;
-                                                            gap: 20px;
-                                                              padding: 8px 16px;
-                                                                justify-content: flex-start;
-                                                                  -webkit-overflow-scrolling: touch;
-                                                                    scrollbar-width: none;
-                                                                    }
-                                                                    .viya-category-strip::-webkit-scrollbar {
-                                                                        display: none;
-                                                                        }
-                                                                        .viya-category-strip a {
-                                                                            flex-shrink: 0;
-                                                                            }
-                                                                          }
-                                                                          
-                                                                        /* ===== 8. HEADER GENERAL POLISH ===== */
-                                                                      .site-header {
-                                                                        padding: 12px 0 !important;
-                                                                        border-bottom: 1px solid #f0ece4 !important;
-                                                                      }
-                                                                      /* Remove excess bold from any header text */
-                                                                    .site-header * {
-                                                                      font-smoothing: antialiased;
-                                                                      -webkit-font-smoothing: antialiased;
-                                                                    }
-                                                                  </style>
-                                                                
-                                                                <script id="viya-ux-upgrade-js">
-                                                                  document.addEventListener('DOMContentLoaded', function() {
-                                                                  
-                                                                    /* ===== 1. UPDATE ANNOUNCEMENT BAR TEXT ===== */
-                                                                    var annBar = document.querySelector('.notification-bar .ttlTxt');
-                                                                    if (annBar) {
-                                                                        annBar.innerHTML = 'Free Shipping for Prepaid Orders above ₹999 &nbsp;|&nbsp; Skin-Safe &nbsp;|&nbsp; Everyday Wear &nbsp;|&nbsp; Waterproof Jewellery';
-                                                                        }
-                                                                      
-                                                                        /* ===== 2. UPDATE SEARCH PLACEHOLDER ===== */
-                                                                        var searchInputs = document.querySelectorAll('[data-input-search], #dynamic-placeholder-input');
-                                                                        searchInputs.forEach(function(input) {
-                                                                            input.setAttribute('placeholder', 'Search jewellery\u2026');
-                                                                            });
-                                                                            // Also update any overlay/modal search inputs
-                                                                            var allSearchInputs = document.querySelectorAll('input[type="search"], input[placeholder*="Search for"]');
-                                                                            allSearchInputs.forEach(function(input) {
-                                                                                input.setAttribute('placeholder', 'Search jewellery\u2026');
-                                                                                });
-                                                                              
-                                                                                /* ===== 3. ADD TOOLTIP DATA ATTRIBUTES TO ICONS ===== */
-                                                                                var accountIcon = document.querySelector('a[href="/account"], a.hdicon[href*="account"]');
-                                                                                if (accountIcon) accountIcon.setAttribute('data-tooltip', 'Account');
-                                                                              
-                                                                                var wishlistIcons = document.querySelectorAll('a.hdicon[href*="wishlist"]');
-                                                                                wishlistIcons.forEach(function(icon) {
-                                                                                    icon.setAttribute('data-tooltip', 'Wishlist');
-                                                                                    });
-                                                                                  
-                                                                                    var cartIcon = document.querySelector('a[id="cartlink"], a[href*="/cart"]');
-                                                                                    if (cartIcon) cartIcon.setAttribute('data-tooltip', 'Cart');
-                                                                                  
-                                                                                    /* ===== 4. RESTRUCTURE NAVIGATION ===== */
-                                                                                    var siteNav = document.getElementById('siteNav');
-                                                                                    if (siteNav) {
-                                                                                        var navItems = siteNav.querySelectorAll(':scope > li');
-                                                                                          
-                                                                                          navItems.forEach(function(item) {
-                                                                                                var link = item.querySelector(':scope > a');
-                                                                                                    if (!link) return;
-                                                                                                        var text = link.textContent.trim().toUpperCase();
-                                                                                                      
-                                                                                                            // Hide Knowledge Lab (move concept to footer)
-                                                                                                                if (text === 'KNOWLEDGE LAB') {
-                                                                                                                        item.style.display = 'none';
-                                                                                                                            }
-                                                                                                                          
-                                                                                                                                // Rename "ANTI-TARNISH JEWELLERY" to "SHOP" with dropdown
-                                                                                                                                    if (text === 'ANTI-TARNISH JEWELLERY' || text.includes('ANTI-TARNISH')) {
-                                                                                                                                            link.innerHTML = 'Shop <i class="at at-angle-down-l" style="font-size:10px;margin-left:4px;"></i>';
-                                                                                                                                                  item.classList.add('viya-shop-parent');
-                                                                                                                                                        
-                                                                                                                                                        // Create enhanced dropdown
-                                                                                                                                                              var existingDropdown = item.querySelector('ul, .megamenu');
-                                                                                                                                                                    if (existingDropdown) {
-                                                                                                                                                                              var dropdownDiv = document.createElement('div');
-                                                                                                                                                                                      dropdownDiv.className = 'viya-shop-dropdown';
-                                                                                                                                                                                              dropdownDiv.innerHTML = '<a href="/collections/imitation-rings">Rings</a>' +
-                                                                                                                                                                                                        '<a href="/collections/imitation-bracelets">Bracelets</a>' +
-                                                                                                                                                                                                                  '<a href="/collections/imitation-bangles">Anklets</a>' +
-                                                                                                                                                                                                                            '<a href="/collections/all">Chains</a>' +
-                                                                                                                                                                                                                                      '<a href="/collections/imitation-earrings">Earrings</a>' +
-                                                                                                                                                                                                                                                '<a href="/collections/imitation-necklaces">Necklaces</a>' +
-                                                                                                                                                                                                                                                          '<a href="/collections/imitation-pendants">Pendants</a>';
-                                                                                                                                                                                                                                                                  item.appendChild(dropdownDiv);
-                                                                                                                                                                                                                                                                          existingDropdown.style.display = 'none';
-                                                                                                                                                                                                                                                                                }
-                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                  
-                                                                                                                                                                                                                                                                                        // Rename BESTSELLER -> Bestsellers
-                                                                                                                                                                                                                                                                                            if (text === 'BESTSELLER' || text === 'BESTSELLERS') {
-                                                                                                                                                                                                                                                                                                    link.textContent = 'Bestsellers';
-                                                                                                                                                                                                                                                                                                        }
-                                                                                                                                                                                                                                                                                                      
-                                                                                                                                                                                                                                                                                                            // Rename ABOUT US -> About
-                                                                                                                                                                                                                                                                                                                if (text === 'ABOUT US') {
-                                                                                                                                                                                                                                                                                                                        link.textContent = 'About';
-                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                          
-                                                                                                                                                                                                                                                                                                                                // Hide CONTACT US (declutter)
-                                                                                                                                                                                                                                                                                                                                    if (text === 'CONTACT US') {
-                                                                                                                                                                                                                                                                                                                                            item.style.display = }}}}}}})}})})})}})}}}}}}}}}}}}}}}}}}}}
-  /* ===== 1. TOP ANNOUNCEMENT STRIP - Trust Signals ===== */
-  .notification-bar {
-    background: #1a1a1a !important;
-      font-size: 12px !important;
-        letter-spacing: 1.5px !important;
-          padding: 8px 0 !important;
-            text-transform: uppercase !important;
-            }
-            .notification-bar .ttlTxt {
-              font-weight: 300 !important;
-                color: #C8B28A !important;
-                }
-
-                /* ===== 2. SEARCH BAR - Elegant & Compact ===== */
-                .custom-search-wrapper {
-                  max-width: 380px !important;
-                    width: 380px !important;
-                    }
-                    .custom-search-wrapper input[type="text"] {
-                      font-size: 13px !important;
-                      letter-spacing: 0.5px !important;
-                        padding: 8px 16px !important;
-                          border: 1px solid #d4d4d4 !important;
-                            border-radius: 25px !important;
-                              transition: border-color 0.3s ease, box-shadow 0.3s ease !important;
-                              }
-                              .custom-search-wrapper input[type="text"]:focus {
-                                border-color: #C8B28A !important;
-                                box-shadow: 0 0 0 2px rgba(200, 178, 138, 0.15) !important;
-                                outline: none !important;
-                                }
-                                .custom-search-wrapper .t4s-search-header__submit {
-                                  right: 8px !important;
-                                }
-                                
-                                /* ===== 3. HEADER ICON LABELS & SPACING ===== */
-                                .icons-col {
-                                  gap: 20px !important;
-                                }
-                                .icons-col > a,
-                              .icons-col > .hdicon,
-                              a.hdicon {
-                                position: relative !important;
-                                display: inline-flex !important;
-                                  align-items: center !important;
-                                  margin: 0 6px !important;
-                                  }
-                                  /* Tooltip labels for icons */
-                                  a.hdicon::after,
-                                  a[id="cartlink"]::after {
-                                    content: attr(data-tooltip);
-                                      position: absolute;
-                                      bottom: -24px;
-                                        left: 50%;
-                                        transform: translateX(-50%) translateY(4px);
-                                          background: #333;
-                                            color: #fff;
-                                              font-size: 10px;
-                                                letter-spacing: 0.8px;
-                                                  padding: 3px 8px;
-                                                    border-radius: 3px;
-                                                    white-space: nowrap;
-                                                    opacity: 0;
-                                                    pointer-events: none;
-                                                      transition: opacity 0.25s ease, transform 0.25s ease;
-                                                      z-index: 1000;
-                                                      font-family: inherit;
-                                                    }
-                                                  a.hdicon:hover::after,
-                                                a[id="cartlink"]:hover::after {
-                                                  opacity: 1;
-                                                  transform: translateX(-50%) translateY(0);
-                                                }
-                                              
-                                              /* ===== 4. NAVIGATION - Luxury Feel ===== */
-                                            #siteNav {
-                                              display: flex !important;
-                                              justify-content: center !important;
-                                              gap: 8px !important;
-                                            }
-                                            #siteNav > li > a {
-                                              font-weight: 300 !important;
-                                              letter-spacing: 2.5px !important;
-                                              font-size: 11.5px !important;
-                                              text-transform: uppercase !important;
-                                              color: #333 !important;
-                                              padding: 12px 16px !important;
-                                              position: relative !important;
-                                              transition: color 0.3s ease !important;
-                                            }
-                                            /* Champagne gold hover */
-                                          #siteNav > li > a:hover {
-                                            color: #C8B28A !important;
-                                          }
-                                          /* Smooth underline animation */
-                                        #siteNav > li > a::after {
-                                          content: '';
-                                          position: absolute;
-                                          bottom: 6px;
-                                          left: 50%;
-                                          width: 0;
-                                          height: 1px;
-                                          background: #C8B28A;
-                                          transition: width 0.35s ease, left 0.35s ease;
-                                        }
-                                        #siteNav > li > a:hover::after {
-                                          width: 60%;
-                                          left: 20%;
-                                        }
-                                      
-                                      /* ===== 5. CATEGORY QUICK ACCESS STRIP ===== */
-                                    .}}}}}}}}}
-                                      </script>
-                                      <!-- ===== END HOUSE OF VIYA PREMIUM UX UPGRADE v2 ===== -->
-!-- Lazy Loading for Below-the-Fold Images -->
+<!-- Lazy Loading for Below-the-Fold Images -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-      var viewportHeight = window.innerHeight;
-          var images = document.querySelectorAll('img:not([loading])');
-              images.forEach(function(img) {
-                    var rect = img.getBoundingClientRect();
-                          if (rect.top >= viewportHeight) {
-                                  img.setAttribute('loading', 'lazy');
-                                        }
-                                            });
-                                              });
-                                              </script>
+    var viewportHeight = window.innerHeight;
+    var images = document.querySelectorAll('img:not([loading])');
+    images.forEach(function(img) {
+      var rect = img.getBoundingClientRect();
+      if (rect.top >= viewportHeight) {
+        img.setAttribute('loading', 'lazy');
+      }
+    });
+  });
+</script>
 
 
 

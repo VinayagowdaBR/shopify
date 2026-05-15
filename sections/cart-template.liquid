@@ -330,7 +330,8 @@
 		{{ 'cart.general.checkout' | t }}
 </button>
           {% if blkSt.continue %}<a href="{{routes.root_url}}" class="btn btn-md w_100 mb10 {{ blkSt.btn-style2 }}">{{ 'cart.general.continue_shopping' | t}}</a>{% endif %}  
-          {% if blkSt.additionalCheckout and additional_checkout_buttons %}<div class="additional-checkout-buttons mb10">{{ content_for_additional_checkout_buttons }}</div>{% endif %}
+          {% comment %} Shop Pay / accelerated checkout buttons hidden — Shop Pay not available in India, was causing shop.app/pay/hop to stall. {% endcomment %}
+          {% comment %} {% if blkSt.additionalCheckout and additional_checkout_buttons %}<div class="additional-checkout-buttons mb10">{{ content_for_additional_checkout_buttons }}</div>{% endif %} {% endcomment %}
           <div id="cart-errors" class="ermsg"></div>
       {%- elsif block.type == 'img' -%}
           {%- if blkSt.payment != blank -%}<div class="paymnet-img mb15"><img src="{{ blkSt.payment | img_url: "400X" }}" width="400" alt="{{ blkSt.payment.alt }}" class="db" /></div>{%- endif -%}

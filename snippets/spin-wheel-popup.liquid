@@ -317,8 +317,26 @@
 <script>
   (function () {
     var STORAGE_KEY = 'viya_spin_wheel_state';
+    var COOKIE_KEY  = 'viya_spin_shown';
+    var COOKIE_DAYS = 365;
     var DELAY_MS    = 2000;
     var SPIN_MS     = 4000;
+
+    // Cookie helpers — survive when localStorage is blocked (Safari private,
+    // strict tracking protection, theme-editor preview iframes, etc.).
+    function readCookie(name) {
+      var safe = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      var m = document.cookie.match(new RegExp('(?:^|;\\s*)' + safe + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function writeCookie(name, value, days) {
+      try {
+        var d = new Date();
+        d.setTime(d.getTime() + days * 86400000);
+        document.cookie = name + '=' + encodeURIComponent(value) +
+          ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+      } catch (e) {}
+    }
 
     function getState() {
       try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
@@ -331,8 +349,27 @@
       } catch (e) {}
     }
 
+    // Single source of truth: have we already shown the popup to this visitor?
+    function hasBeenSeen() {
+      if (readCookie(COOKIE_KEY) === '1') return true;
+      var s = getState();
+      return !!(s.shown || s.dismissed || s.claimed);
+    }
+    // Persist BOTH a cookie and a localStorage flag — either one is enough
+    // to suppress the popup on the next page load.
+    function markSeen() {
+      writeCookie(COOKIE_KEY, '1', COOKIE_DAYS);
+      setState({ shown: true, shownAt: Date.now() });
+    }
+
+    if (hasBeenSeen()) return;
+
+    // Commit "seen" SYNCHRONOUSLY — before the 2-second display delay — so
+    // any rapid refresh, theme-editor reload, or back/forward navigation in
+    // the next few seconds will not re-trigger the popup.
+    markSeen();
+
     var state = getState();
-    if (state.dismissed || state.claimed) return;
 
     document.addEventListener('DOMContentLoaded', function () {
       var popup       = document.getElementById('spinWheelPopup');
@@ -353,7 +390,11 @@
         { label: 'Try Again',     message: 'So close! Better luck next time.' }
       ];
 
-      function open()  { popup.classList.add('is-open');    popup.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+      function open() {
+        popup.classList.add('is-open');
+        popup.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
       function close() { popup.classList.remove('is-open'); popup.setAttribute('aria-hidden', 'true');  document.body.style.overflow = ''; }
 
       setTimeout(open, DELAY_MS);

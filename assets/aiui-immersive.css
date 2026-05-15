@@ -1,0 +1,1314 @@
+/* =========================================================
+   AIUI Immersive — Phase 1 (Header + Hero)
+   Activated only when <html> has class .aiui-on
+   Falls back to existing UI when flag is off or reduced-motion preferred
+   ========================================================= */
+
+/* ---------- Design tokens (scoped to flag) ---------- */
+html.aiui-on {
+  --aiui-ease-spring: cubic-bezier(.22,1,.36,1);
+  --aiui-ease-soft:   cubic-bezier(.4,0,.2,1);
+
+  --aiui-depth-1: 0 1px 2px rgba(15,15,30,.04), 0 2px 6px rgba(15,15,30,.04);
+  --aiui-depth-2: 0 4px 14px rgba(15,15,30,.06), 0 10px 30px rgba(15,15,30,.06);
+  --aiui-depth-3: 0 10px 30px rgba(15,15,30,.08), 0 30px 60px rgba(15,15,30,.10);
+
+  --aiui-glass-bg:  rgba(255,255,255,.62);
+  --aiui-glass-bd:  rgba(255,255,255,.55);
+  --aiui-glass-blur: 18px;
+
+  --aiui-accent: #b88a4a;        /* warm gold to match jewelry brand */
+  --aiui-accent-2: #f4d8a8;
+  --aiui-ink: #0e0e10;
+}
+
+/* ---------- HEADER: glassmorphic + scroll compress ---------- */
+html.aiui-on #header {
+  transition:
+    backdrop-filter .35s var(--aiui-ease-soft),
+    background-color .35s var(--aiui-ease-soft),
+    box-shadow .35s var(--aiui-ease-soft),
+    transform .45s var(--aiui-ease-spring);
+  will-change: transform, backdrop-filter, background-color;
+}
+
+html.aiui-on #header.aiui-scrolled {
+  background: var(--aiui-glass-bg);
+  -webkit-backdrop-filter: saturate(180%) blur(var(--aiui-glass-blur));
+          backdrop-filter: saturate(180%) blur(var(--aiui-glass-blur));
+  border-bottom: 1px solid var(--aiui-glass-bd);
+  box-shadow: var(--aiui-depth-2);
+}
+
+html.aiui-on #header.aiui-scrolled .site-header {
+  transform: translateZ(0) scale(.985);
+  transition: transform .4s var(--aiui-ease-spring);
+}
+
+/* Hide-on-scroll-down, show-on-scroll-up */
+html.aiui-on #header.aiui-hidden {
+  transform: translate3d(0,-110%,0);
+}
+
+/* Subtle accent underline that grows on scroll progress */
+html.aiui-on #header::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px;
+  width: var(--aiui-scroll-progress, 0%);
+  background: linear-gradient(90deg, transparent, var(--aiui-accent), transparent);
+  transition: width .15s linear;
+  pointer-events: none;
+}
+html.aiui-on #header { position: relative; }
+
+/* ---------- HERO: layered parallax + shimmer title ---------- */
+html.aiui-on .aiui-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* WebGL canvas slot — sits behind everything, above the bg image */
+html.aiui-on .aiui-hero__shader {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .8s var(--aiui-ease-soft);
+  mix-blend-mode: soft-light;
+}
+html.aiui-on .aiui-hero.aiui-shader-ready .aiui-hero__shader { opacity: .9; }
+
+/* Vignette + grain overlay (CSS only — no JS, no WebGL needed) */
+html.aiui-on .aiui-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 80% at 50% 110%, rgba(0,0,0,.18), transparent 60%),
+    radial-gradient(80% 60% at 50% -10%, rgba(255,255,255,.10), transparent 70%);
+}
+html.aiui-on .aiui-hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  opacity: .06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .8 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Lift the inner content above overlays */
+html.aiui-on .aiui-hero .hero__inner { position: relative; z-index: 5; }
+
+/* Parallax-on-mouse for the bg image */
+html.aiui-on .aiui-hero .heroImg {
+  transition: transform .6s var(--aiui-ease-soft);
+  will-change: transform;
+  transform: translate3d(
+    calc(var(--aiui-mx, 0) * 14px),
+    calc(var(--aiui-my, 0) * 10px),
+    0
+  ) scale(1.04);
+}
+
+/* Title: stagger + chromatic shimmer (only when in-view animates) */
+html.aiui-on .aiui-hero .mega-title {
+  background: linear-gradient(
+    100deg,
+    var(--tcl, var(--aiui-ink)) 0%,
+    var(--tcl, var(--aiui-ink)) 40%,
+    var(--aiui-accent) 50%,
+    var(--tcl, var(--aiui-ink)) 60%,
+    var(--tcl, var(--aiui-ink)) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: aiui-shimmer 6s linear infinite;
+}
+
+@keyframes aiui-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -50% 0; }
+}
+
+/* Stagger the wrap-text children entry */
+html.aiui-on .aiui-hero .wrap-text > * {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: aiui-rise .9s var(--aiui-ease-spring) forwards;
+}
+html.aiui-on .aiui-hero .wrap-text > *:nth-child(1) { animation-delay: .15s; }
+html.aiui-on .aiui-hero .wrap-text > *:nth-child(2) { animation-delay: .30s; }
+html.aiui-on .aiui-hero .wrap-text > *:nth-child(3) { animation-delay: .45s; }
+html.aiui-on .aiui-hero .wrap-text > *:nth-child(4) { animation-delay: .60s; }
+html.aiui-on .aiui-hero .wrap-text > *:nth-child(n+5) { animation-delay: .75s; }
+
+@keyframes aiui-rise {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Soft glass card for the boxed hero text */
+html.aiui-on .aiui-hero .wrap-text.bx {
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+          backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(255,255,255,.45);
+  box-shadow: var(--aiui-depth-3);
+}
+
+/* ---------- Magnetic CTA ---------- */
+html.aiui-on .aiui-hero .btn {
+  position: relative;
+  transition:
+    transform .35s var(--aiui-ease-spring),
+    box-shadow .35s var(--aiui-ease-soft);
+  will-change: transform;
+}
+html.aiui-on .aiui-hero .btn:hover {
+  box-shadow: 0 12px 28px rgba(184,138,74,.28);
+}
+html.aiui-on .aiui-hero .btn[data-aiui-magnetic] {
+  transform: translate3d(
+    calc(var(--aiui-bx, 0) * 1px),
+    calc(var(--aiui-by, 0) * 1px),
+    0
+  );
+}
+
+/* ---------- Reduced motion: kill animations, keep glass look ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.aiui-on .aiui-hero .mega-title { animation: none; -webkit-text-fill-color: initial; background: none; }
+  html.aiui-on .aiui-hero .wrap-text > * { opacity: 1; transform: none; animation: none; }
+  html.aiui-on .aiui-hero .heroImg { transform: none; }
+  html.aiui-on .aiui-hero__shader { display: none; }
+  html.aiui-on #header { transition: none; }
+}
+
+/* ---------- Mobile: drop the heavy bits, keep the glass ---------- */
+@media (max-width: 768px) {
+  html.aiui-on .aiui-hero__shader { display: none; }
+  html.aiui-on .aiui-hero .heroImg { transform: none; }
+}
+
+/* =========================================================
+   AIUI Immersive — Phase 1.5 (Homepage body)
+   Section headings, category circles, product cards,
+   sale pills, blog cards, footer, reveal-on-scroll.
+   All scoped under html.aiui-on — flag-off keeps stock theme.
+   ========================================================= */
+
+/* ---------- 1. Section headings (.sec-ttl) ----------
+   Replace the plain all-caps look with a refined serif vibe,
+   gold hairline underline, and a subtle decorative ornament. */
+html.aiui-on .sec-ttl {
+  position: relative;
+  padding: 8px 0 28px;
+}
+html.aiui-on .sec-ttl h2,
+html.aiui-on .sec-ttl h3 {
+  font-weight: 500;
+  letter-spacing: .04em;
+  font-size: clamp(22px, 2.4vw, 34px);
+  line-height: 1.2;
+  margin: 0 0 14px;
+  color: var(--aiui-ink);
+}
+html.aiui-on .sec-ttl > p {
+  color: rgba(14,14,16,.6);
+  font-size: 14px;
+  letter-spacing: .02em;
+  max-width: 540px;
+  margin: 0 auto;
+}
+html.aiui-on .sec-ttl::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, transparent, var(--aiui-accent), transparent);
+}
+html.aiui-on .sec-ttl.tl::after { margin-left: 0; }
+
+/* ---------- 2. Category circles (.cat-circles) ---------- */
+html.aiui-on .cat-circles { padding-block: 18px 28px; }
+html.aiui-on .cat-circles .cc-head {
+  font-weight: 500;
+  letter-spacing: .04em;
+  font-size: clamp(20px, 2vw, 28px);
+  text-align: center;
+  margin: 0 0 22px;
+}
+html.aiui-on .cat-circles .cc-head::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin: 12px auto 0;
+  background: linear-gradient(90deg, transparent, var(--aiui-accent), transparent);
+}
+html.aiui-on .cat-circles .cc-item {
+  transition: transform .5s var(--aiui-ease-spring);
+}
+html.aiui-on .cat-circles .cc-item img {
+  transition: transform .6s var(--aiui-ease-spring), box-shadow .4s var(--aiui-ease-soft), filter .5s var(--aiui-ease-soft);
+  box-shadow: 0 6px 18px rgba(15,15,30,.08), inset 0 0 0 1px rgba(255,255,255,.5);
+  filter: saturate(.95);
+}
+html.aiui-on .cat-circles .cc-item:hover { transform: translateY(-4px); }
+html.aiui-on .cat-circles .cc-item:hover img {
+  transform: scale(1.05);
+  filter: saturate(1.1);
+  box-shadow:
+    0 14px 30px rgba(15,15,30,.14),
+    0 0 0 2px var(--aiui-accent-2),
+    inset 0 0 0 1px rgba(255,255,255,.5);
+}
+html.aiui-on .cat-circles .cc-title {
+  transition: color .25s var(--aiui-ease-soft);
+  font-weight: 500;
+  letter-spacing: .03em;
+  margin-top: 12px;
+}
+html.aiui-on .cat-circles .cc-item:hover .cc-title { color: var(--aiui-accent); }
+
+/* ---------- 3. Product cards (.grid-view-item) ---------- */
+html.aiui-on .grid-view-item {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  transition:
+    transform .55s var(--aiui-ease-spring),
+    box-shadow .4s var(--aiui-ease-soft);
+  background: #fff;
+}
+html.aiui-on .grid-view-item .gview-img {
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #fafafa, #f1efea);
+}
+html.aiui-on .grid-view-item:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--aiui-depth-3);
+}
+html.aiui-on .grid-view-item .gitem-img {
+  transition: transform .9s var(--aiui-ease-spring);
+}
+html.aiui-on .grid-view-item:hover .gitem-img.primary {
+  transform: scale(1.06);
+}
+
+/* Title — refined */
+html.aiui-on .grid-view-item__title {
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--aiui-ink);
+  transition: color .25s var(--aiui-ease-soft);
+  display: inline-block;
+  background-image: linear-gradient(var(--aiui-accent), var(--aiui-accent));
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size .35s var(--aiui-ease-spring), color .25s var(--aiui-ease-soft);
+}
+html.aiui-on .grid-view-item:hover .grid-view-item__title {
+  background-size: 100% 1px;
+  color: var(--aiui-accent);
+}
+
+/* Hover-reveal action buttons (declutter the grid) */
+html.aiui-on .grid-view-item .button-set {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .35s var(--aiui-ease-soft), transform .45s var(--aiui-ease-spring);
+  pointer-events: none;
+}
+html.aiui-on .grid-view-item:hover .button-set,
+html.aiui-on .grid-view-item:focus-within .button-set {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+@media (max-width: 768px) {
+  /* Always-visible on touch — hover is unreliable */
+  html.aiui-on .grid-view-item .button-set {
+    opacity: 1; transform: none; pointer-events: auto;
+  }
+}
+
+/* "Add to Cart" inside .flatbtn — make it discreet, gold accent on hover */
+html.aiui-on .grid-view-item .flatbtn .btn {
+  background: transparent;
+  color: var(--aiui-ink);
+  border: 1px solid rgba(14,14,16,.18);
+  border-radius: 999px;
+  letter-spacing: .08em;
+  font-size: 12px;
+  padding: 10px 18px;
+  transition: all .3s var(--aiui-ease-soft);
+}
+html.aiui-on .grid-view-item .flatbtn .btn:hover {
+  background: var(--aiui-ink);
+  color: #fff;
+  border-color: var(--aiui-ink);
+}
+
+/* ---------- 4. Sale / product labels — kill the loud red ---------- */
+html.aiui-on .product-labels { gap: 6px; }
+html.aiui-on .product-labels .lbl {
+  background: linear-gradient(135deg, #f4d8a8, #b88a4a);
+  color: #fff;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(184,138,74,.25);
+}
+html.aiui-on .product-labels .lbl.sold-out {
+  background: rgba(14,14,16,.85);
+}
+
+/* ---------- 5. Blog (Knowledge Lab) cards ---------- */
+html.aiui-on .latest-blog .wrap-blog {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform .5s var(--aiui-ease-spring), box-shadow .4s var(--aiui-ease-soft);
+  background: #fff;
+}
+html.aiui-on .latest-blog .wrap-blog:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--aiui-depth-3);
+}
+html.aiui-on .latest-blog .article__grid-image {
+  display: block;
+  overflow: hidden;
+  position: relative;
+}
+html.aiui-on .latest-blog .article__grid-image::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,.18));
+  pointer-events: none;
+}
+html.aiui-on .latest-blog .wrap-blog .article__grid-image {
+  transition: transform .9s var(--aiui-ease-spring);
+}
+html.aiui-on .latest-blog .wrap-blog:hover .article__grid-image {
+  transform: scale(1.04);
+}
+html.aiui-on .latest-blog .article__grid-meta {
+  padding: 18px 20px 22px;
+}
+html.aiui-on .latest-blog .gridbt {
+  font-weight: 500;
+  letter-spacing: .01em;
+  color: var(--aiui-ink);
+  background-image: linear-gradient(var(--aiui-accent), var(--aiui-accent));
+  background-size: 0% 1px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  transition: background-size .35s var(--aiui-ease-spring), color .25s var(--aiui-ease-soft);
+}
+html.aiui-on .latest-blog .wrap-blog:hover .gridbt {
+  background-size: 100% 1px;
+  color: var(--aiui-accent);
+}
+html.aiui-on .latest-blog .publish-detail {
+  font-size: 12px;
+  letter-spacing: .04em;
+  color: rgba(14,14,16,.5);
+  text-transform: uppercase;
+}
+
+/* ---------- 6. Footer — soften the green wall ---------- */
+html.aiui-on .site-footer {
+  position: relative;
+  background-image:
+    radial-gradient(800px 300px at 80% 0%, rgba(184,138,74,.18), transparent 70%),
+    radial-gradient(600px 240px at 10% 100%, rgba(244,216,168,.10), transparent 70%);
+}
+html.aiui-on .site-footer::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(244,216,168,.45), transparent);
+}
+html.aiui-on .site-footer .footer-block__item {
+  position: relative;
+}
+html.aiui-on .site-footer .footer-block__item h3,
+html.aiui-on .site-footer .footer-block__item .h4 {
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 18px;
+  position: relative;
+  padding-bottom: 10px;
+}
+html.aiui-on .site-footer .footer-block__item h3::after,
+html.aiui-on .site-footer .footer-block__item .h4::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 22px; height: 1px;
+  background: var(--aiui-accent);
+}
+html.aiui-on .site-footer .footer-links a {
+  transition: color .2s var(--aiui-ease-soft), padding-left .25s var(--aiui-ease-spring);
+  display: inline-block;
+}
+html.aiui-on .site-footer .footer-links a:hover {
+  color: var(--aiui-accent-2);
+  padding-left: 6px;
+}
+/* Newsletter form (custom block) — give it a glass card */
+html.aiui-on .site-footer input[type="email"],
+html.aiui-on .site-footer input[type="text"]:not(.search-input) {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 999px;
+  padding: 12px 18px;
+  color: #fff;
+  transition: border-color .25s var(--aiui-ease-soft), background .25s var(--aiui-ease-soft);
+}
+html.aiui-on .site-footer input[type="email"]:focus,
+html.aiui-on .site-footer input[type="text"]:focus {
+  outline: none;
+  border-color: var(--aiui-accent-2);
+  background: rgba(255,255,255,.12);
+}
+html.aiui-on .site-footer button[type="submit"],
+html.aiui-on .site-footer .btn {
+  background: linear-gradient(135deg, var(--aiui-accent-2), var(--aiui-accent));
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 12px 22px;
+  transition: transform .3s var(--aiui-ease-spring), box-shadow .3s var(--aiui-ease-soft);
+}
+html.aiui-on .site-footer button[type="submit"]:hover,
+html.aiui-on .site-footer .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(184,138,74,.35);
+}
+
+/* ---------- 7. Reveal on scroll ----------
+   JS toggles .aiui-inview when an .aiui-reveal element scrolls into view */
+html.aiui-on .aiui-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .9s var(--aiui-ease-soft), transform 1s var(--aiui-ease-spring);
+  will-change: opacity, transform;
+}
+html.aiui-on .aiui-reveal.aiui-inview {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Light stagger for grid children inside a revealed parent */
+html.aiui-on .aiui-reveal.aiui-inview > * {
+  animation: aiui-rise .9s var(--aiui-ease-spring) backwards;
+}
+html.aiui-on .aiui-reveal.aiui-inview > *:nth-child(1) { animation-delay: .05s; }
+html.aiui-on .aiui-reveal.aiui-inview > *:nth-child(2) { animation-delay: .12s; }
+html.aiui-on .aiui-reveal.aiui-inview > *:nth-child(3) { animation-delay: .19s; }
+html.aiui-on .aiui-reveal.aiui-inview > *:nth-child(4) { animation-delay: .26s; }
+html.aiui-on .aiui-reveal.aiui-inview > *:nth-child(5) { animation-delay: .33s; }
+html.aiui-on .aiui-reveal.aiui-inview > *:nth-child(n+6) { animation-delay: .4s; }
+
+/* ---------- 8. "View More" pill — make it premium ---------- */
+html.aiui-on .latest-blog .btn,
+html.aiui-on a.btn[href*="view-all"],
+html.aiui-on .tc.mt10 .btn {
+  position: relative;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 14px 32px;
+  transition: transform .35s var(--aiui-ease-spring), box-shadow .35s var(--aiui-ease-soft);
+}
+
+/* Reduced motion safety net for the new bits */
+@media (prefers-reduced-motion: reduce) {
+  html.aiui-on .aiui-reveal,
+  html.aiui-on .aiui-reveal > * { opacity: 1 !important; transform: none !important; animation: none !important; }
+  html.aiui-on .grid-view-item:hover,
+  html.aiui-on .latest-blog .wrap-blog:hover,
+  html.aiui-on .cat-circles .cc-item:hover { transform: none; }
+}
+
+/* =========================================================
+   AIUI Immersive — Phase 2 (Product Detail Page)
+   Targets the custom .hov-product-conversion section.
+   Specificity: existing inline CSS uses #hov-product-conversion-<id>
+   selectors (1,0,1). We chain .aiui-pdp.aiui-pdp (0,2,0) for normal
+   overrides and use !important only on conflicting values.
+   ========================================================= */
+
+/* ---------- Section background — softer than the cream base ---------- */
+html.aiui-on .aiui-pdp.aiui-pdp {
+  background: #ffffff !important;
+}
+
+/* ---------- Gallery: glass thumbs + smoother main image transition ---------- */
+html.aiui-on .aiui-pdp .hov-main-image {
+  border-radius: 22px !important;
+  box-shadow:
+    0 20px 50px rgba(15,15,30,.08),
+    inset 0 0 0 1px rgba(255,255,255,.6) !important;
+  transition: box-shadow .4s var(--aiui-ease-soft);
+}
+html.aiui-on .aiui-pdp .hov-main-image:hover {
+  box-shadow:
+    0 28px 60px rgba(15,15,30,.12),
+    inset 0 0 0 1px rgba(255,255,255,.6) !important;
+}
+html.aiui-on .aiui-pdp .hov-product-image {
+  transition: opacity .35s var(--aiui-ease-soft), transform .9s var(--aiui-ease-spring);
+}
+
+html.aiui-on .aiui-pdp .hov-thumb {
+  border-radius: 14px !important;
+  border-color: rgba(15,15,30,.08) !important;
+  background: rgba(255,255,255,.7) !important;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  transition: all .35s var(--aiui-ease-spring) !important;
+}
+html.aiui-on .aiui-pdp .hov-thumb:hover {
+  transform: translateY(-3px) !important;
+  border-color: var(--aiui-accent) !important;
+  box-shadow: 0 8px 18px rgba(184,138,74,.2);
+}
+html.aiui-on .aiui-pdp .hov-thumb.is-active {
+  border-color: var(--aiui-accent) !important;
+  box-shadow: 0 0 0 2px var(--aiui-accent-2), 0 8px 18px rgba(184,138,74,.18) !important;
+}
+
+/* ---------- Title & price — refine typography ---------- */
+html.aiui-on .aiui-pdp .hov-title {
+  font-weight: 500 !important;
+  letter-spacing: -.005em !important;
+  font-size: clamp(26px, 2.6vw, 36px) !important;
+  line-height: 1.18 !important;
+}
+html.aiui-on .aiui-pdp .hov-price-current {
+  background: linear-gradient(135deg, #0F3B2E, #1c5b48);
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600 !important;
+}
+
+/* ---------- Trust badges — glass chips ---------- */
+html.aiui-on .aiui-pdp .hov-trust-badges span {
+  background: rgba(255,255,255,.7) !important;
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+          backdrop-filter: saturate(140%) blur(8px);
+  border-color: rgba(15,15,30,.06) !important;
+  font-weight: 500 !important;
+  letter-spacing: .02em;
+  transition: transform .3s var(--aiui-ease-spring), border-color .3s var(--aiui-ease-soft);
+}
+html.aiui-on .aiui-pdp .hov-trust-badges span:hover {
+  transform: translateY(-2px);
+  border-color: var(--aiui-accent) !important;
+}
+
+/* ---------- Variant + quantity — premium fields ---------- */
+html.aiui-on .aiui-pdp .hov-variant-select,
+html.aiui-on .aiui-pdp .hov-quantity-input {
+  border-radius: 14px !important;
+  border-color: rgba(15,15,30,.1) !important;
+  transition: border-color .25s var(--aiui-ease-soft), box-shadow .25s var(--aiui-ease-soft) !important;
+}
+html.aiui-on .aiui-pdp .hov-variant-select:focus,
+html.aiui-on .aiui-pdp .hov-quantity-input:focus {
+  border-color: var(--aiui-accent) !important;
+  box-shadow: 0 0 0 3px rgba(184,138,74,.18) !important;
+}
+
+/* JS-injected +/- stepper wraps .hov-quantity-input */
+html.aiui-on .aiui-pdp .aiui-qty-stepper {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border: 1px solid rgba(15,15,30,.1);
+  border-radius: 14px;
+  background: #fff;
+  overflow: hidden;
+  width: fit-content;
+  min-width: 160px;
+}
+html.aiui-on .aiui-pdp .aiui-qty-stepper button {
+  width: 48px;
+  border: 0;
+  background: transparent;
+  font-size: 20px;
+  color: var(--aiui-ink);
+  cursor: pointer;
+  transition: background .2s var(--aiui-ease-soft);
+}
+html.aiui-on .aiui-pdp .aiui-qty-stepper button:hover { background: rgba(184,138,74,.08); color: var(--aiui-accent); }
+html.aiui-on .aiui-pdp .aiui-qty-stepper .hov-quantity-input {
+  border: 0 !important;
+  border-radius: 0 !important;
+  text-align: center;
+  width: 64px;
+  -moz-appearance: textfield;
+}
+html.aiui-on .aiui-pdp .aiui-qty-stepper .hov-quantity-input::-webkit-outer-spin-button,
+html.aiui-on .aiui-pdp .aiui-qty-stepper .hov-quantity-input::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+
+/* ---------- Buttons — gold gradient primary, glass secondary ---------- */
+html.aiui-on .aiui-pdp .hov-btn-primary {
+  background: linear-gradient(135deg, #1c5b48, #0F3B2E) !important;
+  letter-spacing: .04em !important;
+  position: relative;
+  overflow: hidden;
+  transition: transform .35s var(--aiui-ease-spring), box-shadow .35s var(--aiui-ease-soft) !important;
+}
+html.aiui-on .aiui-pdp .hov-btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform .8s var(--aiui-ease-soft);
+}
+html.aiui-on .aiui-pdp .hov-btn-primary:hover::before { transform: translateX(100%); }
+html.aiui-on .aiui-pdp .hov-btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 14px 32px rgba(15,59,46,.32);
+  opacity: 1 !important;
+}
+
+html.aiui-on .aiui-pdp .hov-btn-secondary {
+  background: linear-gradient(135deg, var(--aiui-accent-2), var(--aiui-accent)) !important;
+  color: #fff !important;
+  border: 0 !important;
+  letter-spacing: .04em !important;
+}
+html.aiui-on .aiui-pdp .hov-btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(184,138,74,.36);
+  background: linear-gradient(135deg, var(--aiui-accent), var(--aiui-accent-2)) !important;
+}
+
+/* ---------- Description — soften card ---------- */
+html.aiui-on .aiui-pdp .hov-description {
+  background: rgba(255,255,255,.65) !important;
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  border-radius: 22px !important;
+  border-color: rgba(15,15,30,.06) !important;
+}
+
+/* ---------- Sticky bar — show on desktop too, premium glass ---------- */
+@media (min-width: 990px) {
+  html.aiui-on .aiui-pdp .hov-sticky-bar {
+    display: block !important;
+    bottom: 18px !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) translateY(160%);
+    width: min(720px, calc(100% - 40px));
+    transition: transform .55s var(--aiui-ease-spring);
+  }
+  html.aiui-on .aiui-pdp.aiui-sticky-visible .hov-sticky-bar {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+@media (max-width: 989px) {
+  html.aiui-on .aiui-pdp .hov-sticky-bar {
+    transform: translateY(160%);
+    transition: transform .5s var(--aiui-ease-spring);
+  }
+  html.aiui-on .aiui-pdp.aiui-sticky-visible .hov-sticky-bar { transform: translateY(0); }
+}
+html.aiui-on .aiui-pdp .hov-sticky-inner {
+  background: rgba(255,255,255,.78) !important;
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+          backdrop-filter: saturate(180%) blur(18px);
+  border: 1px solid rgba(255,255,255,.6) !important;
+  border-radius: 22px !important;
+  box-shadow: 0 18px 50px rgba(15,15,30,.14) !important;
+  padding: 14px 16px !important;
+}
+html.aiui-on .aiui-pdp .hov-sticky-btn {
+  background: linear-gradient(135deg, #1c5b48, #0F3B2E) !important;
+  border-radius: 14px !important;
+  padding: 0 24px !important;
+  letter-spacing: .04em !important;
+  transition: transform .3s var(--aiui-ease-spring), box-shadow .3s var(--aiui-ease-soft) !important;
+}
+html.aiui-on .aiui-pdp .hov-sticky-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15,59,46,.32);
+}
+
+/* ---------- 3D viewer panel + toggle ---------- */
+html.aiui-on .aiui-pdp .aiui-3d-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.8);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+          backdrop-filter: saturate(180%) blur(14px);
+  border: 1px solid rgba(15,15,30,.08);
+  color: var(--aiui-ink);
+  font-size: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .3s var(--aiui-ease-spring), box-shadow .3s var(--aiui-ease-soft), background .25s;
+}
+html.aiui-on .aiui-pdp .aiui-3d-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(15,15,30,.12);
+  background: #fff;
+}
+html.aiui-on .aiui-pdp .aiui-3d-toggle[aria-pressed="true"] {
+  background: var(--aiui-ink);
+  color: #fff;
+  border-color: var(--aiui-ink);
+}
+
+html.aiui-on .aiui-pdp .aiui-3d-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .45s var(--aiui-ease-soft);
+}
+html.aiui-on .aiui-pdp .aiui-3d-stage.aiui-on-view {
+  opacity: 1;
+}
+html.aiui-on .aiui-pdp .aiui-3d-mount,
+html.aiui-on .aiui-pdp .aiui-3d-mount model-viewer {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: linear-gradient(180deg, #fff, #f5f0e8);
+}
+/* While 3D viewer is active, suppress hover zoom + image cursor */
+html.aiui-on .aiui-pdp.aiui-3d-active .hov-zoom-lens,
+html.aiui-on .aiui-pdp.aiui-3d-active .hov-zoom-window {
+  display: none !important;
+}
+html.aiui-on .aiui-pdp.aiui-3d-active .hov-main-image {
+  cursor: default !important;
+}
+
+html.aiui-on .aiui-pdp .aiui-3d-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(14,14,16,.55);
+  background: rgba(255,255,255,.85);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+  padding: 6px 12px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+/* ---------- PDP reveal ---------- */
+html.aiui-on .aiui-pdp .hov-content > * {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: aiui-rise .8s var(--aiui-ease-spring) forwards;
+}
+html.aiui-on .aiui-pdp .hov-content > *:nth-child(1) { animation-delay: .05s; }
+html.aiui-on .aiui-pdp .hov-content > *:nth-child(2) { animation-delay: .12s; }
+html.aiui-on .aiui-pdp .hov-content > *:nth-child(3) { animation-delay: .19s; }
+html.aiui-on .aiui-pdp .hov-content > *:nth-child(4) { animation-delay: .26s; }
+html.aiui-on .aiui-pdp .hov-content > *:nth-child(5) { animation-delay: .33s; }
+html.aiui-on .aiui-pdp .hov-content > *:nth-child(n+6) { animation-delay: .4s; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html.aiui-on .aiui-pdp .hov-content > * { opacity: 1; transform: none; animation: none; }
+  html.aiui-on .aiui-pdp .hov-sticky-bar { transition: none; }
+}
+
+/* =========================================================
+   AIUI Immersive — Phase 3 (Collection / Browse pages)
+   Targets templates/collection.json → sections/main-collection.liquid
+   Class hooks: .clPageBnr, .bnrTtl, .filters-toolbar, .actFilter,
+   .sidebar.filterbar, .sidebar_widget, .widget-title, .infinite,
+   .loadMore, .fl-checkbox, .clrFl > .color > .clrbox.
+   ========================================================= */
+
+/* ---------- 1. Collection banner — refine typography ---------- */
+html.aiui-on .clPageBnr {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+html.aiui-on .clPageBnr::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(80% 60% at 50% 100%, rgba(0,0,0,.18), transparent 70%),
+    radial-gradient(50% 40% at 50% 0%, rgba(255,255,255,.06), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+html.aiui-on .clPageBnr > .pr,
+html.aiui-on .clPageBnr .clBnrBreadcrumb { position: relative; z-index: 2; }
+
+html.aiui-on .clPageBnr .bnrTtl,
+html.aiui-on #Collection .bnrTtl {
+  font-weight: 500;
+  letter-spacing: .02em;
+}
+html.aiui-on #Collection > .page-width > .main-col > .bnrTtl {
+  position: relative;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+html.aiui-on #Collection > .page-width > .main-col > .bnrTtl::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin-top: 14px;
+  background: linear-gradient(90deg, transparent, var(--aiui-accent), transparent);
+}
+
+/* Breadcrumbs */
+html.aiui-on .clBnrBreadcrumb {
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.85);
+}
+html.aiui-on .clBnrBreadcrumb a {
+  opacity: .8;
+  transition: opacity .25s var(--aiui-ease-soft);
+}
+html.aiui-on .clBnrBreadcrumb a:hover { opacity: 1; }
+html.aiui-on .clBnrBcrSep {
+  margin: 0 10px;
+  color: var(--aiui-accent-2);
+  font-weight: 300;
+}
+
+/* Banner dots — premium */
+html.aiui-on .clBnrDot {
+  width: 8px; height: 8px;
+  background: rgba(255,255,255,.45);
+  border: 0;
+  border-radius: 999px;
+  transition: width .35s var(--aiui-ease-spring), background .25s var(--aiui-ease-soft);
+}
+html.aiui-on .clBnrDot.is-active {
+  width: 28px;
+  background: var(--aiui-accent-2);
+}
+
+/* ---------- 2. Toolbar — glass surface, premium controls ---------- */
+html.aiui-on .filters-toolbar {
+  background: rgba(255,255,255,.7);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+          backdrop-filter: saturate(160%) blur(12px);
+  border: 1px solid rgba(15,15,30,.06);
+  border-radius: 16px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  box-shadow: var(--aiui-depth-1);
+}
+
+/* View toggle (grid / list) */
+html.aiui-on .filters-toolbar .collection-view-as {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(15,15,30,.04);
+  border-radius: 999px;
+}
+html.aiui-on .filters-toolbar .change-view {
+  border: 0;
+  background: transparent;
+  width: 36px; height: 32px;
+  border-radius: 999px;
+  color: rgba(14,14,16,.55);
+  cursor: pointer;
+  transition: background .25s var(--aiui-ease-soft), color .25s var(--aiui-ease-soft);
+}
+html.aiui-on .filters-toolbar .change-view:hover { color: var(--aiui-ink); }
+html.aiui-on .filters-toolbar .change-view.active {
+  background: #fff;
+  color: var(--aiui-accent);
+  box-shadow: var(--aiui-depth-1);
+}
+
+/* Product count */
+html.aiui-on .filters-toolbar .filters-toolbar__product-count {
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: rgba(14,14,16,.55);
+  text-transform: uppercase;
+}
+
+/* Sort select — custom chevron, no native arrow */
+html.aiui-on .filters-toolbar__input--sort {
+  border: 1px solid rgba(15,15,30,.1);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 38px 8px 16px;
+  font-size: 13px;
+  letter-spacing: .04em;
+  color: var(--aiui-ink);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b88a4a' stroke-width='2' stroke-linecap='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  cursor: pointer;
+  transition: border-color .25s var(--aiui-ease-soft), box-shadow .25s var(--aiui-ease-soft);
+}
+html.aiui-on .filters-toolbar__input--sort:focus,
+html.aiui-on .filters-toolbar__input--sort:hover {
+  border-color: var(--aiui-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(184,138,74,.14);
+}
+
+/* Mobile filter trigger (.btn-filter) */
+html.aiui-on .filters-toolbar .btn-filter {
+  background: linear-gradient(135deg, #1c5b48, #0F3B2E);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font-size: 12px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  transition: transform .3s var(--aiui-ease-spring), box-shadow .3s var(--aiui-ease-soft);
+}
+html.aiui-on .filters-toolbar .btn-filter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(15,59,46,.28);
+}
+
+/* ---------- 3. Active filter chips ---------- */
+html.aiui-on .active-facets.crFilters {
+  gap: 8px;
+  margin: 6px 0 18px;
+}
+html.aiui-on .actFilter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: .04em;
+  background: rgba(184,138,74,.08);
+  color: var(--aiui-accent);
+  border: 1px solid rgba(184,138,74,.22);
+  transition: background .25s var(--aiui-ease-soft), color .25s var(--aiui-ease-soft), border-color .25s var(--aiui-ease-soft), transform .25s var(--aiui-ease-spring);
+}
+html.aiui-on .actFilter:hover {
+  background: var(--aiui-accent);
+  color: #fff;
+  border-color: var(--aiui-accent);
+  transform: translateY(-1px);
+}
+html.aiui-on .actFilter i { font-size: 10px; }
+
+/* "Clear all" gets a different look */
+html.aiui-on .crFilters > a.actFilter:first-child {
+  background: transparent;
+  color: rgba(14,14,16,.55);
+  border-color: rgba(14,14,16,.18);
+}
+html.aiui-on .crFilters > a.actFilter:first-child:hover {
+  color: var(--aiui-ink);
+  border-color: var(--aiui-ink);
+  background: rgba(14,14,16,.04);
+}
+
+/* ---------- 4. Sidebar (filter drawer / left rail) ---------- */
+html.aiui-on .sidebar.filterbar {
+  background: rgba(255,255,255,.6);
+  -webkit-backdrop-filter: saturate(160%) blur(10px);
+          backdrop-filter: saturate(160%) blur(10px);
+  border-radius: 18px;
+  border: 1px solid rgba(15,15,30,.06);
+  padding: 8px 16px 16px;
+}
+
+/* Make the desktop sidebar sticky */
+@media (min-width: 990px) {
+  html.aiui-on #Collection .sidebar.filterbar {
+    position: sticky;
+    top: 90px;
+    align-self: flex-start;
+    max-height: calc(100vh - 110px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+  html.aiui-on #Collection .sidebar.filterbar::-webkit-scrollbar { width: 6px; }
+  html.aiui-on #Collection .sidebar.filterbar::-webkit-scrollbar-thumb {
+    background: rgba(184,138,74,.3);
+    border-radius: 999px;
+  }
+}
+
+html.aiui-on .sidebar_widget + .sidebar_widget {
+  border-top: 1px solid rgba(15,15,30,.06);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+html.aiui-on .sidebar_widget .widget-title {
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--aiui-ink);
+  cursor: pointer;
+  padding: 8px 0;
+  position: relative;
+}
+html.aiui-on .sidebar_widget .widget-title::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 18px; height: 1px;
+  background: var(--aiui-accent);
+  transition: width .35s var(--aiui-ease-spring);
+}
+html.aiui-on .sidebar_widget:hover .widget-title::after { width: 32px; }
+
+html.aiui-on .count-bubble:not(:empty) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px; height: 18px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--aiui-accent);
+  color: #fff;
+  border-radius: 999px;
+  margin-left: 8px;
+  letter-spacing: 0;
+}
+
+/* ---------- 5. Filter checkboxes — refined ---------- */
+html.aiui-on .fl-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(14,14,16,.78);
+  padding: 6px 0;
+  cursor: pointer;
+  transition: color .2s var(--aiui-ease-soft);
+}
+html.aiui-on .fl-checkbox:hover { color: var(--aiui-ink); }
+html.aiui-on .fl-checkbox .checkbox {
+  width: 16px; height: 16px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(15,15,30,.22);
+  background: #fff;
+  display: inline-block;
+  position: relative;
+  transition: all .25s var(--aiui-ease-soft);
+}
+html.aiui-on .fl-checkbox .custCheck:checked + .checkbox {
+  background: var(--aiui-accent);
+  border-color: var(--aiui-accent);
+}
+html.aiui-on .fl-checkbox .custCheck:checked + .checkbox::after {
+  content: "";
+  position: absolute;
+  left: 4px; top: 1px;
+  width: 5px; height: 9px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+html.aiui-on .fl-checkbox.disabled {
+  opacity: .35;
+  pointer-events: none;
+}
+html.aiui-on .prcnt {
+  margin-left: 4px;
+  font-size: 11px;
+  color: rgba(14,14,16,.4);
+}
+
+/* ---------- 6. Color swatches in filters ---------- */
+html.aiui-on .clrFl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+html.aiui-on .clrFl .color { list-style: none; }
+html.aiui-on .clrFl .clrbox {
+  display: inline-block;
+  width: var(--clswsz, 22px);
+  height: var(--clswsz, 22px);
+  border-radius: 50%;
+  border: 1px solid rgba(15,15,30,.1);
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,.6);
+  cursor: pointer;
+  transition: transform .25s var(--aiui-ease-spring), box-shadow .25s var(--aiui-ease-soft);
+}
+html.aiui-on .clrFl .fl-checkbox:hover .clrbox { transform: scale(1.08); }
+html.aiui-on .clrFl .custCheck:checked + .clrbox {
+  box-shadow: 0 0 0 2px var(--aiui-accent), inset 0 0 0 2px rgba(255,255,255,.7);
+  transform: scale(1.05);
+}
+
+/* ---------- 7. List view item (alt layout) ---------- */
+html.aiui-on .list-view-item {
+  position: relative;
+  border-radius: 18px;
+  background: rgba(255,255,255,.7);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  border: 1px solid rgba(15,15,30,.06);
+  padding: 16px;
+  transition: transform .45s var(--aiui-ease-spring), box-shadow .35s var(--aiui-ease-soft);
+}
+html.aiui-on .list-view-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--aiui-depth-3);
+}
+html.aiui-on .list-view-item__title {
+  font-weight: 500;
+  letter-spacing: .01em;
+  transition: color .2s var(--aiui-ease-soft);
+}
+html.aiui-on .list-view-item:hover .list-view-item__title {
+  color: var(--aiui-accent);
+}
+
+/* ---------- 8. Pagination — replace gif loader, polish "Load More" ---------- */
+html.aiui-on .infinitpagin .infinite img,
+html.aiui-on .infinitpagin .loadMore img {
+  display: none;
+}
+html.aiui-on .infinitpagin .infinite {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(14,14,16,.6);
+}
+html.aiui-on .infinitpagin .infinite::before {
+  content: "";
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(184,138,74,.22);
+  border-top-color: var(--aiui-accent);
+  animation: aiui-spin 0.8s linear infinite;
+}
+@keyframes aiui-spin {
+  to { transform: rotate(360deg); }
+}
+
+html.aiui-on .infinitpagin .btn.loadMore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #1c5b48, #0F3B2E);
+  color: #fff;
+  border: 0;
+  border-radius: 999px;
+  position: relative;
+  overflow: hidden;
+  transition: transform .3s var(--aiui-ease-spring), box-shadow .3s var(--aiui-ease-soft);
+}
+html.aiui-on .infinitpagin .btn.loadMore::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform .8s var(--aiui-ease-soft);
+}
+html.aiui-on .infinitpagin .btn.loadMore:hover::before { transform: translateX(100%); }
+html.aiui-on .infinitpagin .btn.loadMore:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(15,59,46,.32);
+}
+
+/* Default page-numbers pagination */
+html.aiui-on .infinitpaginOuter [aria-label*="age"] a,
+html.aiui-on .infinitpaginOuter .page a,
+html.aiui-on .infinitpaginOuter .page span {
+  border-radius: 999px;
+  transition: all .25s var(--aiui-ease-soft);
+}
+html.aiui-on .infinitpaginOuter .page a:hover {
+  background: rgba(184,138,74,.12);
+  color: var(--aiui-accent);
+}
+html.aiui-on .infinitpaginOuter .page.current span,
+html.aiui-on .infinitpaginOuter .page .page-current {
+  background: var(--aiui-accent);
+  color: #fff;
+}
+
+/* ---------- 9. Collection description — refined ---------- */
+html.aiui-on .collection-description.rte {
+  color: rgba(14,14,16,.7);
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: .005em;
+  max-width: 720px;
+  margin-bottom: 18px;
+}
+html.aiui-on .collection-description.rte p:first-child { margin-top: 0; }
+
+/* ---------- 10. Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html.aiui-on .list-view-item:hover,
+  html.aiui-on .actFilter:hover,
+  html.aiui-on .clrFl .clrbox { transform: none; }
+  html.aiui-on .infinitpagin .infinite::before { animation: none; }
+}

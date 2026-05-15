@@ -1,7 +1,17 @@
 {%- assign secSt = section.settings -%}
 {% capture siteFooter %}
-<footer class="site-footer{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" role="contentinfo">  
-   
+<footer class="site-footer{% if secSt.snow_effect %} falling-snow{% endif %}{% if secSt.snow_style == "style2" %} style2{% else %} style1{% endif %}" role="contentinfo">
+
+  {% render 'hov-footer-features' %}
+    {% render 'hov-footer-stats' %}
+  {% render 'hov-footer-services' %}
+
+  {% comment %}
+  <div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %} hov-trust-card-wrap">
+    {% render 'hov-trust-badges-card' %}
+  </div>
+  {% endcomment %}
+
   {% if section.blocks.size != 0 %}
   	<div class="{% unless secSt.section_width %}page-width{% else %} fullwidth{% endunless %}">
   	<div class="footer-top footer-block">
@@ -147,7 +157,10 @@
       </div>        
   </div>
   {% endif %}
-  
+  {% comment %}
+  {% render 'hov-footer-services' %}
+  {% endcomment %}
+
   {% if secSt.copyright_text != blank or secSt.show_payment %}
   <div class="footer-bottom">
     <div class="fl f-aic f-jcsb f-col f-row-md{% unless secSt.section_width %} page-width{% else %} fullwidth{% endunless %}">

@@ -1,8 +1,40 @@
 {% assign current_product = product %}
 
-<section class="hov-product-conversion" id="hov-product-conversion-{{ section.id }}">
+{%- assign aiui_models = current_product.media | where: 'media_type', 'model' -%}
+{%- assign aiui_has_3d = false -%}
+{%- if aiui_models.size > 0 -%}{%- assign aiui_has_3d = true -%}{%- endif -%}
+
+{%- comment -%}
+  === Extras sections data resolution ===
+  Priority: per-product metafield → section default → hidden.
+  Each section is gated by its own show_extras_* checkbox in section settings.
+{%- endcomment -%}
+{%- assign hov_highlights_mf = current_product.metafields.custom.product_highlights | default: '' -%}
+{%- assign hov_styling_mf    = current_product.metafields.custom.styling_tips      | default: '' -%}
+{%- assign hov_material_mf   = current_product.metafields.custom.material_care     | default: '' -%}
+{%- assign hov_box_mf        = current_product.metafields.custom.box_contents      | default: '' -%}
+
+{%- if hov_highlights_mf != blank -%}{%- assign hov_highlights_raw = hov_highlights_mf -%}{%- else -%}{%- assign hov_highlights_raw = section.settings.default_highlights | default: '' -%}{%- endif -%}
+{%- if hov_styling_mf    != blank -%}{%- assign hov_styling_raw    = hov_styling_mf    -%}{%- else -%}{%- assign hov_styling_raw    = section.settings.default_styling_tips  | default: '' -%}{%- endif -%}
+{%- if hov_material_mf   != blank -%}{%- assign hov_material_raw   = hov_material_mf   -%}{%- else -%}{%- assign hov_material_raw   = section.settings.default_material_care | default: '' -%}{%- endif -%}
+{%- if hov_box_mf        != blank -%}{%- assign hov_box_raw        = hov_box_mf        -%}{%- else -%}{%- assign hov_box_raw        = section.settings.default_box_contents  | default: '' -%}{%- endif -%}
+
+{%- unless section.settings.show_extras_highlights -%}{%- assign hov_highlights_raw = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_styling    -%}{%- assign hov_styling_raw    = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_material   -%}{%- assign hov_material_raw   = '' -%}{%- endunless -%}
+{%- unless section.settings.show_extras_box        -%}{%- assign hov_box_raw        = '' -%}{%- endunless -%}
+
+{%- assign hov_has_extras = false -%}
+{%- if hov_highlights_raw != blank or hov_styling_raw != blank or hov_material_raw != blank or hov_box_raw != blank -%}
+  {%- assign hov_has_extras = true -%}
+{%- endif -%}
+<section class="hov-product-conversion aiui-pdp" id="hov-product-conversion-{{ section.id }}" data-aiui-has-3d="{{ aiui_has_3d }}">
+
   <div class="hov-page-width">
+
     <div class="hov-grid">
+
+      
       <div class="hov-media">
         {% if current_product.images.size > 1 %}
           <div class="hov-thumbnails">
@@ -19,8 +51,7 @@
                 {{
                   image
                   | image_url: width: 300
-                  | image_tag: loading: 'lazy', class: 'hov-thumb-image', alt: image.alt
-                  | escape
+                  | image_tag: loading: 'lazy', class: 'hov-thumb-image', alt: image.alt | escape
                 }}
               </button>
             {% endfor %}
@@ -32,9 +63,40 @@
             {{
               current_product.featured_media
               | image_url: width: 1200
-              | image_tag: loading: 'lazy', class: 'hov-product-image', alt: current_product.title
+              | image_tag: loading: 'eager', fetchpriority: 'high', class: 'hov-product-image', alt: current_product.title
             }}
             <div class="hov-zoom-lens" aria-hidden="true"></div>
+
+            {%- if settings.enable_wishlist -%}
+              <a
+                class="btn wishlist addto-wishlist hov-pdp-wishlist"
+                href="{{ pages[settings.wishlist_page].url }}"
+                rel="{{ current_product.handle | handleize }}"
+                aria-label="{{ 'products.wishlist.add_to' | t }}"
+              >
+                <i class="at at-heart-l" aria-hidden="true"></i>
+                <span class="tooltip-label">{{ 'products.wishlist.add_to' | t }}</span>
+              </a>
+            {%- endif -%}
+
+            {%- if aiui_has_3d -%}
+              {%- assign aiui_first_model = aiui_models | first -%}
+              <div class="aiui-3d-stage" hidden aria-hidden="true">
+                <div class="aiui-3d-mount"
+                     data-model-src="{{ aiui_first_model | model_url }}"
+                     data-poster="{{ current_product.featured_media | image_url: width: 1200 }}"
+                     data-alt="{{ current_product.title | escape }}">
+                </div>
+                <div class="aiui-3d-hint">Drag to rotate · Pinch to zoom</div>
+              </div>
+              <button type="button" class="aiui-3d-toggle" data-aiui-3d-toggle aria-pressed="false">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/>
+                  <path d="M4 7.5L12 12m0 0l8-4.5M12 12v9"/>
+                </svg>
+                <span class="aiui-3d-toggle-label">View in 3D</span>
+              </button>
+            {%- endif -%}
           </div>
           <div class="hov-zoom-window" aria-hidden="true"></div>
         {% endif %}
@@ -42,6 +104,23 @@
 
       <div class="hov-content">
         <h1 class="hov-title">{{ current_product.title }}</h1>
+
+        <link rel="stylesheet" href="https://cdn.retenzy.com/assets/extensions/rating.css" type="text/css" media="all" />
+        <script src="https://cdn.retenzy.com/assets/extensions/rating.js" defer></script>
+        <div
+          class="retenzy-rating"
+          data-product-id="{{ current_product.id }}"
+          data-shop-name="{{ shop.domain }}"
+          data-total-rating="{{ current_product.metafields.thevital.cf_total_review.value }}"
+          data-avg-rating="{{ current_product.metafields.thevital.cf_average_rating.value }}"
+          data-locale="{{ request.locale.iso_code }}"
+          data-size="large">
+        </div>
+
+        {%- if section.settings.show_guarantee_badge -%}
+          {%- assign guarantee_label = product.metafields.custom.guarantee_text | default: section.settings.guarantee_badge_text -%}
+          {% render 'badge-anti-tarnish', label: guarantee_label %}
+        {%- endif -%}
 
         {% if section.settings.show_reviews %}
           <div class="hov-reviews">
@@ -57,18 +136,10 @@
         {% endif %}
 
         <div class="hov-trust-badges">
-          {% if section.settings.badge_1 != blank -%}
-            <span>{{ section.settings.badge_1 }}</span>
-          {%- endif %}
-          {% if section.settings.badge_2 != blank -%}
-            <span>{{ section.settings.badge_2 }}</span>
-          {%- endif %}
-          {% if section.settings.badge_3 != blank -%}
-            <span>{{ section.settings.badge_3 }}</span>
-          {%- endif %}
-          {% if section.settings.badge_4 != blank -%}
-            <span>{{ section.settings.badge_4 }}</span>
-          {%- endif %}
+          {% if section.settings.badge_1 != blank %}<span>{{ section.settings.badge_1 }}</span>{% endif %}
+          {% if section.settings.badge_2 != blank %}<span>{{ section.settings.badge_2 }}</span>{% endif %}
+          {% if section.settings.badge_3 != blank %}<span>{{ section.settings.badge_3 }}</span>{% endif %}
+          {% if section.settings.badge_4 != blank %}<span>{{ section.settings.badge_4 }}</span>{% endif %}
         </div>
 
         {% form 'product', current_product, class: 'hov-product-form' %}
@@ -85,12 +156,8 @@
                 {% for variant in current_product.variants %}
                   <option
                     value="{{ variant.id }}"
-                    {% if variant == current_product.selected_or_first_available_variant %}
-                      selected
-                    {% endif %}
-                    {% unless variant.available %}
-                      disabled
-                    {% endunless %}
+                    {% if variant == current_product.selected_or_first_available_variant %}selected{% endif %}
+                    {% unless variant.available %}disabled{% endunless %}
                   >
                     {{ variant.title }} - {{ variant.price | money_without_trailing_zeros }}
                   </option>
@@ -112,69 +179,115 @@
           </div>
 
           <div class="hov-buttons">
-            <button
-              type="submit"
-              name="add"
-              class="hov-btn hov-btn-primary"
-              {% unless current_product.selected_or_first_available_variant.available %}
-                disabled
-              {% endunless %}
-            >
+            <button type="submit" name="add" class="hov-btn hov-btn-primary" {% unless current_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
               {% if current_product.selected_or_first_available_variant.available %}
                 Add to Cart
               {% else %}
                 Sold Out
               {% endif %}
             </button>
-            <button
-              type="submit"
-              name="checkout"
-              class="hov-btn hov-btn-secondary"
-              {% unless current_product.selected_or_first_available_variant.available %}
-                disabled
-              {% endunless %}
-            >
+            {%- comment -%}
+              Buy It Now — mirrors the cart page's "Proceed to Checkout" flow.
+              Why: that flow (cart-template.liquid:329) calls `handleFloCheckoutBtn()` and
+              successfully opens Shopflo's checkout. We do the same here, just with an
+              add-to-cart step in front so the product lands in the cart first.
+              `handleFloBuyNowBtn` proved unreliable; `handleFloCheckoutBtn` is the one
+              the cart page already uses in production.
+            {%- endcomment -%}
+            <button type="button" id="hov-buy-it-now-btn" class="hov-btn hov-btn-secondary" {% unless current_product.selected_or_first_available_variant.available %}disabled{% endunless %}>
               Buy It Now
             </button>
-
           </div>
+
+          <div
+            id="reward-page-points"
+            class="reward-page-points-container"
+            data-shop-name="{{ shop.domain }}"
+            data-is-logged-in="{% if customer %}true{% else %}false{% endif %}"
+            data-customer-id="{% if customer %}{{ customer.id }}{% else %}null{% endif %}"
+            data-currency-symbol="{{ shop.currency }}"
+            data-theme="{{ settings.theme_style }}"
+            data-product-id="{{ current_product.id }}"
+            data-product-price="{{ current_product.price }}"
+            data-store-name="{{ shop.name }}"
+            data-store-logo="{{ settings.logo }}"
+            data-locale="{{ localization.language.iso_code }}"
+          ></div>
         {% endform %}
-  
+
         <div class="hov-reassurance">
-          {% if section.settings.reassurance_1 != blank %}
-            <p>{{ section.settings.reassurance_1 }}</p>
-          {% endif %}
-          {% if section.settings.reassurance_2 != blank %}
-            <p>{{ section.settings.reassurance_2 }}</p>
-          {% endif %}
+          {% if section.settings.reassurance_1 != blank %}<p>{{ section.settings.reassurance_1 }}</p>{% endif %}
+          {% if section.settings.reassurance_2 != blank %}<p>{{ section.settings.reassurance_2 }}</p>{% endif %}
         </div>
 
-        
-<div
-    id="reward-page-points"
-    class="reward-page-points-container"
-    data-shop-name="{{ shop.domain }}"
-    data-is-logged-in="{% if customer %}true{% else %}false{% endif %}"
-    data-customer-id="{% if customer %}{{ customer.id }}{% else %}null{% endif %}"
-    data-currency-symbol="{{ shop.currency }}"
-    data-theme="{{ settings.theme_style }}"
-    data-product-id="{{ product.id }}"
-    data-product-price="{{ product.price }}"
-    data-store-name="{{ shop.name }}"
-    data-store-logo="{{ settings.logo }}"
-   data-locale="{{ localization.language.iso_code }}"
-
-  ></div>
-        {% if current_product.description != blank %}
-          <div class="hov-description">
-            <h3>Description</h3>
-            <div class="hov-description-content">
-              {{ current_product.description }}
-            </div>
-          </div>
-        {% endif %}
+        {%- comment -%} Description is merged into the unified "About this piece" card rendered by hov-product-makeover.liquid {%- endcomment -%}
       </div>
     </div>
+
+    {%- if hov_has_extras -%}
+      <div class="hov-extras">
+
+        {%- if hov_highlights_raw != blank -%}
+          {%- assign hov_highlight_lines = hov_highlights_raw | newline_to_br | split: '<br />' -%}
+          <section class="hov-extras-section hov-extras-highlights">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> Product Highlights</h2>
+            <div class="hov-extras-highlights-grid">
+              {%- for line in hov_highlight_lines -%}
+                {%- assign clean = line | strip | replace: '<br>', '' | replace: '<br/>', '' | strip -%}
+                {%- if clean != blank -%}
+                  {%- assign parts = clean | split: '|' -%}
+                  {%- assign h_title = parts[0] | strip -%}
+                  {%- assign h_desc  = parts[1] | strip -%}
+                  <div class="hov-extras-card">
+                    <div class="hov-extras-card-num">0{{ forloop.index }}</div>
+                    <h3 class="hov-extras-card-title">{{ h_title }}</h3>
+                    {%- if h_desc != blank -%}
+                      <p class="hov-extras-card-desc">{{ h_desc }}</p>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_styling_raw != blank -%}
+          <section class="hov-extras-section hov-extras-styling">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> Style It Your Way</h2>
+            <div class="hov-extras-prose">{{ hov_styling_raw | newline_to_br }}</div>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_material_raw != blank -%}
+          <section class="hov-extras-section hov-extras-material">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> Material &amp; Care</h2>
+            <div class="hov-extras-prose">{{ hov_material_raw | newline_to_br }}</div>
+          </section>
+        {%- endif -%}
+
+        {%- if hov_box_raw != blank -%}
+          {%- assign hov_box_lines = hov_box_raw | newline_to_br | split: '<br />' -%}
+          <section class="hov-extras-section hov-extras-box">
+            <h2 class="hov-extras-title"><span class="hov-extras-mark">✦</span> What's In The Box</h2>
+            <ul class="hov-extras-box-list">
+              {%- for line in hov_box_lines -%}
+                {%- assign item = line | strip | replace: '<br>', '' | replace: '<br/>', '' | replace: '•', '' | replace: '·', '' | strip -%}
+                {%- if item != blank -%}
+                  <li class="hov-extras-box-item">
+                    <svg class="hov-extras-box-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span>{{ item }}</span>
+                  </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+          </section>
+        {%- endif -%}
+
+      </div>
+    {%- endif -%}
+
   </div>
 
   <div class="hov-sticky-bar">
@@ -192,6 +305,7 @@
       </form>
     </div>
   </div>
+
 </section>
 <style>
   #hov-product-conversion-{{ section.id }} {
@@ -201,7 +315,8 @@
     --hov-charcoal: #2E2E2E;
     --hov-muted: #7A7A7A;
     --hov-border: #E8E1D8;
-    --hov-bg: #FCFAF7;
+    --hov-bg: #ffffff;
+    --hov-sticky-top: 100px;
     background: var(--hov-bg);
     padding: 40px 0 80px;
     box-sizing: border-box;
@@ -260,6 +375,36 @@
     transition: opacity 120ms ease;
     z-index: 5;
   }
+
+  /* PDP wishlist heart — overlay on top-right of the main image */
+  #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist {
+    position: absolute !important;
+    top: 16px !important;
+    right: 16px !important;
+    z-index: 6;
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    box-shadow: 0 4px 14px rgba(15, 59, 46, 0.12) !important;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist .at {
+    font-size: 18px !important;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist:hover {
+    transform: scale(1.06);
+  }
+  @media (max-width: 749px) {
+    #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist {
+      top: 12px !important;
+      right: 12px !important;
+      width: 42px !important;
+      height: 42px !important;
+      min-width: 42px !important;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-pdp-wishlist .at {
+      font-size: 16px !important;
+    }
+  }
   #hov-product-conversion-{{ section.id }} .hov-zoom-window {
     position: absolute;
     top: 0;
@@ -292,23 +437,38 @@
     }
   }
   #hov-product-conversion-{{ section.id }} .hov-media {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr);
+    grid-template-rows: auto auto;
     gap: 14px;
-    align-items: flex-start;
     position: relative;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media:not(:has(.hov-thumbnails)) {
+    grid-template-columns: minmax(0, 1fr);
   }
   #hov-product-conversion-{{ section.id }} .hov-thumbnails {
     display: flex;
     flex-direction: column;
-    width: 84px;
-    flex-shrink: 0;
+    width: 100%;
     gap: 12px;
     margin-top: 0;
+    grid-column: 1;
+    grid-row: 1;
   }
   #hov-product-conversion-{{ section.id }} .hov-main-image {
-    flex: 1 1 auto;
+    grid-column: 2;
+    grid-row: 1;
     min-width: 0;
+    width: 100%;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media:not(:has(.hov-thumbnails)) > .hov-main-image {
+    grid-column: 1;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-media > .hov2-about {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    margin-top: 6px;
   }
   #hov-product-conversion-{{ section.id }} .hov-thumb {
     padding: 0;
@@ -587,6 +747,25 @@
     font-weight: 700;
     cursor: pointer;
   }
+  /* Amazon-style sticky gallery — desktop only.
+     Image column sticks while content column scrolls naturally.
+     No height constraints — content controls total section height. */
+  @media (min-width: 990px) {
+    #hov-product-conversion-{{ section.id }} .hov-grid {
+      align-items: start;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-media {
+      position: relative;
+      align-self: start;
+      height: auto;
+      z-index: 1;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-content {
+      height: auto;
+      overflow: visible;
+    }
+  }
+
   @media screen and (max-width: 989px) {
     #hov-product-conversion-{{ section.id }} {
       padding: 24px 0 60px;
@@ -600,13 +779,26 @@
       gap: 28px;
     }
     #hov-product-conversion-{{ section.id }} .hov-media {
+      display: flex;
       flex-direction: column;
+      grid-template-columns: none;
+      grid-template-rows: none;
     }
     #hov-product-conversion-{{ section.id }} .hov-thumbnails {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       width: 100%;
       margin-top: 14px;
+      grid-column: auto;
+      grid-row: auto;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-main-image {
+      grid-column: auto;
+      grid-row: auto;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-media > .hov2-about {
+      grid-column: auto;
+      grid-row: auto;
     }
     #hov-product-conversion-{{ section.id }} .hov-main-image {
       width: 100%;
@@ -628,26 +820,327 @@
       display: block;
     }
   }
+
+  /* ============================================================
+     EXTRAS — Product Highlights · Styling · Material & Care
+              · What's in the Box
+     ============================================================ */
+  #hov-product-conversion-{{ section.id }} .hov-extras {
+    margin-top: 56px;
+    display: grid;
+    gap: 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-section {
+    background: #FAF7F2;
+    border: 1px solid var(--hov-border);
+    border-radius: 20px;
+    padding: 32px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--hov-gold), transparent);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--hov-emerald);
+    letter-spacing: 0.4px;
+    margin: 0 0 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-mark {
+    color: var(--hov-gold);
+    font-size: 22px;
+    line-height: 1;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-prose {
+    font-size: 15px;
+    color: #3a3a3a;
+    line-height: 1.8;
+    letter-spacing: 0.1px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-prose p {
+    margin: 0 0 12px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-prose p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Product Highlights — card grid */
+  #hov-product-conversion-{{ section.id }} .hov-extras-highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card {
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 14px;
+    padding: 22px 20px 20px;
+    position: relative;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(15, 59, 46, 0.08);
+    border-color: rgba(200, 178, 138, 0.6);
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card-num {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--hov-gold);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--hov-charcoal);
+    margin: 0 0 6px;
+    letter-spacing: 0.2px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-card-desc {
+    font-size: 13.5px;
+    color: var(--hov-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* What's In The Box — checklist */
+  #hov-product-conversion-{{ section.id }} .hov-extras-box-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px 24px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-box-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14.5px;
+    color: var(--hov-charcoal);
+    line-height: 1.5;
+    background: #fff;
+    border: 1px solid var(--hov-border);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  #hov-product-conversion-{{ section.id }} .hov-extras-box-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--hov-emerald);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Extras — Mobile */
+  @media (max-width: 749px) {
+    #hov-product-conversion-{{ section.id }} .hov-extras {
+      margin-top: 32px;
+      gap: 16px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-section {
+      padding: 22px 18px;
+      border-radius: 16px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-title {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-highlights-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-box-list {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    #hov-product-conversion-{{ section.id }} .hov-extras-prose {
+      font-size: 14px;
+    }
+  }
+
+  /* ============================================================
+     PREMIUM FAQ OVERRIDE — applies to the plain hov-faq-wrapper
+     accordion rendered from templates/product.json (custom_liquid).
+     Selectors use `body` prefix to win specificity over the
+     embedded inline styles in the custom_liquid block.
+     ============================================================ */
+  body .hov-faq-wrapper {
+    max-width: 1280px;
+    margin: 56px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  body .hov-faq-wrapper::before {
+    content: "✦  Frequently Asked Questions";
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    color: #C8B28A;
+    letter-spacing: 2.8px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+  body .hov-faq-wrapper .hov-accordion {
+    background: #FAF7F2;
+    border: 1px solid #E8E1D8;
+    border-radius: 20px;
+    padding: 8px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  body .hov-faq-wrapper .hov-accordion::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #C8B28A, transparent);
+  }
+  body .hov-faq-wrapper .hov-accordion-item {
+    border-bottom: 1px solid rgba(15, 59, 46, 0.08);
+  }
+  body .hov-faq-wrapper .hov-accordion-item:last-child {
+    border-bottom: none;
+  }
+  body .hov-faq-wrapper .hov-accordion-header {
+    padding: 22px 4px;
+    font-family: inherit;
+    font-size: 15px;
+    color: #0F3B2E;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    transition: color 0.25s ease;
+    cursor: pointer;
+  }
+  body .hov-faq-wrapper .hov-accordion-header:hover {
+    color: #8a7548;
+  }
+  body .hov-faq-wrapper .hov-accordion-item.active .hov-accordion-header {
+    color: #8a7548;
+  }
+  body .hov-faq-wrapper .hov-chevron {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #fff;
+    border: 1px solid #E8E1D8;
+    color: #0F3B2E;
+    font-size: 13px;
+    transition: transform 0.4s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
+  body .hov-faq-wrapper .hov-accordion-item.active .hov-chevron {
+    background: #0F3B2E;
+    color: #fff;
+    border-color: #0F3B2E;
+  }
+  body .hov-faq-wrapper .hov-accordion-content p {
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.85;
+    color: #4a4a4a;
+    margin: 0 0 22px;
+    padding-right: 40px;
+  }
+  @media (max-width: 749px) {
+    body .hov-faq-wrapper {
+      margin: 32px auto;
+    }
+    body .hov-faq-wrapper::before {
+      font-size: 10px;
+      letter-spacing: 2.2px;
+      margin-bottom: 12px;
+    }
+    body .hov-faq-wrapper .hov-accordion {
+      padding: 4px 20px;
+      border-radius: 16px;
+    }
+    body .hov-faq-wrapper .hov-accordion-header {
+      font-size: 15px;
+      padding: 18px 4px;
+    }
+    body .hov-faq-wrapper .hov-accordion-content p {
+      font-size: 13.5px;
+      padding-right: 8px;
+      margin-bottom: 18px;
+    }
+  }
 </style>
 
 {% render 'hov-product-makeover' %}
 
 <script type="application/json" id="hov-variants-{{ section.id }}">
-  [
-    {%- for v in current_product.variants -%}
-      {%- assign cap = v.compare_at_price | default: 0 -%}
-      {%- assign saved = cap | minus: v.price -%}
-      {%- assign pct = 0 -%}
-      {%- if cap > v.price -%}{%- assign pct = saved | times: 100 | divided_by: cap -%}{%- endif -%}
-      {"id":{{ v.id }},"price":{{ v.price | money_without_trailing_zeros | json }},"compare":{% if cap > v.price %}{{ cap | money_without_trailing_zeros | json }}{% else %}null{% endif %},"pct":{{ pct }},"available":{{ v.available }}}{%- unless forloop.last -%},{%- endunless -%}
-    {%- endfor -%}
-  ]
+[
+  {%- for v in current_product.variants -%}
+    {%- assign cap = v.compare_at_price | default: 0 -%}
+    {%- assign saved = cap | minus: v.price -%}
+    {%- assign pct = 0 -%}
+    {%- if cap > v.price -%}{%- assign pct = saved | times: 100 | divided_by: cap -%}{%- endif -%}
+    {"id":{{ v.id }},"price":{{ v.price | money_without_trailing_zeros | json }},"compare":{% if cap > v.price %}{{ cap | money_without_trailing_zeros | json }}{% else %}null{% endif %},"pct":{{ pct }},"available":{{ v.available }}}{%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+]
 </script>
 
 <script>
   (function () {
     var root = document.getElementById('hov-product-conversion-{{ section.id }}');
     if (!root) return;
+
+    // Buy It Now: add the variant, then trigger Shopflo via the same function
+    // the cart page's "Proceed to Checkout" button uses (handleFloCheckoutBtn).
+    var hovBuyBtn = root.querySelector('#hov-buy-it-now-btn');
+    var hovForm = root.querySelector('.hov-product-form');
+    if (hovBuyBtn && hovForm) {
+      hovBuyBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var sel = hovForm.querySelector('select[name="id"]');
+        var hidden = hovForm.querySelector('input[name="id"]');
+        var vid = (sel && sel.value) || (hidden && hidden.value);
+        var qtyInput = hovForm.querySelector('input[name="quantity"]');
+        var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+        if (!vid) return;
+        hovBuyBtn.disabled = true;
+        var origText = hovBuyBtn.textContent;
+        hovBuyBtn.textContent = 'Loading...';
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: parseInt(vid, 10), quantity: qty })
+        })
+          .then(function (r) { return r.json(); })
+          .then(function () {
+            if (typeof window.handleFloCheckoutBtn === 'function') {
+              window.handleFloCheckoutBtn();
+            } else {
+              console.error('[hov] handleFloCheckoutBtn not available — Shopflo bundle did not load.');
+              hovBuyBtn.textContent = origText;
+              hovBuyBtn.disabled = false;
+            }
+          })
+          .catch(function () {
+            hovBuyBtn.textContent = origText;
+            hovBuyBtn.disabled = false;
+          });
+      });
+    }
 
     try {
       var variantData = JSON.parse(document.getElementById('hov-variants-{{ section.id }}').textContent);
@@ -656,9 +1149,7 @@
       var stickyCmp = root.querySelector('.hov-sticky-compare');
 
       function applyVariant(id) {
-        var v = variantData.find(function (x) {
-          return String(x.id) === String(id);
-        });
+        var v = variantData.find(function (x) { return String(x.id) === String(id); });
         if (!v) return;
         var hasSale = !!v.compare && v.pct > 0;
         if (stickyCur) stickyCur.textContent = v.price;
@@ -667,10 +1158,7 @@
           stickyCmp.hidden = !hasSale;
         }
       }
-      if (select)
-        select.addEventListener('change', function () {
-          applyVariant(select.value);
-        });
+      if (select) select.addEventListener('change', function () { applyVariant(select.value); });
     } catch (e) {}
 
     var media = root.querySelector('.hov-media');
@@ -810,6 +1298,23 @@
       "default": "✨ Bestseller"
     },
     {
+      "type": "header",
+      "content": "Anti-tarnish guarantee badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_guarantee_badge",
+      "label": "Show guarantee badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "guarantee_badge_text",
+      "label": "Guarantee badge text",
+      "info": "Per-product override: set product.metafields.custom.guarantee_text",
+      "default": "6-Month Anti-Tarnish Guarantee"
+    },
+    {
       "type": "text",
       "id": "subtitle",
       "label": "Subtitle",
@@ -886,6 +1391,65 @@
       "id": "reassurance_2",
       "label": "Reassurance line 2",
       "default": "Premium design with a pocket-friendly price"
+    },
+
+    {
+      "type": "header",
+      "content": "Extras — full-width sections below the product"
+    },
+    {
+      "type": "paragraph",
+      "content": "Per-product overrides live in product metafields (custom.product_highlights, custom.styling_tips, custom.material_care, custom.box_contents). The defaults below show whenever a product has no metafield value."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_highlights",
+      "label": "Show Product Highlights",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_highlights",
+      "label": "Default highlights",
+      "info": "One per line, format: Title | Description",
+      "default": "Versatile Style | Pairs with both ethnic and western outfits\nLightweight Feel | Comfortable for all-day wear\nAdjustable Fit | Fits all body types comfortably"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_styling",
+      "label": "Show Style It Your Way",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_styling_tips",
+      "label": "Default styling tips",
+      "default": "Pair with a saree for traditional events.\nLayer over a kurta for festive looks.\nWear over a plain top + jeans for everyday glam."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_material",
+      "label": "Show Material & Care",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_material_care",
+      "label": "Default material & care",
+      "default": "Material: 18K Gold Plated on 304 Stainless Steel.\nCare: Wipe with a soft dry cloth after wear.\nAvoid contact with water, perfume, and chemicals."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_extras_box",
+      "label": "Show What's In The Box",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "default_box_contents",
+      "label": "Default box contents",
+      "info": "One item per line",
+      "default": "1 × Jewellery piece\nPremium gift box\nCare instructions card\nAuthenticity certificate"
     }
   ],
   "presets": [

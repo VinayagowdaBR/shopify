@@ -1,0 +1,159 @@
+{%- comment -%}
+  HOV Footer Features
+  -------------------
+  Cream-toned 6-card USP strip (Tarnish Free, Hypoallergenic, etc.).
+  Used between the dark footer columns and the stats/reviews band.
+{%- endcomment -%}
+
+<section class="hov-foot-features" aria-label="House of Viya quality promises">
+  <div class="hov-foot-features__inner">
+    <ul class="hov-foot-features__grid" role="list">
+
+      <li class="hov-foot-features__item">
+        <span class="hov-foot-features__ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#0E2A22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 3c4 5 7 9 7 13a7 7 0 1 1-14 0c0-4 3-8 7-13z"/>
+            <path d="M12 18a4 4 0 0 0 4 4"/>
+          </svg>
+        </span>
+        <p class="hov-foot-features__ttl">Lust Tarnish &amp;<br/>Waterproof/Sweat proof</p>
+      </li>
+
+      <li class="hov-foot-features__item">
+        <span class="hov-foot-features__ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#0E2A22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 27s-9-5.5-9-12.5A5.5 5.5 0 0 1 16 10a5.5 5.5 0 0 1 9 4.5C25 21.5 16 27 16 27z"/>
+            <path d="M11 16h2l1.5-3 2 6 1.5-3h3"/>
+          </svg>
+        </span>
+        <p class="hov-foot-features__ttl">Hypoallergenic<br/>&amp; Skin Safe</p>
+      </li>
+
+      <li class="hov-foot-features__item">
+        <span class="hov-foot-features__ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#0E2A22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="17" r="7"/>
+            <path d="M16 13v8"/>
+            <path d="M13 15.5h6"/>
+            <path d="M13 18.5h6"/>
+            <path d="M11 7l2 4M21 7l-2 4M16 6v5"/>
+          </svg>
+        </span>
+        <p class="hov-foot-features__ttl">Premium<br/>18k Gold Plated</p>
+      </li>
+
+      <li class="hov-foot-features__item">
+        <span class="hov-foot-features__ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#0E2A22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="8" y="6" width="16" height="20" rx="3"/>
+            <path d="M12 11h8M12 15h8M12 19h5"/>
+          </svg>
+        </span>
+        <p class="hov-foot-features__ttl">100%<br/>Stainless Steel/Copper</p>
+      </li>
+
+      <li class="hov-foot-features__item">
+        <span class="hov-foot-features__ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#0E2A22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="12" width="22" height="14" rx="1.5"/>
+            <path d="M5 17h22"/>
+            <path d="M16 12v14"/>
+            <path d="M11 12c0-3 2-5 5-2 3-3 5-1 5 2"/>
+          </svg>
+        </span>
+        <p class="hov-foot-features__ttl">Premium<br/>Gift Packaging</p>
+      </li>
+
+      <li class="hov-foot-features__item">
+        <span class="hov-foot-features__ico" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="34" height="34" fill="none" stroke="#0E2A22" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4l3 8h8l-6.5 5 2.5 9-7-5-7 5 2.5-9L5 12h8z"/>
+          </svg>
+        </span>
+        <p class="hov-foot-features__ttl">75+ Store<br/>Collection &amp; Designs</p>
+      </li>
+
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hov-foot-features {
+    background: #F2EBDA;
+    padding: 26px 16px;
+  }
+  .hov-foot-features__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .hov-foot-features__grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 12px;
+  }
+  .hov-foot-features__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+  .hov-foot-features__ico {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #0E2A22;
+  }
+  .hov-foot-features__ttl {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #0E2A22;
+    letter-spacing: 0.2px;
+  }
+
+  @media (min-width: 768px) {
+    .hov-foot-features {
+      padding: 30px 24px;
+    }
+    .hov-foot-features__grid {
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0;
+    }
+    .hov-foot-features__item {
+      padding: 4px 12px;
+      position: relative;
+    }
+    .hov-foot-features__item + .hov-foot-features__item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 18%;
+      bottom: 18%;
+      width: 1px;
+      background: rgba(14, 42, 34, 0.18);
+    }
+    .hov-foot-features__ico {
+      width: 48px;
+      height: 48px;
+    }
+    .hov-foot-features__ttl {
+      font-size: 13px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hov-foot-features {
+      padding: 36px 32px;
+    }
+    .hov-foot-features__ttl {
+      font-size: 14px;
+    }
+  }
+</style>

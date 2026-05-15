@@ -36,39 +36,215 @@
 			</div>
 		{%- endif -%}
 		<div class="header-txt fl1 middle-hdr tc{% if settings.centerTxt-mobile %} hide-sm hide-md{% endif %}">
-			<span class="announcement-bar-text" id="announcementBarText">{{ settings.centerTxt }}</span>
+			<div class="hov-announce" id="announcementBarText" aria-live="polite" aria-atomic="true">
+				<span class="hov-announce-text">{{ settings.centerTxt }}</span>
+			</div>
 		</div>
 		<style>
-			.announcement-bar-text { display:inline-block; opacity:1; transition: opacity 0.6s ease; will-change: opacity; }
-			.announcement-bar-text.is-fading { opacity: 0; }
+			/* Subtle shimmer across the top header strip */
+			.top-header-wrapper { position: relative; overflow: hidden; }
+			.top-header-wrapper::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: -50%;
+				width: 50%;
+				height: 100%;
+				background: linear-gradient(90deg, transparent 0%, rgba(200, 178, 138, 0.10) 50%, transparent 100%);
+				animation: hovShimmer 7s ease-in-out infinite;
+				pointer-events: none;
+				z-index: 1;
+			}
+			@keyframes hovShimmer {
+				0%   { left: -50%; }
+				100% { left: 110%; }
+			}
+			.top-header-wrapper > .top-header { position: relative; z-index: 2; }
+
+			/* Announcement container */
+			.hov-announce {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 8px;
+				min-height: 24px;
+				font-family: inherit;
+				font-size: 13px;
+				font-weight: 500;
+				letter-spacing: 0.45px;
+				transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+				            transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+				opacity: 1;
+				transform: translateY(0);
+				will-change: opacity, transform;
+			}
+			.hov-announce.is-fading {
+				opacity: 0;
+				transform: translateY(-6px);
+			}
+			.hov-announce-text {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				flex-wrap: wrap;
+				justify-content: center;
+			}
+
+			/* Gold promo-code pill */
+			.hov-promo-pill {
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+				background: linear-gradient(135deg, #C8B28A 0%, #d8c39b 50%, #C8B28A 100%);
+				color: #0F3B2E;
+				font-family: 'JetBrains Mono', 'Courier New', monospace;
+				font-weight: 800;
+				font-size: 11px;
+				letter-spacing: 0.9px;
+				padding: 2px 9px 2px 7px;
+				border-radius: 999px;
+				cursor: pointer;
+				transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+				vertical-align: middle;
+				white-space: nowrap;
+				user-select: none;
+			}
+			.hov-promo-pill::before {
+				content: "";
+				display: inline-block;
+				width: 10px;
+				height: 10px;
+				background: #0F3B2E;
+				-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20.59 13.41 11 23l-9-9 9.59-9.59A2 2 0 0 1 13 4h7a2 2 0 0 1 2 2v7a2 2 0 0 1-.59 1.41z'/><circle cx='6.5' cy='6.5' r='1.5'/></svg>") center / contain no-repeat;
+				        mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20.59 13.41 11 23l-9-9 9.59-9.59A2 2 0 0 1 13 4h7a2 2 0 0 1 2 2v7a2 2 0 0 1-.59 1.41z'/><circle cx='6.5' cy='6.5' r='1.5'/></svg>") center / contain no-repeat;
+			}
+			.hov-promo-pill:hover {
+				transform: translateY(-1px);
+				box-shadow: 0 4px 12px rgba(200, 178, 138, 0.45);
+			}
+			.hov-promo-pill.is-copied {
+				background: linear-gradient(135deg, #1f6e54 0%, #0F3B2E 100%);
+				color: #ffffff;
+			}
+			.hov-promo-pill.is-copied::before {
+				background: #ffffff;
+				-webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center / contain no-repeat;
+				        mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>") center / contain no-repeat;
+			}
+
+			/* Toast under the pill */
+			.hov-promo-toast {
+				position: absolute;
+				top: calc(100% + 6px);
+				left: 50%;
+				transform: translate(-50%, 4px);
+				background: #0F3B2E;
+				color: #ffffff;
+				font-size: 11px;
+				font-weight: 600;
+				letter-spacing: 0.4px;
+				padding: 4px 10px;
+				border-radius: 6px;
+				opacity: 0;
+				pointer-events: none;
+				transition: opacity 0.25s ease, transform 0.25s ease;
+				white-space: nowrap;
+				z-index: 10;
+			}
+			.hov-promo-pill-wrap { position: relative; display: inline-flex; }
+			.hov-promo-pill-wrap.is-showing .hov-promo-toast {
+				opacity: 1;
+				transform: translate(-50%, 0);
+			}
+
+			@media (max-width: 749px) {
+				.hov-announce { font-size: 12px; letter-spacing: 0.3px; }
+				.hov-promo-pill { font-size: 10px; padding: 2px 7px 2px 6px; }
+			}
 		</style>
 		<script>
 			(function(){
-				/* Tune these two values to control speed. */
-				var HOLD_MS = 5000;   /* how long each message stays visible (ms) */
-				var FADE_MS = 600;    /* fade-in/out duration; must match CSS transition */
+				var HOLD_MS = 5500;
+				var FADE_MS = 550;
+				/* Detect promo codes: ALL-CAPS letters + digits, length 5–14 */
+				var PROMO_RE = /\b([A-Z]{3,10}\d{1,4})\b/g;
+
+				function escapeHTML(s){
+					return String(s)
+						.replace(/&/g, '&amp;')
+						.replace(/</g, '&lt;')
+						.replace(/>/g, '&gt;')
+						.replace(/"/g, '&quot;');
+				}
+
+				function formatMessage(msg){
+					return escapeHTML(msg).replace(PROMO_RE, function(match){
+						return '<span class="hov-promo-pill-wrap">' +
+							'<button type="button" class="hov-promo-pill" data-code="' + match + '" aria-label="Copy code ' + match + '">' + match + '</button>' +
+							'<span class="hov-promo-toast" aria-hidden="true">Code copied!</span>' +
+						'</span>';
+					});
+				}
 
 				function start(){
 					var el = document.getElementById("announcementBarText");
 					if (!el) return;
+					var textHost = el.querySelector(".hov-announce-text") || el;
 					var messages = [
-						"🎁 Free Studs With Every Order – Yours on us, no minimum!",
-						"👜 Free Jewellery Pouch – On orders above ₹1,499",
-						"💎 VIYAVIP10 – Flat 10% OFF | VIP code for our insiders",
-						"REPEAT5 – Flat 5% OFF on your return order above ₹999)",
-						"✨ WELCOME10 – New here? Enjoy 10% OFF on ₹1,499+"
+						"🎁 Free Studs With Every Order — yours on us, no minimum",
+						"👜 Free Jewellery Pouch when you buy 2+ pieces",
+						"💎 VIYAVIP10 — flat 10% OFF | VIP code for our insiders",
+						"🔁 REPEAT5 — flat 5% OFF on your return order above ₹999",
+						"✨ WELCOME10 — new here? Enjoy 10% OFF on ₹1,499+"
 					];
 					var i = 0;
-					el.textContent = messages[i];
+					var paused = false;
+
+					function render(){ textHost.innerHTML = formatMessage(messages[i]); }
+					render();
+
+					/* Click-to-copy on promo pills */
+					el.addEventListener("click", function(e){
+						var pill = e.target.closest(".hov-promo-pill");
+						if (!pill) return;
+						var code = pill.getAttribute("data-code");
+						var wrap = pill.closest(".hov-promo-pill-wrap");
+						var copy = function(){
+							if (navigator.clipboard && navigator.clipboard.writeText) {
+								return navigator.clipboard.writeText(code);
+							}
+							var ta = document.createElement("textarea");
+							ta.value = code; ta.style.position = "fixed"; ta.style.opacity = "0";
+							document.body.appendChild(ta); ta.select();
+							try { document.execCommand("copy"); } catch(e) {}
+							document.body.removeChild(ta);
+							return Promise.resolve();
+						};
+						copy().then(function(){
+							pill.classList.add("is-copied");
+							if (wrap) wrap.classList.add("is-showing");
+							setTimeout(function(){
+								pill.classList.remove("is-copied");
+								if (wrap) wrap.classList.remove("is-showing");
+							}, 1600);
+						});
+					});
+
+					/* Pause rotation on hover (so the customer can actually read it) */
+					el.addEventListener("mouseenter", function(){ paused = true; });
+					el.addEventListener("mouseleave", function(){ paused = false; });
+
 					setInterval(function(){
+						if (paused) return;
 						el.classList.add("is-fading");
 						setTimeout(function(){
 							i = (i + 1) % messages.length;
-							el.textContent = messages[i];
+							render();
 							el.classList.remove("is-fading");
 						}, FADE_MS);
 					}, HOLD_MS);
 				}
+
 				if (document.readyState === "loading") {
 					document.addEventListener("DOMContentLoaded", start);
 				} else { start(); }
