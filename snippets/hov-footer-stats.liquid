@@ -57,13 +57,67 @@
         <p class="hov-foot-stats__rv-quote">
           &ldquo;Absolutely in love with the quality! It&rsquo;s elegant, and tarnish-free, and perfect for daily wear.&rdquo;
         </p>
-        <p class="hov-foot-stats__rv-meta">Tap to @houseofviya to get featured</p>
-      </div>
+        <a
+          id="hov-foot-stats-ig-cta-{{ section.id | default: 'fs' }}"
+          class="hov-foot-stats__rv-meta hov-foot-stats__rv-meta--cta"
+          href="https://www.instagram.com/houseofviya.official/"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-hov-ig-url="https://www.instagram.com/houseofviya.official/"
+          style="display:inline-flex;align-items:center;justify-content:center;gap:6px;margin:4px auto 14px;padding:9px 20px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;text-decoration:none;color:#0B2219;background:linear-gradient(135deg,#E7B96A 0%,#f3d28f 50%,#C8B28A 100%);border:1px solid rgba(255,240,200,0.55);box-shadow:inset 0 1px 0 rgba(255,255,255,0.6),inset 0 -2px 0 rgba(0,0,0,0.08),0 6px 18px rgba(231,185,106,0.45);cursor:pointer;transition:transform 0.2s ease,box-shadow 0.2s ease,filter 0.2s ease;position:relative;z-index:5;"
+          onmouseover="this.style.transform='translateY(-2px) scale(1.05)';this.style.filter='brightness(1.1)';this.style.boxShadow='inset 0 1px 0 rgba(255,255,255,0.7),inset 0 -2px 0 rgba(0,0,0,0.1),0 10px 24px rgba(231,185,106,0.7)';this.style.cursor='pointer';"
+          onmouseout="this.style.transform='';this.style.filter='';this.style.boxShadow='inset 0 1px 0 rgba(255,255,255,0.6),inset 0 -2px 0 rgba(0,0,0,0.08),0 6px 18px rgba(231,185,106,0.45)';"
+        >Tag @houseofviya.official to get featured &rarr;</a>
+        <script>
+          (function(){
+            var el = document.getElementById('hov-foot-stats-ig-cta-{{ section.id | default: "fs" }}');
+            if (!el || el.dataset.hovInit) return;
+            el.dataset.hovInit = '1';
 
-      <p class="hov-foot-stats__rv-title">Loved By Our Beautiful Customers</p>
+            // Capture-phase click: runs before any theme JS handler can preventDefault().
+            el.addEventListener('click', function(ev){
+              ev.stopImmediatePropagation();
+              var url = el.getAttribute('data-hov-ig-url') || el.href;
+              var win = window.open(url, '_blank', 'noopener,noreferrer');
+              if (!win || win.closed || typeof win.closed === 'undefined') {
+                // Popup blocked — fall back to same-tab navigation so the click never feels broken.
+                window.location.href = url;
+              }
+              ev.preventDefault();
+            }, true);
+
+            // JS-driven blink: cannot be killed by CSS overrides.
+            var on = true;
+            setInterval(function(){
+              el.style.opacity = on ? '0.4' : '1';
+              on = !on;
+            }, 550);
+          })();
+        </script>
+      </div>
 
       {%- assign hov_handle = settings.customer_photos_handle | default: '@houseofviya' -%}
       {%- assign hov_handle_url = settings.customer_photos_handle_url -%}
+
+      {%- if hov_handle_url != blank -%}
+        <a
+          href="{{ hov_handle_url }}"
+          class="hov-foot-stats__rv-title hov-foot-stats__rv-title--link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open Instagram {{ hov_handle }} to tag us"
+        >
+          <span class="hov-foot-stats__rv-title-text">Loved By Our Beautiful Customers</span>
+          <svg class="hov-foot-stats__rv-title-ig" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5" ry="5"/>
+            <path d="M16 11.37a4 4 0 1 1-4.74-4.74A4 4 0 0 1 16 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+          </svg>
+          <span class="hov-foot-stats__rv-title-arrow" aria-hidden="true">→</span>
+        </a>
+      {%- else -%}
+        <p class="hov-foot-stats__rv-title">Loved By Our Beautiful Customers</p>
+      {%- endif -%}
 
       <ul class="hov-foot-stats__rv-grid" role="list">
         {%- for i in (1..4) -%}
@@ -182,13 +236,7 @@
     color: rgba(245, 239, 224, 0.85);
     font-style: italic;
   }
-  .hov-foot-stats__rv-meta {
-    margin: 0 0 14px;
-    font-size: 10px;
-    letter-spacing: 0.5px;
-    color: rgba(245, 239, 224, 0.5);
-    text-transform: uppercase;
-  }
+  /* Instagram CTA pill — full styling lives inline on the element so it survives any cache/specificity issue. See <a id="hov-foot-stats-ig-cta-*"> above. */
   .hov-foot-stats__rv-title {
     text-align: center;
     margin: 6px 0 12px;
@@ -197,6 +245,128 @@
     letter-spacing: 1.1px;
     text-transform: uppercase;
     color: #E7B96A;
+  }
+
+  /* === Tappable Instagram CTA — shiny / pressable === */
+  .hov-foot-stats__rv-title--link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 6px auto 14px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    color: #0B2219;
+    background:
+      linear-gradient(135deg, #E7B96A 0%, #f3d28f 45%, #C8B28A 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.08),
+      0 8px 22px rgba(231, 185, 106, 0.28),
+      0 0 0 1px rgba(231, 185, 106, 0.5);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transform: translateY(0);
+    transition:
+      transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.25s ease,
+      filter 0.25s ease;
+    isolation: isolate;
+  }
+
+  /* Static text in the link picks up the gold-on-emerald aesthetic */
+  .hov-foot-stats__rv-title--link .hov-foot-stats__rv-title-text {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    line-height: 1;
+    color: inherit;
+  }
+
+  .hov-foot-stats__rv-title--link .hov-foot-stats__rv-title-ig {
+    color: inherit;
+    flex-shrink: 0;
+  }
+  .hov-foot-stats__rv-title--link .hov-foot-stats__rv-title-arrow {
+    font-size: 14px;
+    line-height: 1;
+    transform: translateX(0);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Shimmer that travels across — every 3.5s, ✨ feel */
+  .hov-foot-stats__rv-title--link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 65%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: hovTitleShine 3.5s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hov-foot-stats__rv-title--link > * { position: relative; z-index: 2; }
+
+  @keyframes hovTitleShine {
+    0%   { transform: translateX(-100%); }
+    55%  { transform: translateX(120%); }
+    100% { transform: translateX(120%); }
+  }
+
+  /* Hover — lift slightly, brighter glow, arrow nudges */
+  .hov-foot-stats__rv-title--link:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.04);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+      0 12px 28px rgba(231, 185, 106, 0.42),
+      0 0 0 1px rgba(231, 185, 106, 0.7);
+  }
+  .hov-foot-stats__rv-title--link:hover .hov-foot-stats__rv-title-arrow {
+    transform: translateX(4px);
+  }
+
+  /* Press — physical "click" feel */
+  .hov-foot-stats__rv-title--link:active {
+    transform: translateY(1px) scale(0.985);
+    transition: transform 0.08s ease;
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.15),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+      0 4px 10px rgba(231, 185, 106, 0.2),
+      0 0 0 1px rgba(231, 185, 106, 0.5);
+    filter: brightness(0.96);
+  }
+
+  /* Keyboard focus — same glow as hover */
+  .hov-foot-stats__rv-title--link:focus-visible {
+    outline: none;
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      inset 0 -2px 0 rgba(0, 0, 0, 0.1),
+      0 0 0 3px rgba(231, 185, 106, 0.55),
+      0 12px 28px rgba(231, 185, 106, 0.42);
+  }
+
+  /* Reduced motion — keep accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .hov-foot-stats__rv-title--link::before { animation: none; }
+    .hov-foot-stats__rv-title--link,
+    .hov-foot-stats__rv-title--link .hov-foot-stats__rv-title-arrow {
+      transition: none;
+    }
   }
   .hov-foot-stats__rv-grid {
     list-style: none;

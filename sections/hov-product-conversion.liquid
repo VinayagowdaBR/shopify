@@ -13,22 +13,19 @@
 {%- assign hov_styling_mf    = current_product.metafields.custom.styling_tips      | default: '' -%}
 {%- assign hov_material_mf   = current_product.metafields.custom.material_care     | default: '' -%}
 {%- assign hov_box_mf        = current_product.metafields.custom.box_contents      | default: '' -%}
-{%- assign hov_protip_mf     = current_product.metafields.custom.pro_tip           | default: '' -%}
 
 {%- if hov_highlights_mf != blank -%}{%- assign hov_highlights_raw = hov_highlights_mf -%}{%- else -%}{%- assign hov_highlights_raw = section.settings.default_highlights | default: '' -%}{%- endif -%}
 {%- if hov_styling_mf    != blank -%}{%- assign hov_styling_raw    = hov_styling_mf    -%}{%- else -%}{%- assign hov_styling_raw    = section.settings.default_styling_tips  | default: '' -%}{%- endif -%}
 {%- if hov_material_mf   != blank -%}{%- assign hov_material_raw   = hov_material_mf   -%}{%- else -%}{%- assign hov_material_raw   = section.settings.default_material_care | default: '' -%}{%- endif -%}
 {%- if hov_box_mf        != blank -%}{%- assign hov_box_raw        = hov_box_mf        -%}{%- else -%}{%- assign hov_box_raw        = section.settings.default_box_contents  | default: '' -%}{%- endif -%}
-{%- if hov_protip_mf     != blank -%}{%- assign hov_protip_raw     = hov_protip_mf     -%}{%- else -%}{%- assign hov_protip_raw     = section.settings.default_pro_tip       | default: '' -%}{%- endif -%}
 
 {%- unless section.settings.show_extras_highlights -%}{%- assign hov_highlights_raw = '' -%}{%- endunless -%}
 {%- unless section.settings.show_extras_styling    -%}{%- assign hov_styling_raw    = '' -%}{%- endunless -%}
 {%- unless section.settings.show_extras_material   -%}{%- assign hov_material_raw   = '' -%}{%- endunless -%}
 {%- unless section.settings.show_extras_box        -%}{%- assign hov_box_raw        = '' -%}{%- endunless -%}
-{%- unless section.settings.show_extras_protip     -%}{%- assign hov_protip_raw     = '' -%}{%- endunless -%}
 
 {%- assign hov_has_extras = false -%}
-{%- if hov_highlights_raw != blank or hov_styling_raw != blank or hov_material_raw != blank or hov_box_raw != blank or hov_protip_raw != blank -%}
+{%- if hov_highlights_raw != blank or hov_styling_raw != blank or hov_material_raw != blank or hov_box_raw != blank -%}
   {%- assign hov_has_extras = true -%}
 {%- endif -%}
 <section class="hov-product-conversion aiui-pdp" id="hov-product-conversion-{{ section.id }}" data-aiui-has-3d="{{ aiui_has_3d }}">
@@ -286,18 +283,6 @@
               {%- endfor -%}
             </ul>
           </section>
-        {%- endif -%}
-
-        {%- if hov_protip_raw != blank -%}
-          <aside class="hov-extras-protip" role="note">
-            <div class="hov-extras-protip-tag">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <path d="M9 18h6m-3-2v2M8 14a5 5 0 1 1 8 0c-.7.8-1 1.5-1 2.5V18H9v-1.5c0-1-.3-1.7-1-2.5z"/>
-              </svg>
-              Pro Tip
-            </div>
-            <p class="hov-extras-protip-text">{{ hov_protip_raw }}</p>
-          </aside>
         {%- endif -%}
 
       </div>
@@ -838,7 +823,7 @@
 
   /* ============================================================
      EXTRAS — Product Highlights · Styling · Material & Care
-              · What's in the Box · Pro Tip
+              · What's in the Box
      ============================================================ */
   #hov-product-conversion-{{ section.id }} .hov-extras {
     margin-top: 56px;
@@ -960,44 +945,6 @@
     margin-top: 1px;
   }
 
-  /* Pro Tip — accent banner */
-  #hov-product-conversion-{{ section.id }} .hov-extras-protip {
-    background: linear-gradient(135deg, #FFF8E8 0%, #FAF1DC 100%);
-    border: 1px solid rgba(200, 178, 138, 0.5);
-    border-radius: 18px;
-    padding: 22px 28px;
-    display: flex;
-    align-items: flex-start;
-    gap: 18px;
-    box-shadow: 0 4px 18px rgba(200, 178, 138, 0.18);
-  }
-  #hov-product-conversion-{{ section.id }} .hov-extras-protip-tag {
-    flex-shrink: 0;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--hov-emerald);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  #hov-product-conversion-{{ section.id }} .hov-extras-protip-tag svg {
-    width: 14px;
-    height: 14px;
-  }
-  #hov-product-conversion-{{ section.id }} .hov-extras-protip-text {
-    font-size: 14.5px;
-    color: #4a4332;
-    line-height: 1.65;
-    margin: 0;
-    align-self: center;
-  }
-
   /* Extras — Mobile */
   @media (max-width: 749px) {
     #hov-product-conversion-{{ section.id }} .hov-extras {
@@ -1019,11 +966,6 @@
     #hov-product-conversion-{{ section.id }} .hov-extras-box-list {
       grid-template-columns: 1fr;
       gap: 10px;
-    }
-    #hov-product-conversion-{{ section.id }} .hov-extras-protip {
-      flex-direction: column;
-      gap: 12px;
-      padding: 18px 20px;
     }
     #hov-product-conversion-{{ section.id }} .hov-extras-prose {
       font-size: 14px;
@@ -1457,7 +1399,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Per-product overrides live in product metafields (custom.product_highlights, custom.styling_tips, custom.material_care, custom.box_contents, custom.pro_tip). The defaults below show whenever a product has no metafield value."
+      "content": "Per-product overrides live in product metafields (custom.product_highlights, custom.styling_tips, custom.material_care, custom.box_contents). The defaults below show whenever a product has no metafield value."
     },
     {
       "type": "checkbox",
@@ -1508,18 +1450,6 @@
       "label": "Default box contents",
       "info": "One item per line",
       "default": "1 × Jewellery piece\nPremium gift box\nCare instructions card\nAuthenticity certificate"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_extras_protip",
-      "label": "Show Pro Tip",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "default_pro_tip",
-      "label": "Default pro tip",
-      "default": "Store in the gift box when not worn to maintain shine."
     }
   ],
   "presets": [
