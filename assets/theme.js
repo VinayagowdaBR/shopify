@@ -239,20 +239,9 @@ theme.Header = (function(){
       $('body').toggleClass("menuOn");
       $('.js-mobile-nav-toggle').toggleClass('open close');
     });
-    // Mobile menu: tapping a parent item (one that has a submenu) opens or
-    // closes its subcategory dropdown instead of navigating away. Leaf links
-    // (no submenu) keep navigating normally. The old +/- icon is no longer
-    // required as the trigger — the whole row is tappable.
-    $('#MobileNav').on('click', 'li > a', function(e){
-		var $a = $(this);
-		var $sub = $a.next('ul');
-		if ($sub.length){
-			e.preventDefault();
-			$a.closest('li').toggleClass('open');
-			$a.find('.at').first().toggleClass('at-plus-l at-minus-l');
-			$sub.stop(true, true).slideToggle();
-		}
-    });
+    // Mobile #MobileNav parent-row toggle is implemented inline at the bottom
+    // of layout/theme.liquid (filter-proof + cache-proof). Do not re-add it
+    // here or it will double-toggle (open then instantly close).
     // Category sidebar keeps the original +/- icon toggle.
     $('.sidebar_cate .at').on('click', function(e){
 		e.preventDefault();

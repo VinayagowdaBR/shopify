@@ -896,8 +896,9 @@ body.menuOn .modalOverly { display:block; opacity:0.5; }
 .MobileNav li li li li a { padding-left:40px; }
 /* Account / wishlist links: match the typed-uppercase look of the rest of the mobile menu */
 .MobileNav .mm-account > a { text-transform:uppercase; letter-spacing:0.05em; font-weight:400; }
-/* Plus/minus icon removed — the whole parent row toggles its dropdown now */
-.MobileNav li a .at { display:none; }
+/* NOTE: the parent-row toggle styles (hide +, caret, .mm-open) are injected by
+   the self-contained script at the bottom of layout/theme.liquid. Do not
+   duplicate them here. */
 
 .MobileNav .gridView { padding:10px; }
 .gridView li { display:inline-block; width:50%; border:0 none; }

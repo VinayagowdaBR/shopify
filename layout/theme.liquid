@@ -357,7 +357,81 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 </script>
 
+<script>
+/* Mobile sidebar (#MobileNav): tapping a parent row (a row whose <li> has its
+   own child <ul>) expands/collapses that submenu instead of navigating. Leaf
+   links navigate normally. Placed here in theme.liquid because:
+     - header.liquid pipes the nav through strip_newlines (kills inline scripts)
+     - theme.js is a separately CDN-cached asset that kept serving stale
+   This file is the HTML document itself: never filtered, never asset-cached. */
+(function () {
+  if (window.__hovMM) return; window.__hovMM = 1;
 
+  /* Self-contained styles: hide the + icon and show a rotating caret on parent
+     rows. Injected here so it does not depend on the cached theme.css. */
+  var st = document.createElement('style');
+  st.textContent =
+    '#MobileNav li a .at{display:none!important}' +
+    '#MobileNav li.has-sub>a{position:relative;padding-right:38px}' +
+    '#MobileNav li.has-sub>a::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-65%) rotate(45deg);transition:transform .2s ease;opacity:.65}' +
+    '#MobileNav li.has-sub.mm-open>a::after{transform:translateY(-35%) rotate(-135deg)}';
+  (document.head || document.documentElement).appendChild(st);
+
+  function ownSub(li) {
+    for (var c = li.firstElementChild; c; c = c.nextElementSibling) {
+      if (c.tagName === 'UL') return c;
+    }
+    return null;
+  }
+  function flagParents() {
+    var nav = document.getElementById('MobileNav');
+    if (!nav) return;
+    /* Delete the +/- icon entirely (CSS-proof): if it is not in the DOM it
+       cannot render regardless of theme.css specificity or caching. */
+    var icons = nav.querySelectorAll('a .at, a .at-plus-l, a .at-minus-l');
+    for (var k = 0; k < icons.length; k++) {
+      icons[k].parentNode && icons[k].parentNode.removeChild(icons[k]);
+    }
+    var lis = nav.getElementsByTagName('li');
+    for (var i = 0; i < lis.length; i++) {
+      if (ownSub(lis[i]) && (' ' + lis[i].className + ' ').indexOf(' has-sub ') === -1) {
+        lis[i].className += ' has-sub';
+      }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', flagParents);
+  } else {
+    flagParents();
+  }
+
+  /* Capture phase → runs before the link's navigation and any theme/jQuery
+     handler, so preventDefault() always wins. No Element.closest() dependency. */
+  document.addEventListener('click', function (e) {
+    var node = e.target, a = null, li = null, inMenu = false;
+    while (node) {
+      if (node.id === 'MobileNav') { inMenu = true; break; }
+      if (node.tagName === 'A' && !a) a = node;
+      if (node.tagName === 'LI' && a && !li) li = node;
+      node = node.parentElement;
+    }
+    if (!inMenu || !a || !li) return;
+    var sub = ownSub(li);
+    if (!sub) return;                 /* leaf link → navigate normally */
+    e.preventDefault();
+    e.stopPropagation();
+    var willOpen = (' ' + li.className + ' ').indexOf(' mm-open ') === -1;
+    if (willOpen) {
+      li.className += ' mm-open';
+    } else {
+      li.className = li.className.replace(/\bmm-open\b/g, '').replace(/\s+/g, ' ').replace(/^\s|\s$/g, '');
+    }
+    var jq = window.jQuery;
+    if (jq) { jq(sub).stop(true, true).slideToggle(220); }   /* keep slide animation */
+    else { sub.style.display = willOpen ? 'block' : 'none'; }
+  }, true);
+})();
+</script>
 
 </body>
 </html>

@@ -482,6 +482,13 @@
     {% endif %}
     </ul>
 </div>
+{%- comment -%}
+  NOTE: Do NOT put <script> here. snippets/header.liquid captures this section
+  and outputs it via `{{ siteHeader | strip_newlines | remove: "  " }}`, which
+  removes every newline and turns the first // comment into a comment that eats
+  the whole one-lined script. The mobile submenu toggle lives in theme.js
+  (an asset, not run through these Liquid filters).
+{%- endcomment -%}
 <!--mmobileend -->
 {%- endif -%}
 {% schema %}
