@@ -74,16 +74,11 @@
             if (!el || el.dataset.hovInit) return;
             el.dataset.hovInit = '1';
 
-            // Capture-phase click: runs before any theme JS handler can preventDefault().
+            // The redirect is handled by the native <a href target="_blank">.
+            // We only stop other theme JS from hijacking/preventing the click —
+            // we never call preventDefault ourselves, so the link always opens.
             el.addEventListener('click', function(ev){
-              ev.stopImmediatePropagation();
-              var url = el.getAttribute('data-hov-ig-url') || el.href;
-              var win = window.open(url, '_blank', 'noopener,noreferrer');
-              if (!win || win.closed || typeof win.closed === 'undefined') {
-                // Popup blocked — fall back to same-tab navigation so the click never feels broken.
-                window.location.href = url;
-              }
-              ev.preventDefault();
+              ev.stopPropagation();
             }, true);
 
             // JS-driven blink: cannot be killed by CSS overrides.

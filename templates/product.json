@@ -29,25 +29,6 @@
         "reassurance_2": ""
       }
     },
-    "1778659576d4c7d5c9": {
-      "type": "apps",
-      "blocks": {
-        "retenzy_product_rating_QMfTAB": {
-          "type": "shopify://apps/retenzy/blocks/ProductRating/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "retenzy_product_rating_QMfTAB"
-      ],
-      "settings": {
-        "top-offeset": "default",
-        "section_width": true,
-        "npd": false,
-        "section_cov": false,
-        "sec_bg_clr": "#fafafa"
-      }
-    },
     "custom_liquid_crNYWJ": {
       "type": "custom-liquid",
       "name": "t:sections.custom_liquid.name",
@@ -574,7 +555,6 @@
   },
   "order": [
     "product",
-    "1778659576d4c7d5c9",
     "custom_liquid_crNYWJ",
     "177757317169cad6f9",
     "collection_list_hnDqwz",

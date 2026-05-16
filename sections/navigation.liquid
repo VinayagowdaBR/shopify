@@ -471,14 +471,14 @@
         <li></li>
         {% if shop.customer_accounts_enabled %}
             {% if customer %}
-                <li><a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a></li>
-                <li><a href="{{ routes.account_logout_url }}"><b>{{ 'customer.account.logout' | t }}</b></a></li>
+                <li class="lvl1 mm-account"><a href="{{ routes.account_url }}" class="site-nav">{{ 'customer.account.title' | t }}</a></li>
+                <li class="lvl1 mm-account"><a href="{{ routes.account_logout_url }}" class="site-nav">{{ 'customer.account.logout' | t }}</a></li>
             {% else %}
-                <li><a href="{{ routes.account_login_url }}">{{ 'customer.login.form_title' | t }}</a></li>
-                {% if shop.customer_accounts_optional %}<li><a href="{{routes.account_register_url}}">{{ 'customer.register.link' | t }}</a></li>{% endif %}
+                <li class="lvl1 mm-account"><a href="{{ routes.account_login_url }}" class="site-nav">{{ 'customer.login.form_title' | t }}</a></li>
+                {% if shop.customer_accounts_optional %}<li class="lvl1 mm-account"><a href="{{routes.account_register_url}}" class="site-nav">{{ 'customer.register.link' | t }}</a></li>{% endif %}
             {% endif %}
         {% endif %}
-        {% if settings.enable_wishlist %}<li><a href="{{pages[settings.wishlist_page].url}}" title="{{ 'products.wishlist.title' | t }}">{{ 'products.wishlist.title' | t }}</a></li>{% endif %}
+        {% if settings.enable_wishlist %}<li class="lvl1 mm-account"><a href="{{pages[settings.wishlist_page].url}}" class="site-nav" title="{{ 'products.wishlist.title' | t }}">{{ 'products.wishlist.title' | t }}</a></li>{% endif %}
     {% endif %}
     </ul>
 </div>

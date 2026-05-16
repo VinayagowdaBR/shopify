@@ -693,13 +693,34 @@ a[onclick*="sendWhatsAppOrder"] { display: none !important; }
     {% endif %}
     insertAnchor.insertAdjacentHTML('afterend', afterHTML);
 
-    // Relocate "About this piece" card into .hov-media so it renders
-    // below the product image in the left column.
+    // "About this piece" card placement is viewport-dependent:
+    //  • Desktop (≥990px): moved into .hov-media so it sits below the
+    //    product image in the left column (Amazon-style), keeping the
+    //    buy box compact on the right.
+    //  • Mobile (<990px): the grid is a single column and .hov-media
+    //    renders BEFORE .hov-content, so moving it there would wedge the
+    //    description between the product image and the title/price/CTA.
+    //    Keep it in .hov-content, below the buying block, where it reads
+    //    naturally as supporting detail.
     var aboutCard = document.querySelector('.hov2-about');
     var mediaCol = document.querySelector('.hov-media');
-    if (aboutCard && mediaCol && aboutCard.parentElement !== mediaCol) {
-      mediaCol.appendChild(aboutCard);
+    // Original home in .hov-content (the element right before the card,
+    // i.e. the payments block) — captured before any relocation.
+    var aboutHome = aboutCard ? aboutCard.previousElementSibling : null;
+    var aboutDesktopMQ = window.matchMedia('(min-width: 990px)');
+    function placeAboutCard() {
+      if (!aboutCard) return;
+      if (aboutDesktopMQ.matches) {
+        if (mediaCol && aboutCard.parentElement !== mediaCol) {
+          mediaCol.appendChild(aboutCard);
+        }
+      } else if (aboutHome && aboutCard.previousElementSibling !== aboutHome) {
+        aboutHome.insertAdjacentElement('afterend', aboutCard);
+      }
     }
+    placeAboutCard();
+    if (aboutDesktopMQ.addEventListener) aboutDesktopMQ.addEventListener('change', placeAboutCard);
+    else if (aboutDesktopMQ.addListener) aboutDesktopMQ.addListener(placeAboutCard);
 
     // Quantity buttons logic
     var qtyInput = document.getElementById('hov2QtyInput');
