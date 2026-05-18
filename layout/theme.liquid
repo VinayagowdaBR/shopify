@@ -367,14 +367,10 @@ document.addEventListener("DOMContentLoaded", function () {
 (function () {
   if (window.__hovMM) return; window.__hovMM = 1;
 
-  /* Self-contained styles: hide the + icon and show a rotating caret on parent
-     rows. Injected here so it does not depend on the cached theme.css. */
+  /* Self-contained style: only suppress the +/- icon (the element is also
+     removed from the DOM below). No caret/indicator — plain text only. */
   var st = document.createElement('style');
-  st.textContent =
-    '#MobileNav li a .at{display:none!important}' +
-    '#MobileNav li.has-sub>a{position:relative;padding-right:38px}' +
-    '#MobileNav li.has-sub>a::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-65%) rotate(45deg);transition:transform .2s ease;opacity:.65}' +
-    '#MobileNav li.has-sub.mm-open>a::after{transform:translateY(-35%) rotate(-135deg)}';
+  st.textContent = '#MobileNav li a .at{display:none!important}';
   (document.head || document.documentElement).appendChild(st);
 
   function ownSub(li) {

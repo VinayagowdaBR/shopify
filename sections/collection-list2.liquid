@@ -14,6 +14,7 @@
     --cc-ring-width: {% if section.settings.show_ring %}{{ section.settings.ring_width | default: 2 }}{% else %}0{% endif %}px;
     --cc-rim-size:  {% if section.settings.show_ring %}{{ section.settings.rim_size  | default: 2 }}{% else %}0{% endif %}px;
     --cc-ring-color: {{ section.settings.ring_color | default: '#222222' }};
+    --cc-arrow-color: {{ section.settings.arrow_color | default: '#0B3D2E' }};
     background-color: {{ section.settings.bg_color }};
     {% if section.settings.bg_image != blank %}
       background-image: url({{ section.settings.bg_image | image_url }});
@@ -28,32 +29,58 @@
       <h2 class="cc-head">{{ section.settings.heading }}</h2>
     {% endif %}
 
+    {% comment %} 2 passes only when auto-scroll → seamless infinite loop {% endcomment %}
     {% assign cc_passes = 1 %}
     {% if section.settings.auto_scroll %}{% assign cc_passes = 2 %}{% endif %}
 
-    <div class="cc-marquee{% if section.settings.auto_scroll %} cc-marquee--on{% endif %}">
-      <div class="cc-row{% if section.settings.desktop_align == 'left' %} align-left{% endif %}{% if section.settings.auto_scroll %} cc-autoscroll{% endif %}">
-        {% for pass in (1..cc_passes) %}
-          {% for block in section.blocks %}
-            {% assign link = block.settings.link %}
-            <div class="cc-item" {% if forloop.parentloop.first %}{{ block.shopify_attributes }}{% else %}aria-hidden="true"{% endif %}>
-              {% if link %}<a href="{{ link }}"{% unless forloop.parentloop.first %} tabindex="-1"{% endunless %}>{% endif %}
-                {% if block.settings.image %}
-                  <img
-                    src="{{ block.settings.image | image_url: width: 480 }}"
-                    width="{{ block.settings.image.width }}"
-                    height="{{ block.settings.image.height }}"
-                    alt="{{ block.settings.title | escape | default: 'Category' }}"
-                    loading="lazy">
-                {% endif %}
-                {% if block.settings.title != blank %}
-                  <span class="cc-title">{{ block.settings.title }}</span>
-                {% endif %}
-              {% if link %}</a>{% endif %}
-            </div>
+    <div class="cc-stage{% if section.settings.nav_arrows %} has-nav{% endif %}{% if section.settings.arrows_mobile %} nav-mobile{% endif %}">
+
+      {% if section.settings.nav_arrows %}
+        <button type="button" class="cc-nav cc-nav--prev" aria-label="Scroll left">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path d="M15 5 L8 12 L15 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endif %}
+
+      <div class="cc-marquee{% if section.settings.auto_scroll %} cc-marquee--on{% endif %}"
+           data-cc-scroller
+           data-auto="{% if section.settings.auto_scroll %}true{% else %}false{% endif %}"
+           data-duration="{{ section.settings.scroll_duration | default: 35 }}"
+           tabindex="0" role="region" aria-label="{{ section.settings.heading | escape | default: 'Category carousel' }}">
+        <div class="cc-row{% if section.settings.desktop_align == 'left' %} align-left{% endif %}{% if section.settings.auto_scroll %} cc-autoscroll{% endif %}">
+          {% for pass in (1..cc_passes) %}
+            {% for block in section.blocks %}
+              {% assign link = block.settings.link %}
+              <div class="cc-item" {% if forloop.parentloop.first %}{{ block.shopify_attributes }}{% else %}aria-hidden="true"{% endif %}>
+                {% if link %}<a href="{{ link }}"{% unless forloop.parentloop.first %} tabindex="-1"{% endunless %}>{% endif %}
+                  {% if block.settings.image %}
+                    <img
+                      src="{{ block.settings.image | image_url: width: 480 }}"
+                      width="{{ block.settings.image.width }}"
+                      height="{{ block.settings.image.height }}"
+                      alt="{{ block.settings.title | escape | default: 'Category' }}"
+                      draggable="false"
+                      loading="lazy">
+                  {% endif %}
+                  {% if block.settings.title != blank %}
+                    <span class="cc-title">{{ block.settings.title }}</span>
+                  {% endif %}
+                {% if link %}</a>{% endif %}
+              </div>
+            {% endfor %}
           {% endfor %}
-        {% endfor %}
+        </div>
       </div>
+
+      {% if section.settings.nav_arrows %}
+        <button type="button" class="cc-nav cc-nav--next" aria-label="Scroll right">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
+            <path d="M9 5 L16 12 L9 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endif %}
+
     </div>
   </div>
 </section>
@@ -73,38 +100,73 @@
     font-weight: 700;
   }
 
+  /* Stage = positioning context for arrows */
+  #cat-circles-{{ section.id }} .cc-stage { position: relative; }
+
   /* Row */
   #cat-circles-{{ section.id }} .cc-row {
     display: flex;
     gap: var(--cc-gap-desktop);
   }
 
-  /* Auto-scroll marquee */
-  #cat-circles-{{ section.id }} .cc-marquee { width: 100%; }
+  /* ===== Scroll container (JS-driven; arrows + drag + swipe work) ===== */
+  #cat-circles-{{ section.id }} .cc-marquee {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    overscroll-behavior-x: contain;
+  }
+  #cat-circles-{{ section.id }} .cc-marquee::-webkit-scrollbar { display: none; }
+  #cat-circles-{{ section.id }} .cc-marquee.is-grab { cursor: grabbing; scroll-behavior: auto; }
+  #cat-circles-{{ section.id }} .cc-marquee.is-grab a { pointer-events: none; }
+
+  /* Soft edge fade only while continuous auto-scroll is on */
   #cat-circles-{{ section.id }} .cc-marquee--on {
-    overflow: hidden;
     -webkit-mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
             mask-image: linear-gradient(to right, transparent 0, #000 5%, #000 95%, transparent 100%);
   }
-  #cat-circles-{{ section.id }} .cc-autoscroll {
-    flex-wrap: nowrap !important;
-    width: max-content !important;
-    justify-content: flex-start !important;
-    overflow: visible !important;
-    animation: cc-scroll-{{ section.id }} {{ section.settings.scroll_duration | default: 35 }}s linear infinite;
-    will-change: transform;
-  }
-  #cat-circles-{{ section.id }} .cc-marquee--on:hover .cc-autoscroll {
-    animation-play-state: paused;
-  }
-  @keyframes cc-scroll-{{ section.id }} {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(-50%, 0, 0); }
+
+  /* Track must be a single non-wrapping line so it can scroll */
+  #cat-circles-{{ section.id }} .cc-row {
+    flex-wrap: nowrap;
+    width: max-content;
+    justify-content: flex-start;
   }
   @media (prefers-reduced-motion: reduce) {
-    #cat-circles-{{ section.id }} .cc-autoscroll { animation: none; }
-    #cat-circles-{{ section.id }} .cc-marquee--on { overflow-x: auto; }
+    #cat-circles-{{ section.id }} .cc-marquee { scroll-behavior: auto; }
   }
+
+  /* ===== Navigation arrows ===== */
+  #cat-circles-{{ section.id }} .cc-nav {
+    position: absolute;
+    top: calc(var(--cc-desktop-size) / 2 + 0px);
+    transform: translateY(-50%);
+    z-index: 5;
+    width: 42px; height: 42px;
+    display: none;                 /* shown only when .has-nav (set via JS-friendly class) */
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(11,61,46,.12);
+    border-radius: 50%;
+    background: rgba(255,255,255,.92);
+    -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(6px);
+    color: var(--cc-arrow-color);
+    box-shadow: 0 6px 18px rgba(11,61,46,.14);
+    cursor: pointer;
+    transition: transform .25s ease, opacity .25s ease, background .25s ease;
+  }
+  #cat-circles-{{ section.id }} .cc-stage.has-nav .cc-nav { display: flex; }
+  #cat-circles-{{ section.id }} .cc-nav:hover { background: #fff; transform: translateY(-50%) scale(1.06); }
+  #cat-circles-{{ section.id }} .cc-nav:active { transform: translateY(-50%) scale(.94); }
+  #cat-circles-{{ section.id }} .cc-nav--prev { left: -6px; }
+  #cat-circles-{{ section.id }} .cc-nav--next { right: -6px; }
+  #cat-circles-{{ section.id }} .cc-nav.is-off { opacity: 0; pointer-events: none; }
+  #cat-circles-{{ section.id }} .cc-nav:focus-visible { outline: 2px solid var(--cc-arrow-color); outline-offset: 2px; }
 
   /* Items */
   #cat-circles-{{ section.id }} .cc-item { flex: 0 0 auto; text-align: center; }
@@ -122,6 +184,8 @@
     background: #fff;
     margin: 0 auto 8px;
     box-sizing: border-box;
+    -webkit-user-drag: none;
+    user-select: none;
   }
 
   /* Titles (wrap, no ellipsis) */
@@ -135,7 +199,7 @@
     text-overflow: unset;
   }
 
-  /* MOBILE (fixed) */
+  /* MOBILE */
   @media (max-width: 768px) {
     #cat-circles-{{ section.id }} {
       padding: {{ section.settings.padding_mobile }} !important;
@@ -143,19 +207,8 @@
     }
     #cat-circles-{{ section.id }} .cc-row {
       gap: var(--cc-gap-mobile);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      scroll-snap-type: x mandatory;
+      scroll-snap-type: x proximity;
       padding: 0 4px;
-    }
-    #cat-circles-{{ section.id }} .cc-row::-webkit-scrollbar { display: none; }
-
-    /* Auto-scroll on mobile: disable native horizontal scroll, let marquee handle motion */
-    #cat-circles-{{ section.id }} .cc-autoscroll {
-      overflow: visible !important;
-      scroll-snap-type: none !important;
-      padding: 0 !important;
     }
 
     /* Cell width from items-per-view */
@@ -173,7 +226,6 @@
       max-width: none;
       width: var(--cc-mobile-size);
     }
-    /* Image capped by cell width to prevent overflow */
     #cat-circles-{{ section.id }} .cc-item img {
       width: min(100%, var(--cc-mobile-size));
       height: auto;
@@ -184,20 +236,139 @@
     #cat-circles-{{ section.id }} .cc-autoscroll .cc-item img {
       width: var(--cc-mobile-size);
     }
+
+    /* Arrows hidden on mobile unless explicitly enabled */
+    #cat-circles-{{ section.id }} .cc-stage.has-nav .cc-nav { display: none; }
+    #cat-circles-{{ section.id }} .cc-stage.has-nav.nav-mobile .cc-nav { display: flex; }
+    #cat-circles-{{ section.id }} .cc-nav {
+      top: calc(var(--cc-mobile-size) / 2);
+      width: 34px; height: 34px;
+    }
+    #cat-circles-{{ section.id }} .cc-nav--prev { left: 0; }
+    #cat-circles-{{ section.id }} .cc-nav--next { right: 0; }
   }
 
   /* DESKTOP */
   @media (min-width: 769px) {
-    #cat-circles-{{ section.id }} .cc-row {
-      flex-wrap: wrap;
-      justify-content: center;  /* centered by default */
-      overflow: visible;
-    }
-    #cat-circles-{{ section.id }} .cc-row.align-left { justify-content: flex-start; }
     #cat-circles-{{ section.id }} .cc-item { width: var(--cc-desktop-size); }
     #cat-circles-{{ section.id }} img { width: var(--cc-desktop-size); height: var(--cc-desktop-size); }
   }
 </style>
+
+<script>
+(function () {
+  var root = document.getElementById('cat-circles-{{ section.id }}');
+  if (!root) return;
+
+  var scroller = root.querySelector('[data-cc-scroller]');
+  var row      = root.querySelector('.cc-row');
+  if (!scroller || !row) return;
+
+  var prevBtn = root.querySelector('.cc-nav--prev');
+  var nextBtn = root.querySelector('.cc-nav--next');
+
+  var auto     = scroller.getAttribute('data-auto') === 'true';
+  var duration = parseFloat(scroller.getAttribute('data-duration')) || 35;
+  var reduce   = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Arrow click: page by ~3 cards ---- */
+  function pageAmount() {
+    var item = row.querySelector('.cc-item');
+    var styles = getComputedStyle(row);
+    var gap = parseFloat(styles.columnGap || styles.gap || 0) || 0;
+    if (item) return (item.getBoundingClientRect().width + gap) * 3;
+    return scroller.clientWidth * 0.8;
+  }
+  function go(dir) {
+    holdAuto(2600);
+    scroller.scrollBy({ left: dir * pageAmount(), behavior: reduce ? 'auto' : 'smooth' });
+  }
+  if (prevBtn) prevBtn.addEventListener('click', function () { go(-1); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { go(1); });
+
+  /* ---- Disable arrows at the ends (only when NOT looping) ---- */
+  function refreshArrows() {
+    if (!prevBtn || !nextBtn || auto) return; /* infinite loop never disables */
+    var max = scroller.scrollWidth - scroller.clientWidth - 2;
+    prevBtn.classList.toggle('is-off', scroller.scrollLeft <= 2);
+    nextBtn.classList.toggle('is-off', scroller.scrollLeft >= max);
+  }
+
+  /* ---- Continuous auto-scroll driven by scrollLeft (pausable) ---- */
+  var paused = false, holdTimer = null, rafId = null, half = 0;
+
+  function measure() { half = scroller.scrollWidth / 2; }            /* one full set */
+  function holdAuto(ms) {                                            /* pause then resume */
+    paused = true;
+    clearTimeout(holdTimer);
+    holdTimer = setTimeout(function () { paused = false; }, ms);
+  }
+  function tick() {
+    if (auto && !reduce && !paused) {
+      var speed = half / (duration * 60);                            /* px per ~frame */
+      scroller.scrollLeft += speed;
+      if (scroller.scrollLeft >= half) scroller.scrollLeft -= half;   /* seamless wrap */
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  /* Pause on any user intent, resume shortly after */
+  ['pointerenter', 'touchstart', 'focusin'].forEach(function (ev) {
+    scroller.addEventListener(ev, function () { paused = true; }, { passive: true });
+  });
+  ['pointerleave', 'touchend', 'focusout'].forEach(function (ev) {
+    scroller.addEventListener(ev, function () { if (auto) holdAuto(1200); }, { passive: true });
+  });
+
+  /* ---- Drag / swipe to scroll (pointer events) ---- */
+  var down = false, startX = 0, startLeft = 0, moved = false;
+  scroller.addEventListener('pointerdown', function (e) {
+    down = true; moved = false;
+    startX = e.clientX; startLeft = scroller.scrollLeft;
+    paused = true;
+  });
+  scroller.addEventListener('pointermove', function (e) {
+    if (!down) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 4) { moved = true; scroller.classList.add('is-grab'); }
+    scroller.scrollLeft = startLeft - dx;
+  });
+  function endDrag() {
+    if (!down) return;
+    down = false;
+    scroller.classList.remove('is-grab');
+    if (auto) holdAuto(1500);
+  }
+  scroller.addEventListener('pointerup', endDrag);
+  scroller.addEventListener('pointercancel', endDrag);
+  scroller.addEventListener('pointerleave', endDrag);
+  /* Prevent ghost-click navigation after a drag */
+  scroller.addEventListener('click', function (e) {
+    if (moved) { e.preventDefault(); e.stopPropagation(); moved = false; }
+  }, true);
+
+  /* ---- Init ---- */
+  function init() {
+    measure();
+    refreshArrows();
+    if (auto && !reduce) rafId = requestAnimationFrame(tick);
+  }
+  scroller.addEventListener('scroll', refreshArrows, { passive: true });
+  window.addEventListener('resize', function () { measure(); refreshArrows(); });
+
+  if ('requestIdleCallback' in window) { requestIdleCallback(init); } else { setTimeout(init, 60); }
+
+  /* Pause work when tab/section is off-screen (battery friendly) */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { if (!rafId && auto && !reduce) rafId = requestAnimationFrame(tick); }
+        else if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      });
+    }, { threshold: 0 }).observe(root);
+  }
+})();
+</script>
 
 {% schema %}
 {
@@ -213,7 +384,6 @@
 
     { "type": "range", "id": "radius_percent", "label": "Image corner radius (%)", "min": 0, "max": 50, "step": 1, "default": 50 },
 
-    /* ring controls */
     { "type": "checkbox", "id": "show_ring",   "label": "Show border ring", "default": true },
     { "type": "color",    "id": "ring_color",  "label": "Ring color", "default": "#222222" },
     { "type": "range",    "id": "ring_width",  "label": "Ring width (px)", "min": 0, "max": 8, "step": 1, "default": 2 },
@@ -247,15 +417,18 @@
     { "type": "range", "id": "desktop_size", "label": "Desktop image size (px)", "min": 90, "max": 260, "step": 2, "default": 160 },
     { "type": "range", "id": "mobile_size",  "label": "Mobile image size (px)",  "min": 60, "max": 200, "step": 2, "default": 110 },
 
+    { "type": "header", "content": "Navigation controls" },
+    { "type": "checkbox", "id": "nav_arrows",   "label": "Show prev / next arrows", "default": true },
+    { "type": "checkbox", "id": "arrows_mobile", "label": "Also show arrows on mobile", "default": false, "info": "Off by default — mobile users swipe/drag." },
+    { "type": "color",    "id": "arrow_color",  "label": "Arrow color", "default": "#0B3D2E" },
+
     { "type": "header", "content": "Auto-scroll" },
-    { "type": "checkbox", "id": "auto_scroll", "label": "Auto-scroll (continuous marquee)", "default": true },
+    { "type": "checkbox", "id": "auto_scroll", "label": "Auto-scroll (continuous)", "default": true, "info": "Pauses on hover, drag, swipe or focus; resumes automatically." },
     { "type": "range", "id": "scroll_duration", "label": "Scroll duration (lower = faster)", "min": 15, "max": 90, "step": 5, "default": 35, "unit": "s" },
 
-    /* separate gaps */
     { "type": "range", "id": "gap_desktop", "label": "Gap between items (desktop px)", "min": 0, "max": 60, "step": 1, "default": 24 },
     { "type": "range", "id": "gap_mobile",  "label": "Gap between items (mobile px)",  "min": 0, "max": 40, "step": 1, "default": 10 },
 
-    /* items per view on mobile */
     {
       "type": "select",
       "id": "items_mobile",
@@ -269,7 +442,6 @@
       ]
     },
 
-    /* padding/margin as shorthands */
     { "type": "text", "id": "padding_desktop", "label": "Section padding (desktop)", "default": "12px 12px 8px" },
     { "type": "text", "id": "margin_desktop",  "label": "Section margin (desktop)",  "default": "0" },
     { "type": "text", "id": "padding_mobile",  "label": "Section padding (mobile)",  "default": "12px 8px 8px" },
