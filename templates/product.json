@@ -14,6 +14,8 @@
       "settings": {
         "show_badge": false,
         "badge_text": "✨ Bestseller",
+        "show_guarantee_badge": true,
+        "guarantee_badge_text": "6-Month Anti-Tarnish Guarantee",
         "subtitle": "A delicate statement for everyday elegance.",
         "show_reviews": false,
         "review_text": "Loved by women for everyday wear",
@@ -26,7 +28,15 @@
         "badge_3": "",
         "badge_4": "",
         "reassurance_1": "",
-        "reassurance_2": ""
+        "reassurance_2": "",
+        "show_extras_highlights": true,
+        "default_highlights": "Versatile Style | Pairs with both ethnic and western outfits\nLightweight Feel | Comfortable for all-day wear\nAdjustable Fit | Fits all body types comfortably",
+        "show_extras_styling": true,
+        "default_styling_tips": "Pair with a saree for traditional events.\nLayer over a kurta for festive looks.\nWear over a plain top + jeans for everyday glam.",
+        "show_extras_material": true,
+        "default_material_care": "Material: 18K Gold Plated on 304 Stainless Steel.\nCare: Wipe with a soft dry cloth after wear.\nAvoid contact with water, perfume, and chemicals.",
+        "show_extras_box": true,
+        "default_box_contents": "1 × Jewellery piece\nPremium gift box\nCare instructions card\nAuthenticity certificate"
       }
     },
     "custom_liquid_crNYWJ": {
@@ -196,11 +206,9 @@
     "17677702292774aa1c": {
       "type": "apps",
       "blocks": {
-        "trustwill_trustoo_review_widget_AA87Vf": {
-          "type": "shopify://apps/trustwill-trustoo/blocks/review-widget/c8f15077-6475-4e86-ad06-b66038d5ba2c",
-          "settings": {
-            "product": ""
-          }
+        "retenzy_product_review_UChdK8": {
+          "type": "shopify://apps/retenzy/blocks/ProductReview/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+          "settings": {}
         },
         "trustwill_trustoo_barrage_carousel_zTENCP": {
           "type": "shopify://apps/trustwill-trustoo/blocks/barrage-carousel/c8f15077-6475-4e86-ad06-b66038d5ba2c",
@@ -209,7 +217,7 @@
         }
       },
       "block_order": [
-        "trustwill_trustoo_review_widget_AA87Vf",
+        "retenzy_product_review_UChdK8",
         "trustwill_trustoo_barrage_carousel_zTENCP"
       ],
       "settings": {

@@ -748,6 +748,36 @@
         "type": "shopify://apps/ctx-whatsapp-chat-marketing/blocks/app-embed/7bea84d9-a54b-47f1-9ebf-40f235a03c1c",
         "disabled": false,
         "settings": {}
+      },
+      "6815314508776984407": {
+        "type": "shopify://apps/retenzy/blocks/DashboardExtension/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+        "disabled": false,
+        "settings": {}
+      },
+      "12379998593356793171": {
+        "type": "shopify://apps/retenzy/blocks/CartSlider/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+        "disabled": false,
+        "settings": {
+          "cart_id": "",
+          "cart_footer_id": ""
+        }
+      },
+      "17685824326160997771": {
+        "type": "shopify://apps/retenzy/blocks/Globalrating/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+        "disabled": false,
+        "settings": {
+          "product_selector": ""
+        }
+      },
+      "17149609178774126159": {
+        "type": "shopify://apps/retenzy/blocks/ReviewFloatterExtension/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+        "disabled": false,
+        "settings": {}
+      },
+      "8531078372295740228": {
+        "type": "shopify://apps/retenzy/blocks/WidgetExtension/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
+        "disabled": false,
+        "settings": {}
       }
     }
   },
