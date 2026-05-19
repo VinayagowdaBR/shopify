@@ -452,6 +452,14 @@ em, .em{font-style:italic}
 .fs26 { font-size:26px;}
 .fs28 { font-size:28px;}
 .fs30 { font-size:30px;}
+
+{% comment %} Hide Trustoo "Customer Reviews" widget on product page (keep Retenzy only). Remove this block to bring it back. {% endcomment %}
+.trustoo-reviews-wrapper,
+#noreviews-wrapper,
+#reviews-wrapper,
+#vstar-noreviews,
+#vstar-reviews,
+[id^="vstar-"] { display:none !important; }
 </style>
 {%- endcapture -%}
 {{headCss | strip_newlines | remove: '  ' }}
