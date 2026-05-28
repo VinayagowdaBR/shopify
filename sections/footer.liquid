@@ -25,7 +25,7 @@
           {{blockTtl}}
 
           {% if blkSt.logo %}
-          <p class="footer-logo"><img class="autoHt lazyload" loading="lazy" data-src="{{ blkSt.logo | img_url: 'master' }}" width="{{blkSt.logo-width}}" height="{{ blkSt.logo-width | divided_by: blkSt.logo.aspect_ratio }}" alt="{{ blkSt.logo.alt | default: shop.name }}"></p>
+          <p class="footer-logo"><img class="autoHt" loading="lazy" src="{{ blkSt.logo | img_url: 'master' }}" width="{{blkSt.logo-width}}" height="{{ blkSt.logo-width | divided_by: blkSt.logo.aspect_ratio }}" alt="{{ blkSt.logo.alt | default: shop.name }}"></p>
           {% endif %}
 
           <div class="text custom-text">{{ blkSt.custom-text }}</div>                 
@@ -54,7 +54,8 @@
           {{blockTtl}}
 
           {% if blkSt.logo != blank %}
-          <p><img class="autoHt lazyload" loading="lazy" data-src="{{ blkSt.logo | img_url: 'master' }}" width="{{blkSt.logo-width}}" height="{{ blkSt.logo-width | divided_by: blkSt.logo.aspect_ratio }}" alt="{{ blkSt.logo.alt | default: shop.name }}"></p>
+          <p><img class="autoHt" loading="lazy" src="{{ blkSt.logo | img_url: 'master' }}" width="{{blkSt.logo-width}}" height="{{ blkSt.logo-width | divided_by: blkSt.logo.aspect_ratio }}" alt="{{ blkSt.logo.alt | default: shop.name }}"></p>
+
           {% endif %}
           
           <ul class="addressFooter">
