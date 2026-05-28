@@ -1,0 +1,244 @@
+<section id="latest-jewellery-{{ section.id }}" class="hov-latest-jewellery">
+  <div class="hov-latest-inner">
+
+    <div class="hov-latest-heading-wrap">
+      <h2 class="hov-latest-heading">Browse Latest Jewellery Collections</h2>
+      <div class="hov-latest-line">
+        <span></span>
+      </div>
+    </div>
+
+    <div class="hov-accordion-gallery">
+      <a href="/collections/new-arrival" class="hov-gallery-card active">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0748/4935/3868/files/image_3.png?v=1779524522"
+          alt="Latest Jewellery Collection"
+          loading="lazy"
+        >
+      </a>
+
+      <a href="/collections/bangles-and-kadas" class="hov-gallery-card">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0748/4935/3868/files/image_2.png?v=1779524522"
+          alt="Bangles Collection"
+          loading="lazy"
+        >
+      </a>
+
+      <a href="/collections/rings" class="hov-gallery-card">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0748/4935/3868/files/image_5.png?v=1779524522"
+          alt="Rings Collection"
+          loading="lazy"
+        >
+      </a>
+
+      <a href="/collections/necklace-sets" class="hov-gallery-card">
+        <img
+          src="https://cdn.shopify.com/s/files/1/0748/4935/3868/files/image_4.png?v=1779524522"
+          alt="Necklace Collection"
+          loading="lazy"
+        >
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #latest-jewellery-{{ section.id }} {
+    width: 100%;
+    background: #ffffff;
+    padding: 30px 22px 42px;
+    box-sizing: border-box;
+  }
+
+  #latest-jewellery-{{ section.id }} * {
+    box-sizing: border-box;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-inner {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-heading-wrap {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-heading {
+    margin: 0;
+    color: #0F3B2E;
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: 0.2px;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-line {
+    width: 22%;
+    max-width: 190px;
+    min-width: 105px;
+    height: 12px;
+    margin: 7px auto 0;
+    position: relative;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-line::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 5px;
+    height: 2px;
+    background: #000000;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-line::after,
+  #latest-jewellery-{{ section.id }} .hov-latest-line span::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    width: 9px;
+    height: 9px;
+    background: #000000;
+    transform: rotate(45deg);
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-line::after {
+    left: -1px;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-latest-line span::after {
+    right: -1px;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-accordion-gallery {
+    display: flex;
+    width: 100%;
+    height: 520px;
+    gap: 2px;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-gallery-card {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    display: block;
+    text-decoration: none;
+    transition: flex 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-gallery-card.active {
+    flex: 3.2;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.55s ease;
+  }
+
+  #latest-jewellery-{{ section.id }} .hov-gallery-card.active img {
+    transform: scale(1.02);
+  }
+
+  @media screen and (max-width: 768px) {
+    #latest-jewellery-{{ section.id }} {
+      padding: 24px 12px 32px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-latest-heading-wrap {
+      margin-bottom: 20px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-latest-heading {
+      font-size: 22px;
+      line-height: 1.15;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-latest-line {
+      width: 20%;
+      min-width: 96px;
+      max-width: 125px;
+      height: 11px;
+      margin-top: 6px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-latest-line::after,
+    #latest-jewellery-{{ section.id }} .hov-latest-line span::after {
+      width: 8px;
+      height: 8px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-accordion-gallery {
+      height: 360px;
+      gap: 2px;
+      border-radius: 7px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-gallery-card {
+      flex: 0.72;
+      border-radius: 7px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-gallery-card.active {
+      flex: 2.8;
+    }
+  }
+
+  @media screen and (max-width: 390px) {
+    #latest-jewellery-{{ section.id }} .hov-accordion-gallery {
+      height: 340px;
+    }
+
+    #latest-jewellery-{{ section.id }} .hov-latest-heading {
+      font-size: 20px;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.getElementById('latest-jewellery-{{ section.id }}');
+    if (!root) return;
+
+    var cards = root.querySelectorAll('.hov-gallery-card');
+    if (!cards.length) return;
+
+    cards.forEach(function(card) {
+      card.addEventListener('click', function(event) {
+        if (!card.classList.contains('active')) {
+          event.preventDefault();
+
+          cards.forEach(function(item) {
+            item.classList.remove('active');
+          });
+
+          card.classList.add('active');
+        }
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Latest Jewellery",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Latest Jewellery"
+    }
+  ]
+}
+{% endschema %}

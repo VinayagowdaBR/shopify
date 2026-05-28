@@ -1,0 +1,297 @@
+<section
+  id="shop-style-{{ section.id }}"
+  class="hov-shop-style-section"
+>
+  <div class="hov-shop-style-inner">
+
+    <div class="hov-style-heading-wrap">
+      <h2 class="hov-style-heading">Shop by Style</h2>
+      <div class="hov-style-line">
+        <span></span>
+      </div>
+    </div>
+
+    <div class="hov-style-grid">
+
+      <div class="hov-style-card">
+        <a href="/collections/for-him" class="hov-style-link">
+          <div class="hov-style-image">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0748/4935/3868/files/Group_33834.png?v=1779518232"
+              alt="Shop for Him"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="hov-style-button">
+            Shop for Him
+          </div>
+        </a>
+      </div>
+
+      <div class="hov-style-card">
+        <a href="/collections/for-her" class="hov-style-link">
+          <div class="hov-style-image">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0748/4935/3868/files/Group_33835.png?v=1779518231"
+              alt="Shop for Her"
+              loading="lazy"
+            >
+          </div>
+
+          <div class="hov-style-button">
+            Shop for Her
+          </div>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  #shop-style-{{ section.id }} {
+    width: 100%;
+    background: #ffffff;
+    padding: 18px 18px 42px;
+    box-sizing: border-box;
+  }
+
+  #shop-style-{{ section.id }} * {
+    box-sizing: border-box;
+  }
+
+  #shop-style-{{ section.id }} .hov-shop-style-inner {
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-heading-wrap {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-heading {
+    margin: 0;
+    color: #0F3B2E;
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: 0.1px;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-line {
+    width: 20%;
+    max-width: 125px;
+    min-width: 96px;
+    height: 11px;
+    margin: 6px auto 0;
+    position: relative;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-line::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 5px;
+    height: 2px;
+    background: #000000;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-line::after,
+  #shop-style-{{ section.id }} .hov-style-line span::after {
+    content: "";
+    position: absolute;
+    top: 1px;
+    width: 8px;
+    height: 8px;
+    background: #000000;
+    transform: rotate(45deg);
+  }
+
+  #shop-style-{{ section.id }} .hov-style-line::after {
+    left: -1px;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-line span::after {
+    right: -1px;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    align-items: end;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-card {
+    text-align: center;
+    min-width: 0;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-image {
+    width: 100%;
+    max-width: 185px;
+    height: 220px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: visible;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: bottom center;
+    display: block;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 92%;
+    max-width: 170px;
+    min-height: 42px;
+    margin-top: 14px;
+    padding: 10px 20px 10px 12px;
+    background: #0F3B2E;
+    color: #ffffff;
+    border: none;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -10px;
+    width: 16px;
+    height: 12px;
+    background: #d8c3a7;
+    border-radius: 4px 4px 0 0;
+  }
+
+  #shop-style-{{ section.id }} .hov-style-button::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    top: 0;
+    width: 22px;
+    height: 100%;
+    background: #ffffff;
+    clip-path: polygon(100% 0, 0 50%, 100% 100%);
+  }
+
+  @media screen and (min-width: 769px) {
+    #shop-style-{{ section.id }} {
+      padding: 28px 26px 54px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-heading-wrap {
+      margin-bottom: 28px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-heading {
+      font-size: 28px;
+      line-height: 1.12;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-line {
+      width: 22%;
+      max-width: 190px;
+      min-width: 105px;
+      height: 12px;
+      margin-top: 7px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-line::before {
+      top: 5px;
+      height: 2px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-line::after,
+    #shop-style-{{ section.id }} .hov-style-line span::after {
+      top: 1px;
+      width: 9px;
+      height: 9px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-grid {
+      gap: 40px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-image {
+      max-width: 430px;
+      height: 500px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-button {
+      max-width: 310px;
+      min-height: 58px;
+      margin-top: 22px;
+      padding: 13px 34px 13px 20px;
+      font-size: 28px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-button::before {
+      top: -14px;
+      width: 20px;
+      height: 16px;
+      border-radius: 5px 5px 0 0;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-button::after {
+      width: 34px;
+    }
+  }
+
+  @media screen and (max-width: 390px) {
+    #shop-style-{{ section.id }} {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-grid {
+      gap: 8px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-image {
+      max-width: 170px;
+      height: 205px;
+    }
+
+    #shop-style-{{ section.id }} .hov-style-button {
+      max-width: 158px;
+      font-size: 12px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Shop by Style",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Shop by Style"
+    }
+  ]
+}
+{% endschema %}

@@ -33,7 +33,7 @@
           "settings": {
             "title": "Popular Products",
             "side_prod_opt": "list",
-            "sidebar_products": "best-seller",
+            "sidebar_products": "gift-for-him",
             "num_of_products": "3",
             "side_all_products": false,
             "btn_txt": "View All"
@@ -63,15 +63,15 @@
         "image_bnr_NjTVi3",
         "static_text_mwcPd9"
       ],
+      "custom_css": [],
       "settings": {
         "fullwidth": false,
         "bnr": true,
         "banner_position": "top",
         "bht": 400,
         "bhtt": 300,
-        "bhtm": 200,
+        "bhtm": 160,
         "clbanner": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_9.43.23_PM.jpg",
-        "clbannerm": "shopify://shop_images/WhatsApp_Image_2026-03-29_at_9.55.16_PM.jpg",
         "bbg": "#f5f5f5",
         "show_collection_name": false,
         "tcl": "#333333",

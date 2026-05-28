@@ -771,7 +771,7 @@
       },
       "17149609178774126159": {
         "type": "shopify://apps/retenzy/blocks/ReviewFloatterExtension/c04b2797-cebf-42e5-8e1f-e2e9fef4a11d",
-        "disabled": false,
+        "disabled": true,
         "settings": {}
       },
       "8531078372295740228": {

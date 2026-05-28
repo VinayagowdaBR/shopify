@@ -9,37 +9,25 @@
  */
 {
   "sections": {
+    "mobile_search_section_HOV": {
+      "type": "mobile-search-section",
+      "settings": {}
+    },
     "custom_slider_Je3QqT": {
       "type": "custom-slider",
       "blocks": {
-        "banner_EzNt8N": {
+        "banner_4tXPiX": {
           "type": "banner",
           "settings": {
-            "desktop_banner_image": "shopify://shop_images/Add_a_heading_78.png",
-            "mobile_banner_image_1": "shopify://shop_images/Untitled_design_81.png",
-            "banner_link": "shopify://collections/all"
-          }
-        },
-        "banner_cMyHNx": {
-          "type": "banner",
-          "settings": {
-            "desktop_banner_image": "shopify://shop_images/Add_a_heading_79.png",
-            "mobile_banner_image_1": "shopify://shop_images/Untitled_design_80_234c54ba-7b16-43b0-a747-d9de7e74ee45.png",
-            "banner_link": "shopify://collections/all"
-          }
-        },
-        "banner_Qgxa8D": {
-          "type": "banner",
-          "disabled": true,
-          "settings": {
-            "banner_link": "shopify://collections/all"
+            "desktop_banner_image": "shopify://shop_images/image_1.png",
+            "mobile_banner_image_1": "shopify://shop_images/image_1.png",
+            "mobile_banner_image_2": "shopify://shop_images/Group_33836.png",
+            "banner_link": ""
           }
         }
       },
       "block_order": [
-        "banner_EzNt8N",
-        "banner_cMyHNx",
-        "banner_Qgxa8D"
+        "banner_4tXPiX"
       ],
       "name": "Custom Slider",
       "settings": {}
@@ -140,27 +128,46 @@
         "hide_desktop": false,
         "hide_mobile": false,
         "heading": "Curated for You",
+        "show_line": true,
         "bg_color": "rgba(0,0,0,0)",
-        "radius_percent": 20,
-        "show_ring": false,
-        "ring_color": "#c8a96e",
-        "ring_width": 2,
-        "rim_size": 2,
+        "heading_color": "#0f3b2e",
+        "line_color": "#000000",
+        "title_color": "#333333",
+        "max_width": 1100,
+        "columns_desktop": 4,
+        "heading_size": 40,
+        "mobile_heading_size": 22,
+        "heading_weight": "500",
+        "line_width": 36,
+        "mobile_line_width": 20,
+        "line_thickness": 3,
+        "image_radius": 20,
+        "mobile_image_radius": 16,
+        "title_size": 28,
+        "mobile_title_size": 12,
+        "title_weight": "400",
         "title_case": "capitalize",
-        "title_font_size": 15,
-        "desktop_align": "center",
-        "desktop_size": 180,
-        "mobile_size": 120,
-        "gap_desktop": 28,
-        "gap_mobile": 16,
-        "items_mobile": "4",
-        "auto_scroll": true,
-        "scroll_duration": 35,
+        "column_gap": 56,
+        "row_gap": 24,
+        "mobile_column_gap": 10,
+        "mobile_row_gap": 18,
+        "heading_bottom_gap": 28,
+        "mobile_heading_bottom_gap": 14,
+        "title_top_gap": 12,
+        "mobile_title_top_gap": 7,
         "padding_desktop": "16px 24px 16px",
         "margin_desktop": "0",
-        "padding_mobile": "0px 8px 8px",
+        "padding_mobile": "18px 8px 8px",
         "margin_mobile": "0"
       }
+    },
+    "shop_by_style_HOV": {
+      "type": "shop-by-style",
+      "settings": {}
+    },
+    "latest_jewellery_HOV": {
+      "type": "latest-jewellery-collections",
+      "settings": {}
     },
     "custom_liquid_VTkH6Q": {
       "type": "custom-liquid",
@@ -1408,42 +1415,30 @@
       "settings": {
         "title": "From the Knowledge Lab",
         "subtitle": "Expert jewellery care tips, styling guides, and curated insights to elevate your everyday elegance.",
-        "top-offeset": "default",
+        "blog": "knowledge-lab",
+        "post_limit": 3,
+        "blog_show_date": true,
+        "show_mini_des": true,
+        "show_read_more": true,
+        "show_view_all": false,
         "hide_mobile": false,
         "hided": false,
-        "section_cov": true,
-        "sec_bg_clr": "rgba(0,0,0,0)",
-        "bgg": "",
-        "blog": "knowledge-lab",
-        "img_ratio": "50",
-        "img_rad": 0,
-        "post_limit": 3,
-        "grid": 3,
-        "tablet-grid": 2,
-        "mobile-grid": 1,
-        "blog_show_author": false,
-        "blog_show_date": true,
-        "show_comment": true,
-        "show_mini_des": true,
-        "twords": 50,
-        "show_read_more": true,
-        "color_ttl": "#111111",
-        "blogfs": 16,
-        "blogfsm": 14,
-        "blogtf": "font2",
-        "blogtw": "fw-600",
-        "blh": 1.2,
-        "blog_align": "tl",
-        "show_view_all": false,
         "btn-style": "btn2",
         "btn-size-desk": "btn-sm",
         "btn-size-mob": "mob-btn-sm"
       }
+    },
+    "customer_love_HOV": {
+      "type": "customer-love-section",
+      "settings": {}
     }
   },
   "order": [
+    "mobile_search_section_HOV",
     "custom_slider_Je3QqT",
     "collection_list2_WmEYG6",
+    "shop_by_style_HOV",
+    "latest_jewellery_HOV",
     "custom_liquid_VTkH6Q",
     "collection_list_tiA9Y9",
     "collection_list_eRg6rC",
@@ -1462,6 +1457,7 @@
     "store_features_wKiCgQ",
     "17526491613533bf4a",
     "176347029038648cdc",
-    "featured_blog_pQR8ep"
+    "featured_blog_pQR8ep",
+    "customer_love_HOV"
   ]
 }
